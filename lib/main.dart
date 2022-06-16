@@ -82,6 +82,11 @@ class MyApp extends StatelessWidget {
             borderSide: const BorderSide(color: Colors.transparent),
           ),
         ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(const StadiumBorder()),
+          ),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             foregroundColor:
