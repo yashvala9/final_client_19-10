@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
-import '../../routes/app_routes.dart';
-import 'auth_controller.dart';
+import '../../../routes/app_routes.dart';
+import '../auth_controller.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({Key? key}) : super(key: key);
@@ -14,10 +14,11 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Login"),
-        ),
-        body: GetX<AuthController>(builder: (_) {
+      appBar: AppBar(
+        title: const Text("Login"),
+      ),
+      body: GetX<AuthController>(
+        builder: (_) {
           return Padding(
             padding: const EdgeInsets.all(12.0),
             child: Form(
@@ -79,6 +80,8 @@ class SignupScreen extends StatelessWidget {
               ),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }

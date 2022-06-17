@@ -3,8 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:reel_ro/widgets/my_elevated_button.dart';
 
-import 'auth_controller.dart';
+import '../auth_controller.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -14,11 +15,16 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Login"),
-        ),
-        body: GetX<AuthController>(builder: (_) {
+      appBar: AppBar(
+        title: const Text("Login"),
+      ),
+      body: GetX<AuthController>(
+        builder: (_) {
           return Padding(
             padding: const EdgeInsets.all(12.0),
             child: Form(
@@ -38,6 +44,22 @@ class LoginScreen extends StatelessWidget {
                     height: 20,
                   ),
                   TextFormField(
+                    decoration: const InputDecoration(label: Text("Name")),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 4,
+                      ),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Password",
+                        style: style.titleMedium,
+                      )),
+                  TextFormField(
                     obscureText: !_controller.obsecure.value,
                     decoration: InputDecoration(
                         label: const Text("Password"),
@@ -53,22 +75,27 @@ class LoginScreen extends StatelessWidget {
                         v!.isEmpty ? "Password is required" : null,
                     onSaved: (v) => _controller.password = v!.trim(),
                   ),
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Forget Password?",
+                            style: style.titleSmall,
+                          ))),
                   const SizedBox(
                     height: 30,
                   ),
                   _controller.loading.value
                       ? const Loading()
-                      : ElevatedButton(
+                      : MyElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
                               _controller.login();
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: Size.fromHeight(40),
-                          ),
-                          child: const Text("Login"),
+                          buttonText: "Login",
                         ),
                   TextButton(
                     onPressed: () {
@@ -76,16 +103,19 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: const Text("Signup"),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      _controller.signInwithGoogle();
-                    },
-                    icon: const Icon(FontAwesomeIcons.google),
-                  ),
+
+                  // IconButton(
+                  //   onPressed: () {
+                  //     _controller.signInwithGoogle();
+                  //   },
+                  //   icon: const Icon(FontAwesomeIcons.google),
+                  // ),
                 ],
               ),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }
