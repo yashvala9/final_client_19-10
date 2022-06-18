@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../../account_settings/views/account_settings_view.dart';
 import '../controllers/giveaway_campaign_controller.dart';
 
@@ -31,176 +32,127 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20, left: 12),
-              child: Text(
-                "Start new giveaway",
-                style: TextStyle(
-                  color: Color.fromRGBO(22, 22, 22, 1),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-              ),
-              ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                "Upload Prize Image",
-                style: TextStyle(
-                  color: Color.fromRGBO(51, 51, 51, 1),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  Get.snackbar("Operation Failed", "Backend Required");
-                },
-                child: Container(
-                  color: const Color.fromRGBO(240, 242, 246, 1),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          "assets/Gallery Icon.png",
-                        ),
-                      ),
-                    ),
-                    height: 283,
-                    width: 364,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 20, left: 12),
+                child: Text(
+                  "Start new giveaway",
+                  style: TextStyle(
+                    color: Color.fromRGBO(22, 22, 22, 1),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                "Campaign Name",
-                style: TextStyle(
-                  color: Color.fromRGBO(51, 51, 51, 1),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Text(
+                  "Upload Prize Image",
+                  style: TextStyle(
+                    color: Color.fromRGBO(51, 51, 51, 1),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12, right: 12),
-              child: TextField(
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              Container(
+                color: const Color.fromRGBO(240, 242, 246, 1),
+                alignment: Alignment.center,
+                child: Image.asset("assets/Gallery Icon.png"),
+              ),
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Text(
+                  "Campaign Name",
+                  style: TextStyle(
+                    color: Color.fromRGBO(51, 51, 51, 1),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              const TextField(
                 decoration: InputDecoration(
-                  labelText: "Input",
                   hintText: "Input",
-                  filled: true,
-                  fillColor: Color.fromRGBO(240, 242, 246, 1),
-                  border: OutlineInputBorder()
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                "Prize",
-                style: TextStyle(
-                  color: Color.fromRGBO(51, 51, 51, 1),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 4,
+                ),
+                child: Text(
+                  "Prize",
+                  style: TextStyle(
+                    color: Color.fromRGBO(51, 51, 51, 1),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12, right: 12),
-              child: TextField(
+              const TextField(
                 decoration: InputDecoration(
-                    labelText: "Input",
-                    hintText: "Input",
-                    filled: true,
-                    fillColor: Color.fromRGBO(240, 242, 246, 1),
-                    border: OutlineInputBorder()
+                  hintText: "Input",
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12),
-              child: Text(
-                "Campaign end date",
-                style: TextStyle(
-                  color: Color.fromRGBO(51, 51, 51, 1),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Text(
+                  "Campaign end date",
+                  style: TextStyle(
+                    color: Color.fromRGBO(51, 51, 51, 1),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12, right: 12),
-              child: TextField(
-                decoration: InputDecoration(
+              SizedBox(
+                height: Get.height * 0.02,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 12, right: 12),
+                child: TextField(
+                  decoration: InputDecoration(
                     labelText: "Input",
                     hintText: "Input",
                     filled: true,
                     fillColor: Color.fromRGBO(240, 242, 246, 1),
                     border: OutlineInputBorder(),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.05,
-            ),
-            Center(
-              child: SizedBox(
-                height: 72,
-                width: 376,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Get.snackbar("Operation Failed", "Backend Required");
-                    Get.to(const AccountSettingsView());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(253, 196, 64, 1),
-                ),
-                  child: const Text(
-                    "Start Campaign",
-                    style: TextStyle(
-                      color: Color.fromRGBO(22, 22, 22, 1),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                    ),
-                    ),
-                ),
+              SizedBox(
+                height: Get.height * 0.05,
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.03,
-            )
-          ],
+              MyElevatedButton(
+                buttonText: "Start Compaign",
+                onPressed: () {},
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -8,8 +8,9 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorSchema = theme.colorScheme;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         leading: IconButton(
@@ -31,89 +32,89 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 694.9,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage("assets/Background.png"),
-              ),
-            ),
-            alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                Container(
-                  height: 308,
-                  width: 285,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/Winner.png"),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 370,
-                  width: 376,
-                  color: const Color.fromRGBO(239, 192, 70, 1),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: Get.height * 0.03,
-                      ),
-                      const Text(
-                        "Pick a random follower",
-                        style: TextStyle(
-                          color: Color.fromRGBO(119, 79, 0, 1),
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600
-                        ),
-                      ),
-                      SizedBox(
-                        height: Get.height * 0.01,
-                      ),
-                      const Text(
-                        "You can randomly choose the contest winner",
-                        style: TextStyle(
-                            color: Color.fromRGBO(22, 23, 34, 1),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400
-                        ),
-                      ),
-                      Image.asset(
-                        "assets/Winner 1.png",
-                        height: 250,
-                        width: 250,
-                      ),
-                      SizedBox(
-                        height: 40,
-                        width: 160,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.to(const FollowerPickerWinnerView());
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color.fromRGBO(234, 67, 89, 1),
-                          ),
-                          child: const Text(
-                            "Start",
-                            style: TextStyle(
-                              color: Color.fromRGBO(255, 255, 255, 1),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(
+              "assets/Background.png",
             ),
           ),
-        ],
+        ),
+        alignment: Alignment.bottomCenter,
+        child: Column(
+          children: [
+            const Spacer(
+              flex: 2,
+            ),
+            Image.asset(
+              "assets/Winner.png",
+              height: 300,
+            ),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: colorSchema.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: Get.height * 0.03,
+                  ),
+                  const Text(
+                    "Pick a random follower",
+                    style: TextStyle(
+                        color: Color.fromRGBO(119, 79, 0, 1),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: Get.height * 0.01,
+                  ),
+                  const Text(
+                    "You can randomly choose the contest winner",
+                    style: TextStyle(
+                        color: Color.fromRGBO(22, 23, 34, 1),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  Image.asset(
+                    "assets/Winner 1.png",
+                    height: 250,
+                    width: 250,
+                  ),
+                  SizedBox(
+                    height: 40,
+                    width: 160,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(const FollowerPickerWinnerView());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color.fromRGBO(234, 67, 89, 1),
+                      ),
+                      child: const Text(
+                        "Start",
+                        style: TextStyle(
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Spacer(
+              flex: 2,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -184,8 +185,7 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                         style: TextStyle(
                             color: Color.fromRGBO(119, 79, 0, 1),
                             fontSize: 20,
-                            fontWeight: FontWeight.w600
-                        ),
+                            fontWeight: FontWeight.w600),
                       ),
                       Image.asset(
                         "assets/Winner 2.png",
@@ -197,7 +197,8 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                         width: 160,
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.snackbar("Operation Failed", "Backend Required");
+                            Get.snackbar(
+                                "Operation Failed", "Backend Required");
                             Get.to(const AccountSettingsView());
                           },
                           style: ElevatedButton.styleFrom(
