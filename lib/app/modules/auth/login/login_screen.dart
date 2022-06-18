@@ -5,7 +5,6 @@ import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/custom_button.dart';
-import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../auth_controller.dart';
 
@@ -104,12 +103,12 @@ class LoginScreen extends StatelessWidget {
                                         !isPassWordVisible.value,
                                     child: isPassWordVisible.value == true
                                         ? Icon(
-                                            Icons.visibility_outlined,
+                                            Icons.visibility_sharp,
                                             color: AppColors.headline5Color
                                                 .withOpacity(.5),
                                           )
                                         : Icon(
-                                            Icons.visibility_off_outlined,
+                                            Icons.visibility_off_sharp,
                                             color: AppColors.headline5Color
                                                 .withOpacity(.5),
                                           ),
@@ -198,12 +197,15 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.02),
                             Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed(AppRoutes.signUp);
+                                },
                                 child: RichText(
                                   text: TextSpan(
                                     text: 'Don\'t have account?',
                                     style: style.bodyMedium?.copyWith(
-                                      color: AppColors.subtitle2Color,
+                                      color: AppColors.subtitle2Color
+                                          .withOpacity(.8),
                                     ),
                                     children: [
                                       TextSpan(

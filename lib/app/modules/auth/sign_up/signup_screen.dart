@@ -1,6 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/utils/assets.dart';
+import 'package:reel_ro/utils/colors.dart';
+import 'package:reel_ro/widgets/custom_button.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../../../routes/app_routes.dart';
 import '../auth_controller.dart';
 
@@ -12,72 +18,297 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
+
+    final RxBool isPassWordVisible = false.obs;
+    final RxBool isRepeatPassWordVisible = false.obs;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-      ),
-      body: GetX<AuthController>(
-        builder: (_) {
-          return Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      label: Text("Email"),
-                    ),
-                    validator: (v) => v!.isEmpty ? "Email is required" : null,
-                    onSaved: (v) => _controller.email = v!.trim(),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    obscureText: !_controller.obsecure.value,
-                    decoration: InputDecoration(
-                        label: const Text("Password"),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              _controller.obsecure.value =
-                                  !_controller.obsecure.value;
-                            },
-                            icon: Icon(!_controller.obsecure.value
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined))),
-                    validator: (v) =>
-                        v!.isEmpty ? "Password is required" : null,
-                    onSaved: (v) => _controller.password = v!.trim(),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  _controller.loading.value
-                      ? const Loading()
-                      : ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _controller.signup();
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(40),
-                          ),
-                          child: const Text("Signup"),
+      body: KeyboardVisibilityBuilder(
+        builder: (context, isKeyboardVisible) {
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Stack(
+                  children: [
+                    Image.asset(Assets.loginScreenBackground),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: Get.width * 0.05,
+                        right: Get.width * 0.05,
+                        top: isKeyboardVisible
+                            ? Get.height * 0.01
+                            : Get.height * 0.05,
+                        bottom: Get.height * 0.015,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Register',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.titleLarge,
+                            ),
+                            SizedBox(height: Get.height * 0.015),
+                            Text(
+                              'Username',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.01),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                hintText: 'jamesbond123',
+                                prefixIcon: Icon(
+                                  CupertinoIcons.person_solid,
+                                  color:
+                                      AppColors.headline5Color.withOpacity(.5),
+                                ),
+                              ),
+                              keyboardType: TextInputType.name,
+                              validator: (value) {
+                                value!.isEmpty ? 'Username is required' : '';
+                              },
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Text(
+                              'Email',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.01),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                hintText: 'Email',
+                                prefixIcon: Icon(
+                                  Icons.email_rounded,
+                                  color:
+                                      AppColors.headline5Color.withOpacity(.5),
+                                ),
+                              ),
+                              validator: (value) {
+                                value!.isEmpty ? 'Email is required' : '';
+                              },
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Text(
+                              'Mobile Number',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.01),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: Get.width * 0.3,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: '+44',
+                                      counterText: '',                                     
+                                    ),
+                                    maxLength: 2,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.57,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: '9876543210',
+                                      counterText: '',
+                                      prefixIcon: Icon(
+                                        Icons.phone_android_sharp,
+                                        color: AppColors.headline5Color
+                                            .withOpacity(.5),
+                                      ),
+                                    ),
+                                    maxLength: 10,
+                                    validator: (value) {
+                                      value!.isEmpty
+                                          ? 'Mobile number is required'
+                                          : '';
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Text(
+                              'Password',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.015),
+                            Obx(
+                              () => TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => isPassWordVisible.value =
+                                        !isPassWordVisible.value,
+                                    child: isPassWordVisible.value == true
+                                        ? Icon(
+                                            Icons.visibility_sharp,
+                                            color: AppColors.headline5Color
+                                                .withOpacity(.5),
+                                          )
+                                        : Icon(
+                                            Icons.visibility_off_sharp,
+                                            color: AppColors.headline5Color
+                                                .withOpacity(.5),
+                                          ),
+                                  ),
+                                ),
+                                obscureText: !isPassWordVisible.value,
+                                validator: (value) {
+                                  value!.isEmpty ? 'Password is required' : '';
+                                },
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Text(
+                              'Repeat Password',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.015),
+                            Obx(
+                              () => TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'Repeat Password',
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => isRepeatPassWordVisible.value =
+                                        !isRepeatPassWordVisible.value,
+                                    child: isRepeatPassWordVisible.value == true
+                                        ? Icon(
+                                            Icons.visibility_sharp,
+                                            color: AppColors.headline5Color
+                                                .withOpacity(.5),
+                                          )
+                                        : Icon(
+                                            Icons.visibility_off_sharp,
+                                            color: AppColors.headline5Color
+                                                .withOpacity(.5),
+                                          ),
+                                  ),
+                                ),
+                                obscureText: !isPassWordVisible.value,
+                                validator: (value) {
+                                  value!.isEmpty ? 'Password is required' : '';
+                                },
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.03),
+                            MyElevatedButton(
+                              buttonText: 'Sign Up',
+                              onPressed: () {},
+                            ),
+                            SizedBox(height: Get.height * 0.03),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    indent: Get.width * 0.04,
+                                    endIndent: Get.width * 0.04,
+                                    color: AppColors.subtitle1Color
+                                        .withOpacity(.2),
+                                  ),
+                                ),
+                                Text(
+                                  'or login with',
+                                  textScaleFactor: Get.textScaleFactor,
+                                  style: style.bodyMedium?.copyWith(
+                                    color: AppColors.subtitle2Color
+                                        .withOpacity(.6),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    indent: Get.width * 0.04,
+                                    endIndent: Get.width * 0.04,
+                                    color: AppColors.subtitle1Color
+                                        .withOpacity(.2),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Button(
+                                  style: style,
+                                  text: 'Google',
+                                  border: Border.all(
+                                    color: AppColors.textFieldColor,
+                                  ),
+                                  iconImage: Assets.googleIcon,
+                                  onTap: () {},
+                                  color: AppColors.lightGrey,
+                                  width: Get.width * 0.42,
+                                  space: Get.width * 0.04,
+                                ),
+                                Button(
+                                  style: style,
+                                  text: 'Facebook',
+                                  border: Border.all(
+                                    color: AppColors.textFieldColor,
+                                  ),
+                                  iconImage: Assets.facebookIcon,
+                                  onTap: () {},
+                                  color: AppColors.lightGrey,
+                                  width: Get.width * 0.42,
+                                  space: Get.width * 0.04,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Center(
+                              child: TextButton(
+                                onPressed: () {
+                                  Get.toNamed(AppRoutes.login);
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Already have an account?',
+                                    style: style.bodyMedium?.copyWith(
+                                      color: AppColors.subtitle2Color
+                                          .withOpacity(.8),
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Sign in',
+                                        style: style.bodyMedium?.copyWith(
+                                          color: AppColors.lightOrange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                  TextButton(
-                    onPressed: () {
-                      Get.offAllNamed(AppRoutes.login);
-                    },
-                    child: const Text("Login"),
-                  ),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
