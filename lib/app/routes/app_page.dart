@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/auth/register/signup_screen.dart';
+import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
+import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
 import 'package:reel_ro/app/modules/get_started/get_started_view.dart';
 import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
-import '../modules/auth/login/login_screen.dart';
 import '../modules/homepage/home_page.dart';
 
 class AppPages {
@@ -27,7 +27,7 @@ class AppPages {
       page: () => HomePage(),
     ),
     GetPage(
-      name: AppRoutes.signup,
+      name: AppRoutes.signUp,
       page: () => SignupScreen(),
     ),
   ];

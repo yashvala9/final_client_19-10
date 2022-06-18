@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
+import 'package:reel_ro/utils/assets.dart';
+import 'package:reel_ro/utils/colors.dart';
+import 'package:reel_ro/widgets/custom_button.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
-
 import '../auth_controller.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -17,102 +19,212 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    final colorScheme = theme.colorScheme;
+
+    final RxBool isValidEmail = false.obs;
+    final RxBool isPassWordVisible = false.obs;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-      ),
-      body: GetX<AuthController>(
-        builder: (_) {
-          return Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      label: Text("Email"),
-                    ),
-                    validator: (v) => v!.isEmpty ? "Email is required" : null,
-                    onSaved: (v) => _controller.email = v!.trim(),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(label: Text("Name")),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 4,
+      body: KeyboardVisibilityBuilder(
+        builder: (context, isKeyboardVisible) {
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Stack(
+                  children: [
+                    Image.asset(Assets.loginScreenBackground),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: Get.width * 0.05,
+                        right: Get.width * 0.05,
+                        top: isKeyboardVisible
+                            ? Get.height * 0.01
+                            : Get.height * 0.15,
+                        bottom: Get.height * 0.025,
                       ),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Password",
-                        style: style.titleMedium,
-                      )),
-                  TextFormField(
-                    obscureText: !_controller.obsecure.value,
-                    decoration: InputDecoration(
-                        label: const Text("Password"),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              _controller.obsecure.value =
-                                  !_controller.obsecure.value;
-                            },
-                            icon: Icon(!_controller.obsecure.value
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined))),
-                    validator: (v) =>
-                        v!.isEmpty ? "Password is required" : null,
-                    onSaved: (v) => _controller.password = v!.trim(),
-                  ),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Forget Password?",
-                            style: style.titleSmall,
-                          ))),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  _controller.loading.value
-                      ? const Loading()
-                      : MyElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _controller.login();
-                            }
-                          },
-                          buttonText: "Login",
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome to',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.titleLarge,
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Image.asset(
+                              Assets.reelRoImage,
+                              width: Get.width * 0.35,
+                            ),
+                            SizedBox(height: Get.height * 0.03),
+                            Text(
+                              'Username',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.015),
+                            Obx(
+                              () => TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'abc@gmail.com',
+                                  suffixIcon:
+                                      isValidEmail.value == !isValidEmail.value
+                                          ? const Icon(
+                                              Icons.check_box,
+                                              color: AppColors.lightGreen,
+                                            )
+                                          : null,
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                validator: (value) {
+                                  value!.isEmpty ? 'Email is required' : '';
+                                  value.isEmail
+                                      ? isValidEmail.value = true
+                                      : isValidEmail.value = false;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.03),
+                            Text(
+                              'Password',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge?.copyWith(
+                                color: AppColors.labelLarge,
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.015),
+                            Obx(
+                              () => TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => isPassWordVisible.value =
+                                        !isPassWordVisible.value,
+                                    child: isPassWordVisible.value == true
+                                        ? Icon(
+                                            Icons.visibility_outlined,
+                                            color: AppColors.headline5Color
+                                                .withOpacity(.5),
+                                          )
+                                        : Icon(
+                                            Icons.visibility_off_outlined,
+                                            color: AppColors.headline5Color
+                                                .withOpacity(.5),
+                                          ),
+                                  ),
+                                ),
+                                obscureText: !isPassWordVisible.value,
+                                validator: (value) {
+                                  value!.isEmpty ? 'Password is required' : '';
+                                },
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                'Forgot Password?',
+                                textScaleFactor: Get.textScaleFactor,
+                                style: style.bodyMedium?.copyWith(
+                                  color: AppColors.lightBlack.withOpacity(.5),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            MyElevatedButton(
+                              buttonText: 'Login',
+                              onPressed: () {},
+                            ),
+                            SizedBox(height: Get.height * 0.03),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                      indent: Get.width * 0.04,
+                                      endIndent: Get.width * 0.04,
+                                      color: AppColors.subtitle1Color
+                                          .withOpacity(.2)),
+                                ),
+                                Text(
+                                  'or login with',
+                                  textScaleFactor: Get.textScaleFactor,
+                                  style: style.bodyMedium?.copyWith(
+                                    color: AppColors.subtitle2Color
+                                        .withOpacity(.6),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                      indent: Get.width * 0.04,
+                                      endIndent: Get.width * 0.04,
+                                      color: AppColors.subtitle1Color
+                                          .withOpacity(.2)),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Button(
+                                  style: style,
+                                  text: 'Google',
+                                  border: Border.all(
+                                    color: AppColors.textFieldColor,
+                                  ),
+                                  iconImage: Assets.googleIcon,
+                                  onTap: () {},
+                                  color: AppColors.lightGrey,
+                                  width: Get.width * 0.42,
+                                  space: Get.width * 0.04,
+                                ),
+                                Button(
+                                  style: style,
+                                  text: 'Facebook',
+                                  border: Border.all(
+                                    color: AppColors.textFieldColor,
+                                  ),
+                                  iconImage: Assets.facebookIcon,
+                                  onTap: () {},
+                                  color: AppColors.lightGrey,
+                                  width: Get.width * 0.42,
+                                  space: Get.width * 0.04,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: Get.height * 0.02),
+                            Center(
+                              child: TextButton(
+                                onPressed: () {},
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Don\'t have account?',
+                                    style: style.bodyMedium?.copyWith(
+                                      color: AppColors.subtitle2Color,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Sign up',
+                                        style: style.bodyMedium?.copyWith(
+                                          color: AppColors.lightOrange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                  TextButton(
-                    onPressed: () {
-                      Get.offAllNamed(AppRoutes.signup);
-                    },
-                    child: const Text("Signup"),
-                  ),
-
-                  // IconButton(
-                  //   onPressed: () {
-                  //     _controller.signInwithGoogle();
-                  //   },
-                  //   icon: const Icon(FontAwesomeIcons.google),
-                  // ),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           );
         },
       ),

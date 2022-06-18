@@ -4,5 +4,5 @@ class AppRoutes {
   static const getStarted = '/get-started';
   static const dashboard = '/dashboard';
   static const login = '/login';
-  static const signup = '/signup';
+  static const signUp = '/signUp';
 }

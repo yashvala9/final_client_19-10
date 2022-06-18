@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
+import 'package:reel_ro/widgets/custom_button.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -31,29 +32,35 @@ class GetStarted extends StatelessWidget {
               Positioned(
                 bottom: Get.height * 0.05,
                 child: Padding(
-                  padding: EdgeInsets.all(Get.width * 0.1),
+                  padding: EdgeInsets.all(Get.width * 0.08),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Button(
                         onTap: (){},
                         style: style,
+                        color: Colors.white,
                         text: 'Continue with Facebook',
                         iconImage: Assets.facebookIcon,
+                        buttonTextColor: AppColors.buttonTextColor2,
                       ),
                       const Divider(),
                       Button(
                         onTap: (){},
                         style: style,
+                        color: Colors.white,
                         text: 'Continue with Google',
                         iconImage: Assets.googleIcon,
+                        buttonTextColor: AppColors.buttonTextColor2,
                       ),
                       const Divider(),
                       Button(
                         onTap: () => Get.toNamed(AppRoutes.login),
                         style: style,
+                        border: Border.all(color: AppColors.borderColor),
                         text: 'Continue with Email',
                         iconImage: Assets.emailIcon,
+                        buttonTextColor: Colors.white,
                       ),
                     ],
                   ),
@@ -67,47 +74,4 @@ class GetStarted extends StatelessWidget {
   }
 }
 
-class Button extends StatelessWidget {
-  const Button({
-    Key? key,
-    required this.style,
-    required this.text,
-    required this.iconImage,
-    required this.onTap,
-  }) : super(key: key);
 
-  final TextTheme style;
-  final String text;
-  final String iconImage;
-  final Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: Get.width * 0.8,
-        padding: EdgeInsets.symmetric(
-          vertical: Get.height * 0.02,
-          horizontal: Get.width * 0.05,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Image.asset(iconImage, width: Get.width * 0.08),
-            SizedBox(width: Get.width * 0.08),
-            Text(
-              text,
-              style: style.bodyMedium?.copyWith(
-                color: AppColors.buttonTextColor2,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

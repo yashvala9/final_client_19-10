@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/widgets/loading.dart';
-
 import '../../../routes/app_routes.dart';
 import '../auth_controller.dart';
 
