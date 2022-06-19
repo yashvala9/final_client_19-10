@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
@@ -56,7 +57,8 @@ class VerifyEmailView extends StatelessWidget {
                     Form(
                       key: _formKey,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Get.width * 0.03),
                         child: Row(
                           children: [
                             OTPTextField(
@@ -107,7 +109,9 @@ class VerifyEmailView extends StatelessWidget {
                     SizedBox(height: Get.height * 0.03),
                     MyElevatedButton(
                       buttonText: 'Submit',
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(AppRoutes.resetPassword);
+                      },
                     ),
                   ],
                 ),
