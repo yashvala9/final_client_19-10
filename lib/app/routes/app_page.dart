@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/auth/create_profile/create_profile_view.dart';
 import 'package:reel_ro/app/modules/auth/forgot_password/forgot_password_view.dart';
 import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/auth/reset_password/reset_password_view.dart';
@@ -39,7 +40,11 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.resetPassword,
-      page: () => const ResetPasswordView(),
+      page: () => ResetPasswordView(),
+    ),
+    GetPage(
+      name: AppRoutes.createProfile,
+      page: () => CreateProfileView(),
     ),
     GetPage(
       name: AppRoutes.signUp,

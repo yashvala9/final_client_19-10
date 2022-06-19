@@ -30,18 +30,29 @@ class VerifyEmailView extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.1,
-                  vertical: Get.height * 0.15,
+                  horizontal: Get.width * 0.07,
+                  vertical: Get.height * 0.12,
                 ),
                 child: Column(
                   children: [
                     SizedBox(
                       height: Get.height * 0.4,
                       width: Get.width,
-                      child: Image.asset(Assets.emailImage),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.none,
+                          child: Image.asset(
+                            Assets.emailImage,
+                            width: Get.width * 0.5,
+                            height: Get.width * 0.5,
+                          ),
+                        )
+                      ),
                     ),
+                    SizedBox(height: Get.height * 0.02),
                     Text(
                       'Verify your email',
+                      textScaleFactor: Get.textScaleFactor,
                       style: style.headlineSmall?.copyWith(
                         color: AppColors.headline5Color,
                       ),
@@ -49,6 +60,8 @@ class VerifyEmailView extends StatelessWidget {
                     SizedBox(height: Get.height * 0.02),
                     Text(
                       'Please check your email to take 4 digit\ncode for continue.',
+                      textScaleFactor: Get.textScaleFactor,
+                      textAlign: TextAlign.center,
                       style: style.bodyLarge?.copyWith(
                         color: AppColors.subtitle2Color.withOpacity(.6),
                       ),
@@ -58,7 +71,7 @@ class VerifyEmailView extends StatelessWidget {
                       key: _formKey,
                       child: Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: Get.width * 0.03),
+                            EdgeInsets.symmetric(horizontal: Get.width * 0.08),
                         child: Row(
                           children: [
                             OTPTextField(
@@ -69,6 +82,7 @@ class VerifyEmailView extends StatelessWidget {
                                 }
                               },
                             ),
+                            SizedBox(width: Get.width * 0.015),
                             OTPTextField(
                               text: _text2,
                               onChanged: (value) {
@@ -77,6 +91,7 @@ class VerifyEmailView extends StatelessWidget {
                                 }
                               },
                             ),
+                            SizedBox(width: Get.width * 0.015),
                             OTPTextField(
                               text: _text3,
                               onChanged: (value) {
@@ -85,6 +100,7 @@ class VerifyEmailView extends StatelessWidget {
                                 }
                               },
                             ),
+                            SizedBox(width: Get.width * 0.015),
                             OTPTextField(
                               text: _text4,
                               onChanged: (value) {
@@ -109,9 +125,7 @@ class VerifyEmailView extends StatelessWidget {
                     SizedBox(height: Get.height * 0.03),
                     MyElevatedButton(
                       buttonText: 'Submit',
-                      onPressed: () {
-                        Get.toNamed(AppRoutes.resetPassword);
-                      },
+                      onPressed: () => Get.toNamed(AppRoutes.resetPassword),
                     ),
                   ],
                 ),
@@ -143,16 +157,23 @@ class OTPTextField extends StatelessWidget {
         maxLength: 1,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
+          fillColor: Colors.white,
+          filled: true,
           counterText: '',
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide:
+                BorderSide(color: AppColors.subtitle1Color.withOpacity(.1)),
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide:
-                BorderSide(color: AppColors.subtitle1Color.withOpacity(.2)),
+                BorderSide(color: AppColors.subtitle1Color.withOpacity(.5)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide:
-                BorderSide(color: AppColors.subtitle1Color.withOpacity(.8)),
+                BorderSide(color: AppColors.subtitle1Color.withOpacity(.6)),
           ),
         ),
         textInputAction: TextInputAction.next,

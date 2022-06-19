@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
@@ -24,18 +25,28 @@ class ForgotPasswordView extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.1,
-                  vertical: Get.height * 0.15,
+                  horizontal: Get.width * 0.07,
+                  vertical: Get.height * 0.12,
                 ),
                 child: Column(
                   children: [
                     SizedBox(
                       height: Get.height * 0.4,
                       width: Get.width,
-                      child: Image.asset(Assets.lockImage),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.none,
+                          child: Image.asset(
+                            Assets.lockImage,
+                            width: Get.width * 0.5,
+                            height: Get.width * 0.5,
+                          ),
+                        ),
+                      ),
                     ),
                     Text(
                       'Forgot password?',
+                      textScaleFactor: Get.textScaleFactor,
                       style: style.headlineSmall?.copyWith(
                         color: AppColors.headline5Color,
                       ),
@@ -43,6 +54,8 @@ class ForgotPasswordView extends StatelessWidget {
                     SizedBox(height: Get.height * 0.02),
                     Text(
                       'Enter your email address for recovery\nyour account.',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: Get.textScaleFactor,
                       style: style.bodyLarge?.copyWith(
                         color: AppColors.subtitle2Color.withOpacity(.6),
                       ),
@@ -63,7 +76,7 @@ class ForgotPasswordView extends StatelessWidget {
                     SizedBox(height: Get.height * 0.03),
                     MyElevatedButton(
                       buttonText: 'Reset Password',
-                      onPressed: () {},
+                      onPressed: () => Get.toNamed(AppRoutes.verifyEmail),
                     ),
                   ],
                 ),

@@ -1,3 +1,5 @@
+import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
+
 class AppRoutes {
   static const home = '/home';
   static const splash = '/splash';
@@ -8,4 +10,5 @@ class AppRoutes {
   static const forgotPassword = '/forgot-password';
   static const verifyEmail = '/verify-email';
   static const resetPassword = '/reset-password';
+  static const createProfile = '/create-profile';
 }

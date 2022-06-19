@@ -4,7 +4,7 @@ import 'package:reel_ro/utils/colors.dart';
 class MyElevatedButton extends StatelessWidget {
   final String buttonText;
 
-  final Function onPressed;
+  final Function() onPressed;
   const MyElevatedButton({
     Key? key,
     required this.buttonText,
@@ -29,7 +29,7 @@ class MyElevatedButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: ElevatedButton(
-        onPressed: () => onPressed,
+        onPressed: onPressed,
         child: Text(
           buttonText,
         ),

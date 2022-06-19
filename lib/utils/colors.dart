@@ -26,6 +26,7 @@ class AppColors {
   static const lightBlack = Color(0xff1C1C1C);
   static const lightGrey = Color(0xffF9F9F9);
   static const lightOrange = Color(0xffFF942C);
+  static const yellowOrange = Color(0xffFBA800);
 
   static const buttonGradiantColor = [Color(0xffFDD447), Color(0xffFDBA3C)];
 }

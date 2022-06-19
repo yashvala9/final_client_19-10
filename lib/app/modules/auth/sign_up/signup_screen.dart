@@ -227,7 +227,8 @@ class SignupScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.03),
                             MyElevatedButton(
                               buttonText: 'Sign Up',
-                              onPressed: () {},
+                              onPressed: () =>
+                                  Get.toNamed(AppRoutes.createProfile),
                             ),
                             SizedBox(height: Get.height * 0.03),
                             Row(
