@@ -24,6 +24,13 @@ class SignupScreen extends StatelessWidget {
     final RxBool isPassWordVisible = false.obs;
     final RxBool isRepeatPassWordVisible = false.obs;
 
+    final _emailController = TextEditingController();
+    final _userNameController = TextEditingController();
+    final _countryCodeController = TextEditingController();
+    final _mobileController = TextEditingController();
+    final _passwordController = TextEditingController();
+    final _repeatPasswordController = TextEditingController();
+
     return Scaffold(
       body: KeyboardVisibilityBuilder(
         builder: (context, isKeyboardVisible) {
@@ -62,6 +69,7 @@ class SignupScreen extends StatelessWidget {
                             ),
                             SizedBox(height: Get.height * 0.01),
                             TextFormField(
+                              controller: _userNameController,
                               decoration: InputDecoration(
                                 hintText: 'jamesbond123',
                                 prefixIcon: Icon(
@@ -85,6 +93,7 @@ class SignupScreen extends StatelessWidget {
                             ),
                             SizedBox(height: Get.height * 0.01),
                             TextFormField(
+                              controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'Email',
                                 prefixIcon: Icon(
@@ -112,9 +121,10 @@ class SignupScreen extends StatelessWidget {
                                 SizedBox(
                                   width: Get.width * 0.3,
                                   child: TextFormField(
-                                    decoration: InputDecoration(
+                                    controller: _countryCodeController,
+                                    decoration: const InputDecoration(
                                       hintText: '+44',
-                                      counterText: '',                                     
+                                      counterText: '',
                                     ),
                                     maxLength: 2,
                                   ),
@@ -122,6 +132,7 @@ class SignupScreen extends StatelessWidget {
                                 SizedBox(
                                   width: Get.width * 0.57,
                                   child: TextFormField(
+                                    controller: _mobileController,
                                     decoration: InputDecoration(
                                       hintText: '9876543210',
                                       counterText: '',
@@ -152,6 +163,7 @@ class SignupScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
+                                controller: _passwordController,
                                 decoration: InputDecoration(
                                   hintText: 'Password',
                                   suffixIcon: GestureDetector(
@@ -187,6 +199,7 @@ class SignupScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
+                                controller: _repeatPasswordController,
                                 decoration: InputDecoration(
                                   hintText: 'Repeat Password',
                                   suffixIcon: GestureDetector(

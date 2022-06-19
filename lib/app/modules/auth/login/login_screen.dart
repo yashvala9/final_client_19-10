@@ -13,6 +13,8 @@ class LoginScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(AuthController());
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,7 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
+                                controller: _emailController,
                                 decoration: InputDecoration(
                                   hintText: 'abc@gmail.com',
                                   suffixIcon:
@@ -96,6 +99,7 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
+                                controller: _passwordController,
                                 decoration: InputDecoration(
                                   hintText: 'Password',
                                   suffixIcon: GestureDetector(
@@ -123,11 +127,16 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.02),
                             Align(
                               alignment: Alignment.centerRight,
-                              child: Text(
-                                'Forgot Password?',
-                                textScaleFactor: Get.textScaleFactor,
-                                style: style.bodyMedium?.copyWith(
-                                  color: AppColors.lightBlack.withOpacity(.5),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(AppRoutes.forgotPassword);
+                                },
+                                child: Text(
+                                  'Forgot Password?',
+                                  textScaleFactor: Get.textScaleFactor,
+                                  style: style.bodyMedium?.copyWith(
+                                    color: AppColors.lightBlack.withOpacity(.5),
+                                  ),
                                 ),
                               ),
                             ),

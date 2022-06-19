@@ -66,8 +66,13 @@ class MyApp extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          hintStyle: base.textTheme.bodyLarge?.copyWith(
+            color: AppColors.subtitle1Color.withOpacity(.6),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: Get.width * 0.035,
+            vertical: Get.height * 0.015,
+          ),
           fillColor: AppColors.textFieldColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
