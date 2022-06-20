@@ -16,13 +16,12 @@ class LoginScreen extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final RxBool isPassWordVisible = false.obs;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-
-    final RxBool isValidEmail = false.obs;
-    final RxBool isPassWordVisible = false.obs;
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -71,20 +70,24 @@ class LoginScreen extends StatelessWidget {
                                 controller: _emailController,
                                 decoration: InputDecoration(
                                   hintText: 'abc@gmail.com',
-                                  suffixIcon:
-                                      isValidEmail.value == !isValidEmail.value
-                                          ? const Icon(
-                                              Icons.check_box,
-                                              color: AppColors.lightGreen,
-                                            )
-                                          : null,
+                                  suffixIcon: _controller.isValildEmail.value ==
+                                          !_controller.isValildEmail.value
+                                      ? const Icon(
+                                          Icons.check_box,
+                                          color: AppColors.lightGreen,
+                                        )
+                                      : null,
                                 ),
                                 keyboardType: TextInputType.emailAddress,
-                                validator: (value) {
-                                  value!.isEmpty ? 'Email is required' : '';
+                                onChanged: (value) {
                                   value.isEmail
-                                      ? isValidEmail.value = true
-                                      : isValidEmail.value = false;
+                                      ? _controller.isValildEmail.value = true
+                                      : _controller.isValildEmail.value = false;
+                                },
+                                validator: (value) {
+                                  return value!.isEmpty
+                                      ? 'Email is required'
+                                      : null;
                                 },
                               ),
                             ),
@@ -119,9 +122,9 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                 ),
                                 obscureText: !isPassWordVisible.value,
-                                validator: (value) {
-                                  value!.isEmpty ? 'Password is required' : '';
-                                },
+                                validator: (value) => value!.isEmpty
+                                    ? 'Password is required'
+                                    : null,
                               ),
                             ),
                             SizedBox(height: Get.height * 0.02),

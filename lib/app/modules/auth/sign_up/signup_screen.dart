@@ -63,9 +63,7 @@ class SignupScreen extends StatelessWidget {
                             Text(
                               'Username',
                               textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge?.copyWith(
-                                color: AppColors.labelLarge,
-                              ),
+                              style: style.labelLarge,
                             ),
                             SizedBox(height: Get.height * 0.01),
                             TextFormField(
@@ -80,16 +78,16 @@ class SignupScreen extends StatelessWidget {
                               ),
                               keyboardType: TextInputType.name,
                               validator: (value) {
-                                value!.isEmpty ? 'Username is required' : '';
+                                return value!.isEmpty
+                                    ? 'Username is required'
+                                    : null;
                               },
                             ),
                             SizedBox(height: Get.height * 0.02),
                             Text(
                               'Email',
                               textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge?.copyWith(
-                                color: AppColors.labelLarge,
-                              ),
+                              style: style.labelLarge,
                             ),
                             SizedBox(height: Get.height * 0.01),
                             TextFormField(
@@ -103,23 +101,21 @@ class SignupScreen extends StatelessWidget {
                                 ),
                               ),
                               validator: (value) {
-                                value!.isEmpty ? 'Email is required' : '';
+                                return value!.isEmpty
+                                    ? 'Email is required'
+                                    : '';
                               },
                             ),
                             SizedBox(height: Get.height * 0.02),
-                            Text(
-                              'Mobile Number',
-                              textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge?.copyWith(
-                                color: AppColors.labelLarge,
-                              ),
-                            ),
+                            Text('Mobile Number',
+                                textScaleFactor: Get.textScaleFactor,
+                                style: style.labelLarge),
                             SizedBox(height: Get.height * 0.01),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: Get.width * 0.3,
+                                Expanded(
+                                  flex: 1,
                                   child: TextFormField(
                                     controller: _countryCodeController,
                                     decoration: const InputDecoration(
@@ -129,8 +125,11 @@ class SignupScreen extends StatelessWidget {
                                     maxLength: 2,
                                   ),
                                 ),
-                                SizedBox(
-                                  width: Get.width * 0.57,
+                                 SizedBox(
+                                  width: Get.width * 0.03,
+                                ),
+                                Expanded(
+                                  flex: 3,
                                   child: TextFormField(
                                     controller: _mobileController,
                                     decoration: InputDecoration(
@@ -144,9 +143,9 @@ class SignupScreen extends StatelessWidget {
                                     ),
                                     maxLength: 10,
                                     validator: (value) {
-                                      value!.isEmpty
+                                    return  value!.isEmpty
                                           ? 'Mobile number is required'
-                                          : '';
+                                          : null;
                                     },
                                   ),
                                 ),
@@ -156,9 +155,7 @@ class SignupScreen extends StatelessWidget {
                             Text(
                               'Password',
                               textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge?.copyWith(
-                                color: AppColors.labelLarge,
-                              ),
+                              style: style.labelLarge
                             ),
                             SizedBox(height: Get.height * 0.015),
                             Obx(
@@ -169,7 +166,7 @@ class SignupScreen extends StatelessWidget {
                                   suffixIcon: GestureDetector(
                                     onTap: () => isPassWordVisible.value =
                                         !isPassWordVisible.value,
-                                    child: isPassWordVisible.value == true
+                                    child: isPassWordVisible.value 
                                         ? Icon(
                                             Icons.visibility_sharp,
                                             color: AppColors.headline5Color
@@ -184,7 +181,7 @@ class SignupScreen extends StatelessWidget {
                                 ),
                                 obscureText: !isPassWordVisible.value,
                                 validator: (value) {
-                                  value!.isEmpty ? 'Password is required' : '';
+                                 return value!.isEmpty ? 'Password is required' : null;
                                 },
                               ),
                             ),
@@ -205,7 +202,7 @@ class SignupScreen extends StatelessWidget {
                                   suffixIcon: GestureDetector(
                                     onTap: () => isRepeatPassWordVisible.value =
                                         !isRepeatPassWordVisible.value,
-                                    child: isRepeatPassWordVisible.value == true
+                                    child: isRepeatPassWordVisible.value
                                         ? Icon(
                                             Icons.visibility_sharp,
                                             color: AppColors.headline5Color
@@ -220,7 +217,7 @@ class SignupScreen extends StatelessWidget {
                                 ),
                                 obscureText: !isPassWordVisible.value,
                                 validator: (value) {
-                                  value!.isEmpty ? 'Password is required' : '';
+                                 return value!.isEmpty ? 'Password is required' : null;
                                 },
                               ),
                             ),

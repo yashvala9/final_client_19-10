@@ -10,13 +10,12 @@ class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-
-    final _emailController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -47,9 +46,7 @@ class ForgotPasswordView extends StatelessWidget {
                     Text(
                       'Forgot password?',
                       textScaleFactor: Get.textScaleFactor,
-                      style: style.headlineSmall?.copyWith(
-                        color: AppColors.headline5Color,
-                      ),
+                      style: style.headlineSmall,
                     ),
                     SizedBox(height: Get.height * 0.02),
                     Text(
