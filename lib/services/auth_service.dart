@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:reel_ro/app/inbox_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
 
@@ -9,8 +8,7 @@ class AuthService extends GetxService {
   Future<void> redirectUser() async {
     var user = _authRepo.user;
     if (user == null) {
-      Get.to(() => const InboxScreen());
-      // Get.offAllNamed(AppRoutes.login);
+      Get.offAllNamed(AppRoutes.getStarted);
     } else {
       Get.offAllNamed(AppRoutes.home);
     }
