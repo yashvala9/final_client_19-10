@@ -9,6 +9,7 @@ class AuthController extends GetxController {
 
   RxBool loading = RxBool(false);
   RxBool obsecure = RxBool(false);
+  RxBool isValildEmail = RxBool(false);
 
   String email = '';
   String password = '';
