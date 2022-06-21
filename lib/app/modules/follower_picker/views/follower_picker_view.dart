@@ -9,6 +9,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final style = theme.textTheme;
     final colorSchema = theme.colorScheme;
     return Scaffold(
       appBar: AppBar(
@@ -23,13 +24,13 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
             width: 10.21,
           ),
         ),
-        title: const Text(
+        title: Text(
           "Random Follower Picker",
-          style: TextStyle(
+          style: style.titleMedium, /*TextStyle(
             color: Color.fromRGBO(22, 23, 34, 1),
             fontWeight: FontWeight.w400,
             fontSize: 16,
-          ),
+          ),*/
         ),
       ),
       body: Container(
@@ -65,22 +66,22 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                   SizedBox(
                     height: Get.height * 0.03,
                   ),
-                  const Text(
+                  Text(
                     "Pick a random follower",
-                    style: TextStyle(
+                    style: style.headline6, /*TextStyle(
                         color: Color.fromRGBO(119, 79, 0, 1),
                         fontSize: 20,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: FontWeight.w600),*/
                   ),
                   SizedBox(
                     height: Get.height * 0.01,
                   ),
-                  const Text(
+                  Text(
                     "You can randomly choose the contest winner",
-                    style: TextStyle(
+                    style: style.titleMedium, /*TextStyle(
                         color: Color.fromRGBO(22, 23, 34, 1),
                         fontSize: 14,
-                        fontWeight: FontWeight.w400),
+                        fontWeight: FontWeight.w400),*/
                   ),
                   Image.asset(
                     "assets/Winner 1.png",
@@ -97,20 +98,20 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                       style: ElevatedButton.styleFrom(
                         primary: const Color.fromRGBO(234, 67, 89, 1),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Start",
-                        style: TextStyle(
+                        style: style.titleMedium, /*TextStyle(
                           color: Color.fromRGBO(255, 255, 255, 1),
                           fontWeight: FontWeight.w500,
                           fontSize: 18,
-                        ),
+                        ),*/
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            Spacer(
+            const Spacer(
               flex: 2,
             ),
           ],

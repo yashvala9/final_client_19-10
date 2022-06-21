@@ -25,13 +25,13 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             width: 10.21,
           ),
         ),
-        title: const Text(
+        title: Text(
           "Account Settings",
-          style: TextStyle(
+          style: style.titleMedium,/*TextStyle(
             color: Color.fromRGBO(22, 23, 34, 1),
             fontWeight: FontWeight.w400,
             fontSize: 16,
-          ),
+          ),*/
         ),
       ),
       body: Column(
@@ -57,17 +57,15 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Manage my account",
-                style: TextStyle(
+                style: style.titleMedium,/*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
-              SizedBox(
-                width: Get.width * 0.4,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {
                   Get.to(const EditProfileView());
@@ -90,17 +88,15 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Privacy and safety",
-                style: TextStyle(
+                style: style.titleMedium, /*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
-              SizedBox(
-                width: Get.width * 0.435,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(
@@ -121,17 +117,15 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Share profile",
-                style: TextStyle(
+                style: style.titleMedium, /*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
-              SizedBox(
-                width: Get.width * 0.53,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(
@@ -160,9 +154,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   fontSize: 15,
                 ),
               ),
-              SizedBox(
-                width: Get.width * 0.59,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(
@@ -176,9 +168,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           const Divider(
             thickness: 1,
           ),
-          SizedBox(
-            height: Get.height * 0.015,
-          ),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text("GENERAL", style: style.titleMedium),
@@ -193,13 +183,13 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Push notifications",
-                style: TextStyle(
+                style: style.titleMedium, /*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
               const Spacer(),
               IconButton(
@@ -222,13 +212,13 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Giveaway",
-                style: TextStyle(
+                style: style.titleMedium, /*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
               SizedBox(
                 width: Get.width * 0.57,
@@ -334,18 +324,16 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           const Divider(
             thickness: 1,
           ),
-          SizedBox(
-            height: Get.height * 0.015,
-          ),
-          const Padding(
-            padding: EdgeInsets.all(10.0),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
             child: Text(
               "SUPPORT",
-              style: TextStyle(
+              style: style.titleMedium, /*TextStyle(
                 color: Color.fromRGBO(134, 135, 139, 1),
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-              ),
+              ),*/
             ),
           ),
           Row(
@@ -358,17 +346,15 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Report a problem",
-                style: TextStyle(
+                style: style.titleMedium, /*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
-              SizedBox(
-                width: Get.width * 0.43,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(
@@ -389,17 +375,15 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   width: 14,
                 ),
               ),
-              const Text(
+              Text(
                 "Help Center",
-                style: TextStyle(
+                style: style.titleMedium, /*TextStyle(
                   color: Color.fromRGBO(22, 23, 34, 1),
                   fontWeight: FontWeight.w400,
                   fontSize: 15,
-                ),
+                ),*/
               ),
-              SizedBox(
-                width: Get.width * 0.52,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(

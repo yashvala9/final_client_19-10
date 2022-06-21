@@ -9,6 +9,8 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
@@ -23,13 +25,13 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
             width: 10.21,
           ),
         ),
-        title: const Text(
+        title: Text(
           "Giveaway",
-          style: TextStyle(
+          style: style.titleMedium, /*TextStyle(
             color: Color.fromRGBO(22, 23, 34, 1),
             fontWeight: FontWeight.w400,
             fontSize: 16,
-          ),
+          ),*/
         ),
       ),
       body: Padding(
@@ -38,29 +40,29 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20, left: 12),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, left: 12),
                 child: Text(
                   "Start new giveaway",
-                  style: TextStyle(
+                  style: style.titleMedium, /*TextStyle(
                     color: Color.fromRGBO(22, 22, 22, 1),
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                  ),
+                  ),*/
                 ),
               ),
               SizedBox(
                 height: Get.height * 0.02,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
                 child: Text(
                   "Upload Prize Image",
-                  style: TextStyle(
+                  style: style.titleMedium, /*TextStyle(
                     color: Color.fromRGBO(51, 51, 51, 1),
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                  ),
+                  ),*/
                 ),
               ),
               SizedBox(
@@ -74,15 +76,15 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
               SizedBox(
                 height: Get.height * 0.02,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
                 child: Text(
                   "Campaign Name",
-                  style: TextStyle(
+                  style: style.titleMedium, /*TextStyle(
                     color: Color.fromRGBO(51, 51, 51, 1),
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                  ),
+                  ),*/
                 ),
               ),
               SizedBox(
@@ -96,18 +98,18 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
               SizedBox(
                 height: Get.height * 0.02,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(
+              Padding(
+                padding: const EdgeInsets.symmetric(
                   vertical: 8,
                   horizontal: 4,
                 ),
                 child: Text(
                   "Prize",
-                  style: TextStyle(
+                  style: style.titleMedium, /*TextStyle(
                     color: Color.fromRGBO(51, 51, 51, 1),
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                  ),
+                  ),*/
                 ),
               ),
               const TextField(
@@ -118,15 +120,15 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
               SizedBox(
                 height: Get.height * 0.02,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
                 child: Text(
                   "Campaign end date",
-                  style: TextStyle(
+                  style: style.titleMedium, /*TextStyle(
                     color: Color.fromRGBO(51, 51, 51, 1),
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                  ),
+                  ),*/
                 ),
               ),
               SizedBox(
@@ -148,7 +150,7 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 height: Get.height * 0.05,
               ),
               MyElevatedButton(
-                buttonText: "Start Compaign",
+                buttonText: "Start Campaign",
                 onPressed: () {},
               ),
             ],
