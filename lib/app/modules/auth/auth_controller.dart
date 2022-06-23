@@ -9,10 +9,15 @@ class AuthController extends GetxController {
 
   RxBool loading = RxBool(false);
   RxBool obsecure = RxBool(false);
-  RxBool isValildEmail = RxBool(false);
 
   String email = '';
   String password = '';
+  String repeatPassword = "";
+  String userName = '';
+  String mobileNumber = "";
+  String countryCode = "";
+
+  String forgetPasswordEmail = "";
 
   void login() async {
     loading(true);
@@ -42,6 +47,15 @@ class AuthController extends GetxController {
       Get.offAllNamed(AppRoutes.home);
     } on FirebaseAuthException catch (e) {
       print("googleSignIn: $e");
+    }
+  }
+
+  Future<void> forgetPassword() async{
+    
+    try {
+      await _authRepo.forgetPassword();
+    } catch (e) {
+    print("forgetPassword: $e");
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/custom_button.dart';
+import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../auth_controller.dart';
 
@@ -13,8 +14,8 @@ class LoginScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(AuthController());
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  // final _emailController = TextEditingController();
+  // final _passwordController = TextEditingController();
 
   final RxBool isPassWordVisible = false.obs;
 
@@ -53,7 +54,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             SizedBox(height: Get.height * 0.02),
                             Image.asset(
-                              Assets.reelRoImage,
+                              Assets.reelRo,
                               width: Get.width * 0.35,
                             ),
                             SizedBox(height: Get.height * 0.03),
@@ -67,27 +68,18 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
-                                controller: _emailController,
-                                decoration: InputDecoration(
+                                enabled: !_controller.loading.value,
+                                decoration: const InputDecoration(
                                   hintText: 'abc@gmail.com',
-                                  suffixIcon: _controller.isValildEmail.value ==
-                                          !_controller.isValildEmail.value
-                                      ? const Icon(
-                                          Icons.check_box,
-                                          color: AppColors.lightGreen,
-                                        )
-                                      : null,
                                 ),
                                 keyboardType: TextInputType.emailAddress,
-                                onChanged: (value) {
-                                  value.isEmail
-                                      ? _controller.isValildEmail.value = true
-                                      : _controller.isValildEmail.value = false;
-                                },
+                                onSaved: (v) => _controller.email = v!,
                                 validator: (value) {
                                   return value!.isEmpty
                                       ? 'Email is required'
-                                      : null;
+                                      : !value.isEmail
+                                          ? "Invalid Email"
+                                          : null;
                                 },
                               ),
                             ),
@@ -102,29 +94,27 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
-                                controller: _passwordController,
+                                enabled: !_controller.loading.value,
                                 decoration: InputDecoration(
                                   hintText: 'Password',
                                   suffixIcon: GestureDetector(
-                                    onTap: () => isPassWordVisible.value =
-                                        !isPassWordVisible.value,
-                                    child: isPassWordVisible.value == true
-                                        ? Icon(
-                                            Icons.visibility_sharp,
-                                            color: AppColors.headline5Color
-                                                .withOpacity(.5),
-                                          )
-                                        : Icon(
-                                            Icons.visibility_off_sharp,
-                                            color: AppColors.headline5Color
-                                                .withOpacity(.5),
-                                          ),
-                                  ),
+                                      onTap: () => isPassWordVisible.value =
+                                          !isPassWordVisible.value,
+                                      child: Icon(
+                                        isPassWordVisible.value
+                                            ? Icons.visibility_sharp
+                                            : Icons.visibility_off_sharp,
+                                        color: AppColors.headline5Color
+                                            .withOpacity(.5),
+                                      )),
                                 ),
                                 obscureText: !isPassWordVisible.value,
+                                onSaved: (v) => _controller.password = v!,
                                 validator: (value) => value!.isEmpty
                                     ? 'Password is required'
-                                    : null,
+                                    : value.length <= 8
+                                        ? "Password should be greater than 8 words"
+                                        : null,
                               ),
                             ),
                             SizedBox(height: Get.height * 0.02),
@@ -144,10 +134,17 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: Get.height * 0.02),
-                            MyElevatedButton(
-                              buttonText: 'Login',
-                              onPressed: () {},
-                            ),
+                            _controller.loading.value
+                                ? const Loading()
+                                : MyElevatedButton(
+                                    buttonText: 'Login',
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        _controller.login();
+                                      }
+                                    },
+                                  ),
                             SizedBox(height: Get.height * 0.03),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

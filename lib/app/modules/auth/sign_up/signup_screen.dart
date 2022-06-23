@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/custom_button.dart';
-import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../../../routes/app_routes.dart';
 import '../auth_controller.dart';
@@ -24,12 +24,12 @@ class SignupScreen extends StatelessWidget {
     final RxBool isPassWordVisible = false.obs;
     final RxBool isRepeatPassWordVisible = false.obs;
 
-    final _emailController = TextEditingController();
-    final _userNameController = TextEditingController();
-    final _countryCodeController = TextEditingController();
-    final _mobileController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _repeatPasswordController = TextEditingController();
+    // final _emailController = TextEditingController();
+    // final _userNameController = TextEditingController();
+    // final _countryCodeController = TextEditingController();
+    // final _mobileController = TextEditingController();
+    // final _passwordController = TextEditingController();
+    // final _repeatPasswordController = TextEditingController();
 
     return Scaffold(
       body: KeyboardVisibilityBuilder(
@@ -67,7 +67,6 @@ class SignupScreen extends StatelessWidget {
                             ),
                             SizedBox(height: Get.height * 0.01),
                             TextFormField(
-                              controller: _userNameController,
                               decoration: InputDecoration(
                                 hintText: 'jamesbond123',
                                 prefixIcon: Icon(
@@ -82,6 +81,7 @@ class SignupScreen extends StatelessWidget {
                                     ? 'Username is required'
                                     : null;
                               },
+                              onSaved: (v) => _controller.userName = v!,
                             ),
                             SizedBox(height: Get.height * 0.02),
                             Text(
@@ -91,7 +91,6 @@ class SignupScreen extends StatelessWidget {
                             ),
                             SizedBox(height: Get.height * 0.01),
                             TextFormField(
-                              controller: _emailController,
                               decoration: InputDecoration(
                                 hintText: 'Email',
                                 prefixIcon: Icon(
@@ -103,8 +102,11 @@ class SignupScreen extends StatelessWidget {
                               validator: (value) {
                                 return value!.isEmpty
                                     ? 'Email is required'
-                                    : '';
+                                    : !value.isEmail
+                                        ? "Invalid Email"
+                                        : null;
                               },
+                              onSaved: (v) => _controller.email = v!,
                             ),
                             SizedBox(height: Get.height * 0.02),
                             Text('Mobile Number',
@@ -117,73 +119,83 @@ class SignupScreen extends StatelessWidget {
                                 Expanded(
                                   flex: 1,
                                   child: TextFormField(
-                                    controller: _countryCodeController,
                                     decoration: const InputDecoration(
                                       hintText: '+44',
                                       counterText: '',
                                     ),
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
                                     maxLength: 2,
+                                    validator: (v) => v!.isEmpty
+                                        ? "Country code is required"
+                                        : v.length != 2
+                                            ? "Country code must be 2 digits"
+                                            : null,
+                                    onSaved: (v) =>
+                                        _controller.countryCode = v!,
                                   ),
                                 ),
-                                 SizedBox(
+                                SizedBox(
                                   width: Get.width * 0.03,
                                 ),
                                 Expanded(
                                   flex: 3,
                                   child: TextFormField(
-                                    controller: _mobileController,
                                     decoration: InputDecoration(
                                       hintText: '9876543210',
-                                      counterText: '',
                                       prefixIcon: Icon(
                                         Icons.phone_android_sharp,
                                         color: AppColors.headline5Color
                                             .withOpacity(.5),
                                       ),
                                     ),
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
                                     maxLength: 10,
                                     validator: (value) {
-                                    return  value!.isEmpty
+                                      return value!.isEmpty
                                           ? 'Mobile number is required'
-                                          : null;
+                                          : value.length != 10
+                                              ? "Mobile number must be 10 digits"
+                                              : null;
                                     },
+                                    onSaved: (v) =>
+                                        _controller.mobileNumber = v!,
                                   ),
                                 ),
                               ],
                             ),
                             SizedBox(height: Get.height * 0.02),
-                            Text(
-                              'Password',
-                              textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge
-                            ),
+                            Text('Password',
+                                textScaleFactor: Get.textScaleFactor,
+                                style: style.labelLarge),
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
-                                controller: _passwordController,
-                                decoration: InputDecoration(
-                                  hintText: 'Password',
-                                  suffixIcon: GestureDetector(
-                                    onTap: () => isPassWordVisible.value =
-                                        !isPassWordVisible.value,
-                                    child: isPassWordVisible.value 
-                                        ? Icon(
-                                            Icons.visibility_sharp,
-                                            color: AppColors.headline5Color
-                                                .withOpacity(.5),
-                                          )
-                                        : Icon(
-                                            Icons.visibility_off_sharp,
-                                            color: AppColors.headline5Color
-                                                .withOpacity(.5),
-                                          ),
+                                  decoration: InputDecoration(
+                                    hintText: 'Password',
+                                    suffixIcon: GestureDetector(
+                                        onTap: () => isPassWordVisible.value =
+                                            !isPassWordVisible.value,
+                                        child: Icon(
+                                          isPassWordVisible.value
+                                              ? Icons.visibility_sharp
+                                              : Icons.visibility_off_sharp,
+                                          color: AppColors.headline5Color
+                                              .withOpacity(.5),
+                                        )),
                                   ),
-                                ),
-                                obscureText: !isPassWordVisible.value,
-                                validator: (value) {
-                                 return value!.isEmpty ? 'Password is required' : null;
-                                },
-                              ),
+                                  obscureText: !isPassWordVisible.value,
+                                  onSaved: (v) => _controller.password = v!,
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Password is required'
+                                      : value.length <= 8
+                                          ? "Password should be greater than 8 words"
+                                          : null),
                             ),
                             SizedBox(height: Get.height * 0.02),
                             Text(
@@ -196,36 +208,41 @@ class SignupScreen extends StatelessWidget {
                             SizedBox(height: Get.height * 0.015),
                             Obx(
                               () => TextFormField(
-                                controller: _repeatPasswordController,
-                                decoration: InputDecoration(
-                                  hintText: 'Repeat Password',
-                                  suffixIcon: GestureDetector(
-                                    onTap: () => isRepeatPassWordVisible.value =
-                                        !isRepeatPassWordVisible.value,
-                                    child: isRepeatPassWordVisible.value
-                                        ? Icon(
-                                            Icons.visibility_sharp,
-                                            color: AppColors.headline5Color
-                                                .withOpacity(.5),
-                                          )
-                                        : Icon(
-                                            Icons.visibility_off_sharp,
-                                            color: AppColors.headline5Color
-                                                .withOpacity(.5),
-                                          ),
+                                  decoration: InputDecoration(
+                                    hintText: 'Repeat Password',
+                                    suffixIcon: GestureDetector(
+                                      onTap: () =>
+                                          isRepeatPassWordVisible.value =
+                                              !isRepeatPassWordVisible.value,
+                                      child: Icon(
+                                        isPassWordVisible.value
+                                            ? Icons.visibility_sharp
+                                            : Icons.visibility_off_sharp,
+                                        color: AppColors.headline5Color
+                                            .withOpacity(.5),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                obscureText: !isPassWordVisible.value,
-                                validator: (value) {
-                                 return value!.isEmpty ? 'Password is required' : null;
-                                },
-                              ),
+                                  obscureText: !isPassWordVisible.value,
+                                  onSaved: (v) => _controller.password = v!,
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Password is required'
+                                      : value.length <= 8
+                                          ? "Password should be greater than 8 words"
+                                          : null),
                             ),
                             SizedBox(height: Get.height * 0.03),
                             MyElevatedButton(
                               buttonText: 'Sign Up',
-                              onPressed: () =>
-                                  Get.toNamed(AppRoutes.createProfile),
+                              onPressed: () {
+                                // if(!_formKey.currentState!.validate()){
+                                //     return;
+                                // }
+                                // _formKey.currentState!.save();
+                                // _controller.signup();
+                                Get.toNamed(AppRoutes.createProfile);
+                              }
+                                  
                             ),
                             SizedBox(height: Get.height * 0.03),
                             Row(
