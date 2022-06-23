@@ -168,7 +168,6 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           const Divider(
             thickness: 1,
           ),
-          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text("GENERAL", style: style.titleMedium),
@@ -220,9 +219,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   fontSize: 15,
                 ),*/
               ),
-              SizedBox(
-                width: Get.width * 0.57,
-              ),
+              const Spacer(),
               IconButton(
                 onPressed: () {
                   Get.dialog(
@@ -314,17 +311,40 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
               ),
             ],
           ),
-          AccountTile(
-            asset: "assets/Account Stroke Icon 2.png",
-            title: "Random Follower Picker",
-            onPressed: () {
-              Get.to(() => const FollowerPickerView());
-            },
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: Image.asset(
+                  "assets/Account Stroke Icon 2.png",
+                  height: 16,
+                  width: 14,
+                ),
+              ),
+              Text(
+                "Random Follower Picker",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(22, 23, 34, 1),
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15,
+                ),*/
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () {
+                  Get.to(() => const FollowerPickerView());
+                },
+                icon: Image.asset(
+                  "assets/Right Arrow Icon.png",
+                  height: 10.5,
+                  width: 5.79,
+                ),
+              ),
+            ],
           ),
           const Divider(
             thickness: 1,
           ),
-          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
@@ -395,49 +415,6 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class AccountTile extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String asset;
-  final String title;
-
-  const AccountTile(
-      {Key? key,
-      required this.asset,
-      required this.title,
-      required this.onPressed})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme;
-    return InkWell(
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 8,
-        ),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Image.asset(
-                asset,
-                height: 16,
-                width: 14,
-              ),
-            ),
-            Text(title, style: style.subtitle2),
-            const Spacer(),
-            const Icon(Icons.keyboard_arrow_right, color: Colors.black45),
-          ],
-        ),
       ),
     );
   }

@@ -175,7 +175,10 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                 Container(
                   height: 370,
                   width: 376,
-                  color: const Color.fromRGBO(239, 192, 70, 1),
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(239, 192, 70, 1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Column(
                     children: [
                       SizedBox(

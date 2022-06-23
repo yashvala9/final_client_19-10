@@ -71,16 +71,14 @@ class EditProfileView extends GetView<EditProfileController> {
                   ),*/
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 222),
-                child: Text(
-                  "Jacob West",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(134, 135, 139, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
-                ),
+              const Spacer(),
+              Text(
+                "Jacob West",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(134, 135, 139, 1),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),*/
               ),
               IconButton(
                 onPressed: () {},
@@ -105,16 +103,14 @@ class EditProfileView extends GetView<EditProfileController> {
                   ),*/
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 218),
-                child: Text(
-                  "jacob_w",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(134, 135, 139, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
-                ),
+              const Spacer(),
+              Text(
+                "jacob_w",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(134, 135, 139, 1),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),*/
               ),
               IconButton(
                 onPressed: () {},
@@ -128,16 +124,14 @@ class EditProfileView extends GetView<EditProfileController> {
           ),
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 210),
-                child: Text(
-                  "tiktok.com@jacob_w",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(134, 135, 139, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
-                ),
+              const Spacer(),
+              Text(
+                "tiktok.com@jacob_w",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(134, 135, 139, 1),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),*/
               ),
               IconButton(
                 onPressed: () {},
@@ -162,16 +156,14 @@ class EditProfileView extends GetView<EditProfileController> {
                   ),*/
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 163),
-                child: Text(
-                  "Add a bio to your profile",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(134, 135, 139, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
-                ),
+              const Spacer(),
+              Text(
+                "Add a bio to your profile",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(134, 135, 139, 1),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),*/
               ),
               IconButton(
                 onPressed: () {},
@@ -200,16 +192,14 @@ class EditProfileView extends GetView<EditProfileController> {
                   ),*/
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 258),
-                child: Text(
-                  "Email",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(134, 135, 139, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
-                ),
+              const Spacer(),
+              Text(
+                "Email",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(134, 135, 139, 1),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),*/
               ),
               IconButton(
                 onPressed: () {},
@@ -234,16 +224,14 @@ class EditProfileView extends GetView<EditProfileController> {
                   )*/
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 235),
-                child: Text(
-                  "Number",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(134, 135, 139, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
-                ),
+              const Spacer(),
+              Text(
+                "Number",
+                style: style.titleMedium, /*TextStyle(
+                  color: Color.fromRGBO(134, 135, 139, 1),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),*/
               ),
               IconButton(
                 onPressed: () {},
