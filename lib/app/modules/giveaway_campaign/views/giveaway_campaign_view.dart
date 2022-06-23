@@ -15,23 +15,9 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        leading: IconButton(
-          onPressed: () {
-            Get.to(const AccountSettingsView());
-          },
-          icon: Image.asset(
-            "assets/Left Arrow Icon.png",
-            height: 18,
-            width: 10.21,
-          ),
-        ),
         title: Text(
           "Giveaway",
-          style: style.titleMedium, /*TextStyle(
-            color: Color.fromRGBO(22, 23, 34, 1),
-            fontWeight: FontWeight.w400,
-            fontSize: 16,
-          ),*/
+          style: style.titleMedium,
         ),
       ),
       body: Padding(
@@ -44,11 +30,7 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 padding: const EdgeInsets.only(top: 20, left: 12),
                 child: Text(
                   "Start new giveaway",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(22, 22, 22, 1),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),*/
+                  style: style.titleMedium,
                 ),
               ),
               SizedBox(
@@ -58,11 +40,7 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 padding: const EdgeInsets.only(left: 12),
                 child: Text(
                   "Upload Prize Image",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
+                  style: style.titleMedium,
                 ),
               ),
               SizedBox(
@@ -71,20 +49,17 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
               Container(
                 color: const Color.fromRGBO(240, 242, 246, 1),
                 alignment: Alignment.center,
-                child: Image.asset("assets/Gallery Icon.png"),
+                child: const Icon(Icons.photo_outlined),
               ),
               SizedBox(
                 height: Get.height * 0.02,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 12),
+                padding: const EdgeInsets.only(left: 4),
                 child: Text(
                   "Campaign Name",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
+                  style: style
+                      .titleMedium, 
                 ),
               ),
               SizedBox(
@@ -105,11 +80,8 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 ),
                 child: Text(
                   "Prize",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
+                  style: style
+                      .titleMedium, 
                 ),
               ),
               const TextField(
@@ -121,14 +93,11 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 height: Get.height * 0.02,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 12),
+                padding: const EdgeInsets.only(left: 4),
                 child: Text(
                   "Campaign end date",
-                  style: style.titleMedium, /*TextStyle(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),*/
+                  style: style
+                      .titleMedium, 
                 ),
               ),
               SizedBox(

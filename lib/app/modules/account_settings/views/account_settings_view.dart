@@ -17,21 +17,9 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        leading: IconButton(
-          onPressed: () {},
-          icon: Image.asset(
-            "assets/Left Arrow Icon.png",
-            height: 18,
-            width: 10.21,
-          ),
-        ),
         title: Text(
           "Account Settings",
-          style: style.titleMedium,/*TextStyle(
-            color: Color.fromRGBO(22, 23, 34, 1),
-            fontWeight: FontWeight.w400,
-            fontSize: 16,
-          ),*/
+          style: style.titleMedium,
         ),
       ),
       body: Column(
@@ -47,123 +35,27 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
               style: style.titleMedium,
             ),
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  Assets.accountStoke,
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Manage my account",
-                style: style.titleMedium,/*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {
-                  Get.to(const EditProfileView());
-                },
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.accountStoke,
+            title: "Manage my account",
+            onPressed: () {
+              Get.to(const EditProfileView());
+            },
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Lock Stroke Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Privacy and safety",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.lock,
+            title: "Privacy and safety",
+            onPressed: () {},
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Share Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Share profile",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.share,
+            title: "Share profile",
+            onPressed: () {},
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/QR Code Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              const Text(
-                "QR Code",
-                style: TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.qrcode,
+            title: "QR Code",
+            onPressed: () {},
           ),
           const Divider(
             thickness: 1,
@@ -172,175 +64,101 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             padding: const EdgeInsets.all(10.0),
             child: Text("GENERAL", style: style.titleMedium),
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Bell Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Push notifications",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.bell,
+            title: "Push notifications",
+            onPressed: () {},
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Gift Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Giveaway",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {
-                  Get.dialog(
-                    AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      title: const Text(
-                        "Enable Giveaway Campaigns",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color.fromRGBO(22, 22, 22, 1),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      content: const Text(
-                        "You haven’t enabled giveaway campaign."
-                        "\nDo you want to enable now and"
-                        "\nstart a new campaign right away?",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(68, 67, 65, 1),
-                        ),
-                      ),
-                      actions: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              height: 42,
-                              width: 140,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary:
-                                      const Color.fromRGBO(253, 196, 64, 1),
-                                  elevation: 9,
-                                ),
-                                onPressed: () {
-                                  Get.to(const GiveawayCampaignView());
-                                },
-                                child: const Text(
-                                  "Yes",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(68, 67, 65, 1),
-                                  ),
-                                ),
+          AccountTile(
+            asset: Assets.gift,
+            title: "Giveaway",
+            onPressed: () {
+              Get.dialog(
+                AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  title: const Text(
+                    "Enable Giveaway Campaigns",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color.fromRGBO(22, 22, 22, 1),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  content: const Text(
+                    "You haven’t enabled giveaway campaign."
+                    "\nDo you want to enable now and"
+                    "\nstart a new campaign right away?",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Color.fromRGBO(68, 67, 65, 1),
+                    ),
+                  ),
+                  actions: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 42,
+                          width: 140,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color.fromRGBO(253, 196, 64, 1),
+                              elevation: 9,
+                            ),
+                            onPressed: () {
+                              Get.to(const GiveawayCampaignView());
+                            },
+                            child: const Text(
+                              "Yes",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Color.fromRGBO(68, 67, 65, 1),
                               ),
                             ),
-                            SizedBox(
-                              width: Get.width * 0.04,
+                          ),
+                        ),
+                        SizedBox(
+                          width: Get.width * 0.04,
+                        ),
+                        SizedBox(
+                          height: 42,
+                          width: 140,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color.fromRGBO(217, 217, 217, 1),
+                              elevation: 8,
                             ),
-                            SizedBox(
-                              height: 42,
-                              width: 140,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  primary:
-                                      const Color.fromRGBO(217, 217, 217, 1),
-                                  elevation: 8,
-                                ),
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                child: const Text(
-                                  "No",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Color.fromRGBO(68, 67, 65, 1),
-                                  ),
-                                ),
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text(
+                              "No",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14,
+                                color: Color.fromRGBO(68, 67, 65, 1),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  );
-                },
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
+                  ],
                 ),
-              ),
-            ],
+              );
+            },
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Account Stroke Icon 2.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Random Follower Picker",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {
-                  Get.to(() => const FollowerPickerView());
-                },
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.accountStoke,
+            title: "Random Follower Picker",
+            onPressed: () {
+              Get.to(() => const FollowerPickerView());
+            },
           ),
           const Divider(
             thickness: 1,
@@ -349,72 +167,70 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             padding: const EdgeInsets.all(10.0),
             child: Text(
               "SUPPORT",
-              style: style.titleMedium, /*TextStyle(
-                color: Color.fromRGBO(134, 135, 139, 1),
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),*/
+              style: style.titleMedium,
             ),
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Pen Stroke Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Report a problem",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.pen,
+            title: "Report a problem",
+            onPressed: () {
+              Get.to(() => const FollowerPickerView());
+            },
           ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Question Stroke Icon.png",
-                  height: 16,
-                  width: 14,
-                ),
-              ),
-              Text(
-                "Help Center",
-                style: style.titleMedium, /*TextStyle(
-                  color: Color.fromRGBO(22, 23, 34, 1),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),*/
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  "assets/Right Arrow Icon.png",
-                  height: 10.5,
-                  width: 5.79,
-                ),
-              ),
-            ],
+          AccountTile(
+            asset: Assets.help,
+            title: "Help",
+            onPressed: () {},
           ),
         ],
+      ),
+    );
+  }
+}
+
+class AccountTile extends StatelessWidget {
+  final String asset;
+  final String title;
+  final VoidCallback onPressed;
+  const AccountTile(
+      {Key? key,
+      required this.asset,
+      required this.title,
+      required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
+    return InkWell(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                asset,
+                height: 16,
+                width: 14,
+              ),
+            ),
+            Text(
+              title,
+              style: style.titleMedium,
+            ),
+            const Spacer(),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: Color(0xff86878B),
+            )
+          ],
+        ),
       ),
     );
   }
