@@ -18,6 +18,9 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+final GlobalKey<ScaffoldMessengerState> snackbarKey =
+    GlobalKey<ScaffoldMessengerState>();
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -49,6 +52,7 @@ class MyApp extends StatelessWidget {
     final base = ThemeData.light();
     return GetMaterialApp(
       title: 'Reel Ro',
+      scaffoldMessengerKey: snackbarKey,
       theme: ThemeData(
         primarySwatch: Colors.amber,
         colorScheme: base.colorScheme.copyWith(
@@ -113,10 +117,8 @@ class MyApp extends StatelessWidget {
         ),
       ),
       getPages: AppPages.routes,
-
       debugShowCheckedModeBanner: false,
-      //initialRoute: AppPages.initial,
-      home: const AccountSettingsView(),
+      initialRoute: AppPages.initial,
     );
   }
 }
