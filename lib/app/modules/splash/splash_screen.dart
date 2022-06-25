@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/splash/splash_controller.dart';
-
 import '../../../utils/assets.dart';
 
 class SplashScreen extends StatelessWidget {
-   SplashScreen({Key? key}) : super(key: key);
+  SplashScreen({Key? key}) : super(key: key);
   final _controller = Get.put(SplashController());
 
   @override
@@ -14,30 +13,23 @@ class SplashScreen extends StatelessWidget {
       top: false,
       child: Scaffold(
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(),
-            SizedBox(
-              height: 150,
-              width: double.infinity,
+            Center(
               child: Image.asset(
                 Assets.reelRo,
-                fit: BoxFit.contain,
+                width: Get.width * 0.5,
               ),
             ),
-            const Spacer(),
-            /*  Text(
-              "Version : ${controller.packageInfo.version}",
-              textScaleFactor: Get.textScaleFactor,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                    color: Theme.of(context).disabledColor,
-                  ),
-            ), */
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
+            // Text(
+            //   "Version : ${_controller.packageInfo.version}",
+            //   textScaleFactor: Get.textScaleFactor,
+            //   textAlign: TextAlign.center,
+            //   style: Theme.of(context).textTheme.subtitle2?.copyWith(
+            //         color: Theme.of(context).disabledColor,
+            //       ),
+            // ),
           ],
         ),
       ),

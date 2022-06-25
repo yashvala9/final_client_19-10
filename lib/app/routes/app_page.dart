@@ -1,10 +1,15 @@
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/auth/signup_screen.dart';
 import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
 import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
-import '../modules/auth/login_screen.dart';
 import '../modules/homepage/homepage_screen.dart';
+import 'package:reel_ro/app/modules/auth/create_profile/create_profile_view.dart';
+import 'package:reel_ro/app/modules/auth/forgot_password/forgot_password_view.dart';
+import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
+import 'package:reel_ro/app/modules/auth/reset_password/reset_password_view.dart';
+import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
+import 'package:reel_ro/app/modules/auth/verify_email/verify_email.dart';
+import 'package:reel_ro/app/modules/get_started/get_started_view.dart';
 
 class AppPages {
   static const initial = AppRoutes.navigationBar;
@@ -19,11 +24,31 @@ class AppPages {
       page: () => LoginScreen(),
     ),
     GetPage(
+      name: AppRoutes.getStarted,
+      page: () => const GetStarted(),
+    ),
+    GetPage(
       name: AppRoutes.home,
       page: () => HomePageScreen(),
     ),
     GetPage(
-      name: AppRoutes.signup,
+      name: AppRoutes.forgotPassword,
+      page: () => ForgotPasswordView(),
+    ),
+    GetPage(
+      name: AppRoutes.verifyEmail,
+      page: () => VerifyEmailView(),
+    ),
+    GetPage(
+      name: AppRoutes.resetPassword,
+      page: () => ResetPasswordView(),
+    ),
+    GetPage(
+      name: AppRoutes.createProfile,
+      page: () => CreateProfileView(),
+    ),
+    GetPage(
+      name: AppRoutes.signUp,
       page: () => SignupScreen(),
     ),
     GetPage(

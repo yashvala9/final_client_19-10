@@ -37,6 +37,12 @@ class AuthRepository {
     await _auth.signInWithCredential(credential);
   }
 
+  Future<void> addProfile() async{
+
+  }
+
+  Future<void> forgetPassword() async{}
+
   Future<void> signOut() async {
     await _auth.signOut();
   }
