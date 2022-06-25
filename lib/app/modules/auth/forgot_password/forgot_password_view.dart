@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/auth/auth_controller.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
@@ -10,7 +11,7 @@ class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _controller = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -61,19 +62,28 @@ class ForgotPasswordView extends StatelessWidget {
                     Form(
                       key: _formKey,
                       child: TextFormField(
-                        controller: _emailController,
                         decoration: const InputDecoration(
                           hintText: 'Enter your email',
                         ),
                         keyboardType: TextInputType.emailAddress,
-                        validator: (value) =>
-                            value!.isEmpty ? 'Email is required' : '',
+                        validator: (value) => value!.isEmpty
+                            ? 'Email is required'
+                            : !value.isEmail
+                                ? "Invalid email"
+                                : null,
+                      onSaved: (v) => _controller.forgetPasswordEmail = v!,
                       ),
                     ),
                     SizedBox(height: Get.height * 0.03),
                     MyElevatedButton(
                       buttonText: 'Reset Password',
-                      onPressed: () => Get.toNamed(AppRoutes.verifyEmail),
+                      onPressed: () {
+                        // if(!_formKey.currentState!.validate()){
+                        //   return;
+                        // }
+                        // _formKey.currentState!.save();
+                        Get.toNamed(AppRoutes.verifyEmail);
+                      },
                     ),
                   ],
                 ),
