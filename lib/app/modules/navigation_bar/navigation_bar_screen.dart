@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/auth/login_screen.dart';
-import 'package:reel_ro/app/modules/auth/signup_screen.dart';
+import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
+import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
+import 'package:reel_ro/app/modules/edit_profile/views/edit_profile_view.dart';
+import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/services/auth_service.dart';
@@ -25,7 +27,7 @@ class NavigationBarScreen extends StatelessWidget {
     return Obx(() => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: SizedBox(
-          height: 54,
+          height: 57,
           child: BottomNavigationBar(
             showUnselectedLabels: true,
             showSelectedLabels: true,
@@ -109,10 +111,10 @@ class NavigationBarScreen extends StatelessWidget {
             index: controller.tabIndex.value,
             children: [
               HomePageScreen(),
-              SignupScreen(),
-              LoginScreen(),
-              SignupScreen(),
-              LoginScreen(),
+              HomePageScreen(),
+              HomePageScreen(),
+              HomePageScreen(),
+              ProfileScreen(),
             ],
           )),
     ));

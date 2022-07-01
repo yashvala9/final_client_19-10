@@ -11,6 +11,8 @@ import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
 import 'package:reel_ro/app/modules/auth/verify_email/verify_email.dart';
 import 'package:reel_ro/app/modules/get_started/get_started_view.dart';
 
+import '../modules/profile/profile_screen.dart';
+
 class AppPages {
   static const initial = AppRoutes.navigationBar;
 
@@ -54,6 +56,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.navigationBar,
       page: () => NavigationBarScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => ProfileScreen(),
     ),
   ];
 }

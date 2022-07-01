@@ -13,4 +13,5 @@ class AppRoutes {
   static const verifyEmail = '/verify-email';
   static const resetPassword = '/reset-password';
   static const createProfile = '/create-profile';
+  static const profile = '/profile';
 }
