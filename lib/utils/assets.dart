@@ -1,5 +1,7 @@
 class Assets {
   static const reelRo = 'assets/reelro.png';
+  static const music = 'assets/music.png';
+  static const homePageBackground = 'assets/homePageBackground.png';
   static const accountStoke = 'assets/Account Stroke Icon.png';
   static const lock = 'assets/lock.png';
   static const share = 'assets/share.png';
