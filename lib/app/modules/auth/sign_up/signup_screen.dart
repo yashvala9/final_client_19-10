@@ -46,40 +46,41 @@ class SignupScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              
                               Text(
                                 'Register',
                                 textScaleFactor: Get.textScaleFactor,
                                 style: style.titleLarge,
                               ),
-                              SizedBox(height: Get.height * 0.015),
-                              Text(
-                                'Username',
-                                textScaleFactor: Get.textScaleFactor,
-                                style: style.labelLarge,
-                              ),
-                              SizedBox(height: Get.height * 0.01),
-                              TextFormField(
-                                enabled: !_controller.loading,
-                                decoration: InputDecoration(
-                                  hintText: 'jamesbond123',
-                                  prefixIcon: Icon(
-                                    CupertinoIcons.person_solid,
-                                    color: AppColors.headline5Color
-                                        .withOpacity(.5),
-                                  ),
-                                ),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp('[a-zA-Z0-9]')),
-                                ],
-                                keyboardType: TextInputType.name,
-                                validator: (value) {
-                                  return value!.isEmpty
-                                      ? 'Username is required'
-                                      : null;
-                                },
-                                onSaved: (v) => _controller.userName = v!,
-                              ),
+                              // SizedBox(height: Get.height * 0.015),
+                              // Text(
+                              //   'Username',
+                              //   textScaleFactor: Get.textScaleFactor,
+                              //   style: style.labelLarge,
+                              // ),
+                              // SizedBox(height: Get.height * 0.01),
+                              // TextFormField(
+                              //   enabled: !_controller.loading,
+                              //   decoration: InputDecoration(
+                              //     hintText: 'jamesbond123',
+                              //     prefixIcon: Icon(
+                              //       CupertinoIcons.person_solid,
+                              //       color: AppColors.headline5Color
+                              //           .withOpacity(.5),
+                              //     ),
+                              //   ),
+                              //   inputFormatters: [
+                              //     FilteringTextInputFormatter.allow(
+                              //         RegExp('[a-zA-Z0-9]')),
+                              //   ],
+                              //   keyboardType: TextInputType.name,
+                              //   validator: (value) {
+                              //     return value!.isEmpty
+                              //         ? 'Username is required'
+                              //         : null;
+                              //   },
+                              //   onSaved: (v) => _controller.userName = v!,
+                              // ),
                               SizedBox(height: Get.height * 0.02),
                               Text(
                                 'Email',
@@ -107,71 +108,71 @@ class SignupScreen extends StatelessWidget {
                                 onSaved: (v) => _controller.email = v!,
                               ),
                               SizedBox(height: Get.height * 0.02),
-                              Text('Mobile Number',
-                                  textScaleFactor: Get.textScaleFactor,
-                                  style: style.labelLarge),
-                              SizedBox(height: Get.height * 0.01),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: TextFormField(
-                                      enabled: !_controller.loading,
-                                      decoration: const InputDecoration(
-                                        hintText: '+44',
-                                        counterText: '',
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp('[0-9,+]')),
-                                      ],
-                                      maxLength: 2,
-                                      validator: (v) => v!.isEmpty
-                                          ? "Country code is required"
-                                          : v.length != 2
-                                              ? "Country code must be 2 digits"
-                                              : null,
-                                      onSaved: (v) =>
-                                          _controller.countryCode = v!,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width * 0.03,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: TextFormField(
-                                      enabled: !_controller.loading,
-                                      decoration: InputDecoration(
-                                        hintText: '9876543210',
-                                        prefixIcon: Icon(
-                                          Icons.phone_android_sharp,
-                                          color: AppColors.headline5Color
-                                              .withOpacity(.5),
-                                        ),
-                                      ),
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly,
-                                      ],
-                                      maxLength: 10,
-                                      validator: (value) {
-                                        return value!.isEmpty
-                                            ? 'Mobile number is required'
-                                            : value.length != 10
-                                                ? "Mobile number must be 10 digits"
-                                                : null;
-                                      },
-                                      onSaved: (v) =>
-                                          _controller.mobileNumber = v!,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: Get.height * 0.02),
+                              // Text('Mobile Number',
+                              //     textScaleFactor: Get.textScaleFactor,
+                              //     style: style.labelLarge),
+                              // SizedBox(height: Get.height * 0.01),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     Expanded(
+                              //       flex: 1,
+                              //       child: TextFormField(
+                              //         enabled: !_controller.loading,
+                              //         decoration: const InputDecoration(
+                              //           hintText: '+44',
+                              //           counterText: '',
+                              //         ),
+                              //         keyboardType: TextInputType.number,
+                              //         inputFormatters: [
+                              //           FilteringTextInputFormatter.allow(
+                              //               RegExp('[0-9,+]')),
+                              //         ],
+                              //         maxLength: 2,
+                              //         validator: (v) => v!.isEmpty
+                              //             ? "Country code is required"
+                              //             : v.length != 2
+                              //                 ? "Country code must be 2 digits"
+                              //                 : null,
+                              //         onSaved: (v) =>
+                              //             _controller.countryCode = v!,
+                              //       ),
+                              //     ),
+                              //     SizedBox(
+                              //       width: Get.width * 0.03,
+                              //     ),
+                              //     Expanded(
+                              //       flex: 3,
+                              //       child: TextFormField(
+                              //         enabled: !_controller.loading,
+                              //         decoration: InputDecoration(
+                              //           hintText: '9876543210',
+                              //           prefixIcon: Icon(
+                              //             Icons.phone_android_sharp,
+                              //             color: AppColors.headline5Color
+                              //                 .withOpacity(.5),
+                              //           ),
+                              //         ),
+                              //         keyboardType: TextInputType.number,
+                              //         inputFormatters: [
+                              //           FilteringTextInputFormatter.digitsOnly,
+                              //         ],
+                              //         maxLength: 10,
+                              //         validator: (value) {
+                              //           return value!.isEmpty
+                              //               ? 'Mobile number is required'
+                              //               : value.length != 10
+                              //                   ? "Mobile number must be 10 digits"
+                              //                   : null;
+                              //         },
+                              //         onSaved: (v) =>
+                              //             _controller.mobileNumber = v!,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(height: Get.height * 0.02),
                               Text('Password',
                                   textScaleFactor: Get.textScaleFactor,
                                   style: style.labelLarge),

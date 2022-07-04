@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
           IconButton(
               onPressed: () {
                 _authService.signOut();
+                
               },
               icon: const Icon(Icons.power_settings_new_outlined))
         ],

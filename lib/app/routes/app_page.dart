@@ -34,10 +34,10 @@ class AppPages {
       name: AppRoutes.forgotPassword,
       page: () => ForgotPasswordView(),
     ),
-    GetPage(
-      name: AppRoutes.verifyEmail,
-      page: () => VerifyEmailView(),
-    ),
+    // GetPage(
+    //   name: AppRoutes.verifyEmail,
+    //   page: () => VerifyEmailView(),
+    // ),
     GetPage(
       name: AppRoutes.resetPassword,
       page: () => ResetPasswordView(),
