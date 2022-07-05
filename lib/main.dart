@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
 import 'package:reel_ro/app/routes/app_page.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'firebase_options.dart';

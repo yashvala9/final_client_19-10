@@ -69,7 +69,7 @@ class SignupScreen extends StatelessWidget {
                               //           .withOpacity(.5),
                               //     ),
                               //   ),
-                              //   inputFormatters: [
+                            //   inputFormatters: [
                               //     FilteringTextInputFormatter.allow(
                               //         RegExp('[a-zA-Z0-9]')),
                               //   ],

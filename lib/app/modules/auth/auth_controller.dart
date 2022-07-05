@@ -2,20 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reel_ro/app/modules/auth/verify_email/verify_email.dart';
-import 'package:reel_ro/app/modules/homepage/home_page.dart';
+import 'package:reel_ro/app/modules/homepage/homepage_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
-import 'package:reel_ro/repositories/user_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/constants.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
+import '../navigation_bar/navigation_bar_screen.dart';
+
 class AuthController extends GetxController {
   final _authRepo = Get.put(AuthRepository());
-  final _userRepo = Get.put(UserRepository());
+  // final _userRepo = Get.put(UserRepository());
   final _authService = Get.find<AuthService>();
 
   final _storage = GetStorage();
@@ -54,7 +54,7 @@ class AuthController extends GetxController {
     loading = true;
     try {
       final message = await _authRepo.signIn(email: email, password: password);
-
+      print("LoginSuccess: $message");
       _authService.redirectUser();
     } catch (e) {
       if (e == "Your account email is not confirmed") {
@@ -106,9 +106,9 @@ class AuthController extends GetxController {
     try {
       final tokenId = await _authRepo.verifyOtp(data);
       _storage.write(Constants.token, tokenId);
-      Get.offAll(() => HomePage());
+      _authService.redirectUser();
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      showSnackBar(e.toString(), color: Color.fromARGB(255, 92, 90, 90));
       print("login: $e");
     }
     loading = false;

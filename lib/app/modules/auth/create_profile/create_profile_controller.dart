@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
+import 'package:reel_ro/services/auth_service.dart';
 
 class CreateProfileController extends GetxController {
-  final _authRepo = Get.put(AuthRepository());
-  String fullName = "";
-  String about = "";
-
+  // final _authRepo = Get.put(AuthRepository());
+  final _authService = Get.find<AuthService>();
+  final _profileRepo = Get.put(ProfileRepository());
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
@@ -22,10 +23,27 @@ class CreateProfileController extends GetxController {
     update();
   }
 
+  String username = '';
+  String fullname = '';
+  int countryCode = 0;
+  int mobileNumber = 0;
+  String bio = "";
+
   void addProfileData() async {
     loading = true;
+    printInfo(info: "Id: ${_authService.userId}");
     try {
-      _authRepo.addProfile();
+      var profileData = {
+        'fullname': fullname,
+        'bio': bio,
+        'countryCode': countryCode,
+        'username': username,
+        'phoneNumber': mobileNumber,
+        'isVerified': false,
+        'user': _authService.userId,
+      };
+      await _profileRepo.addProfile(profileData, _authService.token!);
+      _authService.redirectUser();
     } catch (e) {
       print("addProfileDate: $e");
     }

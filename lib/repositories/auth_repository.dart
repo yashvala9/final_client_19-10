@@ -33,7 +33,7 @@ class AuthRepository {
     print("signInBody: $body");
     if (response.statusCode == 200) {
       var map = {
-        Constants.token: body['jwt'],
+        Constants.jwt: body['jwt'],
         Constants.userId: body['user']['id'],
       };
       await _storage.write(Constants.token, map);
@@ -72,14 +72,18 @@ class AuthRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       var map = {
-        Constants.token: body['jwt'],
+        Constants.jwt: body['jwt'],
         Constants.userId: body['user']['id'],
       };
       return map;
     } else {
-      return Future.error(body['error']['message']);
+      return Future.error(body['message']);
     }
   }
+
+  
+
+  
 
   Future<void> sendPasswordResetLink(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
@@ -102,7 +106,6 @@ class AuthRepository {
     await _auth.signInWithCredential(credential);
   }
 
-  Future<void> addProfile() async {}
 
   Future<void> forgetPassword(String email) async {
     final response = await http.post(

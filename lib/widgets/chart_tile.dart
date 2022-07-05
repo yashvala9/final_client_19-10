@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/chat_screen.dart';
-import 'package:reel_ro/app/notification_screen.dart';
 
 class ChatTile extends StatelessWidget {
   const ChatTile({Key? key}) : super(key: key);
