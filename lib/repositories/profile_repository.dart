@@ -61,4 +61,25 @@ class ProfileRepository {
       return Future.error(body['error']['message']);
     }
   }
+
+  Future<ProfileModel?> getReelsByUserId(String userId,String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getReelsByUserId}?currentUserId=$userId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      if (body['profile'] != null) {
+        int profileId = body['profile'];
+        return await getProfileById(profileId, token);
+      } else {
+        return null;
+      }
+    } else {
+      return Future.error(body['message']);
+    }
+  }
 }
