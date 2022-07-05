@@ -10,7 +10,7 @@ class InboxScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    final colorSchem = theme.colorScheme;
+    // final colorSchem = theme.colorScheme;
     return SafeArea(
       child: Scaffold(
         body: Padding(

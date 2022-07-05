@@ -8,13 +8,12 @@ import 'package:reel_ro/app/modules/auth/forgot_password/forgot_password_view.da
 import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/auth/reset_password/reset_password_view.dart';
 import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
-import 'package:reel_ro/app/modules/auth/verify_email/verify_email.dart';
 import 'package:reel_ro/app/modules/get_started/get_started_view.dart';
 
 import '../modules/profile/profile_screen.dart';
 
 class AppPages {
-  static const initial = AppRoutes.navigationBar;
+  static const initial = AppRoutes.splash;
 
   static final routes = [
     GetPage(
@@ -37,10 +36,10 @@ class AppPages {
       name: AppRoutes.forgotPassword,
       page: () => ForgotPasswordView(),
     ),
-    GetPage(
-      name: AppRoutes.verifyEmail,
-      page: () => VerifyEmailView(),
-    ),
+    // GetPage(
+    //   name: AppRoutes.verifyEmail,
+    //   page: () => VerifyEmailView(),
+    // ),
     GetPage(
       name: AppRoutes.resetPassword,
       page: () => ResetPasswordView(),

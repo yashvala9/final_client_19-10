@@ -2,17 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/homepage/comment_panel.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
-import 'package:reel_ro/services/auth_service.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../utils/assets.dart';
 import '../../../utils/circle_animation.dart';
-import '../../../utils/colors.dart';
 import '../../../utils/video_player_iten.dart';
-import 'action_bar.dart';
-import 'comment_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);

@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -9,6 +11,7 @@ import 'package:reel_ro/app/modules/auth/create_profile/create_profile_controlle
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
@@ -173,6 +176,32 @@ class CreateProfileView extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: Get.height * 0.02),
+                          Text('Username',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge),
+                          SizedBox(height: Get.height * 0.01),
+                          TextFormField(
+                            enabled: !_controller.loading,
+                            decoration: InputDecoration(
+                              hintText: 'jamesbond123',
+                              prefixIcon: Icon(
+                                CupertinoIcons.person_solid,
+                                color: AppColors.headline5Color.withOpacity(.5),
+                              ),
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp('[a-zA-Z0-9]')),
+                            ],
+                            keyboardType: TextInputType.name,
+                            validator: (value) {
+                              return value!.isEmpty
+                                  ? 'Username is required'
+                                  : null;
+                            },
+                            onSaved: (v) => _controller.username = v!,
+                          ),
+                          SizedBox(height: Get.height * 0.02),
                           Text('Full Name',
                               textScaleFactor: Get.textScaleFactor,
                               style: style.labelLarge),
@@ -185,7 +214,70 @@ class CreateProfileView extends StatelessWidget {
                             keyboardType: TextInputType.name,
                             validator: (value) =>
                                 value!.isEmpty ? 'Name is required' : null,
-                            onSaved: (v) => _controller.fullName = v!,
+                            onSaved: (v) => _controller.fullname = v!,
+                          ),
+                          SizedBox(height: Get.height * 0.02),
+                          Text('Mobile Number',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge),
+                          SizedBox(height: Get.height * 0.01),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: TextFormField(
+                                    enabled: !_controller.loading,
+                                    decoration: const InputDecoration(
+                                      hintText: '+44',
+                                      counterText: '',
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp('[0-9,+]')),
+                                    ],
+                                    maxLength: 3,
+                                    validator: (v) => v!.isEmpty
+                                        ? "Country code is required"
+                                        : v.length != 2
+                                            ? "Country code must be 2 digits"
+                                            : null,
+                                    onSaved: (v) => _controller.countryCode =
+                                        int.parse(v!)),
+                              ),
+                              SizedBox(
+                                width: Get.width * 0.03,
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: TextFormField(
+                                  enabled: !_controller.loading,
+                                  decoration: InputDecoration(
+                                    hintText: '9876543210',
+                                    prefixIcon: Icon(
+                                      Icons.phone_android_sharp,
+                                      color: AppColors.headline5Color
+                                          .withOpacity(.5),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  // maxLength: 10,
+                                  validator: (value) {
+                                    return value!.isEmpty
+                                        ? 'Mobile number is required'
+                                        : value.length != 10
+                                            ? "Mobile number must be 10 digits"
+                                            : null;
+                                  },
+                                  onSaved: (v) =>
+                                      _controller.mobileNumber = int.parse(v!),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: Get.height * 0.02),
                           Text(
@@ -205,6 +297,7 @@ class CreateProfileView extends StatelessWidget {
                             keyboardType: TextInputType.text,
                             validator: (v) =>
                                 v!.isEmpty ? "About is required" : null,
+                            onSaved: (v) => _controller.bio = v!,
                           ),
                           SizedBox(height: Get.height * 0.03),
                           _controller.loading
@@ -212,15 +305,16 @@ class CreateProfileView extends StatelessWidget {
                               : MyElevatedButton(
                                   buttonText: 'Submit',
                                   onPressed: () {
-                                    // if (!_formKey.currentState!.validate()) {
-                                    //   return;
-                                    // }
-                                    // if (_controller.file == null) {
-                                    //   return;
-                                    // }
-                                    // _formKey.currentState!.save();
-                                    // _controller.addProfileData();
-                                    Get.toNamed(AppRoutes.home);
+                                    if (!_formKey.currentState!.validate()) {
+                                      return;
+                                    }
+                                    if (_controller.file == null) {
+                                      showSnackBar("Please select image",color: Colors.red);
+                                      return;
+                                    }
+                                    _formKey.currentState!.save();
+                                    _controller.addProfileData();
+                                    // Get.toNamed(AppRoutes.home);
                                   },
                                 ),
                         ],

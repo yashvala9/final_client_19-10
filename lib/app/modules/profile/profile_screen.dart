@@ -3,12 +3,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
   final _controller = Get.put(ProfileController());
+  final authService = Get.put(AuthService());
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +142,9 @@ class ProfileScreen extends StatelessWidget {
                       height: 15,
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        authService.signOut();
+                      },
                       child: Container(
                         width: Get.width * 0.9,
                         height: 47,

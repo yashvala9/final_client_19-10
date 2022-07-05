@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ActionsToolbar extends StatelessWidget {
@@ -44,7 +43,7 @@ class ActionsToolbar extends StatelessWidget {
             ),
             color: Colors.white,
             onPressed: () {}),
-        CircleAvatar(
+        const CircleAvatar(
           radius: 30,
           backgroundColor: Colors.black,
           child: CircleAvatar(

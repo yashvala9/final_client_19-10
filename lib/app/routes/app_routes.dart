@@ -1,4 +1,3 @@
-import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
 
 class AppRoutes {
   static const home = '/home';

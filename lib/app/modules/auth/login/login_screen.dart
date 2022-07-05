@@ -67,22 +67,21 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: Get.height * 0.015),
-                             TextFormField(
-                                  enabled: !_controller.loading,
-                                  decoration: const InputDecoration(
-                                    hintText: 'abc@gmail.com',
-                                  ),
-                                  keyboardType: TextInputType.emailAddress,
-                                  onSaved: (v) => _controller.email = v!,
-                                  validator: (value) {
-                                    return value!.isEmpty
-                                        ? 'Email is required'
-                                        : !value.isEmail
-                                            ? "Invalid Email"
-                                            : null;
-                                  },
+                              TextFormField(
+                                enabled: !_controller.loading,
+                                decoration: const InputDecoration(
+                                  hintText: 'abc@gmail.com',
                                 ),
-                              
+                                keyboardType: TextInputType.emailAddress,
+                                onSaved: (v) => _controller.email = v!,
+                                validator: (value) {
+                                  return value!.isEmpty
+                                      ? 'Email is required'
+                                      : !value.isEmail
+                                          ? "Invalid Email"
+                                          : null;
+                                },
+                              ),
                               SizedBox(height: Get.height * 0.03),
                               Text(
                                 'Password',
@@ -92,30 +91,29 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: Get.height * 0.015),
-                               TextFormField(
-                                  enabled: !_controller.loading,
-                                  decoration: InputDecoration(
-                                    hintText: 'Password',
-                                    suffixIcon: GestureDetector(
-                                        onTap: () => _controller.obsecure =
-                                            !_controller.obsecure,
-                                        child: Icon(
-                                         _controller.obsecure
-                                              ? Icons.visibility_sharp
-                                              : Icons.visibility_off_sharp,
-                                          color: AppColors.headline5Color
-                                              .withOpacity(.5),
-                                        )),
-                                  ),
-                                  obscureText: !_controller.obsecure,
-                                  onSaved: (v) => _controller.password = v!,
-                                  validator: (value) => value!.isEmpty
-                                      ? 'Password is required'
-                                      : value.length <= 8
-                                          ? "Password should be greater than 8 words"
-                                          : null,
+                              TextFormField(
+                                enabled: !_controller.loading,
+                                decoration: InputDecoration(
+                                  hintText: 'Password',
+                                  suffixIcon: GestureDetector(
+                                      onTap: () => _controller.obsecure =
+                                          !_controller.obsecure,
+                                      child: Icon(
+                                        _controller.obsecure
+                                            ? Icons.visibility_sharp
+                                            : Icons.visibility_off_sharp,
+                                        color: AppColors.headline5Color
+                                            .withOpacity(.5),
+                                      )),
                                 ),
-                              
+                                obscureText: !_controller.obsecure,
+                                onSaved: (v) => _controller.password = v!,
+                                validator: (value) => value!.isEmpty
+                                    ? 'Password is required'
+                                    : value.length < 8
+                                        ? "Password should be greater than 8 words"
+                                        : null,
+                              ),
                               SizedBox(height: Get.height * 0.02),
                               Align(
                                 alignment: Alignment.centerRight,
