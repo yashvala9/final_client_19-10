@@ -69,6 +69,9 @@ class MyApp extends StatelessWidget {
         buttonTheme: const ButtonThemeData(
           textTheme: ButtonTextTheme.primary,
         ),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           hintStyle: base.textTheme.bodyLarge?.copyWith(

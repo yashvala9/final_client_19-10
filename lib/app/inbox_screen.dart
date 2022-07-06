@@ -38,15 +38,7 @@ class InboxScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Divider(
-                thickness: 1,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
+             
               TextFormField(
                 decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),

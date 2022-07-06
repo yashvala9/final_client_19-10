@@ -1,45 +1,40 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
-
+import 'package:reel_ro/models/comment_model.dart';
+import 'package:reel_ro/repositories/comment_repository.dart';
+import 'package:reel_ro/repositories/reel_repository.dart';
+import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import '../../../models/comment.dart';
-import '../../../models/video.dart';
+import '../../../models/reel_model.dart';
 
 class HomePageController extends GetxController {
-  final Rx<List<Video>> _videoList = Rx<List<Video>>([
-    Video(
-      username: "yashvala9",
-      uid: "uid",
-      id: "1",
-      likes: [],
-      commentCount: 123,
-      shareCount: 456,
-      songName: "songName",
-      caption: "caption",
-      videoUrl:
-          "https://firebasestorage.googleapis.com/v0/b/ticktok-demo.appspot.com/o/videos%2FVideo%203?alt=media&token=fe645364-ac1e-4c96-a2f2-04ee9dcb99d4",
-      profilePhoto:
-          "https://firebasestorage.googleapis.com/v0/b/ticktok-demo.appspot.com/o/profilePics%2FS9FpK7hTIVbU6YzTt8zBBgyFdty2?alt=media&token=6a9aa08d-60f8-4003-994c-12350737ab5a",
-      thumbnail:
-          "https://firebasestorage.googleapis.com/v0/b/ticktok-demo.appspot.com/o/thumbnails%2FVideo%200?alt=media&token=edd77dcc-15a7-4809-97b6-649e093f4326",
-    ),
-    Video(
-      username: "yashvala9",
-      uid: "uid",
-      id: "2",
-      likes: [],
-      commentCount: 123,
-      shareCount: 456,
-      songName: "songName",
-      caption: "caption",
-      videoUrl:
-          "https://firebasestorage.googleapis.com/v0/b/ticktok-demo.appspot.com/o/videos%2FVideo%200?alt=media&token=36e96aac-25ae-482c-80d8-e849e56284c8",
-      profilePhoto:
-          "https://firebasestorage.googleapis.com/v0/b/ticktok-demo.appspot.com/o/profilePics%2FS9FpK7hTIVbU6YzTt8zBBgyFdty2?alt=media&token=6a9aa08d-60f8-4003-994c-12350737ab5a",
-      thumbnail:
-          "https://firebasestorage.googleapis.com/v0/b/ticktok-demo.appspot.com/o/thumbnails%2FVideo%200?alt=media&token=edd77dcc-15a7-4809-97b6-649e093f4326",
-    ),
-  ]);
-  List<Video> get videoList => _videoList.value;
+  final _reelRepo = Get.put(ReelRepository());
+  final _authService = Get.put(AuthService());
+
+  String? get token => _authService.token;
+  int? get profileId => _authService.profileModel?.id;
+
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool loading) {
+    _loading = loading;
+    update();
+  }
+
+  bool _showLike = false;
+  bool get showLike => _showLike;
+  set showLike(bool showLike) {
+    _showLike = showLike;
+    update();
+  }
+
+  List<ReelModel> _reelList = [];
+  List<ReelModel> get reelList => _reelList;
+  set reelList(List<ReelModel> reelList) {
+    _reelList = reelList;
+    update();
+  }
 
   final Rx<List<Comment>> _comments = Rx<List<Comment>>([
     Comment(
@@ -55,6 +50,122 @@ class HomePageController extends GetxController {
 
   @override
   void onInit() {
+    getFeeds();
     super.onInit();
+  }
+
+  void getFeeds() async {
+    loading = true;
+    try {
+      reelList = await _reelRepo.getFeeds(profileId!, token!);
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
+    }
+    loading = false;
+  }
+
+  void toggleLikeShow() async {
+    showLike = true;
+    await Future.delayed(
+        const Duration(milliseconds: 1000), () => showLike = false);
+  }
+
+  void likeToggle(int index) async {
+    print("Index: $index");
+    if (reelList[index].isLiked) {
+      reelList[index].likeCount--;
+    } else {
+      toggleLikeShow();
+      reelList[index].likeCount++;
+    }
+    reelList[index].isLiked = !reelList[index].isLiked;
+    _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
+    update();
+  }
+}
+
+class CommentController extends GetxController {
+  CommentController({required this.reelId});
+  final String reelId;
+  final _commentRepo = Get.put(CommentRepository());
+  final _authService = Get.put(AuthService());
+
+  String? get token => _authService.token;
+  int? get profileId => _authService.profileModel?.id;
+
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool loading) {
+    _loading = loading;
+    update();
+  }
+
+  List<CommentModel> _commentList = [];
+  List<CommentModel> get commentList => _commentList;
+  set commentList(List<CommentModel> commentList) {
+    _commentList = commentList;
+    update();
+  }
+
+  String comment = "";
+
+  @override
+  void onInit() {
+    customeInit();
+    super.onInit();
+  }
+
+  void customeInit(){
+    clean();
+    getCommentsByReelId();
+  }
+
+  void clean(){
+    commentList.clear();
+    comment = "";
+  }
+
+  void getCommentsByReelId() async {
+    loading = true;
+    try {
+      commentList = await _commentRepo.getCommentByReelId(reelId, token!);
+      print("commentList: $commentList");
+    } catch (e) {
+      print("getCommentsByReelId: $e");
+    }
+    loading = false;
+  }
+
+  void addCommentLocally(Map<String, dynamic> data) {
+    var comment = CommentModel(
+        id: 0,
+        comment: data['comment'],
+        likeCount: 0,
+        responseCount: 0,
+        profile: profileId!,
+        reelId: reelId);
+    _commentList.add(comment);
+    update();
+  }
+
+  void addComment() async {
+    if (comment.isEmpty) {
+      showSnackBar("Please add comment", color: Colors.red);
+      return;
+    }
+    var map = {
+      'userId': profileId,
+      'reelId': reelId,
+      'comment': comment.trim(),
+    };
+    addCommentLocally(map);
+    try {
+      final message = await _commentRepo.addCommentToReelId(token!, map);
+      print("addCommentSuccess: $message");
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("addComment: $e");
+    }
   }
 }
