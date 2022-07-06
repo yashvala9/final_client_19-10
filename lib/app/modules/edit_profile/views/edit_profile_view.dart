@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/utils/assets.dart';
+import '../../../../utils/snackbar.dart';
 import '../controllers/edit_profile_controller.dart';
 
 class EditProfileView extends GetView<EditProfileController> {
-  const EditProfileView({Key? key}) : super(key: key);
-
+  const EditProfileView(this.profileModel, {Key? key}) : super(key: key);
+  final ProfileModel profileModel;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        title: Text(
-          "Edit Profile",
-          style: style.titleMedium,
-        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              showSnackBar('button pressed');
+              Get.back();
+            }),
+        title: const Center(child: Text("Edit Profille")),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.notifications_none), onPressed: () {}),
+          IconButton(
+              icon: const Icon(Icons.add_box_outlined), onPressed: () {}),
+        ],
       ),
+      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       body: Column(
         children: [
           SizedBox(

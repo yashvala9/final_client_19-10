@@ -44,20 +44,20 @@ class ProfileRepository {
     }
   }
 
-  Future<ProfileModel> getProfileByUserName(String userName) async {
+  Future<ProfileModel> getProfileByUserName(
+      String userName, String token) async {
     print('username:' + userName);
     final response = await http.get(
-      Uri.parse("${Base.searchUser}/$userName").replace(queryParameters: {
-        'username': userName,
-      }),
+      Uri.parse("${Base.searchUser}/?username=$userName"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    final body = jsonDecode(response.body);
     print(response.body);
+    final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      return ProfileModel.fromMap(body);
+      return ProfileModel.fromMap(body[0][0]);
     } else {
       return Future.error(body['error']['message']);
     }
