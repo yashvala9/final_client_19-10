@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../utils/assets.dart';
+import '../edit_profile/views/edit_profile_view.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -41,20 +43,14 @@ class ProfileScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ClipOval(
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl:
-                                        "https://static.ishaoutreach.org/sites/default/files/2022-02/ConciousPlanet-SaveSoil_AppIcons_Round_V2.png",
-                                    height: 100,
-                                    width: 100,
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(
-                                      Icons.error,
-                                    ),
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Color.fromRGBO(0, 0, 0, 0.6),
+                                    backgroundImage: AssetImage(Assets.profile),
+                                    radius: 45,
                                   ),
-                                )
+                                ),
+                                
                               ],
                             ),
                             const SizedBox(
@@ -87,8 +83,7 @@ class ProfileScreen extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       Text(
-                                        _controller.profileModel.noOfPosts
-                                            .toString(),
+                                        '9',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -153,7 +148,8 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                authService.signOut();
+                                Get.to(() =>
+                                    EditProfileView(_controller.profileModel));
                               },
                               child: Container(
                                 width: Get.width * 0.9,
@@ -188,27 +184,31 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20))),
-                              child: Column(
-                                children: [
-                                  Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Center(
+                                        child: Text(
+                                      "Upcoming giveaway on 18th June.",
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 18),
+                                    )),
+                                    Center(
+                                        child: Text(
+                                      "Stay Tuned",
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 18),
+                                    )),
+                                    Center(
                                       child: Text(
-                                    "Upcoming giveaway on 18th June.",
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 18),
-                                  )),
-                                  Center(
-                                      child: Text(
-                                    "Stay Tuned",
-                                    style: TextStyle(
-                                        color: Colors.red, fontSize: 18),
-                                  )),
-                                  Center(
-                                    child: Text(
-                                      "Engineer who love dancing, modelling,\nphotography. DM me for collaboration",
-                                      style: TextStyle(fontSize: 18),
+                                        "Engineer who love dancing, modelling, photography. DM me for collaboration",
+                                        style: TextStyle(fontSize: 16),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             _tabSection(context),

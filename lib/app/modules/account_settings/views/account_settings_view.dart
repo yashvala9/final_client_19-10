@@ -39,7 +39,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             asset: Assets.accountStoke,
             title: "Manage my account",
             onPressed: () {
-              Get.to(const EditProfileView());
+              // Get.to(EditProfileView());
             },
           ),
           AccountTile(
