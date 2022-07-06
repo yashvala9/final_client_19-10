@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
+  final VoidCallback doubleTap;
+  final bool showLike;
   const VideoPlayerItem({
     Key? key,
     required this.videoUrl,
+    required this.doubleTap,
+    this.showLike = false,
   }) : super(key: key);
 
   @override
@@ -35,13 +40,36 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-      ),
-      child: VideoPlayer(videoPlayerController),
-    );
+    return videoPlayerController.value.isBuffering
+        ? const Loading()
+        : Container(
+            width: size.width,
+            height: size.height,
+            decoration: const BoxDecoration(
+              color: Colors.black,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                InkWell(
+                    onDoubleTap: () {
+                      widget.doubleTap();
+                    },
+                    onTap: () {
+                      if (videoPlayerController.value.isPlaying) {
+                        videoPlayerController.pause();
+                      } else {
+                        videoPlayerController.play();
+                      }
+                    },
+                    child: VideoPlayer(videoPlayerController)),
+              widget.showLike?  const Icon(
+                  Icons.favorite,
+                  color: Colors.red,
+                  size: 100,
+                ): const SizedBox(),
+              ],
+            ),
+          );
   }
 }

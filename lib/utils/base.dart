@@ -12,8 +12,20 @@ class Base {
 
   //Reels
   static const getReelsByUserId = '$_url/getReelsByUserId';
+  static const getFeedsByUserId ='$_url/getFeed';
+  static const addReel = '$_url/addReelByUserId';
+
+  //Like
+  static const toggleLike = '$_url/toggleLike';
+  static const getLikeFlag = '$_url/getLikeFlag';
+
+  //Comment
+  static const getCommentByReelId = '$_url/getCommentsByReelId';
+  static const addCommentToReelId = '$_url/addComment';
   
 
   //Photos
   static const getPhotosByUserId = '$_url/getPhotosByUserId';
+
+
 }
