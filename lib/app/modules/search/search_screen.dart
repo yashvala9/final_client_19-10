@@ -9,6 +9,7 @@ class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
 
   final _controller = Get.put(SearchController());
+  final searchTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,8 @@ class SearchScreen extends StatelessWidget {
             TextFormField(
               decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.search), hintText: "Search here..."),
+              controller: searchTextController,
+              onFieldSubmitted: (value) => _controller.searchUser(value),
             ),
             const SizedBox(
               height: 8,

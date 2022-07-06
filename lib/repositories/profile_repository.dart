@@ -44,6 +44,25 @@ class ProfileRepository {
     }
   }
 
+  Future<ProfileModel> getProfileByUserName(String userName) async {
+    print('username:' + userName);
+    final response = await http.get(
+      Uri.parse("${Base.searchUser}/$userName").replace(queryParameters: {
+        'username': userName,
+      }),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    final body = jsonDecode(response.body);
+    print(response.body);
+    if (response.statusCode == 200) {
+      return ProfileModel.fromMap(body);
+    } else {
+      return Future.error(body['error']['message']);
+    }
+  }
+
   Future<void> addProfile(
       Map<String, dynamic> profileData, String token) async {
     final response = await http.post(
@@ -62,7 +81,7 @@ class ProfileRepository {
     }
   }
 
-  Future<ProfileModel?> getReelsByUserId(String userId,String token) async {
+  Future<ProfileModel?> getReelsByUserId(String userId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getReelsByUserId}?currentUserId=$userId"),
       headers: <String, String>{
