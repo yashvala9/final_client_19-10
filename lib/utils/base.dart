@@ -9,6 +9,7 @@ class Base {
   static const getProfileId =  '$_url/users/me';
   static const getProfilebyId = '$_url/user-profiles';
   static const createProfile = '$_url/user-profiles';
+  static const searchUser = '$_url/searchByUserName';
 
   //Reels
   static const getReelsByUserId = '$_url/getReelsByUserId';
