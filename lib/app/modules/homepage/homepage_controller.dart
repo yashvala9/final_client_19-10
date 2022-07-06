@@ -86,13 +86,13 @@ class HomePageController extends GetxController {
 }
 
 class CommentController extends GetxController {
-  CommentController({required this.reelId});
-  final String reelId;
+ 
   final _commentRepo = Get.put(CommentRepository());
   final _authService = Get.put(AuthService());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
+
 
   bool _loading = false;
   bool get loading => _loading;
@@ -110,34 +110,28 @@ class CommentController extends GetxController {
 
   String comment = "";
 
-  @override
-  void onInit() {
-    customeInit();
-    super.onInit();
-  }
+  
 
-  void customeInit(){
-    clean();
-    getCommentsByReelId();
-  }
 
   void clean(){
     commentList.clear();
     comment = "";
   }
 
-  void getCommentsByReelId() async {
+  void getCommentsByReelId(String reelId) async {
     loading = true;
     try {
       commentList = await _commentRepo.getCommentByReelId(reelId, token!);
-      print("commentList: $commentList");
+      printInfo(info:  "commentList: $commentList");
+      
     } catch (e) {
       print("getCommentsByReelId: $e");
     }
     loading = false;
+    update();
   }
 
-  void addCommentLocally(Map<String, dynamic> data) {
+  void addCommentLocally(Map<String, dynamic> data,String reelId) {
     var comment = CommentModel(
         id: 0,
         comment: data['comment'],
@@ -149,7 +143,7 @@ class CommentController extends GetxController {
     update();
   }
 
-  void addComment() async {
+  void addComment(String reelId) async {
     if (comment.isEmpty) {
       showSnackBar("Please add comment", color: Colors.red);
       return;
@@ -159,7 +153,7 @@ class CommentController extends GetxController {
       'reelId': reelId,
       'comment': comment.trim(),
     };
-    addCommentLocally(map);
+    addCommentLocally(map,reelId);
     try {
       final message = await _commentRepo.addCommentToReelId(token!, map);
       print("addCommentSuccess: $message");

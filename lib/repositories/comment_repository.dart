@@ -20,7 +20,7 @@ class CommentRepository {
     final body = jsonDecode(response.body);
     printInfo(info:  "getCommentsByReelIdBody: $body");
     if (response.statusCode == 200) {
-      final Iterable list = body;
+      final Iterable list = body['comments'];
       return list.map((e) => CommentModel.fromMap(e)).toList();
     } else {
       return Future.error(body['message']);

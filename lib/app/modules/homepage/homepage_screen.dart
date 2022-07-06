@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_screen.dart';
@@ -58,6 +59,7 @@ class HomePageScreen extends StatelessWidget {
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             final data = _controller.reelList[index];
+                            printInfo(info: "Data: $data");
                             return Stack(
                               children: [
                                 VideoPlayerItem(
@@ -189,14 +191,13 @@ class HomePageScreen extends StatelessWidget {
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        showModalBottomSheet(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return CommentSheet(
-                                                                reelId:
-                                                                    data.reelId,
-                                                              );
-                                                            });
+                                                        Get.bottomSheet(
+                                                          CommentSheet(
+                                                            reelId: data.reelId,
+                                                          ),
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                        );
                                                       },
                                                       child: const Icon(
                                                         Icons.comment,
@@ -332,9 +333,13 @@ class CommentSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = Get.put(CommentController(reelId: reelId));
+    final _controller = Get.put(CommentController());
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _controller.getCommentsByReelId(reelId);
+    });
     // _controller.customeInit();
     return GetBuilder<CommentController>(
+     
       builder: (_) => Column(
         mainAxisSize: MainAxisSize.min,
         children: _controller.loading
@@ -441,7 +446,7 @@ class CommentSheet extends StatelessWidget {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            _controller.addComment();
+                            _controller.addComment(reelId);
                           }
                         },
                         icon: Icon(Icons.send),
