@@ -9,8 +9,11 @@ class ProfileModel {
   final String username;
   final String email;
   final bool isVerified;
-  final int noOfPosts;
+  int noOfPosts;
   final int countryCode;
+  int postsCount;
+  int followerCount;
+  int followingCount;
   ProfileModel({
     required this.id,
     required this.email,
@@ -22,6 +25,9 @@ class ProfileModel {
     required this.isVerified,
     required this.noOfPosts,
     required this.countryCode,
+    required this.postsCount,
+    required this.followerCount,
+    required this.followingCount,
   });
 
   ProfileModel copyWith({
@@ -35,6 +41,9 @@ class ProfileModel {
     bool? isVerified,
     int? noOfPosts,
     int? countryCode,
+    int? postsCount,
+    int? followerCount,
+    int? followingCount,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -47,6 +56,9 @@ class ProfileModel {
       isVerified: isVerified ?? this.isVerified,
       noOfPosts: noOfPosts ?? this.noOfPosts,
       countryCode: countryCode ?? this.countryCode,
+      postsCount: postsCount ?? this.postsCount,
+      followerCount: followerCount ?? this.followerCount,
+      followingCount: followingCount ?? this.followingCount,
     );
   }
 
@@ -62,6 +74,9 @@ class ProfileModel {
       'isVerified': isVerified,
       'noOfPosts': noOfPosts,
       'countryCode': countryCode,
+      'postsCount': postsCount,
+      'followerCount': followerCount,
+      'followingCount': followingCount,
     };
   }
 
@@ -77,6 +92,9 @@ class ProfileModel {
       isVerified: map['isVerified'] ?? false,
       noOfPosts: map['noOfPosts']?.toInt() ?? 0,
       countryCode: map['countryCode']?.toInt() ?? 0,
+      postsCount: map['postsCount']?.toInt() ?? 0,
+      followerCount: map['followerCount']?.toInt() ?? 0,
+      followingCount: map['followingCount']?.toInt() ?? 0,
     );
   }
 
@@ -104,7 +122,10 @@ class ProfileModel {
         other.username == username &&
         other.isVerified == isVerified &&
         other.noOfPosts == noOfPosts &&
-        other.countryCode == countryCode;
+        other.countryCode == countryCode &&
+        other.postsCount == postsCount &&
+        other.followerCount == followerCount &&
+        other.followingCount == followingCount;
   }
 
   @override
@@ -118,6 +139,9 @@ class ProfileModel {
         username.hashCode ^
         isVerified.hashCode ^
         noOfPosts.hashCode ^
-        countryCode.hashCode;
+        countryCode.hashCode ^
+        postsCount.hashCode ^
+        followerCount.hashCode ^
+        followingCount.hashCode;
   }
 }
