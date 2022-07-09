@@ -92,4 +92,22 @@ class ReelRepository {
       return Future.error(body['message']);
     }
   }
+
+  Future<List<ReelModel>> getReelsById(int profileId, String token) async {
+    List<ReelModel> reels = [];
+    final response = await http.get(
+      Uri.parse("${Base.getReelsByUserId}/currentUserId=13"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      reels.add(ReelModel.fromMap(body));
+      return reels;
+    } else {
+      return Future.error(body['error']['message']);
+    }
+  }
 }

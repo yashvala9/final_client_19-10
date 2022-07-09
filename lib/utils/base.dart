@@ -8,6 +8,7 @@ class Base {
   static const verifyOtp = '$_url/auth/register/verifyOTP';
   static const getProfileId =  '$_url/users/me';
   static const getProfilebyId = '$_url/user-profiles';
+  static const getReelsbyId = '$_url/getReelsByUserId';
   static const createProfile = '$_url/user-profiles';
   static const searchUser = '$_url/searchByUserName';
 
