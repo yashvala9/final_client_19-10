@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/utils/base.dart';
 
 class ReelRepository {
   Future<List<ReelModel>> getFeeds(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getFeedsByUserId}?currentUserId=2"),
+      Uri.parse("${Base.getFeedsByUserId}?currentUserId=13"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -17,7 +18,7 @@ class ReelRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
+      return reelFromJson(response.body);
     } else {
       return Future.error(body['message']);
     }
@@ -70,7 +71,7 @@ class ReelRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
+      return reelFromJson(response.body);
     } else {
       return Future.error(body['message']);
     }
@@ -94,18 +95,36 @@ class ReelRepository {
   }
 
   Future<List<ReelModel>> getReelsById(int profileId, String token) async {
-    List<ReelModel> reels = [];
     final response = await http.get(
-      Uri.parse("${Base.getReelsByUserId}/currentUserId=13"),
+      Uri.parse("${Base.getReelsByUserId}?currentUserId=14"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
+    print("running reels by id 323232");
+    print(body);
     if (response.statusCode == 200) {
-      reels.add(ReelModel.fromMap(body));
-      return reels;
+      return reelFromJson(response.body);
+    } else {
+      return Future.error(body['error']['message']);
+    }
+  }
+
+  Future<List<PhotoModel>> getPhotosById(int profileId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getPhotosByUserId}?currentUserId=14"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print("running reels by id 323232");
+    print(body);
+    if (response.statusCode == 200) {
+      return photoFromJson(response.body);
     } else {
       return Future.error(body['error']['message']);
     }

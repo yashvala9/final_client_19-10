@@ -7,6 +7,7 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../utils/assets.dart';
 import '../edit_profile/views/edit_profile_view.dart';
+import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -46,11 +47,13 @@ class ProfileScreen extends StatelessWidget {
                                   child: CircleAvatar(
                                     backgroundColor:
                                         Color.fromRGBO(0, 0, 0, 0.6),
-                                    backgroundImage: AssetImage(Assets.profile),
+                                    backgroundImage:
+                                        // NetworkImage(
+                                        //     _controller.profileModel.profileUrl),
+                                        AssetImage(Assets.profile),
                                     radius: 45,
                                   ),
                                 ),
-                                
                               ],
                             ),
                             const SizedBox(
@@ -241,7 +244,7 @@ class ProfileScreen extends StatelessWidget {
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 9,
+                itemCount: _controller.reels.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 1,
@@ -250,16 +253,21 @@ class ProfileScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   String thumbnail =
                       "https://images.unsplash.com/photo-1656311877606-778f297e00d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80";
-                  return CachedNetworkImage(
-                    imageUrl: thumbnail,
-                    fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(SingleFeedScreen(_controller.reels[index]));
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: thumbnail,
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               ),
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 9,
+                itemCount: _controller.photos.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 1,
@@ -269,7 +277,8 @@ class ProfileScreen extends StatelessWidget {
                   String thumbnail =
                       "https://images.unsplash.com/photo-1656311877606-778f297e00d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80";
                   return CachedNetworkImage(
-                    imageUrl: thumbnail,
+                    imageUrl:
+                        _controller.photos[index].videoId.formats.large.url,
                     fit: BoxFit.cover,
                   );
                 },

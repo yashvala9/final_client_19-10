@@ -2,22 +2,23 @@
 //
 //     final reel = reelFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<ReelModel> reelFromJson(String str) =>
-    List<ReelModel>.from(json.decode(str).map((x) => ReelModel.fromJson(x)));
+List<PhotoModel> photoFromJson(String str) =>
+    List<PhotoModel>.from(json.decode(str).map((x) => PhotoModel.fromJson(x)));
 
-String reelToJson(List<ReelModel> data) =>
+String photoToJson(List<PhotoModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class ReelModel {
-  ReelModel({
+class PhotoModel {
+  PhotoModel({
     required this.id,
     required this.description,
-    this.mediaLink,
-    this.mediaType,
-    this.mediaExt,
-    this.isDeleted,
+    required this.mediaLink,
+    required this.mediaType,
+    required this.mediaExt,
+    required this.isDeleted,
     required this.profile,
     required this.title,
     required this.type,
@@ -55,7 +56,7 @@ class ReelModel {
   List<dynamic> hashtags;
   bool isLiked;
 
-  factory ReelModel.fromJson(Map<String, dynamic> json) => ReelModel(
+  factory PhotoModel.fromJson(Map<String, dynamic> json) => PhotoModel(
         id: json["id"],
         description: json["description"],
         mediaLink: json["mediaLink"],
@@ -99,7 +100,7 @@ class ReelModel {
         "reel_comments": List<dynamic>.from(reelComments.map((x) => x)),
         "hashtags": List<dynamic>.from(hashtags.map((x) => x)),
         "isLiked": isLiked,
-    };
+      };
 }
 
 class Profile {
@@ -110,16 +111,16 @@ class Profile {
     required this.phonePin,
     required this.phoneNumber,
     required this.currentLanguage,
-    this.address,
-    this.city,
-    this.pincode,
-    this.country,
-    this.isDeleted,
+    required this.address,
+    required this.city,
+    required this.pincode,
+    required this.country,
+    required this.isDeleted,
     required this.user,
     required this.username,
     required this.isVerified,
-    this.noOfPosts,
-    this.profileUrl,
+    required this.noOfPosts,
+    required this.profileUrl,
     required this.publishedAt,
     required this.createdAt,
     required this.updatedAt,
@@ -127,7 +128,7 @@ class Profile {
     required this.postsCount,
     required this.followerCount,
     required this.followingCount,
-    this.profileImg,
+    required this.profileImg,
   });
 
   int id;
@@ -214,19 +215,19 @@ class VideoId {
   VideoId({
     required this.id,
     required this.name,
-    this.alternativeText,
-    this.caption,
-    this.width,
-    this.height,
-    this.formats,
+    required this.alternativeText,
+    required this.caption,
+    required this.width,
+    required this.height,
+    required this.formats,
     required this.hash,
     required this.ext,
     required this.mime,
     required this.size,
     required this.url,
-    this.previewUrl,
+    required this.previewUrl,
     required this.provider,
-    this.providerMetadata,
+    required this.providerMetadata,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -235,9 +236,9 @@ class VideoId {
   String name;
   dynamic alternativeText;
   dynamic caption;
-  dynamic width;
-  dynamic height;
-  dynamic formats;
+  int width;
+  int height;
+  Formats formats;
   String hash;
   String ext;
   String mime;
@@ -256,7 +257,7 @@ class VideoId {
         caption: json["caption"],
         width: json["width"],
         height: json["height"],
-        formats: json["formats"],
+        formats: Formats.fromJson(json["formats"]),
         hash: json["hash"],
         ext: json["ext"],
         mime: json["mime"],
@@ -276,7 +277,7 @@ class VideoId {
         "caption": caption,
         "width": width,
         "height": height,
-        "formats": formats,
+        "formats": formats.toJson(),
         "hash": hash,
         "ext": ext,
         "mime": mime,
@@ -287,5 +288,81 @@ class VideoId {
         "provider_metadata": providerMetadata,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+      };
+}
+
+class Formats {
+  Formats({
+    required this.large,
+    required this.small,
+    required this.medium,
+    required this.thumbnail,
+  });
+
+  Large large;
+  Large small;
+  Large medium;
+  Large thumbnail;
+
+  factory Formats.fromJson(Map<String, dynamic> json) => Formats(
+        large: Large.fromJson(json["large"]),
+        small: Large.fromJson(json["small"]),
+        medium: Large.fromJson(json["medium"]),
+        thumbnail: Large.fromJson(json["thumbnail"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "large": large.toJson(),
+        "small": small.toJson(),
+        "medium": medium.toJson(),
+        "thumbnail": thumbnail.toJson(),
+      };
+}
+
+class Large {
+  Large({
+    required this.ext,
+    required this.url,
+    required this.hash,
+    required this.mime,
+    required this.name,
+    required this.path,
+    required this.size,
+    required this.width,
+    required this.height,
+  });
+
+  String ext;
+  String url;
+  String hash;
+  String mime;
+  String name;
+  dynamic path;
+  double size;
+  int width;
+  int height;
+
+  factory Large.fromJson(Map<String, dynamic> json) => Large(
+        ext: json["ext"],
+        url: json["url"],
+        hash: json["hash"],
+        mime: json["mime"],
+        name: json["name"],
+        path: json["path"],
+        size: json["size"].toDouble(),
+        width: json["width"],
+        height: json["height"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ext": ext,
+        "url": url,
+        "hash": hash,
+        "mime": mime,
+        "name": name,
+        "path": path,
+        "size": size,
+        "width": width,
+        "height": height,
       };
 }

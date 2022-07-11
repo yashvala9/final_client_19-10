@@ -4,6 +4,7 @@ import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/reel_repository.dart';
 import '../../../services/auth_service.dart';
@@ -12,11 +13,11 @@ import '../../../utils/snackbar.dart';
 class ProfileController extends GetxController {
   final _authService = Get.find<AuthService>();
   final _profileRepo = Get.put(ProfileRepository());
-final _reelRepo = Get.put(ReelRepository());
+  final _reelRepo = Get.put(ReelRepository());
 
   late ProfileModel profileModel;
-  late List<ReelModel> reels;
-
+  late List<ReelModel> reels = [];
+  late List<PhotoModel> photos = [];
 
   int? get profileId => _authService.profileModel?.id;
   String? get token => _authService.token;
@@ -32,6 +33,7 @@ final _reelRepo = Get.put(ReelRepository());
   void onInit() {
     getProfile();
     getReelsById();
+    getPhotosById();
     super.onInit();
   }
 
@@ -48,7 +50,19 @@ final _reelRepo = Get.put(ReelRepository());
 
   void getReelsById() async {
     try {
+      print("running getReelsById");
       reels.addAll(await _reelRepo.getReelsById(profileId!, token!));
+      print(reels.length);
+    } catch (e) {
+      print("getReelsById: $e");
+    }
+  }
+
+  void getPhotosById() async {
+    try {
+      print("running getPhotosById");
+      photos.addAll(await _reelRepo.getPhotosById(profileId!, token!));
+      print(reels.length);
     } catch (e) {
       print("getReelsById: $e");
     }
