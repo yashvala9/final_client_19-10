@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
@@ -26,18 +28,31 @@ class AddFeedController extends GetxController {
     descriptionn = "";
   }
 
-  void addFeed() async {
+  // Future<int> uploadVideoOrPhoto(File file) async {
+  //   try {
+  //     final url = await _reelRepo.addPhotoOrVideo(file,token!);
+  //     return url;
+  //   } catch (e) {
+  //     printInfo(info: "uploadVideoOrPhoto: $e");
+  //     showSnackBar(e.toString(), color: Colors.red);
+  //     return Future.error(e.toString());
+  //   }
+  // }
+
+  void addFeed(File file, int type) async {
     loading = true;
     var data = {
       "userId": profileId!,
       "description": descriptionn,
       "videoTitle": title,
-      "video": "",
+      "videoId": 0,
       'tags': [],
       'song': "",
-      "type": 0,
+      "type": type,
     };
     try {
+      final videoId = await _reelRepo.addPhotoOrVideo(file,token!);
+      data['videoId'] = videoId;
       await _reelRepo.addReel(data, token!);
       showSnackBar("Reel added successfully");
       clean();

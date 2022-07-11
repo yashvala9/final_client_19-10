@@ -98,7 +98,9 @@ class MyApp extends StatelessWidget {
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(
-            shape: MaterialStateProperty.all(const StadiumBorder()),
+            shape: MaterialStateProperty.all(const RoundedRectangleBorder(
+               borderRadius: BorderRadius.all(Radius.circular(12))
+            )),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(

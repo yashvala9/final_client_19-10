@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/utils/base.dart';
@@ -8,7 +9,7 @@ import 'package:reel_ro/utils/base.dart';
 class ReelRepository {
   Future<List<ReelModel>> getFeeds(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getFeedsByUserId}?currentUserId=2"),
+      Uri.parse("${Base.getFeedsByUserId}?currentUserId=$profileId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -90,6 +91,32 @@ class ReelRepository {
       return;
     } else {
       return Future.error(body['message']);
+    }
+  }
+
+  Future<int> addPhotoOrVideo(File file, String token) async {
+    printInfo(info: "File path: ${file.path}");
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(Base.uploadVideo),
+    );
+    var headers = <String, String>{
+      'Content-Type': 'multipart/form-data; charset=UTF-8',
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    };
+    request.headers.addAll(headers);
+    request.files.add(
+      await http.MultipartFile.fromPath('files', file.path),
+    );
+
+    var res = await request.send();
+    var responsed = await http.Response.fromStream(res);
+    var resData = json.decode(responsed.body);
+    printInfo(info: resData.toString());
+    if (res.statusCode == 200) {
+      return resData[0]['id'];
+    } else {
+      return Future.error(resData['message']);
     }
   }
 }
