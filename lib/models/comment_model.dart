@@ -7,6 +7,7 @@ class CommentModel {
   int responseCount;
   int profile;
   String reelId;
+  bool isLiked;
   CommentModel({
     required this.id,
     required this.comment,
@@ -14,6 +15,7 @@ class CommentModel {
     required this.responseCount,
     required this.profile,
     required this.reelId,
+   required this.isLiked ,
   });
 
   CommentModel copyWith({
@@ -23,6 +25,7 @@ class CommentModel {
     int? responseCount,
     int? profile,
     String? reelId,
+    bool? isLiked,
   }) {
     return CommentModel(
       id: id ?? this.id,
@@ -31,6 +34,7 @@ class CommentModel {
       responseCount: responseCount ?? this.responseCount,
       profile: profile ?? this.profile,
       reelId: reelId ?? this.reelId,
+      isLiked: isLiked ?? this.isLiked,
     );
   }
 
@@ -42,6 +46,7 @@ class CommentModel {
       'responseCount': responseCount,
       'profile': profile,
       'reelId': reelId,
+      'isLiked': isLiked,
     };
   }
 
@@ -53,38 +58,40 @@ class CommentModel {
       responseCount: map['responseCount']?.toInt() ?? 0,
       profile: map['profile']?.toInt() ?? 0,
       reelId: map['reelId']?.toString() ?? '',
+      isLiked: map['isLiked'] ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory CommentModel.fromJson(String source) => CommentModel.fromMap(json.decode(source));
+  factory CommentModel.fromJson(String source) =>
+      CommentModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'CommentModel(id: $id, comment: $comment, likeCount: $likeCount, responseCount: $responseCount, profile: $profile, reelId: $reelId)';
+    return 'CommentModel(id: $id, comment: $comment, likeCount: $likeCount,isLiked $isLiked,responseCount: $responseCount, profile: $profile, reelId: $reelId)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is CommentModel &&
-      other.id == id &&
-      other.comment == comment &&
-      other.likeCount == likeCount &&
-      other.responseCount == responseCount &&
-      other.profile == profile &&
-      other.reelId == reelId;
+        other.id == id &&
+        other.comment == comment &&
+        other.likeCount == likeCount &&
+        other.responseCount == responseCount &&
+        other.profile == profile &&
+        other.reelId == reelId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      comment.hashCode ^
-      likeCount.hashCode ^
-      responseCount.hashCode ^
-      profile.hashCode ^
-      reelId.hashCode;
+        comment.hashCode ^
+        likeCount.hashCode ^
+        responseCount.hashCode ^
+        profile.hashCode ^
+        reelId.hashCode;
   }
 }

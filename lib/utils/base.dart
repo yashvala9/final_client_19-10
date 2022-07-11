@@ -14,7 +14,11 @@ class Base {
   //Reels
   static const getReelsByUserId = '$_url/getReelsByUserId';
   static const getFeedsByUserId ='$_url/getFeed';
+  static const getPhotosByUserId ='$_url/getPhotosByUserId';
   static const addReel = '$_url/addReelByUserId';
+
+  //Upload Video and photo
+  static const uploadVideo = '$_url/upload';
 
   //Like
   static const toggleLike = '$_url/toggleLike';
@@ -23,10 +27,12 @@ class Base {
   //Comment
   static const getCommentByReelId = '$_url/getCommentsByReelId';
   static const addCommentToReelId = '$_url/addComment';
+  static const toggleCommentLike = '$_url/toggleCommentLike';
+
+  //Follow UnFollow
+  static const toggleFollow = '${_url}/sendFollowRequest';
   
 
-  //Photos
-  static const getPhotosByUserId = '$_url/getPhotosByUserId';
 
 
 }

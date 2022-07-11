@@ -5,6 +5,8 @@ class AppRoutes {
   static const getStarted = '/get-started';
   static const dashboard = '/dashboard';
   static const login = '/login';
+  // static String login_then(String afterSuccessfulLogin) =>
+  //     '$login?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
   static const signup = '/signup';
   static const navigationBar = '/navigation_bar';
   static const signUp = '/signUp';
@@ -13,4 +15,5 @@ class AppRoutes {
   static const resetPassword = '/reset-password';
   static const createProfile = '/create-profile';
   static const profile = '/profile';
+  
 }

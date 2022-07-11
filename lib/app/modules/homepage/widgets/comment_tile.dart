@@ -8,7 +8,10 @@ import 'package:reel_ro/widgets/loading.dart';
 
 class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
-  CommentWidget({Key? key, required this.commentModel}) : super(key: key);
+  final VoidCallback likeToggle;
+  CommentWidget(
+      {Key? key, required this.commentModel, required this.likeToggle})
+      : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
@@ -49,7 +52,9 @@ class CommentWidget extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            likeToggle();
+                          },
                           icon: const Icon(
                             Icons.favorite,
                             color: Colors.red,

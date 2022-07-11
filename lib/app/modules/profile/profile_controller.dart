@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:video_player/video_player.dart';
 
@@ -10,6 +11,7 @@ import '../../../utils/snackbar.dart';
 class ProfileController extends GetxController {
   final _authService = Get.find<AuthService>();
   final _profileRepo = Get.put(ProfileRepository());
+  final _authRepo = Get.put(AuthRepository());
 
   int? get profileId => _authService.profileModel?.id;
   String? get token => _authService.token;
@@ -41,11 +43,14 @@ class ProfileController extends GetxController {
     loading = false;
   }
 
-  void getReelsById() async{
-    try {
+  // void getReelsById() async{
+  //   try {
       
-    } catch (e) {
-      print("getReelsById: $e");
-    }
+  //   } catch (e) {
+  //     print("getReelsById: $e");
+  //   }
+  // }
+  void signOut()async{
+    await _authRepo.signOut();
   }
 }

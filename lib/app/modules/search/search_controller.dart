@@ -1,42 +1,73 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/user_model.dart';
+import 'package:reel_ro/services/auth_service.dart';
 
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/snackbar.dart';
 
 class SearchController extends GetxController {
-  final _storage = GetStorage();
+  final String username;
+  SearchController(this.username);
 
-  String? get token => _storage.read(Constants.token)['jwt'];
-  int? get userId => _storage.read(Constants.token)[Constants.userId];
-  ProfileModel? searchProfileModel;
+  final _profileRepo = Get.put(ProfileRepository());
+  final _authService = Get.put(AuthService());
+  final _profileControllere = Get.find<ProfileController>();
+
+  String? get token => _authService.token;
+  int? get profileId => _authService.profileModel?.id;
 
   bool _loading = false;
-  final _profileRepo = Get.put(ProfileRepository());
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
     update();
   }
 
+  List<ProfileModel> _searchProfiles = [];
+  List<ProfileModel> get searchProfiles =>
+      _searchProfiles.where((element) => element.id != profileId).toList();
+  set searchProfiles(List<ProfileModel> searchProfiles) {
+    _searchProfiles = searchProfiles;
+    update();
+  }
+
+  @override
+  void onInit() {
+    searchUser(username);
+    super.onInit();
+  }
+
   void searchUser(String username) async {
     print("username: $username");
     loading = true;
     try {
-      searchProfileModel =
-          await _profileRepo.getProfileByUserName(username, token!);
-      print(searchProfileModel);
+      searchProfiles =
+          await _profileRepo.getProfileByUserName(username, profileId!, token!);
     } catch (e) {
-      showSnackBar(e.toString(), color: Color.fromARGB(255, 92, 90, 90));
+      showSnackBar(e.toString(), color: Colors.red);
       print("searchUser: $e");
     }
     loading = false;
-    
+  }
+
+  void toggleFollowing(int index) async {
+    searchProfiles[index].isFollowing = !searchProfiles[index].isFollowing!;
+    if (searchProfiles[index].isFollowing!) {
+      searchProfiles[index].followerCount++;
+      _profileControllere.profileModel.followingCount++;
+    } else {
+      searchProfiles[index].followerCount--;
+      _profileControllere.profileModel.followingCount--;
+    }
+    _profileRepo.toggleFollow(searchProfiles[index].id, profileId!, token!);
+    update();
   }
 }
