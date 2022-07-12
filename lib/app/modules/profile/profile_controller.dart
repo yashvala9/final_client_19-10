@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,6 +19,7 @@ class ProfileController extends GetxController {
   late ProfileModel profileModel;
   late List<ReelModel> reels = [];
   late List<PhotoModel> photos = [];
+  final _authRepo = Get.put(AuthRepository());
 
   int? get profileId => _authService.profileModel?.id;
   String? get token => _authService.token;
@@ -32,8 +34,8 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     getProfile();
-    getReelsById();
-    getPhotosById();
+    // getReelsById();
+    // getPhotosById();
     super.onInit();
   }
 
@@ -48,23 +50,14 @@ class ProfileController extends GetxController {
     loading = false;
   }
 
-  void getReelsById() async {
-    try {
-      print("running getReelsById");
-      reels.addAll(await _reelRepo.getReelsById(profileId!, token!));
-      print(reels.length);
-    } catch (e) {
-      print("getReelsById: $e");
-    }
-  }
-
-  void getPhotosById() async {
-    try {
-      print("running getPhotosById");
-      photos.addAll(await _reelRepo.getPhotosById(profileId!, token!));
-      print(reels.length);
-    } catch (e) {
-      print("getReelsById: $e");
-    }
+  // void getReelsById() async{
+  //   try {
+      
+  //   } catch (e) {
+  //     print("getReelsById: $e");
+  //   }
+  // }
+  void signOut()async{
+    await _authRepo.signOut();
   }
 }

@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_screen.dart';
@@ -12,6 +13,8 @@ import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
+import 'comment_controller.dart';
+import 'comment_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
@@ -25,26 +28,78 @@ class HomePageScreen extends StatelessWidget {
     final style = theme.textTheme;
     return GetBuilder<HomePageController>(
         builder: (_) => Scaffold(
+              backgroundColor: Colors.black,
               extendBodyBehindAppBar: true,
               appBar: AppBar(
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 leading: IconButton(
                     icon: const Icon(Icons.arrow_back_ios), onPressed: () {}),
-                title: const Center(child: Text("Rolls For You")),
+                title: const Center(
+                    child: Text(
+                  "Rolls For You",
+                )),
                 actions: [
                   IconButton(
-                      icon: const Icon(Icons.notifications_none),
+                      icon: const Icon(
+                        Icons.notifications_none,
+                      ),
                       onPressed: () {}),
                   IconButton(
-                      icon: const Icon(Icons.add_box_outlined),
-                      onPressed: () async {
-                        var video = await ImagePicker()
-                            .pickVideo(source: ImageSource.gallery);
-                        if (video != null) {
-                          Get.to(() => AddFeedScreen(file: File(video.path)));
+                    icon: const Icon(
+                      Icons.add_box_outlined,
+                    ),
+                    onPressed: () async {
+                      final val = await showDialog(
+                        context: context,
+                        builder: (_) => Dialog(
+                            child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                Navigator.pop(context, true);
+                              },
+                              leading: Icon(Icons.video_call),
+                              title: Text("Video"),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                Navigator.pop(context, false);
+                              },
+                              leading: Icon(Icons.photo),
+                              title: Text("Photo"),
+                            ),
+                          ],
+                        )),
+                      );
+                      if (val != null) {
+                        if (val) {
+                          var video = await ImagePicker()
+                              .pickVideo(source: ImageSource.gallery);
+                          if (video != null) {
+                            Get.to(
+                              () => AddFeedScreen(
+                                file: File(video.path),
+                                type: 0,
+                              ),
+                            );
+                          }
+                        } else {
+                          var photo = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery);
+                          if (photo != null) {
+                            Get.to(
+                              () => AddFeedScreen(
+                                file: File(photo.path),
+                                type: 1,
+                              ),
+                            );
+                          }
                         }
-                      }),
+                      }
+                    },
+                  ),
                 ],
               ),
               body: _controller.loading
@@ -58,6 +113,7 @@ class HomePageScreen extends StatelessWidget {
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             final data = _controller.reelList[index];
+                            printInfo(info: "Data: $data");
                             return Stack(
                               children: [
                                 VideoPlayerItem(
@@ -90,6 +146,13 @@ class HomePageScreen extends StatelessWidget {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
+                                                  Text(
+                                                    "@${data.profile.username}",
+                                                    style: style.titleLarge!
+                                                        .copyWith(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                   Text(
                                                     data.title,
                                                     style: const TextStyle(
@@ -189,14 +252,13 @@ class HomePageScreen extends StatelessWidget {
                                                   children: [
                                                     InkWell(
                                                       onTap: () {
-                                                        showModalBottomSheet(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return CommentSheet(
-                                                                reelId:
-                                                                    data.reelId,
-                                                              );
-                                                            });
+                                                        Get.bottomSheet(
+                                                          CommentSheet(
+                                                            reelId: data.reelId,
+                                                          ),
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                        );
                                                       },
                                                       child: const Icon(
                                                         Icons.comment,
@@ -310,146 +372,6 @@ class HomePageScreen extends StatelessWidget {
                 ),
               ))
         ],
-      ),
-    );
-  }
-}
-
-class CommentSheet extends StatelessWidget {
-  final String reelId;
-  CommentSheet({Key? key, required this.reelId}) : super(key: key);
-
-  buildProfile(String profilePhoto) {
-    return CircleAvatar(
-      radius: 20,
-      backgroundImage: const NetworkImage(
-        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-      ),
-    );
-  }
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    final _controller = Get.put(CommentController(reelId: reelId));
-    // _controller.customeInit();
-    return GetBuilder<CommentController>(
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: _controller.loading
-            ? [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Loading(),
-                )
-              ]
-            : [
-                ListTile(
-                  leading: Text('${_controller.commentList.length} Comments',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ),
-                Divider(),
-                // ListTile(
-                //   leading: buildProfile(""),
-                //   title: Container(
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Row(
-                //           children: [
-                //             Text(
-                //               '@yashvala9',
-                //               style: TextStyle(fontWeight: FontWeight.bold),
-                //             ),
-                //             SizedBox(
-                //               width: 10,
-                //             ),
-                //             Text(
-                //               '1 day ago',
-                //             ),
-                //           ],
-                //         ),
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               'Hey! check this out.',
-                //             ),
-                //             Row(
-                //               children: [
-                //                 IconButton(
-                //                     onPressed: () {},
-                //                     icon: Icon(
-                //                       Icons.favorite,
-                //                       color: Colors.red,
-                //                     )),
-                //                 Text('2'),
-                //               ],
-                //             )
-                //           ],
-                //         ),
-                //         InkWell(
-                //             onTap: () {},
-                //             child: Text(
-                //               '2 Responses',
-                //               style: TextStyle(color: Colors.blue),
-                //             )),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                if (_controller.commentList.isEmpty)
-                  EmptyWidget("No comments available!")
-                else
-                  ..._controller.commentList
-                      .map(
-                        (e) => ListTile(
-                          leading: buildProfile(""),
-                          title: CommentWidget(commentModel: e),
-                        ),
-                      )
-                      .toList(),
-                Divider(),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: buildProfile(""),
-                    ),
-                    Expanded(
-                      child: Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: ' Add a comment',
-                          ),
-                          onSaved: (v) {
-                            _controller.comment = v!;
-                          },
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: IconButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            _controller.addComment();
-                          }
-                        },
-                        icon: Icon(Icons.send),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
       ),
     );
   }

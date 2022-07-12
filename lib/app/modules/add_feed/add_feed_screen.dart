@@ -11,7 +11,9 @@ import 'package:video_player/video_player.dart';
 
 class AddFeedScreen extends StatefulWidget {
   final File file;
-  const AddFeedScreen({Key? key, required this.file}) : super(key: key);
+  final int type;
+  const AddFeedScreen({Key? key, required this.file, required this.type})
+      : super(key: key);
 
   @override
   State<AddFeedScreen> createState() => _AddFeedScreenState();
@@ -22,11 +24,13 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
 
   @override
   void initState() {
-    videoPlayerController = VideoPlayerController.file(widget.file)
-      ..initialize().then((_) {
-        setState(() {});
-        videoPlayerController.pause();
-      });
+    if (widget.type == 0) {
+      videoPlayerController = VideoPlayerController.file(widget.file)
+        ..initialize().then((_) {
+          setState(() {});
+          videoPlayerController.pause();
+        });
+    }
     super.initState();
   }
 
@@ -79,7 +83,9 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       height: 200,
                       width: 200,
                       margin: const EdgeInsets.only(left: 8, bottom: 8),
-                      child: VideoPlayer(videoPlayerController),
+                      child: widget.type == 1
+                          ? Image.file(widget.file)
+                          : VideoPlayer(videoPlayerController),
                     ),
                   ),
                   Padding(
@@ -107,7 +113,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              _controller.addFeed();
+                              _controller.addFeed(widget.file, widget.type);
                             }
                           },
                         ),

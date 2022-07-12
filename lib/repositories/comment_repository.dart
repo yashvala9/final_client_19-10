@@ -9,18 +9,20 @@ import '../utils/base.dart';
 
 class CommentRepository {
   Future<List<CommentModel>> getCommentByReelId(
-      String reelId, String token) async {
+      String reelId, int profileId, String token) async {
+    printInfo(info: "getCommentByreelId: $reelId");
     final response = await http.get(
-      Uri.parse("${Base.getCommentByReelId}?reelId=$reelId"),
+      Uri.parse(
+          "${Base.getCommentByReelId}?reelId=$reelId&currentUserId=$profileId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    printInfo(info:  "getCommentsByReelIdBody: $body");
+    printInfo(info: "getCommentsByReelIdBody: $body");
     if (response.statusCode == 200) {
-      final Iterable list = body;
+      final Iterable list = body['comments'];
       return list.map((e) => CommentModel.fromMap(e)).toList();
     } else {
       return Future.error(body['message']);
@@ -40,6 +42,25 @@ class CommentRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       return "";
+    } else {
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<void> toggleCommentLike(
+      int commentId, int userId, String token) async {
+    final response = await http.post(
+      Uri.parse(
+          "${Base.toggleCommentLike}?commentId=$commentId&userId=$userId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      printInfo(info: body['message']);
+      return;
     } else {
       return Future.error(body['message']);
     }

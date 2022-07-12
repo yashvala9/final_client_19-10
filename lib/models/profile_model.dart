@@ -9,6 +9,7 @@ class ProfileModel {
   final String username;
   final String email;
   final bool isVerified;
+  bool? isFollowing;
   int noOfPosts;
   final int countryCode;
   int postsCount;
@@ -24,6 +25,7 @@ class ProfileModel {
     required this.username,
     required this.isVerified,
     required this.noOfPosts,
+    this.isFollowing,
     required this.countryCode,
     required this.postsCount,
     required this.followerCount,
@@ -44,6 +46,7 @@ class ProfileModel {
     int? postsCount,
     int? followerCount,
     int? followingCount,
+    bool? isFollowing,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -59,6 +62,7 @@ class ProfileModel {
       postsCount: postsCount ?? this.postsCount,
       followerCount: followerCount ?? this.followerCount,
       followingCount: followingCount ?? this.followingCount,
+      isFollowing: isFollowing,
     );
   }
 
@@ -77,6 +81,7 @@ class ProfileModel {
       'postsCount': postsCount,
       'followerCount': followerCount,
       'followingCount': followingCount,
+      'isFollowing': isFollowing,
     };
   }
 
@@ -85,6 +90,7 @@ class ProfileModel {
       id: map['id']?.toInt() ?? 0,
       fullname: map['fullname'] ?? '',
       bio: map['bio'] ?? '',
+      isFollowing: map['isFollowing'] ,
       profileUrl: map['profileUrl'] ?? '',
       email: map['user']['email'] ?? '',
       phoneNumber: int.parse(map['phoneNumber'] ?? "0"),

@@ -3,6 +3,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:reel_ro/app/modules/auth/create_profile/create_profile_view.dart';
 import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_screen.dart';
+import 'package:reel_ro/app/routes/app_page.dart';
+import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
@@ -46,6 +48,7 @@ class AuthService extends GetxService {
         Get.off(() => CreateProfileView());
       }
     } else {
+      // Get.toNamed(AppRoutes.login_then("afterSuccessfulLogin"));
       Get.off(() => LoginScreen());
     }
   }
