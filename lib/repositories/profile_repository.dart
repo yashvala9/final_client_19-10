@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 
 import '../models/reel_model.dart';
@@ -108,8 +109,9 @@ class ProfileRepository {
 
   Future<List<ReelModel>> getReelByProfileId(
       int profileId, String token) async {
+    List<ReelModel> reels = [];
     final response = await http.get(
-      Uri.parse("${Base.getReelsByUserId}?currentUserId=5"),
+      Uri.parse("${Base.getReelsByUserId}?currentUserId=$profileId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -118,13 +120,19 @@ class ProfileRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
+
+      for (var item in list as List<dynamic>) {
+        reels.add(ReelModel.fromJson(item));
+      }
+      return reels;
     } else {
       return Future.error(body['message']);
     }
   }
 
-  Future<List<ReelModel>> getPhotosByProfileId(int profileId, String token) async {
+  Future<List<PhotoModel>> getPhotosByProfileId(
+      int profileId, String token) async {
+    List<PhotoModel> photos = [];
     final response = await http.get(
       Uri.parse("${Base.getPhotosByUserId}?currentUserId=$profileId"),
       headers: <String, String>{
@@ -135,13 +143,15 @@ class ProfileRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
+
+      for (var item in list as List<dynamic>) {
+        photos.add(PhotoModel.fromJson(item));
+      }
+      return photos;
     } else {
       return Future.error(body['message']);
     }
   }
-
- 
 
   Future<void> toggleFollow(
       int followingProfileId, int profileId, String token) async {

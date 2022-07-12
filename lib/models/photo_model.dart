@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final reel = reelFromJson(jsonString);
+//     final reel = photoFromJson(jsonString);
 
 import 'package:meta/meta.dart';
 import 'dart:convert';

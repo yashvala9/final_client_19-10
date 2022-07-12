@@ -1,19 +1,22 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
 
 class SingleFeedScreen extends StatelessWidget {
-  SingleFeedScreen(this.reel, {Key? key}) : super(key: key);
+  SingleFeedScreen(this.reel, this.photo, {Key? key}) : super(key: key);
 
-  ReelModel reel;
+  ReelModel? reel;
+  PhotoModel? photo;
 
   final _controller = Get.put(SingleFeedController());
   @override
@@ -21,6 +24,7 @@ class SingleFeedScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
+    final data = reel ?? photo;
     return GetBuilder<SingleFeedController>(
         builder: (_) => Scaffold(
               extendBodyBehindAppBar: true,
@@ -42,16 +46,25 @@ class SingleFeedScreen extends StatelessWidget {
                           PageController(initialPage: 0, viewportFraction: 1),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        final data = reel;
                         return Stack(
                           children: [
-                            VideoPlayerItem(
-                              videoUrl: data.videoId.url,
-                              doubleTap: () {
-                                _controller.likeToggle(reel);
-                              },
-                              showLike: _controller.showLike,
-                            ),
+                            reel == null
+                                ? GestureDetector(
+                                    onDoubleTap: () {
+                                      _controller.likeToggle(reel!);
+                                    },
+                                    child: CachedNetworkImage(
+                                      imageUrl: photo!.videoId.url,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : VideoPlayerItem(
+                                    videoUrl: reel!.videoId.url,
+                                    doubleTap: () {
+                                      _controller.likeToggle(reel!);
+                                    },
+                                    showLike: _controller.showLike,
+                                  ),
                             Column(
                               children: [
                                 const SizedBox(
@@ -74,7 +87,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                data.title,
+                                                reel == null
+                                                    ? photo!.title
+                                                    : reel!.title,
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.white,
@@ -82,7 +97,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                data.description,
+                                                reel == null
+                                                    ? photo!.description
+                                                    : reel!.description,
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white,
@@ -96,7 +113,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                     color: Colors.white,
                                                   ),
                                                   Text(
-                                                    data.song,
+                                                    reel == null
+                                                        ? photo!.song
+                                                        : reel!.song,
                                                     style: const TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.white,
@@ -145,18 +164,32 @@ class SingleFeedScreen extends StatelessWidget {
                                                   onTap: () {},
                                                   // _controller.likeVideo(data.id),
                                                   child: Icon(
-                                                    data.isLiked
-                                                        ? Icons.favorite
-                                                        : Icons.favorite_border,
+                                                    reel == null
+                                                        ? photo!.isLiked
+                                                            ? Icons.favorite
+                                                            : Icons
+                                                                .favorite_border
+                                                        : reel!.isLiked
+                                                            ? Icons.favorite
+                                                            : Icons
+                                                                .favorite_border,
                                                     size: 30,
-                                                    color: data.isLiked
-                                                        ? Colors.red
-                                                        : Colors.white,
+                                                    color: reel == null
+                                                        ? photo!.isLiked
+                                                            ? Colors.red
+                                                            : Colors.white
+                                                        : reel!.isLiked
+                                                            ? Colors.red
+                                                            : Colors.white,
                                                   ),
                                                 ),
                                                 // const SizedBox(height: 7),
                                                 Text(
-                                                  data.likeCount.toString(),
+                                                  reel == null
+                                                      ? photo!.likeCount
+                                                          .toString()
+                                                      : reel!.likeCount
+                                                          .toString(),
                                                   style: style.headlineSmall!
                                                       .copyWith(
                                                     color: Colors.white,
@@ -172,7 +205,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                         context: context,
                                                         builder: (context) {
                                                           return CommentSheet(
-                                                            reelId: data.reelId,
+                                                            reelId: reel == null
+                                                                ? photo!.reelId
+                                                                : reel!.reelId,
                                                           );
                                                         });
                                                   },
@@ -183,8 +218,13 @@ class SingleFeedScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Text(
-                                                  data.reelComments.length
-                                                      .toString(),
+                                                  reel == null
+                                                      ? photo!
+                                                          .reelComments.length
+                                                          .toString()
+                                                      : reel!
+                                                          .reelComments.length
+                                                          .toString(),
                                                   style: style.headlineSmall!
                                                       .copyWith(
                                                     color: Colors.white,
@@ -212,10 +252,12 @@ class SingleFeedScreen extends StatelessWidget {
                                                 // )
                                               ],
                                             ),
-                                            CircleAnimation(
-                                              child: buildMusicAlbum(
-                                                  "https://images.unsplash.com/photo-1656311877606-778f297e00d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"),
-                                            ),
+                                            reel == null
+                                                ? Container()
+                                                : CircleAnimation(
+                                                    child: buildMusicAlbum(
+                                                        "https://images.unsplash.com/photo-1656311877606-778f297e00d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"),
+                                                  ),
                                           ],
                                         ),
                                       ),
@@ -388,7 +430,10 @@ class CommentSheet extends StatelessWidget {
                       .map(
                         (e) => ListTile(
                           leading: buildProfile(""),
-                          title: CommentWidget(commentModel: e),
+                          title: CommentWidget(
+                            commentModel: e,
+                            likeToggle: () {},
+                          ),
                         ),
                       )
                       .toList(),

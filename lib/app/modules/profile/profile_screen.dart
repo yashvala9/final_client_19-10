@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
@@ -135,8 +136,9 @@ class ProfileScreen extends StatelessWidget {
                                               ),
                                               child: OutlinedButton(
                                                 onPressed: () {
-                                                  _controller.signOut();
-                                                  authService.redirectUser();
+                                                  Get.to(EditProfileView(
+                                                      _controller
+                                                          .profileModel));
                                                 },
                                                 style: OutlinedButton.styleFrom(
                                                   minimumSize:
@@ -291,7 +293,7 @@ class ProfileScreen extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(),
-            FutureBuilder<List<ReelModel>>(
+            FutureBuilder<List<PhotoModel>>(
                 future: _profileRepo.getPhotosByProfileId(
                     _controller.profileId!, _controller.token!),
                 builder: (context, snapshot) {
@@ -317,14 +319,19 @@ class ProfileScreen extends StatelessWidget {
                             crossAxisSpacing: 5,
                           ),
                           itemBuilder: (context, index) {
-                            String thumbnail = photos[index].mediaLink;
+                            String thumbnail = photos[index].videoId.url;
                             printInfo(
                                 info: "ProfileId: ${_controller.profileId}");
                             printInfo(info: "tumbnail: $thumbnail");
-                            return CachedNetworkImage(
-                              imageUrl: thumbnail,
-                              fit: BoxFit.cover,
-                              errorWidget: (c, s, e) => Icon(Icons.error),
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(SingleFeedScreen(null, photos[index]));
+                              },
+                              child: CachedNetworkImage(
+                                imageUrl: thumbnail,
+                                fit: BoxFit.cover,
+                                errorWidget: (c, s, e) => Icon(Icons.error),
+                              ),
                             );
                           },
                         );
@@ -380,18 +387,16 @@ class ProfileReel extends StatelessWidget {
               mainAxisSpacing: 5,
             ),
             itemBuilder: (context, index) {
-              return VideoPlayer(
-                VideoPlayerController.network(
-                  reels[index].mediaLink,
-                  videoPlayerOptions: VideoPlayerOptions(
-                    allowBackgroundPlayback: false,
-                  ),
-                )..initialize(),
+              return GestureDetector(
+                onTap: () {
+                  Get.to(SingleFeedScreen(reels[index], null));
+                },
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                  fit: BoxFit.cover,
+                ),
               );
-              // return CachedNetworkImage(
-              //   imageUrl: thumbnail,
-              //   fit: BoxFit.cover,
-              // );
             },
           );
         });
