@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/utils/base.dart';
 
@@ -15,6 +16,7 @@ class ReelRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
+    print(response.body.toString() + '343434');
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
@@ -94,6 +96,43 @@ class ReelRepository {
     }
   }
 
+  Future<List<ReelModel>> getReelsById(int profileId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getReelsByUserId}?currentUserId=14"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print("running reels by id 323232");
+    print(body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['error']['message']);
+    }
+  }
+
+  Future<List<PhotoModel>> getPhotosById(int profileId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getPhotosByUserId}?currentUserId=14"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print("running reels by id 323232");
+    print(body);
+    if (response.statusCode == 200) {
+      return photoFromJson(response.body);
+    } else {
+      return Future.error(body['error']['message']);
+    }
+  }
+
   Future<int> addPhotoOrVideo(File file, String token) async {
     printInfo(info: "File path: ${file.path}");
     var request = http.MultipartRequest(
@@ -120,3 +159,4 @@ class ReelRepository {
     }
   }
 }
+

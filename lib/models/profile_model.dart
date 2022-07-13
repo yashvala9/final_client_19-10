@@ -7,6 +7,7 @@ class ProfileModel {
   final String profileUrl;
   final int phoneNumber;
   final String username;
+  final String email;
   final bool isVerified;
   bool? isFollowing;
   int noOfPosts;
@@ -16,6 +17,7 @@ class ProfileModel {
   int followingCount;
   ProfileModel({
     required this.id,
+    required this.email,
     required this.fullname,
     required this.bio,
     required this.profileUrl,
@@ -35,6 +37,7 @@ class ProfileModel {
     String? fullname,
     String? bio,
     String? profileUrl,
+    String? email,
     int? phoneNumber,
     String? username,
     bool? isVerified,
@@ -50,6 +53,7 @@ class ProfileModel {
       fullname: fullname ?? this.fullname,
       bio: bio ?? this.bio,
       profileUrl: profileUrl ?? this.profileUrl,
+      email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       username: username ?? this.username,
       isVerified: isVerified ?? this.isVerified,
@@ -68,6 +72,7 @@ class ProfileModel {
       'fullname': fullname,
       'bio': bio,
       'profileUrl': profileUrl,
+      'email': email,
       'phoneNumber': phoneNumber,
       'username': username,
       'isVerified': isVerified,
@@ -85,9 +90,10 @@ class ProfileModel {
       id: map['id']?.toInt() ?? 0,
       fullname: map['fullname'] ?? '',
       bio: map['bio'] ?? '',
-      isFollowing: map['isFollowing'] ,
+      isFollowing: map['isFollowing'],
       profileUrl: map['profileUrl'] ?? '',
-      phoneNumber: int.parse(map['phoneNumber'] ?? '0'),
+      email: '',
+      phoneNumber: int.parse(map['phoneNumber'] ?? "0"),
       username: map['username'] ?? '',
       isVerified: map['isVerified'] ?? false,
       noOfPosts: map['noOfPosts']?.toInt() ?? 0,
@@ -105,7 +111,7 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, fullname: $fullname, bio: $bio, profileUrl: $profileUrl, phoneNumber: $phoneNumber, username: $username, isVerified: $isVerified, noOfPosts: $noOfPosts, countryCode: $countryCode, postsCount: $postsCount, followerCount: $followerCount, followingCount: $followingCount)';
+    return 'ProfileModel(id: $id, fullname: $fullname, bio: $bio, profileUrl: $profileUrl, email: $email, phoneNumber: $phoneNumber, username: $username, isVerified: $isVerified, noOfPosts: $noOfPosts, countryCode: $countryCode)';
   }
 
   @override
@@ -117,6 +123,7 @@ class ProfileModel {
         other.fullname == fullname &&
         other.bio == bio &&
         other.profileUrl == profileUrl &&
+        other.email == email &&
         other.phoneNumber == phoneNumber &&
         other.username == username &&
         other.isVerified == isVerified &&
@@ -133,6 +140,7 @@ class ProfileModel {
         fullname.hashCode ^
         bio.hashCode ^
         profileUrl.hashCode ^
+        email.hashCode ^
         phoneNumber.hashCode ^
         username.hashCode ^
         isVerified.hashCode ^

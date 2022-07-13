@@ -19,16 +19,9 @@ class EditProfileView extends GetView<EditProfileController> {
         leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
-              showSnackBar('button pressed');
               Get.back();
             }),
         title: const Center(child: Text("Edit Profille")),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.notifications_none), onPressed: () {}),
-          IconButton(
-              icon: const Icon(Icons.add_box_outlined), onPressed: () {}),
-        ],
       ),
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       body: Column(
@@ -64,7 +57,7 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
               const Spacer(),
               Text(
-                "Jacob West",
+                profileModel.fullname,
                 style: style.titleMedium,
               ),
               IconButton(
@@ -88,7 +81,7 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
               const Spacer(),
               Text(
-                "jacob_w",
+                profileModel.username,
                 style: style.titleMedium,
               ),
               IconButton(
@@ -105,7 +98,7 @@ class EditProfileView extends GetView<EditProfileController> {
             children: [
               const Spacer(),
               Text(
-                "tiktok.com@jacob_w",
+                "reelro.com@" + profileModel.username,
                 style: style.titleMedium,
               ),
               IconButton(
@@ -129,7 +122,7 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
               const Spacer(),
               Text(
-                "Add a bio to your profile",
+                profileModel.bio,
                 style: style.titleMedium,
               ),
               IconButton(
@@ -157,7 +150,7 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
               const Spacer(),
               Text(
-                "Email",
+                profileModel.email,
                 style: style.titleMedium,
               ),
               IconButton(
@@ -181,7 +174,7 @@ class EditProfileView extends GetView<EditProfileController> {
               ),
               const Spacer(),
               Text(
-                "Number",
+                profileModel.phoneNumber.toString(),
                 style: style.titleMedium,
               ),
               IconButton(
