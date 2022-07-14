@@ -8,9 +8,15 @@ import 'package:reel_ro/app/modules/search/profile_detail_controller.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 
+import '../../../models/photo_model.dart';
+import '../../../models/reel_model.dart';
+import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
+import '../../../utils/empty_widget.dart';
+import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../profile/profile_screen.dart';
+import '../single_feed/single_feed_screen.dart';
 
 class ProfileDetail extends StatelessWidget {
   final int index;
@@ -273,44 +279,125 @@ class ProfileDetail extends StatelessWidget {
   }
 
   Widget _tabSection(BuildContext context, ProfileModel profileModel) {
+    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TabBar(tabs: [
-          const Tab(text: "Rolls"),
-          const Tab(text: "Photos"),
-          if (profileModel.isVerified) const Tab(text: "Giveaway"),
+          Tab(text: "Rolls"),
+          Tab(text: "Photos"),
+          if (profileModel.isVerified) Tab(text: "Giveaway"),
         ]),
         const SizedBox(
           height: 8,
         ),
         Expanded(
           child: TabBarView(children: [
-            ProfileReel(
-              profileId: profileModel.id,
-            ),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 9,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1,
-                crossAxisSpacing: 5,
-              ),
-              itemBuilder: (context, index) {
-                String thumbnail =
-                    "https://images.unsplash.com/photo-1656311877606-778f297e00d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80";
-                return CachedNetworkImage(
-                  imageUrl: thumbnail,
-                  fit: BoxFit.cover,
-                );
-              },
-            ),
-            if (profileModel.isVerified) const Center(child: Text("Giveaway")),
+            ProfileReel(profileId: profileModel.id),
+            FutureBuilder<List<PhotoModel>>(
+                future: _profileRepo.getPhotosByProfileId(
+                    profileModel.id, _controller.token!),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Loading();
+                  }
+                  if (snapshot.hasError) {
+                    printInfo(
+                        info: "getCurrentUserPhoto: ${snapshot.hasError}");
+                    return Container();
+                  }
+                  var photos = snapshot.data!;
+                  return photos.isEmpty
+                      ? EmptyWidget("No photos available")
+                      : GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: photos.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 5,
+                          ),
+                          itemBuilder: (context, index) {
+                            String thumbnail = photos[index].videoId.url;
+                            printInfo(
+                                info: "ProfileId: ${_controller.profileId}");
+                            printInfo(info: "tumbnail: $thumbnail");
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(SingleFeedScreen(null, photos[index]));
+                              },
+                              child: CachedNetworkImage(
+                                imageUrl: thumbnail,
+                                fit: BoxFit.cover,
+                                errorWidget: (c, s, e) => Icon(Icons.error),
+                              ),
+                            );
+                          },
+                        );
+                }),
+            if (profileModel.isVerified) Center(child: Text("Giveaway")),
           ]),
         ),
       ],
     );
+  }
+}
+class ProfileReel extends StatelessWidget {
+  final int? profileId;
+  ProfileReel({Key? key, this.profileId}) : super(key: key);
+
+  final _profileRepo = Get.find<ProfileRepository>();
+
+  @override
+  Widget build(BuildContext context) {
+    final _controller = Get.find<SearchController>();
+    printInfo(info: "ProfileId: ${_controller.profileId}");
+    return FutureBuilder<List<ReelModel>>(
+        future: profileId != null
+            ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
+            : _profileRepo.getReelByProfileId(
+                _controller.profileId!, _controller.token!),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            printInfo(info: "profileReels: ${snapshot.error}");
+          }
+          var reels = snapshot.data!;
+          printInfo(info: "Reels: $reels");
+          if (reels.isEmpty) {
+            return Center(
+              child: Text("No reels available"),
+            );
+          }
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: reels.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+            ),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(SingleFeedScreen(reels[index], null));
+                },
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                  fit: BoxFit.cover,
+                ),
+              );
+            },
+          );
+        });
   }
 }
