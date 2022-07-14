@@ -32,6 +32,9 @@ class Base {
 
   //Follow UnFollow
   static const toggleFollow = '${_url}/sendFollowRequest';
+
+  //Giveaway
+  static const createGiveaway = '$_url/contests';
   
 
 

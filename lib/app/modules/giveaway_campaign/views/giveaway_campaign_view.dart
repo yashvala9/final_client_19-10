@@ -5,7 +5,8 @@ import '../../account_settings/views/account_settings_view.dart';
 import '../controllers/giveaway_campaign_controller.dart';
 
 class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
-  const GiveawayCampaignView({Key? key}) : super(key: key);
+  GiveawayCampaignView({Key? key}) : super(key: key);
+  final _controller = Get.put(GiveawayCampaignController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +59,7 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 padding: const EdgeInsets.only(left: 4),
                 child: Text(
                   "Campaign Name",
-                  style: style
-                      .titleMedium, 
+                  style: style.titleMedium,
                 ),
               ),
               SizedBox(
@@ -80,8 +80,7 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 ),
                 child: Text(
                   "Prize",
-                  style: style
-                      .titleMedium, 
+                  style: style.titleMedium,
                 ),
               ),
               const TextField(
@@ -96,8 +95,7 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 padding: const EdgeInsets.only(left: 4),
                 child: Text(
                   "Campaign end date",
-                  style: style
-                      .titleMedium, 
+                  style: style.titleMedium,
                 ),
               ),
               SizedBox(
@@ -120,7 +118,9 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
               ),
               MyElevatedButton(
                 buttonText: "Start Campaign",
-                onPressed: () {},
+                onPressed: () {
+                  _controller.createGiveaway();
+                },
               ),
             ],
           ),

@@ -100,17 +100,18 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                   ),
                   actions: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
                           height: 42,
-                          width: 140,
+                          width: 100,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: const Color.fromRGBO(253, 196, 64, 1),
                               elevation: 9,
                             ),
                             onPressed: () {
-                              Get.to(const GiveawayCampaignView());
+                              Get.to(GiveawayCampaignView());
                             },
                             child: const Text(
                               "Yes",
@@ -127,7 +128,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                         ),
                         SizedBox(
                           height: 42,
-                          width: 140,
+                          width: 100,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: const Color.fromRGBO(217, 217, 217, 1),
