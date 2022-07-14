@@ -59,7 +59,7 @@ class SingleFeedScreen extends StatelessWidget {
                                     ),
                                   )
                                 : VideoPlayerItem(
-                                    videoUrl: reel!.videoId.url,
+                                    videoUrl: reel!.video.url,
                                     doubleTap: () {
                                       _controller.likeToggle(reel!);
                                     },

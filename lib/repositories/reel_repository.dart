@@ -20,7 +20,7 @@ class ReelRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return reelFromJson(response.body);
+      return list.map((e) => ReelModel.fromMap(e)).toList();
     } else {
       return Future.error(body['message']);
     }
@@ -73,7 +73,7 @@ class ReelRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return reelFromJson(response.body);
+      return list.map((e) => ReelModel.fromMap(e)).toList();
     } else {
       return Future.error(body['message']);
     }
@@ -108,7 +108,8 @@ class ReelRepository {
     print("running reels by id 323232");
     print(body);
     if (response.statusCode == 200) {
-      return reelFromJson(response.body);
+      final Iterable list = body;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
     } else {
       return Future.error(body['error']['message']);
     }
@@ -158,3 +159,4 @@ class ReelRepository {
     }
   }
 }
+

@@ -1,23 +1,44 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // To parse this JSON data, do
 //
 //     final reel = reelFromJson(jsonString);
 
 import 'dart:convert';
 
-List<ReelModel> reelFromJson(String str) =>
-    List<ReelModel>.from(json.decode(str).map((x) => ReelModel.fromJson(x)));
+import 'package:flutter/foundation.dart';
 
-String reelToJson(List<ReelModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+import 'package:reel_ro/models/comment_model.dart';
+import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/models/video_model.dart';
 
 class ReelModel {
+  int id;
+  String description;
+  dynamic mediaLink;
+  dynamic mediaType;
+  dynamic mediaExt;
+  dynamic isDeleted;
+  ProfileModel profile;
+  String title;
+  bool type;
+  String song;
+  String reelId;
+  DateTime publishedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
+  int likeCount;
+  int commentCount;
+  VideoModel video;
+  List<CommentModel> reelComments;
+  List<String> hashtags;
+  bool isLiked;
   ReelModel({
     required this.id,
     required this.description,
-    this.mediaLink,
-    this.mediaType,
-    this.mediaExt,
-    this.isDeleted,
+    required this.mediaLink,
+    required this.mediaType,
+    required this.mediaExt,
+    required this.isDeleted,
     required this.profile,
     required this.title,
     required this.type,
@@ -28,264 +49,171 @@ class ReelModel {
     required this.updatedAt,
     required this.likeCount,
     required this.commentCount,
-    required this.videoId,
+    required this.video,
     required this.reelComments,
     required this.hashtags,
     required this.isLiked,
   });
 
-  int id;
-  String description;
-  dynamic mediaLink;
-  dynamic mediaType;
-  dynamic mediaExt;
-  dynamic isDeleted;
-  Profile profile;
-  String title;
-  bool type;
-  String song;
-  String reelId;
-  DateTime publishedAt;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int likeCount;
-  int commentCount;
-  VideoId videoId;
-  List<dynamic> reelComments;
-  List<dynamic> hashtags;
-  bool isLiked;
+  ReelModel copyWith({
+    int? id,
+    String? description,
+    dynamic? mediaLink,
+    dynamic? mediaType,
+    dynamic? mediaExt,
+    dynamic? isDeleted,
+    ProfileModel? profile,
+    String? title,
+    bool? type,
+    String? song,
+    String? reelId,
+    DateTime? publishedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? likeCount,
+    int? commentCount,
+    VideoModel? video,
+    List<CommentModel>? reelComments,
+    List<String>? hashtags,
+    bool? isLiked,
+  }) {
+    return ReelModel(
+      id: id ?? this.id,
+      description: description ?? this.description,
+      mediaLink: mediaLink ?? this.mediaLink,
+      mediaType: mediaType ?? this.mediaType,
+      mediaExt: mediaExt ?? this.mediaExt,
+      isDeleted: isDeleted ?? this.isDeleted,
+      profile: profile ?? this.profile,
+      title: title ?? this.title,
+      type: type ?? this.type,
+      song: song ?? this.song,
+      reelId: reelId ?? this.reelId,
+      publishedAt: publishedAt ?? this.publishedAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      likeCount: likeCount ?? this.likeCount,
+      commentCount: commentCount ?? this.commentCount,
+      video: video ?? this.video,
+      reelComments: reelComments ?? this.reelComments,
+      hashtags: hashtags ?? this.hashtags,
+      isLiked: isLiked ?? this.isLiked,
+    );
+  }
 
-  factory ReelModel.fromJson(Map<String, dynamic> json) => ReelModel(
-        id: json["id"],
-        description: json["description"],
-        mediaLink: json["mediaLink"],
-        mediaType: json["mediaType"],
-        mediaExt: json["mediaExt"],
-        isDeleted: json["isDeleted"],
-        profile: Profile.fromJson(json["profile"]),
-        title: json["title"],
-        type: json["type"],
-        song: json["song"],
-        reelId: json["reelId"],
-        publishedAt: DateTime.parse(json["published_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        likeCount: json["likeCount"],
-        commentCount: json["commentCount"],
-        videoId: VideoId.fromJson(json["videoId"]),
-        reelComments: List<dynamic>.from(json["reel_comments"].map((x) => x)),
-        hashtags: List<dynamic>.from(json["hashtags"].map((x) => x)),
-        isLiked: json["isLiked"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "description": description,
-        "mediaLink": mediaLink,
-        "mediaType": mediaType,
-        "mediaExt": mediaExt,
-        "isDeleted": isDeleted,
-        "profile": profile.toJson(),
-        "title": title,
-        "type": type,
-        "song": song,
-        "reelId": reelId,
-        "published_at": publishedAt.toIso8601String(),
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-        "likeCount": likeCount,
-        "commentCount": commentCount,
-        "videoId": videoId.toJson(),
-        "reel_comments": List<dynamic>.from(reelComments.map((x) => x)),
-        "hashtags": List<dynamic>.from(hashtags.map((x) => x)),
-        "isLiked": isLiked,
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'description': description,
+      'mediaLink': mediaLink,
+      'mediaType': mediaType,
+      'mediaExt': mediaExt,
+      'isDeleted': isDeleted,
+      'profile': profile.toMap(),
+      'title': title,
+      'type': type,
+      'song': song,
+      'reelId': reelId,
+      'publishedAt': publishedAt.millisecondsSinceEpoch,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
+      'likeCount': likeCount,
+      'commentCount': commentCount,
+      'videoId': video.toMap(),
+      'reelComments': reelComments.map((x) => x.toMap()).toList(),
+      'hashtags': hashtags,
+      'isLiked': isLiked,
     };
-}
+  }
 
-class Profile {
-  Profile({
-    required this.id,
-    required this.fullname,
-    required this.bio,
-    required this.phonePin,
-    required this.phoneNumber,
-    required this.currentLanguage,
-    this.address,
-    this.city,
-    this.pincode,
-    this.country,
-    this.isDeleted,
-    required this.user,
-    required this.username,
-    required this.isVerified,
-    this.noOfPosts,
-    this.profileUrl,
-    required this.publishedAt,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.countryCode,
-    required this.postsCount,
-    required this.followerCount,
-    required this.followingCount,
-    this.profileImg,
-  });
+  factory ReelModel.fromMap(Map<String, dynamic> map) {
+    return ReelModel(
+      id: map['id'] ?? 0,
+      isLiked: map['isLiked'] ?? false,
+      description: map['description'] ?? "",
+      mediaLink: map['mediaLink'] ?? "",
+      mediaType: map['mediaType'] ?? "",
+      mediaExt: map['mediaExt'] ?? "",
+      isDeleted: map['isDeleted'] ?? "",
+      profile: ProfileModel.fromMap(map['profile'] as Map<String, dynamic>),
+      title: map['title'] ?? "",
+      type: map['type'] ?? false,
+      song: map['song'] ?? "",
+      reelId: map['reelId'] ?? "",
+      publishedAt: DateTime.parse(map['published_at']),
+      createdAt: DateTime.parse(map['created_at']),
+      updatedAt: DateTime.parse(map['updated_at']),
+      likeCount: map['likeCount'] ?? 0,
+      commentCount: map['commentCount'] ?? 0,
+      video: VideoModel.fromMap(map['videoId'] as Map<String, dynamic>),
+      reelComments: List<CommentModel>.from(
+        (map['reel_comments']).map<CommentModel>(
+          (x) => CommentModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+      hashtags: List<String>.from(
+        (map['hashtags']),
+      ),
+    );
+  }
 
-  int id;
-  String fullname;
-  String bio;
-  int phonePin;
-  String phoneNumber;
-  String currentLanguage;
-  dynamic address;
-  dynamic city;
-  dynamic pincode;
-  dynamic country;
-  dynamic isDeleted;
-  int user;
-  String username;
-  bool isVerified;
-  dynamic noOfPosts;
-  dynamic profileUrl;
-  DateTime publishedAt;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int countryCode;
-  int postsCount;
-  int followerCount;
-  int followingCount;
-  dynamic profileImg;
+  String toJson() => json.encode(toMap());
 
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json["id"],
-        fullname: json["fullname"],
-        bio: json["bio"],
-        phonePin: json["phonePin"],
-        phoneNumber: json["phoneNumber"],
-        currentLanguage: json["currentLanguage"],
-        address: json["address"],
-        city: json["city"],
-        pincode: json["pincode"],
-        country: json["country"],
-        isDeleted: json["isDeleted"],
-        user: json["user"],
-        username: json["username"],
-        isVerified: json["isVerified"],
-        noOfPosts: json["noOfPosts"],
-        profileUrl: json["profileUrl"],
-        publishedAt: DateTime.parse(json["published_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        countryCode: json["countryCode"],
-        postsCount: json["postsCount"],
-        followerCount: json["followerCount"],
-        followingCount: json["followingCount"],
-        profileImg: json["profileImg"],
-      );
+  factory ReelModel.fromJson(String source) =>
+      ReelModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "fullname": fullname,
-        "bio": bio,
-        "phonePin": phonePin,
-        "phoneNumber": phoneNumber,
-        "currentLanguage": currentLanguage,
-        "address": address,
-        "city": city,
-        "pincode": pincode,
-        "country": country,
-        "isDeleted": isDeleted,
-        "user": user,
-        "username": username,
-        "isVerified": isVerified,
-        "noOfPosts": noOfPosts,
-        "profileUrl": profileUrl,
-        "published_at": publishedAt.toIso8601String(),
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-        "countryCode": countryCode,
-        "postsCount": postsCount,
-        "followerCount": followerCount,
-        "followingCount": followingCount,
-        "profileImg": profileImg,
-      };
-}
+  @override
+  String toString() {
+    return 'ReelModel(id: $id, description: $description, mediaLink: $mediaLink, mediaType: $mediaType, mediaExt: $mediaExt, isDeleted: $isDeleted, profile: $profile, title: $title, type: $type, song: $song, reelId: $reelId, publishedAt: $publishedAt, createdAt: $createdAt, updatedAt: $updatedAt, likeCount: $likeCount, commentCount: $commentCount, video: $video, reelComments: $reelComments, hashtags: $hashtags, isLiked: $isLiked)';
+  }
 
-class VideoId {
-  VideoId({
-    required this.id,
-    required this.name,
-    this.alternativeText,
-    this.caption,
-    this.width,
-    this.height,
-    this.formats,
-    required this.hash,
-    required this.ext,
-    required this.mime,
-    required this.size,
-    required this.url,
-    this.previewUrl,
-    required this.provider,
-    this.providerMetadata,
-    required this.createdAt,
-    required this.updatedAt,
-  });
+  @override
+  bool operator ==(covariant ReelModel other) {
+    if (identical(this, other)) return true;
 
-  int id;
-  String name;
-  dynamic alternativeText;
-  dynamic caption;
-  dynamic width;
-  dynamic height;
-  dynamic formats;
-  String hash;
-  String ext;
-  String mime;
-  double size;
-  String url;
-  dynamic previewUrl;
-  String provider;
-  dynamic providerMetadata;
-  DateTime createdAt;
-  DateTime updatedAt;
+    return other.id == id &&
+        other.description == description &&
+        other.mediaLink == mediaLink &&
+        other.mediaType == mediaType &&
+        other.mediaExt == mediaExt &&
+        other.isDeleted == isDeleted &&
+        other.profile == profile &&
+        other.title == title &&
+        other.type == type &&
+        other.song == song &&
+        other.reelId == reelId &&
+        other.publishedAt == publishedAt &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.likeCount == likeCount &&
+        other.commentCount == commentCount &&
+        other.video == video &&
+        listEquals(other.reelComments, reelComments) &&
+        listEquals(other.hashtags, hashtags) &&
+        other.isLiked == isLiked;
+  }
 
-  factory VideoId.fromJson(Map<String, dynamic> json) => VideoId(
-        id: json["id"],
-        name: json["name"],
-        alternativeText: json["alternativeText"],
-        caption: json["caption"],
-        width: json["width"],
-        height: json["height"],
-        formats: json["formats"],
-        hash: json["hash"],
-        ext: json["ext"],
-        mime: json["mime"],
-        size: json["size"].toDouble(),
-        url: json["url"],
-        previewUrl: json["previewUrl"],
-        provider: json["provider"],
-        providerMetadata: json["provider_metadata"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "alternativeText": alternativeText,
-        "caption": caption,
-        "width": width,
-        "height": height,
-        "formats": formats,
-        "hash": hash,
-        "ext": ext,
-        "mime": mime,
-        "size": size,
-        "url": url,
-        "previewUrl": previewUrl,
-        "provider": provider,
-        "provider_metadata": providerMetadata,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-      };
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        description.hashCode ^
+        mediaLink.hashCode ^
+        mediaType.hashCode ^
+        mediaExt.hashCode ^
+        isDeleted.hashCode ^
+        profile.hashCode ^
+        title.hashCode ^
+        type.hashCode ^
+        song.hashCode ^
+        reelId.hashCode ^
+        publishedAt.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        likeCount.hashCode ^
+        commentCount.hashCode ^
+        video.hashCode ^
+        reelComments.hashCode ^
+        hashtags.hashCode ^
+        isLiked.hashCode;
+  }
 }

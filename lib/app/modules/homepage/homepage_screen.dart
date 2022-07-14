@@ -2,18 +2,16 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_screen.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
-import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
-import 'comment_controller.dart';
 import 'comment_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
@@ -113,16 +111,26 @@ class HomePageScreen extends StatelessWidget {
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             final data = _controller.reelList[index];
-                            printInfo(info: "Data: $data");
+                            printInfo(info: "Data: ${data.toJson()}");
                             return Stack(
                               children: [
-                                VideoPlayerItem(
-                                  videoUrl: data.videoId.url,
-                                  doubleTap: () {
-                                    _controller.likeToggle(index);
-                                  },
-                                  showLike: _controller.showLike,
-                                ),
+                                // data.type
+                                //     ?
+                                     VideoPlayerItem(
+                                        videoUrl: data.video.url,
+                                        doubleTap: () {
+                                          _controller.likeToggle(index);
+                                        },
+                                        showLike: _controller.showLike,
+                                      ),
+                                    // : CachedNetworkImage(
+                                    //     imageUrl: data.video.url,
+                                    //     placeholder: (context, _) => Loading(),
+                                    //     errorWidget: (context, s, e) => Icon(
+                                    //       Icons.error,
+                                    //       color: Colors.red,
+                                    //     ),
+                                    //   ),
                                 Column(
                                   children: [
                                     const SizedBox(
