@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/entry_count/views/entry_count_view.dart';
+import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
 import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
+import 'package:reel_ro/app/modules/referrals/views/referrals_view.dart';
+import 'package:reel_ro/app/modules/send_invite/views/send_invite_view.dart';
 import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import '../modules/homepage/homepage_screen.dart';
@@ -59,6 +63,22 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => ProfileScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.entryCount,
+      page: () => EntryCountView(),
+    ),
+    GetPage(
+      name: AppRoutes.sendInvite,
+      page: () => SendInviteView(),
+    ),
+    GetPage(
+      name: AppRoutes.referrals,
+      page: () => ReferralsView(),
+    ),
+    GetPage(
+      name: AppRoutes.giveaway,
+      page: () => GiveawayView(),
     ),
   ];
 }

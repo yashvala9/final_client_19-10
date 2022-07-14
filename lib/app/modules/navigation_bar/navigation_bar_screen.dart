@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
 import 'package:reel_ro/app/modules/edit_profile/views/edit_profile_view.dart';
+import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
 import 'package:reel_ro/app/modules/splash/splash_screen.dart';
@@ -114,7 +115,7 @@ class NavigationBarScreen extends StatelessWidget {
             children: [
               HomePageScreen(),
               SearchScreen(),
-              Container(),
+              GiveawayView(),
               const InboxScreen(),
               ProfileScreen(),
             ],
