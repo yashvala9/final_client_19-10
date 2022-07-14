@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/entry_count/views/entry_count_view.dart';
+import 'package:reel_ro/app/modules/referrals/views/referrals_view.dart';
 import 'package:reel_ro/utils/colors.dart';
 
 import '../controllers/giveaway_controller.dart';
@@ -16,7 +18,7 @@ class GiveawayView extends GetView<GiveawayController> {
         title: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Entry Count',
+            'Give Away',
             style: style.titleMedium,
           ),
         ),
@@ -27,145 +29,41 @@ class GiveawayView extends GetView<GiveawayController> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                Image.asset(
-                  'assets/Frame.png',
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Stack(
                     children: [
-                      Image.asset('assets/banner.png'),
-                      Positioned(
-                        right: Get.width * 0.3,
-                        top: Get.height * 0.05,
-                        child: Column(
-                          children: [
-                            Text(
-                              "Total Entries",
-                              style: style.titleMedium,
-                            ),
-                            Text(
-                              "1440",
-                              style: style.titleLarge
-                                  ?.copyWith(color: AppColors.red),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: Get.width * 0.45,
-                        height: Get.height * 0.25,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14)),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: Image.asset(
-                                  'assets/advertising.png',
-                                  height: 80,
-                                  width: 80,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "336",
-                                  style: style.titleLarge
-                                      ?.copyWith(color: AppColors.red),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Ad Entries",
-                                  style: style.titleMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      Image.asset(
+                        'assets/entrycount.png',
                       ),
-                      SizedBox(
-                        width: Get.width * 0.45,
-                        height: Get.height * 0.25,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14)),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 40),
-                                child: Image.asset(
-                                  'assets/referral.png',
-                                  height: 80,
-                                  width: 80,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "210",
-                                  style: style.titleLarge
-                                      ?.copyWith(color: AppColors.red),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "Referral Entries",
-                                  style: style.titleMedium,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                    child: SizedBox(
-                      height: Get.height * 0.15,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 5),
-                            child: Image.asset(
-                              'assets/youtube.png',
-                              height: 80,
-                              width: 80,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                            ),
+                      Column(
+                        children: const [
+                          Center(
                             child: Text(
-                              "Ad History",
-                              style: style.titleMedium,
+                              '\nEarned Entries',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 25),
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              '1246',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
                       ),
-                    ),
+                    ],
                   ),
-                )
+                ),
+                listTileWidget('enter 1', 'Entry Count', EntryCountView()),
+                listTileWidget('referral', 'Referrals', ReferralsView()),
+                listTileWidget('trophy', 'Winners', ReferralsView()),
+                listTileWidget('badge', 'Contest Dates', ReferralsView()),
+                listTileWidget('book', 'Contest Rules', ReferralsView()),
               ],
             ),
           ),
@@ -174,3 +72,26 @@ class GiveawayView extends GetView<GiveawayController> {
     );
   }
 }
+
+Widget listTileWidget(String filename, String text, var pageName) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ListTile(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      contentPadding: const EdgeInsets.all(8.0),
+      leading: SizedBox(
+        width: 70,
+        child: Image.asset(
+          'assets/$filename.png',
+        ),
+      ),
+      title: Text(text),
+      tileColor: Colors.grey[200],
+      onTap: () {
+        Get.to(pageName);
+      },
+    ),
+  );
+}
+
