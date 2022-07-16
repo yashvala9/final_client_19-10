@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/colors.dart';
 
+import '../../../../models/contest_model.dart';
+import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
+import '../../ContestDates/controllers/contest_dates_controller.dart';
 import '../controllers/contest_rules_controller.dart';
 
 class ContestRulesView extends GetView<ContestRulesController> {
-  const ContestRulesView({Key? key}) : super(key: key);
+  ContestRulesView({Key? key}) : super(key: key);
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _controller = Get.put(ContestDatesController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +33,21 @@ class ContestRulesView extends GetView<ContestRulesController> {
                 Icons.arrow_back_ios_new,
               )),
         ),
-        body: Obx(
-          () => !controller.isLoading.value
-              ? ListView.builder(
+      body: FutureBuilder<List<ContestModel>>(
+        future: _giveawayRepo.getContests(
+            _controller.profileId!, _controller.token!),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Loading();
+          }
+          if (snapshot.hasError) {
+            printInfo(info: "getContests: ${snapshot.hasError}");
+            return Container();
+          }
+          return ListView.builder(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),
-                  itemCount: controller.contestRulesList.length,
+            itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       margin: const EdgeInsets.all(16),
@@ -53,40 +68,21 @@ class ContestRulesView extends GetView<ContestRulesController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            controller.contestRulesList[index].title.toString(),
+                      snapshot.data![index].contestName,
                             style: style.titleLarge!.copyWith(
                               color: AppColors.winnercardbrown,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ListView.builder(
-                            physics: const ClampingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: controller
-                                .contestRulesList[index].rules!.length,
-                            itemBuilder: (BuildContext context, int index1) {
-                              return Text(controller
-                                  .contestRulesList[index].rules!
-                                  .cast()
-                                  .values
-                                  .elementAt(index1)
-                                  .toString());
-                            },
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                )
-              : const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.yellow,
-                    backgroundColor: Colors.red,
-                  ),
+                          
+                    Text(snapshot.data![index].rules.replaceAll(', ', '\n')),
+                  ],
                 ),
-        ));
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }

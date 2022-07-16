@@ -14,7 +14,7 @@ class DemoData {
           'https://images.unsplash.com/photo-1466112928291-0903b80a9466?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1173&q=80',
       userName: 'Jonathan Higgins',
       title: 'Mega Contest Winners',
-      prize: 'Mercedes Benz E-Class',
+      prize: 'Mercedes Benz',
     ),
   ];
   static List<ContestDates> demoContestDatesList = [
@@ -30,7 +30,7 @@ class DemoData {
           'https://images.unsplash.com/photo-1622185135505-2d795003994a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
       endOn: 'May 31st',
       title: 'Mega Contest',
-      prize: 'Mercedes Benz E-Class',
+      prize: 'Mercedes Benz',
     ),
     ContestDates(
       imageurl:

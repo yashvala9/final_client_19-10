@@ -5,13 +5,14 @@ import 'package:reel_ro/repositories/giveaway_repository.dart';
 
 import '../../../../models/contest_model.dart';
 import '../../../../widgets/loading.dart';
-import '../controllers/contest_dates_controller.dart';
+import '../controllers/my_contest_controller.dart';
 import 'widgets/contestcard_widget.dart';
 
-class ContestDatesView extends GetView<ContestDatesController> {
-  ContestDatesView({Key? key}) : super(key: key);
+class MyContestView extends GetView<MyContestController> {
+  MyContestView(this.contestModel, {Key? key}) : super(key: key);
+  final ContestModel contestModel;
   final _giveawayRepo = Get.put(GiveawayRepository());
-  final _controller = Get.put(ContestDatesController());
+  final _controller = Get.put(MyContestController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -19,7 +20,7 @@ class ContestDatesView extends GetView<ContestDatesController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Contest Dates',
+          'My Contest',
           style: TextStyle(fontSize: 14),
         ),
         leading: IconButton(
@@ -30,29 +31,8 @@ class ContestDatesView extends GetView<ContestDatesController> {
               Icons.arrow_back_ios_new,
             )),
       ),
-      body: Center(
-        child: FutureBuilder<List<ContestModel>>(
-          future: _giveawayRepo.getContests(
-              _controller.profileId!, _controller.token!),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Loading();
-            }
-            if (snapshot.hasError) {
-              printInfo(info: "getContests: ${snapshot.hasError}");
-              return Container();
-            }
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ContestCard(
-                  contest: snapshot.data![index],
-                );
-              },
-            );
-          },
-        )
-            ,
+      body: ContestCard(
+        contest: contestModel,
       ),
     );
   }

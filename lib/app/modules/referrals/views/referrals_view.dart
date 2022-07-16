@@ -4,9 +4,13 @@ import 'package:get/get.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
+import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
 import '../controllers/referrals_controller.dart';
 
 class ReferralsView extends GetView<ReferralsController> {
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _controller = Get.put(ReferralsController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -27,8 +31,12 @@ class ReferralsView extends GetView<ReferralsController> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                FutureBuilder<List<String>>(
+                  future: _giveawayRepo.getBuddyPairByUserId(
+                      _controller.profileId!, _controller.token!),
+                  builder: (context, snapshot) {
+                    return Padding(
+                      padding: EdgeInsets.all(16.0),
                   child: Container(
                     height: Get.height * 0.13,
                     decoration: BoxDecoration(
@@ -41,34 +49,42 @@ class ReferralsView extends GetView<ReferralsController> {
                       ),
                     ),
                     child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: CircleAvatar(
-                            radius: 30,
-                            child: Image.asset(
-                              'assets/Ellipse_3.png',
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "Buddy Pair",
-                              style: style.titleMedium?.copyWith(fontSize: 14),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 10),
+                              child: CircleAvatar(
+                                radius: 30,
+                                child: (!snapshot.hasData)
+                                    ? const Loading()
+                                    : Image.asset(
+                                        'assets/Ellipse_3.png',
+                                      ),
+                              ),
                             ),
-                            Text(
-                              "Catherine Treesa",
-                              style: style.titleSmall?.copyWith(fontSize: 18),
-                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Buddy Pair",
+                                  style:
+                                      style.titleMedium?.copyWith(fontSize: 14),
+                                ),
+                                (!snapshot.hasData)
+                                    ? const Loading()
+                                    : Text(
+                                        snapshot.data![1].toString(),
+                                        style: style.titleSmall
+                                            ?.copyWith(fontSize: 18),
+                                      ),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
+                        ),
                   ),
+                    );
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -90,7 +106,7 @@ class ReferralsView extends GetView<ReferralsController> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 10),
+                                    horizontal: 10, vertical: 10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -100,19 +116,39 @@ class ReferralsView extends GetView<ReferralsController> {
                                       style: style.headlineSmall
                                           ?.copyWith(fontSize: 20),
                                     ),
-                                    Text(
-                                      "210",
-                                      style: style.titleLarge
-                                          ?.copyWith(color: AppColors.red),
+                                    FutureBuilder<String>(
+                                      future: _giveawayRepo
+                                          .getReferralsEntryCountByUserId(
+                                              _controller.profileId!,
+                                              _controller.token!),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const Loading();
+                                        }
+                                        if (snapshot.hasError) {
+                                          printInfo(
+                                              info:
+                                                  "getReferralsEntryCountByUserId: ${snapshot.hasError}");
+                                          return Container();
+                                        }
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            snapshot.data.toString(),
+                                            style: style.titleLarge?.copyWith(
+                                                color: AppColors.red),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(12.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: SizedBox(
-                                  width: Get.width * 0.29,
-                                  height: Get.height * 0.04,
+                                  width: Get.width * 0.35,
+                                  height: 50,
                                   child: MyElevatedButton(
                                     buttonText: "Send Invite",
                                     onPressed: () {},
@@ -126,7 +162,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                 MaterialStateProperty.all(Color(0xffF6DC9D)),
                             dataRowColor:
                                 MaterialStateProperty.all(Color(0xffFFF3D2)),
-                            columnSpacing: 22,
+                            columnSpacing: 10,
                             dataRowHeight: 80,
                             columns: const [
                               DataColumn(
@@ -151,12 +187,17 @@ class ReferralsView extends GetView<ReferralsController> {
                                           MainAxisAlignment.start,
                                       children: [
                                         CircleAvatar(
-                                          radius: 18,
+                                          radius: 12,
                                           child: Image.asset(
                                             'assets/Ellipse_1.png',
                                           ),
                                         ),
-                                        const Text("Mike Torello"),
+                                        const Text(
+                                          "Mike Torello",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -167,218 +208,6 @@ class ReferralsView extends GetView<ReferralsController> {
                                       style: style.headlineSmall
                                           ?.copyWith(fontSize: 14),
                                     )),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activitygreen(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 18,
-                                          child: Image.asset(
-                                            'assets/Ellipse_2.png',
-                                          ),
-                                        ),
-                                        const Text("Dori Doreau"),
-                                      ],
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: Text(
-                                        "4323",
-                                        style: style.headlineSmall
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activityred(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 18,
-                                          child: Image.asset(
-                                            'assets/Ellipse_1.png',
-                                          ),
-                                        ),
-                                        const Text("Mike Torello"),
-                                      ],
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: Text(
-                                        "2345",
-                                        style: style.headlineSmall
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activitygreen(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 18,
-                                          child: Image.asset(
-                                            'assets/Ellipse_2.png',
-                                          ),
-                                        ),
-                                        const Text("Dori Doreau"),
-                                      ],
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: Text(
-                                        "4323",
-                                        style: style.headlineSmall
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activityred(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 18,
-                                          child: Image.asset(
-                                            'assets/Ellipse_1.png',
-                                          ),
-                                        ),
-                                        const Text("Mike Torello"),
-                                      ],
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: Text(
-                                        "2345",
-                                        style: style.headlineSmall
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activitygreen(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 18,
-                                          child: Image.asset(
-                                            'assets/Ellipse_2.png',
-                                          ),
-                                        ),
-                                        const Text("Dori Doreau"),
-                                      ],
-                                    ),
-                                  ),
-                                   DataCell(
-                                    Center(
-                                      child: Text("4323",style: style.headlineSmall?.copyWith(fontSize: 14),),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activityred(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 18,
-                                          child: Image.asset(
-                                            'assets/Ellipse_1.png',
-                                          ),
-                                        ),
-                                        const Text("Mike Torello"),
-                                      ],
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: Text(
-                                        "2345",
-                                        style: style.headlineSmall
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                    ),
                                   ),
                                   DataCell(
                                     Center(

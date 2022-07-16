@@ -3,7 +3,7 @@ import 'package:reel_ro/app/data/demo_data.dart';
 
 import '../../../../services/auth_service.dart';
 
-class ContestDatesController extends GetxController {
+class MyContestController extends GetxController {
   final _authService = Get.put(AuthService());
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;

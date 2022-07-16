@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/colors.dart';
 
+import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
 import '../controllers/entry_count_controller.dart';
 
 class EntryCountView extends GetView<EntryCountController> {
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _controller = Get.put(EntryCountController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -44,11 +48,27 @@ class EntryCountView extends GetView<EntryCountController> {
                               "Total Entries",
                               style: style.titleMedium,
                             ),
-                            Text(
-                              "1440",
-                              style: style.titleLarge
-                                  ?.copyWith(color: AppColors.red),
-                            ),
+                            FutureBuilder<String>(
+                                future:
+                                    _giveawayRepo.getTotalEntryCountByUserId(
+                                        _controller.profileId!,
+                                        _controller.token!),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Loading();
+                                  }
+                                  if (snapshot.hasError) {
+                                    printInfo(
+                                        info:
+                                            "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                    return Container();
+                                  }
+                                  return Text(
+                                    snapshot.data.toString(),
+                                    style: style.titleLarge
+                                        ?.copyWith(color: AppColors.red),
+                                  );
+                                })
                           ],
                         ),
                       )
@@ -59,10 +79,11 @@ class EntryCountView extends GetView<EntryCountController> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: Get.width * 0.45,
-                        height: Get.height * 0.25,
+                        width: Get.width * 0.43,
+                        height: 214,
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14)),
@@ -76,14 +97,30 @@ class EntryCountView extends GetView<EntryCountController> {
                                   width: 80,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "336",
-                                  style: style.titleLarge
-                                      ?.copyWith(color: AppColors.red),
-                                ),
-                              ),
+                              FutureBuilder<String>(
+                                  future:
+                                      _giveawayRepo.getAdsEntryCountByUserId(
+                                          _controller.profileId!,
+                                          _controller.token!),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Loading();
+                                    }
+                                    if (snapshot.hasError) {
+                                      printInfo(
+                                          info:
+                                              "getAdsEntryCountByUserId: ${snapshot.hasError}");
+                                      return Container();
+                                    }
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        snapshot.data.toString(),
+                                        style: style.titleLarge
+                                            ?.copyWith(color: AppColors.red),
+                                      ),
+                                    );
+                                  }),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
@@ -96,8 +133,8 @@ class EntryCountView extends GetView<EntryCountController> {
                         ),
                       ),
                       SizedBox(
-                        width: Get.width * 0.45,
-                        height: Get.height * 0.25,
+                        width: Get.width * 0.43,
+                        height: 214,
                         child: Card(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14)),
@@ -111,14 +148,30 @@ class EntryCountView extends GetView<EntryCountController> {
                                   width: 80,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "210",
-                                  style: style.titleLarge
-                                      ?.copyWith(color: AppColors.red),
-                                ),
-                              ),
+                              FutureBuilder<String>(
+                                  future: _giveawayRepo
+                                      .getReferralsEntryCountByUserId(
+                                          _controller.profileId!,
+                                          _controller.token!),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Loading();
+                                    }
+                                    if (snapshot.hasError) {
+                                      printInfo(
+                                          info:
+                                              "getReferralsEntryCountByUserId: ${snapshot.hasError}");
+                                      return Container();
+                                    }
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        snapshot.data.toString(),
+                                        style: style.titleLarge
+                                            ?.copyWith(color: AppColors.red),
+                                      ),
+                                    );
+                                  }),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(

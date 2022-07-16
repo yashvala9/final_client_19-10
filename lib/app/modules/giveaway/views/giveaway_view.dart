@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:reel_ro/app/data/demo_data.dart';
+import 'package:reel_ro/app/modules/ContestDates/views/contest_dates_view.dart';
+import 'package:reel_ro/app/modules/ContestRules/views/contest_rules_view.dart';
 import 'package:reel_ro/app/modules/entry_count/views/entry_count_view.dart';
 import 'package:reel_ro/app/modules/referrals/views/referrals_view.dart';
 import 'package:reel_ro/utils/colors.dart';
 
+import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
+import '../../winners/views/winners_view.dart';
 import '../controllers/giveaway_controller.dart';
 
 class GiveawayView extends GetView<GiveawayController> {
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _controller = Get.put(GiveawayController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -37,22 +45,35 @@ class GiveawayView extends GetView<GiveawayController> {
                         'assets/entrycount.png',
                       ),
                       Column(
-                        children: const [
-                          Center(
+                        children: [
+                          const Center(
                             child: Text(
                               '\nEarned Entries',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 25),
                             ),
                           ),
-                          Center(
-                            child: Text(
-                              '1246',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          FutureBuilder<String>(
+                            future: _giveawayRepo.getTotalEntryCountByUserId(
+                                _controller.profileId!, _controller.token!),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Loading();
+                              }
+                              if (snapshot.hasError) {
+                                printInfo(
+                                    info:
+                                        "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                return Container();
+                              }
+                              return Text(
+                                snapshot.data.toString(),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -61,9 +82,9 @@ class GiveawayView extends GetView<GiveawayController> {
                 ),
                 listTileWidget('enter 1', 'Entry Count', EntryCountView()),
                 listTileWidget('referral', 'Referrals', ReferralsView()),
-                listTileWidget('trophy', 'Winners', ReferralsView()),
-                listTileWidget('badge', 'Contest Dates', ReferralsView()),
-                listTileWidget('book', 'Contest Rules', ReferralsView()),
+                listTileWidget('trophy', 'Winners', WinnersView()),
+                listTileWidget('badge', 'Contest Dates', ContestDatesView()),
+                listTileWidget('book', 'Contest Rules', ContestRulesView()),
               ],
             ),
           ),
