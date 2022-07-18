@@ -24,7 +24,7 @@ class GiveawayCampaignController extends GetxController {
   RxString photoUrl = ''.obs;
   RxBool photoLoading = false.obs;
 
-  void createGiveaway() async {
+  Future<void> createGiveaway() async {
     loading = true;
     print('21212121 $campaignName');
     print('21212121 $endDate');

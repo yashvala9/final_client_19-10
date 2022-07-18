@@ -10,6 +10,7 @@ class ContestModel {
   final String rules;
   final String prizeName;
   final String prizeImageUrl;
+  final String winnerName;
   ContestModel({
     this.id = 0,
     this.contestName = '',
@@ -19,6 +20,7 @@ class ContestModel {
     this.rules = '',
     this.prizeName = '',
     this.prizeImageUrl = '',
+    this.winnerName = '',
   });
 
   ContestModel copyWith({
@@ -30,6 +32,7 @@ class ContestModel {
     String? rules,
     String? prizeName,
     String? prizeImageUrl,
+    String? winnerName,
   }) {
     return ContestModel(
       id: id ?? this.id,
@@ -40,6 +43,7 @@ class ContestModel {
       rules: rules ?? this.rules,
       prizeName: prizeName ?? this.prizeName,
       prizeImageUrl: prizeImageUrl ?? this.prizeImageUrl,
+      winnerName: winnerName ?? this.winnerName,
     );
   }
 
@@ -53,6 +57,7 @@ class ContestModel {
       'rules': rules,
       'prizeName': prizeName,
       'prizeImageUrl': prizeImageUrl,
+      'winnerName': winnerName,
     };
   }
 
@@ -68,6 +73,7 @@ class ContestModel {
       rules: (map['rules'] ?? '') as String,
       prizeName: (map['prizeName'] ?? '') as String,
       prizeImageUrl: (map['prizeImageUrl'] ?? '') as String,
+      winnerName: (map['winnerName'] ?? '') as String,
     );
   }
 
@@ -78,13 +84,13 @@ class ContestModel {
 
   @override
   String toString() {
-    return 'ContestModel(id: $id, contestName: $contestName, createdBy: $createdBy, creatorType: $creatorType, endDate: $endDate, rules: $rules, prizeName: $prizeName, prizeImageUrl: $prizeImageUrl)';
+    return 'ContestModel(id: $id, contestName: $contestName, createdBy: $createdBy, creatorType: $creatorType, endDate: $endDate, rules: $rules, prizeName: $prizeName, prizeImageUrl: $prizeImageUrl, winnerName: $winnerName)';
   }
 
   @override
   bool operator ==(covariant ContestModel other) {
     if (identical(this, other)) return true;
-
+  
     return other.id == id &&
         other.contestName == contestName &&
         other.createdBy == createdBy &&
@@ -92,7 +98,8 @@ class ContestModel {
         other.endDate == endDate &&
         other.rules == rules &&
         other.prizeName == prizeName &&
-        other.prizeImageUrl == prizeImageUrl;
+        other.prizeImageUrl == prizeImageUrl &&
+        other.winnerName == winnerName;
   }
 
   @override
@@ -104,6 +111,7 @@ class ContestModel {
         endDate.hashCode ^
         rules.hashCode ^
         prizeName.hashCode ^
-        prizeImageUrl.hashCode;
+        prizeImageUrl.hashCode ^
+        winnerName.hashCode;
   }
 }

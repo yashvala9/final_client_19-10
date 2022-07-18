@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/data/demo_data.dart';
+import 'package:reel_ro/models/winner_model.dart';
 import 'package:reel_ro/utils/colors.dart';
 
 class WinnerCardWidget extends StatelessWidget {
-  final WinnerList winnerList;
+  final WinnerModel winner;
   const WinnerCardWidget({
     Key? key,
-    required this.winnerList,
+    required this.winner,
   }) : super(key: key);
 
   @override
@@ -35,11 +36,11 @@ class WinnerCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              winnerList.title!,
+              winner.contestName,
               style: style.subtitle1,
             ),
             Text(
-              winnerList.prize!,
+              winner.prizeName,
               style: style.titleLarge!.copyWith(
                 color: AppColors.winnercardpink,
               ),
@@ -58,11 +59,11 @@ class WinnerCardWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(winnerList.imageurl!),
+                    backgroundImage: NetworkImage(winner.winnerImageUrl),
                     radius: 25,
                   ),
                   Text(
-                    winnerList.userName!,
+                    winner.winnerName,
                     style: style.subtitle1
                   ),
                 ],

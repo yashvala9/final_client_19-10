@@ -19,8 +19,6 @@ class AccountSettingsController extends GetxController {
   }
 
   void getContestByUser() async {
-    showSnackBar('running getcontestbyuser');
     contestModel = await _giveawayRepo.getContestsByUserId(profileId!, token!);
-    showSnackBar(contestModel!.contestName);
   }
 }

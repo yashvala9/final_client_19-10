@@ -5,6 +5,8 @@ import 'package:reel_ro/app/data/demo_data.dart';
 import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/utils/colors.dart';
 
+import '../../../../../widgets/loading.dart';
+
 class ContestCard extends StatelessWidget {
   final ContestModel contest;
   const ContestCard({Key? key, required this.contest}) : super(key: key);
@@ -40,7 +42,7 @@ class ContestCard extends StatelessWidget {
             contest.prizeImageUrl,
             fit: BoxFit.cover,
             width: 150,
-            height: 90,
+            height: 90
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

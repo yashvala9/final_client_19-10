@@ -180,7 +180,6 @@ class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
                 onPressed: () async {
                   await _controller.createGiveaway();
                 },
-
               ),
             ],
           ),

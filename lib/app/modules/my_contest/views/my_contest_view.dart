@@ -37,29 +37,3 @@ class MyContestView extends GetView<MyContestController> {
     );
   }
 }
-
-                                    // FutureBuilder<String>(
-                                    //   future: _giveawayRepo
-                                    //       .getReferralsEntryCountByUserId(
-                                    //           _controller.profileId!,
-                                    //           _controller.token!),
-                                    //   builder: (context, snapshot) {
-                                    //     if (!snapshot.hasData) {
-                                    //       return const Loading();
-                                    //     }
-                                    //     if (snapshot.hasError) {
-                                    //       printInfo(
-                                    //           info:
-                                    //               "getReferralsEntryCountByUserId: ${snapshot.hasError}");
-                                    //       return Container();
-                                    //     }
-                                    //     return Padding(
-                                    //       padding: const EdgeInsets.all(8.0),
-                                    //       child: Text(
-                                    //         snapshot.data.toString(),
-                                    //         style: style.titleLarge?.copyWith(
-                                    //             color: AppColors.red),
-                                    //       ),
-                                    //     );
-                                    //   },
-                                    // ),

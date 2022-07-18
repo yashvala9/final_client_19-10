@@ -125,20 +125,19 @@ class GiveawayRepository {
     if (response.statusCode == 200) {
       for (var item in body) {
         var cm = ContestModel(
-          id: item['id'] as int,
-          createdBy: item['createdBy']['id'] ?? 0,
-          contestName: (item['contestName'] ?? '') as String,
-          endDate: DateTime.parse((item['endDate'] ?? '') as String),
-          creatorType: (item['creatorType'] ?? '') as String,
-          prizeName:
-              // '',
-              (item['prizes'] as List<dynamic>).isNotEmpty
-                  ? (item['prizes'][0]['prizeName'] ?? '') as String
-                  : '',
-          prizeImageUrl:
-              'https://reelro-strapi.s3.ap-south-1.amazonaws.com/image_picker1761878752343692204_9ff2c4915a.jpg',
-          rules: (item['rules'] ?? '') as String,
-        );
+            id: item['id'] as int,
+            createdBy: item['createdBy']['id'] ?? 0,
+            contestName: (item['contestName'] ?? '') as String,
+            endDate: DateTime.parse((item['endDate'] ?? '') as String),
+            creatorType: (item['creatorType'] ?? '') as String,
+            prizeName:
+                // '',
+                (item['prizes'] as List<dynamic>).isNotEmpty
+                    ? (item['prizes'][0]['prizeName'] ?? '') as String
+                    : '',
+            prizeImageUrl:
+                'https://reelro-strapi.s3.ap-south-1.amazonaws.com/image_picker1761878752343692204_9ff2c4915a.jpg',
+            rules: (item['rules'] ?? '') as String);
 
         contests.add(cm);
       }
@@ -150,7 +149,6 @@ class GiveawayRepository {
 
   Future<ContestModel> getContestsByUserId(int profileId, String token) async {
     ContestModel contest;
-    showSnackBar('running get contest');
     final response = await http.get(
       Uri.parse('${Base.giveaway}?createdBy=$profileId'),
       headers: <String, String>{
@@ -179,6 +177,38 @@ class GiveawayRepository {
       );
 
       return contest;
+    } else {
+      return Future.error(body);
+    }
+  }
+
+  Future<List<WinnerModel>> getWinners(int profileId, String token) async {
+    List<WinnerModel> winners = [];
+    final response = await http.get(
+      Uri.parse(Base.winners),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print('list212121winnerbody $body');
+    if (response.statusCode == 200) {
+      for (var item in body) {
+        var winner = WinnerModel(
+            id: (item['id'] ?? 0) as int,
+            contestName: (item['contestId']['contestName'] ?? '') as String,
+            prizeName: 'prizename',
+            // (item['prizes'][0]['prizeName'] ?? '') as String,
+            winnerName: 'WinnerName',
+            //item['profileId']['fullname'],
+            winnerImageUrl: 'WinnerUrl'
+            // item['profileId']['profileUrl']
+            );
+        print('list212121winnerbody ${winner.toString()}');
+        winners.add(winner);
+      }
+      return winners;
     } else {
       return Future.error(body);
     }

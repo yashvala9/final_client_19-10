@@ -4,39 +4,51 @@ import 'dart:convert';
 // ignore: non_constant_identifier_names
 class WinnerModel {
   int id;
-  int profileId;
-  int contestId;
-  WinnerModel(
-    this.id,
-    this.profileId,
-    this.contestId,
-  );
+  String prizeName;
+  String winnerName;
+  String contestName;
+  String winnerImageUrl;
+  WinnerModel({
+    this.id = 0,
+    this.prizeName = '',
+    this.winnerName = '',
+    this.contestName = '',
+    this.winnerImageUrl = '',
+  });
 
   WinnerModel copyWith({
     int? id,
-    int? profileId,
-    int? contestId,
+    String? prizeName,
+    String? winnerName,
+    String? contestName,
+    String? winnerImageUrl,
   }) {
     return WinnerModel(
-      id ?? this.id,
-      profileId ?? this.profileId,
-      contestId ?? this.contestId,
+      id: id ?? this.id,
+      prizeName: prizeName ?? this.prizeName,
+      winnerName: winnerName ?? this.winnerName,
+      contestName: contestName ?? this.contestName,
+      winnerImageUrl: winnerImageUrl ?? this.winnerImageUrl,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'profileId': profileId,
-      'contestId': contestId,
+      'prizeName': prizeName,
+      'winnerName': winnerName,
+      'contestName': contestName,
+      'winnerImageUrl': winnerImageUrl,
     };
   }
 
   factory WinnerModel.fromMap(Map<String, dynamic> map) {
     return WinnerModel(
-      map['id'] as int,
-      map['profileId'] as int,
-      map['contestId'] as int,
+      id: (map['id'] ?? 0) as int,
+      prizeName: (map['prizeName'] ?? '') as String,
+      winnerName: (map['winnerName'] ?? '') as String,
+      contestName: (map['contestName'] ?? '') as String,
+      winnerImageUrl: (map['winnerImageUrl'] ?? '') as String,
     );
   }
 
@@ -46,18 +58,27 @@ class WinnerModel {
       WinnerModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() =>
-      'WinnerModel(id: $id, profileId: $profileId, contestId: $contestId)';
+  String toString() {
+    return 'WinnerModel(id: $id, prizeName: $prizeName, winnerName: $winnerName, contestName: $contestName, winnerImageUrl: $winnerImageUrl)';
+  }
 
   @override
   bool operator ==(covariant WinnerModel other) {
     if (identical(this, other)) return true;
-
+  
     return other.id == id &&
-        other.profileId == profileId &&
-        other.contestId == contestId;
+        other.prizeName == prizeName &&
+        other.winnerName == winnerName &&
+        other.contestName == contestName &&
+        other.winnerImageUrl == winnerImageUrl;
   }
 
   @override
-  int get hashCode => id.hashCode ^ profileId.hashCode ^ contestId.hashCode;
+  int get hashCode {
+    return id.hashCode ^
+        prizeName.hashCode ^
+        winnerName.hashCode ^
+        contestName.hashCode ^
+        winnerImageUrl.hashCode;
+  }
 }

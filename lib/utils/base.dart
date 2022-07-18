@@ -41,6 +41,7 @@ class Base {
   static const getTotalEntryCountByUserId = '$_url/totalEntries';
   static const getBuddyPairByUserId = '$_url/getBuddy';
   static const imageUpload = '$_url/upload';
+  static const winners = '$_url/winners';
   
   
 
