@@ -27,7 +27,7 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.getCommentsByReelId(reelId);
     });
     // _controller.customeInit();

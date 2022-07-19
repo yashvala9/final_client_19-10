@@ -114,23 +114,30 @@ class HomePageScreen extends StatelessWidget {
                             printInfo(info: "Data: ${data.toJson()}");
                             return Stack(
                               children: [
+                                VideoPlayerWidget(
+                                  url: data.video.url,
+                                  doubleTap: () {
+                                    _controller.likeToggle(index);
+                                  },
+                                  showLike: _controller.showLike,
+                                ),
                                 // data.type
                                 //     ?
-                                     VideoPlayerItem(
-                                        videoUrl: data.video.url,
-                                        doubleTap: () {
-                                          _controller.likeToggle(index);
-                                        },
-                                        showLike: _controller.showLike,
-                                      ),
-                                    // : CachedNetworkImage(
-                                    //     imageUrl: data.video.url,
-                                    //     placeholder: (context, _) => Loading(),
-                                    //     errorWidget: (context, s, e) => Icon(
-                                    //       Icons.error,
-                                    //       color: Colors.red,
-                                    //     ),
-                                    //   ),
+                                //  VideoPlayerItem(
+                                //     videoUrl: data.video.url,
+                                //     doubleTap: () {
+                                //       _controller.likeToggle(index);
+                                //     },
+                                //     showLike: _controller.showLike,
+                                //   ),
+                                // : CachedNetworkImage(
+                                //     imageUrl: data.video.url,
+                                //     placeholder: (context, _) => Loading(),
+                                //     errorWidget: (context, s, e) => Icon(
+                                //       Icons.error,
+                                //       color: Colors.red,
+                                //     ),
+                                //   ),
                                 Column(
                                   children: [
                                     const SizedBox(
