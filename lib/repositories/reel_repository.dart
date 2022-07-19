@@ -10,7 +10,7 @@ import 'package:reel_ro/utils/base.dart';
 class ReelRepository {
   Future<List<ReelModel>> getFeeds(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getFeedsByUserId}?currentUserId=$profileId"),
+      Uri.parse("${Base.getReelsByUserId}?currentUserId=$profileId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",

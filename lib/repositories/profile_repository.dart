@@ -117,14 +117,13 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
+    
     final body = jsonDecode(response.body);
+    print('listRolls $body');
     if (response.statusCode == 200) {
       final Iterable list = body;
 
-      for (var item in list as List<dynamic>) {
-        reels.add(ReelModel.fromJson(item));
-      }
-      return reels;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
     } else {
       return Future.error(body['message']);
     }

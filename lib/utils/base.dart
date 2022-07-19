@@ -32,6 +32,17 @@ class Base {
 
   //Follow UnFollow
   static const toggleFollow = '${_url}/sendFollowRequest';
+
+  //Giveaway
+  static const giveaway = '$_url/contests';
+  static const CreateGiveaway = '$_url/createContest';
+  static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
+  static const getReferralsEntryCountByUserId = '$_url/referrals/count';
+  static const getTotalEntryCountByUserId = '$_url/totalEntries';
+  static const getBuddyPairByUserId = '$_url/getBuddy';
+  static const imageUpload = '$_url/upload';
+  static const winners = '$_url/winners';
+  
   
 
 

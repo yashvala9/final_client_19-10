@@ -307,7 +307,7 @@ class HomePageScreen extends StatelessWidget {
                                                 ),
                                                 CircleAnimation(
                                                   child: buildMusicAlbum(
-                                                      data.profile.profileUrl),
+                                                      "https://firebasestorage.googleapis.com/v0/b/cucumia-369c1.appspot.com/o/images%2FMagazines%2F2022-06-17%2015%3A03%3A33.892_2022-06-17%2015%3A03%3A33.893.jpg?alt=media&token=75624798-52a6-4735-a422-092955a6aa3a"),
                                                 ),
                                               ],
                                             ),

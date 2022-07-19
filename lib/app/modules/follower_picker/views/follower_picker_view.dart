@@ -203,7 +203,7 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                           onPressed: () {
                             Get.snackbar(
                                 "Operation Failed", "Backend Required");
-                            Get.to(const AccountSettingsView());
+                            Get.to(AccountSettingsView());
                           },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromRGBO(234, 67, 89, 1),

@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
@@ -34,6 +35,20 @@ class ProfileScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.settings,
+                ),
+                onPressed: () async {
+                  Get.to(AccountSettingsView());
+                },
+              ),
+            ],
+          ),
           body: _controller.loading
               ? Loading()
               : NestedScrollView(
