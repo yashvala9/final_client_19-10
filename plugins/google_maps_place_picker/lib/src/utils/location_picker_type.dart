@@ -1,0 +1,4 @@
+enum LocationPickerType {
+  Auto,
+  Manual,
+}
