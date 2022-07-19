@@ -29,4 +29,21 @@ class AppColors {
   static const yellowOrange = Color(0xffFBA800);
 
   static const buttonGradiantColor = [Color(0xffFDD447), Color(0xffFDBA3C)];
+    
+  static const pokeGradiantColor = [Color(0xffFDB62C), Color(0xffFFD27B)];
+  static const scaffoldGradiantColor = [Color(0xffFFEAB4), Color(0xffFFD669)];
+  static const containerGradiantColor = [Color(0xffFFEAB4), Color(0xffFFEDBC)];
+  static const white = Color(0xffFFFFFF);
+  static const red = Color(0xffEA4359);
+
+
+  static const whiteappbar = Color(0xffffffff);
+  static const darkred = Color.fromRGBO(255, 77, 103, 1);
+  static const blackAppColor = Color(0xff000000);
+
+  static const winnercardbrown = Color.fromRGBO(106, 70, 0, 1);
+  static const winnercardpink = Color.fromRGBO(203, 50, 70, 1);
+
+  static const contestrulesbrown = Color(0xffffeab4);
+  static const contestrulesligthbrown = Color(0xffc9bd9e);
 }

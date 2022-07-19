@@ -15,5 +15,11 @@ class AppRoutes {
   static const resetPassword = '/reset-password';
   static const createProfile = '/create-profile';
   static const profile = '/profile';
-  
+  static const entryCount = '/entry-count';
+  static const sendInvite = '/send-invite';
+  static const referrals = '/referrals';
+  static const giveaway = '/giveaway';
+  static const winners = '/winners';
+  static const contestDates = '/contest-dates';
+  static const contestRules = '/contest-rules';  
 }
