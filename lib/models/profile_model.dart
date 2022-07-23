@@ -1,83 +1,53 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
 class ProfileModel {
   final int id;
-  final String fullname;
-  final String bio;
-  final String profileUrl;
-  final int phoneNumber;
-  final String username;
-  final String email;
-  final bool isVerified;
-  bool? isFollowing;
+  final String? email;
+  final String? username;
+  final String? status;
+  final String? user_type;
+  final int? referrer_id;
+  final bool? is_deleted;
+  final String? created_at;
+  final String? updated_at;
+  final User_profile? user_profile;
   int noOfPosts;
-  final int countryCode;
   int postsCount;
   int followerCount;
   int followingCount;
+  bool? isFollowing;
   ProfileModel({
-    required this.id,
-    required this.email,
-    required this.fullname,
-    required this.bio,
-    required this.profileUrl,
-    required this.phoneNumber,
-    required this.username,
-    required this.isVerified,
-    required this.noOfPosts,
+    this.id = 0,
+    this.email = '',
+    this.username = '',
+    this.status = '',
+    this.user_type,
+    this.referrer_id,
+    this.is_deleted,
+    this.created_at,
+    this.updated_at,
+    this.user_profile,
+    this.noOfPosts = 0,
+    this.postsCount = 0,
+    this.followerCount = 0,
+    this.followingCount = 0,
     this.isFollowing,
-    required this.countryCode,
-    required this.postsCount,
-    required this.followerCount,
-    required this.followingCount,
   });
 
-  ProfileModel copyWith({
-    int? id,
-    String? fullname,
-    String? bio,
-    String? profileUrl,
-    String? email,
-    int? phoneNumber,
-    String? username,
-    bool? isVerified,
-    int? noOfPosts,
-    int? countryCode,
-    int? postsCount,
-    int? followerCount,
-    int? followingCount,
-    bool? isFollowing,
-  }) {
-    return ProfileModel(
-      id: id ?? this.id,
-      fullname: fullname ?? this.fullname,
-      bio: bio ?? this.bio,
-      profileUrl: profileUrl ?? this.profileUrl,
-      email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      username: username ?? this.username,
-      isVerified: isVerified ?? this.isVerified,
-      noOfPosts: noOfPosts ?? this.noOfPosts,
-      countryCode: countryCode ?? this.countryCode,
-      postsCount: postsCount ?? this.postsCount,
-      followerCount: followerCount ?? this.followerCount,
-      followingCount: followingCount ?? this.followingCount,
-      isFollowing: isFollowing,
-    );
-  }
-
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'id': id,
-      'fullname': fullname,
-      'bio': bio,
-      'profileUrl': profileUrl,
       'email': email,
-      'phoneNumber': phoneNumber,
       'username': username,
-      'isVerified': isVerified,
+      'status': status,
+      'user_type': user_type,
+      'referrer_id': referrer_id,
+      'is_deleted': is_deleted,
+      'created_at': created_at,
+      'updated_at': updated_at,
+      'user_profile': user_profile?.toMap(),
       'noOfPosts': noOfPosts,
-      'countryCode': countryCode,
       'postsCount': postsCount,
       'followerCount': followerCount,
       'followingCount': followingCount,
@@ -87,67 +57,123 @@ class ProfileModel {
 
   factory ProfileModel.fromMap(Map<String, dynamic> map) {
     return ProfileModel(
-      id: map['id']?.toInt() ?? 0,
-      fullname: map['fullname'] ?? '',
-      bio: map['bio'] ?? '',
-      isFollowing: map['isFollowing'],
-      profileUrl: map['profileUrl'] ?? '',
-      email: '',
-      phoneNumber: int.parse(map['phoneNumber'] ?? "0"),
-      username: map['username'] ?? '',
-      isVerified: map['isVerified'] ?? false,
-      noOfPosts: map['noOfPosts']?.toInt() ?? 0,
-      countryCode: map['countryCode']?.toInt() ?? 0,
-      postsCount: map['postsCount']?.toInt() ?? 0,
-      followerCount: map['followerCount']?.toInt() ?? 0,
-      followingCount: map['followingCount']?.toInt() ?? 0,
+      id: (map['id'] ?? 0) as int,
+      email: map['email'] != null ? map['email'] as String : null,
+      username: map['username'] != null ? map['username'] as String : null,
+      status: map['status'] != null ? map['status'] as String : null,
+      user_type: map['user_type'] != null ? map['user_type'] as String : null,
+      referrer_id:
+          map['referrer_id'] != null ? map['referrer_id'] as int : null,
+      is_deleted: map['is_deleted'] != null ? map['is_deleted'] as bool : null,
+      created_at:
+          map['created_at'] != null ? map['created_at'] as String : null,
+      updated_at:
+          map['updated_at'] != null ? map['updated_at'] as String : null,
+      user_profile: map['user_profile'] != null
+          ? User_profile.fromMap(map['user_profile'] as Map<String, dynamic>)
+          : null,
+      noOfPosts: (map['noOfPosts'] ?? 0) as int,
+      postsCount: (map['postsCount'] ?? 0) as int,
+      followerCount: (map['followerCount'] ?? 0) as int,
+      followingCount: (map['followingCount'] ?? 0) as int,
+      isFollowing:
+          map['isFollowing'] != null ? map['isFollowing'] as bool : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory ProfileModel.fromJson(String source) =>
-      ProfileModel.fromMap(json.decode(source));
+      ProfileModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, fullname: $fullname, bio: $bio, profileUrl: $profileUrl, email: $email, phoneNumber: $phoneNumber, username: $username, isVerified: $isVerified, noOfPosts: $noOfPosts, countryCode: $countryCode)';
+    return 'ProfileModel(id: $id, email: $email, username: $username, status: $status, user_type: $user_type, referrer_id: $referrer_id, is_deleted: $is_deleted, created_at: $created_at, updated_at: $updated_at, user_profile: $user_profile, noOfPosts: $noOfPosts, postsCount: $postsCount, followerCount: $followerCount, followingCount: $followingCount, isFollowing: $isFollowing)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant ProfileModel other) {
     if (identical(this, other)) return true;
-
-    return other is ProfileModel &&
-        other.id == id &&
-        other.fullname == fullname &&
-        other.bio == bio &&
-        other.profileUrl == profileUrl &&
+  
+    return other.id == id &&
         other.email == email &&
-        other.phoneNumber == phoneNumber &&
         other.username == username &&
-        other.isVerified == isVerified &&
+        other.status == status &&
+        other.user_type == user_type &&
+        other.referrer_id == referrer_id &&
+        other.is_deleted == is_deleted &&
+        other.created_at == created_at &&
+        other.updated_at == updated_at &&
+        other.user_profile == user_profile &&
         other.noOfPosts == noOfPosts &&
-        other.countryCode == countryCode &&
         other.postsCount == postsCount &&
         other.followerCount == followerCount &&
-        other.followingCount == followingCount;
+        other.followingCount == followingCount &&
+        other.isFollowing == isFollowing;
+  }
+}
+
+class User_profile {
+  final String? fullname;
+  final String? bio;
+  final String? profile_img;
+  final String? phone_pin;
+  final String? phone_number;
+  final String? current_language;
+  User_profile({
+    this.fullname = '',
+    this.bio = '',
+    this.profile_img = '',
+    this.phone_pin = '',
+    this.phone_number = '',
+    this.current_language = '',
+  });
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'fullname': fullname,
+      'bio': bio,
+      'profile_img': profile_img,
+      'phone_pin': phone_pin,
+      'phone_number': phone_number,
+      'current_language': current_language,
+    };
+  }
+
+  factory User_profile.fromMap(Map<String, dynamic> map) {
+    return User_profile(
+      fullname: map['fullname'] != null ? map['fullname'] as String : null,
+      bio: map['bio'] != null ? map['bio'] as String : null,
+      profile_img:
+          map['profile_img'] != null ? map['profile_img'] as String : null,
+      phone_pin: map['phone_pin'] != null ? map['phone_pin'] as String : null,
+      phone_number:
+          map['phone_number'] != null ? map['phone_number'] as String : null,
+      current_language: map['current_language'] != null
+          ? map['current_language'] as String
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory User_profile.fromJson(String source) =>
+      User_profile.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'User_profile(fullname: $fullname, bio: $bio, profile_img: $profile_img, phone_pin: $phone_pin, phone_number: $phone_number, current_language: $current_language)';
   }
 
   @override
-  int get hashCode {
-    return id.hashCode ^
-        fullname.hashCode ^
-        bio.hashCode ^
-        profileUrl.hashCode ^
-        email.hashCode ^
-        phoneNumber.hashCode ^
-        username.hashCode ^
-        isVerified.hashCode ^
-        noOfPosts.hashCode ^
-        countryCode.hashCode ^
-        postsCount.hashCode ^
-        followerCount.hashCode ^
-        followingCount.hashCode;
+  bool operator ==(covariant User_profile other) {
+    if (identical(this, other)) return true;
+
+    return other.fullname == fullname &&
+        other.bio == bio &&
+        other.profile_img == profile_img &&
+        other.phone_pin == phone_pin &&
+        other.phone_number == phone_number &&
+        other.current_language == current_language;
   }
 }

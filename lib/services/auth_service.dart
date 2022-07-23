@@ -38,9 +38,12 @@ class AuthService extends GetxService {
     //   Get.toNamed(AppRoutes.home);
     // }
     final isLoggedIn = await _storage.read(Constants.token);
+
+    print('2121 isLoggedIn != null ${isLoggedIn != null}');
     if (isLoggedIn != null) {
-      final profile = await _profileRepo.getProfileId(token!);
+      final profile = await _profileRepo.getProfileByToken(token!);
       if (profile != null) {
+        print('2121 $profile');
         profileModel = profile;
 
         Get.off(() => NavigationBarScreen());

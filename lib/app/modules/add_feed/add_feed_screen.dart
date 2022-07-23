@@ -43,81 +43,83 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
     final style = theme.textTheme;
     return SafeArea(
       child: Scaffold(
-        body: GetBuilder<AddFeedController>(
-          builder: (_) => Padding(
-            padding: const EdgeInsets.all(12),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 16,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "New Post",
-                          style: style.titleMedium!.copyWith(
-                            fontWeight: FontWeight.w500,
+        body: SingleChildScrollView(
+          child: GetBuilder<AddFeedController>(
+            builder: (_) => Padding(
+              padding: const EdgeInsets.all(12),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 16,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "New Post",
+                            style: style.titleMedium!.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        const SizedBox(),
-                      ],
+                          const SizedBox(),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Divider(
-                    thickness: 1,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      margin: const EdgeInsets.only(left: 8, bottom: 8),
-                      child: widget.type == 1
-                          ? Image.file(widget.file)
-                          : VideoPlayer(videoPlayerController),
+                    const SizedBox(
+                      height: 8,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      decoration: const InputDecoration(hintText: "Title"),
-                      onSaved: (v) => _controller.title = v!,
+                    const Divider(
+                      thickness: 1,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      decoration:
-                          const InputDecoration(hintText: "Description"),
-                      onSaved: (v) => _controller.descriptionn = v!,
+                    const SizedBox(
+                      height: 8,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _controller.loading
-                      ? const Loading()
-                      : MyElevatedButton(
-                          buttonText: "Add",
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              _controller.addFeed(widget.file, widget.type);
-                            }
-                          },
-                        ),
-                ],
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        height: 200,
+                        
+                        margin: const EdgeInsets.only(left: 8, bottom: 8),
+                        child: widget.type == 1
+                            ? Image.file(widget.file)
+                            : VideoPlayer(videoPlayerController),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        decoration: const InputDecoration(hintText: "Title"),
+                        onSaved: (v) => _controller.title = v!,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        decoration:
+                            const InputDecoration(hintText: "Description"),
+                        onSaved: (v) => _controller.description = v!,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    _controller.loading
+                        ? const Loading()
+                        : MyElevatedButton(
+                            buttonText: "Add",
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                _controller.addFeed(widget.file, widget.type);
+                              }
+                            },
+                          ),
+                  ],
+                ),
               ),
             ),
           ),

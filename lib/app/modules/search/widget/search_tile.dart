@@ -30,13 +30,13 @@ class SearchTile extends StatelessWidget {
           ),
         ),
         title: Text(
-          profileModel.fullname,
+          profileModel.user_profile!.fullname!,
           style: style.titleMedium!.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: Text(
-          profileModel.username,
+          profileModel.username!,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

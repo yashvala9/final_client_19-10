@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     return GetBuilder<ProfileController>(
       builder: (_) => DefaultTabController(
-        length: _controller.profileModel.isVerified ? 3 : 2,
+        length: _controller.profileModel.status == "VERIFIED" ? 3 : 2,
         child: Scaffold(
           backgroundColor: Colors.white,
           extendBodyBehindAppBar: true,
@@ -85,7 +85,8 @@ class ProfileScreen extends StatelessWidget {
                                               height: Get.height * 0.08,
                                             ),
                                             Text(
-                                              _controller.profileModel.fullname,
+                                              _controller.profileModel
+                                                  .user_profile!.fullname!,
                                               style: style.headline5,
                                             ),
                                             SizedBox(
@@ -151,9 +152,7 @@ class ProfileScreen extends StatelessWidget {
                                               ),
                                               child: OutlinedButton(
                                                 onPressed: () {
-                                                  Get.to(EditProfileView(
-                                                      _controller
-                                                          .profileModel));
+                                                  Get.to(EditProfileView());
                                                 },
                                                 style: OutlinedButton.styleFrom(
                                                   minimumSize:
@@ -300,7 +299,8 @@ class ProfileScreen extends StatelessWidget {
         TabBar(tabs: [
           Tab(text: "Rolls"),
           Tab(text: "Photos"),
-          if (_controller.profileModel.isVerified) Tab(text: "Giveaway"),
+          if (_controller.profileModel.status == 'VERIFIED')
+            Tab(text: "Giveaway"),
         ]),
         const SizedBox(
           height: 8,
@@ -308,50 +308,51 @@ class ProfileScreen extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(),
-            FutureBuilder<List<PhotoModel>>(
-                future: _profileRepo.getPhotosByProfileId(
-                    _controller.profileId!, _controller.token!),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Loading();
-                  }
-                  if (snapshot.hasError) {
-                    printInfo(
-                        info: "getCurrentUserPhoto: ${snapshot.hasError}");
-                    return Container();
-                  }
-                  var photos = snapshot.data!;
-                  return photos.isEmpty
-                      ? EmptyWidget("No photos available")
-                      : GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: photos.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 5,
-                          ),
-                          itemBuilder: (context, index) {
-                            String thumbnail = photos[index].videoId.url;
-                            printInfo(
-                                info: "ProfileId: ${_controller.profileId}");
-                            printInfo(info: "tumbnail: $thumbnail");
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(SingleFeedScreen(null, photos[index]));
-                              },
-                              child: CachedNetworkImage(
-                                imageUrl: thumbnail,
-                                fit: BoxFit.cover,
-                                errorWidget: (c, s, e) => Icon(Icons.error),
-                              ),
-                            );
-                          },
-                        );
-                }),
-            if (_controller.profileModel.isVerified)
+            Container(),
+            // FutureBuilder<List<PhotoModel>>(
+            //     future: _profileRepo.getPhotosByProfileId(
+            //         _controller.profileId!, _controller.token!),
+            //     builder: (context, snapshot) {
+            //       if (!snapshot.hasData) {
+            //         return Loading();
+            //       }
+            //       if (snapshot.hasError) {
+            //         printInfo(
+            //             info: "getCurrentUserPhoto: ${snapshot.hasError}");
+            //         return Container();
+            //       }
+            //       var photos = snapshot.data!;
+            //       return photos.isEmpty
+            //           ? EmptyWidget("No photos available")
+            //           : GridView.builder(
+            //               shrinkWrap: true,
+            //               physics: const NeverScrollableScrollPhysics(),
+            //               itemCount: photos.length,
+            //               gridDelegate:
+            //                   const SliverGridDelegateWithFixedCrossAxisCount(
+            //                 crossAxisCount: 3,
+            //                 childAspectRatio: 1,
+            //                 crossAxisSpacing: 5,
+            //               ),
+            //               itemBuilder: (context, index) {
+            //                 String thumbnail = photos[index].videoId.url;
+            //                 printInfo(
+            //                     info: "ProfileId: ${_controller.profileId}");
+            //                 printInfo(info: "tumbnail: $thumbnail");
+            //                 return GestureDetector(
+            //                   onTap: () {
+            //                     Get.to(SingleFeedScreen(null, photos[index]));
+            //                   },
+            //                   child: CachedNetworkImage(
+            //                     imageUrl: thumbnail,
+            //                     fit: BoxFit.cover,
+            //                     errorWidget: (c, s, e) => Icon(Icons.error),
+            //                   ),
+            //                 );
+            //               },
+            //             );
+            //     }),
+            if (_controller.profileModel.status == 'VERIFIED')
               Center(child: Text("Giveaway")),
           ]),
         ),
@@ -370,50 +371,51 @@ class ProfileReel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     printInfo(info: "ProfileId: ${_controller.profileId}");
-    return FutureBuilder<List<ReelModel>>(
-        future: profileId != null
-            ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
-            : _profileRepo.getReelByProfileId(
-                _controller.profileId!, _controller.token!),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            printInfo(info: "profileReels: ${snapshot.error}");
-          }
-          var reels = snapshot.data!;
-          printInfo(info: "Reels: $reels");
-          if (reels.isEmpty) {
-            return Center(
-              child: Text("No reels available"),
-            );
-          }
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: reels.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-            ),
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Get.to(SingleFeedScreen(reels[index], null));
-                },
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
-          );
-        });
+    return Container();
+    // FutureBuilder<List<ReelModel>>(
+    //     future: profileId != null
+    //         ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
+    //         : _profileRepo.getReelByProfileId(
+    //             _controller.profileId!, _controller.token!),
+    //     builder: (context, snapshot) {
+    //       if (!snapshot.hasData) {
+    //         return Center(
+    //           child: CircularProgressIndicator(),
+    //         );
+    //       }
+    //       if (snapshot.hasError) {
+    //         printInfo(info: "profileReels: ${snapshot.error}");
+    //       }
+    //       var reels = snapshot.data!;
+    //       printInfo(info: "Reels: $reels");
+    //       if (reels.isEmpty) {
+    //         return Center(
+    //           child: Text("No reels available"),
+    //         );
+    //       }
+    //       return GridView.builder(
+    //         shrinkWrap: true,
+    //         physics: const NeverScrollableScrollPhysics(),
+    //         itemCount: reels.length,
+    //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    //           crossAxisCount: 3,
+    //           childAspectRatio: 1,
+    //           crossAxisSpacing: 5,
+    //           mainAxisSpacing: 5,
+    //         ),
+    //         itemBuilder: (context, index) {
+    //           return GestureDetector(
+    //             onTap: () {
+    //               Get.to(SingleFeedScreen(reels[index], null));
+    //             },
+    //             child: CachedNetworkImage(
+    //               imageUrl:
+    //                   "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+    //               fit: BoxFit.cover,
+    //             ),
+    //           );
+    //         },
+    //       );
+    //     });
   }
 }

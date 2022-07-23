@@ -74,14 +74,9 @@ class AuthController extends GetxController {
 
   void signup() async {
     loading = true;
-    var userModel = UserModel(
-        id: "",
-        username: userName,
-        email: email,
-        countryCode: countryCode,
-        mobileNumber: mobileNumber);
     try {
       var map = {
+        "username": "",
         "email": email.trim(),
         "password": password.trim(),
       };

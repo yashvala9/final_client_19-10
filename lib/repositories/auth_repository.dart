@@ -18,28 +18,22 @@ class AuthRepository {
 
   Future<String> signIn(
       {required String email, required String password}) async {
-    final response = await http.post(
-      Uri.parse(Base.login),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-      body: jsonEncode({
-        "identifier": email,
-        "password": password,
-      }),
-    );
-    final body = jsonDecode(response.body);
+    var request = http.MultipartRequest('POST', Uri.parse(Base.login));
+    request.fields.addAll({'username': email, 'password': password});
+
+    http.StreamedResponse response = await request.send();
+    var body = jsonDecode(await response.stream.bytesToString());
     print("signInBody: $body");
     if (response.statusCode == 200) {
       var map = {
-        Constants.jwt: body['jwt'],
-        Constants.userId: body['user']['id'],
+        Constants.jwt: body['access_token'],
+        // Constants.userId: body['user']['id'],
       };
       await _storage.write(Constants.token, map);
+
       return "Login successful";
     } else {
-      return Future.error(body['message']);
+      return Future.error('Login unsuccessful');
     }
   }
 
@@ -48,11 +42,11 @@ class AuthRepository {
       Uri.parse(Base.register),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode(data),
     );
     final body = jsonDecode(response.body);
+    print('2121 body $body');
     if (response.statusCode == 200) {
       return;
     } else {
@@ -81,10 +75,6 @@ class AuthRepository {
     }
   }
 
-  
-
-  
-
   Future<void> sendPasswordResetLink(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
@@ -105,7 +95,6 @@ class AuthRepository {
 
     await _auth.signInWithCredential(credential);
   }
-
 
   Future<void> forgetPassword(String email) async {
     final response = await http.post(
