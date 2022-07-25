@@ -83,4 +83,8 @@ class HomePageController extends GetxController {
     _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
     update();
   }
+
+  void signOut() {
+    _authService.signOut();
+  }
 }

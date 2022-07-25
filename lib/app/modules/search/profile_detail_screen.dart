@@ -28,7 +28,7 @@ class ProfileDetail extends StatelessWidget {
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return DefaultTabController(
-      length: _controller.searchProfiles[index].isVerified ? 3 : 2,
+      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 3 : 2,
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -68,7 +68,7 @@ class ProfileDetail extends StatelessWidget {
                                         height: Get.height * 0.08,
                                       ),
                                       Text(
-                                        profileModel.fullname,
+                                        profileModel.user_profile!.fullname!,
                                         style: style.headline5,
                                       ),
                                       SizedBox(
@@ -286,7 +286,7 @@ class ProfileDetail extends StatelessWidget {
         TabBar(tabs: [
           Tab(text: "Rolls"),
           Tab(text: "Photos"),
-          if (profileModel.isVerified) Tab(text: "Giveaway"),
+          if (profileModel.status == 'VERIFIED') Tab(text: "Giveaway"),
         ]),
         const SizedBox(
           height: 8,
@@ -337,7 +337,8 @@ class ProfileDetail extends StatelessWidget {
                           },
                         );
                 }),
-            if (profileModel.isVerified) Center(child: Text("Giveaway")),
+            if (profileModel.status == 'VERIFIED')
+              Center(child: Text("Giveaway")),
           ]),
         ),
       ],

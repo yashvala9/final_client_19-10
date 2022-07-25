@@ -15,6 +15,7 @@ class SplashController extends GetxController {
 
   void _redirectUser() {
     final _services = Get.put(AuthService(), permanent: true);
+    print('2121 caliing redirect user');
     _services.redirectUser();
   }
 }

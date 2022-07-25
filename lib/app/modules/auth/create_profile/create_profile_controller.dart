@@ -42,7 +42,7 @@ class CreateProfileController extends GetxController {
         'isVerified': false,
         'user': _authService.userId,
       };
-      await _profileRepo.addProfile(profileData, _authService.token!);
+      await _profileRepo.updateProfile(profileData, _authService.token!);
       _authService.redirectUser();
     } catch (e) {
       print("addProfileDate: $e");

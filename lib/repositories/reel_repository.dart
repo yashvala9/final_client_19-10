@@ -1,11 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
+
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/utils/base.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 
 class ReelRepository {
   Future<List<ReelModel>> getFeeds(int profileId, String token) async {
@@ -89,6 +94,7 @@ class ReelRepository {
       body: jsonEncode(data),
     );
     final body = jsonDecode(response.body);
+    print('2121 $body');
     if (response.statusCode == 200) {
       return;
     } else {
@@ -158,5 +164,35 @@ class ReelRepository {
       return Future.error(resData['message']);
     }
   }
-}
 
+  /// Uploads the video file to AWS VOD input bucket and saves the key to get url later
+  Future<String?> uploadFileToAwsS3({
+    required String userID,
+    required File file,
+    required String fileName,
+  }) async {
+    try {
+      return await AwsS3.uploadFile(
+        accessKey: "AKIARYAXXOSN5XYB5M67",
+        secretKey: "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",
+        file: file,
+        bucket: "reelro-vod-destinationbucket",
+        region: "ap-south-1",
+        filename: "$fileName${path.extension(file.path)}",
+        // filename:
+        //     "${path.basenameWithoutExtension(file.path)}${path.extension(file.path)}",
+        destDir: 'videos',
+      ).then((String? _response) {
+        if (_response == null) {
+          return null;
+        } else {
+          return "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/videos/$fileName${path.extension(file.path)}";
+        }
+      });
+    } catch (e) {
+      showSnackBar("Error Uploading File");
+      printInfo(info: "File Uploading error.......");
+      return null;
+    }
+  }
+}

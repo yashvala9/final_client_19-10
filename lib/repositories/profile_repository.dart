@@ -5,29 +5,26 @@ import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/services/auth_service.dart';
 
 import '../models/reel_model.dart';
 import '../utils/base.dart';
 
 class ProfileRepository {
-  Future<ProfileModel?> getProfileId(String token) async {
+  Future<ProfileModel?> getProfileByToken(String token) async {
     final response = await http.get(
-      Uri.parse(Base.getProfileId),
+      Uri.parse(Base.getProfileByToken),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
+    print('2121 $body');
     if (response.statusCode == 200) {
-      if (body['profile'] != null) {
-        int profileId = body['profile'];
-        return await getProfileById(profileId, token);
-      } else {
-        return null;
-      }
+      return ProfileModel.fromMap(body);
     } else {
-      return Future.error(body['message']);
+      return null;
     }
   }
 
@@ -68,10 +65,10 @@ class ProfileRepository {
     }
   }
 
-  Future<void> addProfile(
+  Future<void> updateProfile(
       Map<String, dynamic> profileData, String token) async {
-    final response = await http.post(
-      Uri.parse(Base.createProfile),
+    final response = await http.put(
+      Uri.parse(Base.updateProfile),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -80,6 +77,7 @@ class ProfileRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      AuthService().redirectUser();
       return;
     } else {
       return Future.error(body['error']['message']);
@@ -117,7 +115,7 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    
+
     final body = jsonDecode(response.body);
     print('listRolls $body');
     if (response.statusCode == 200) {

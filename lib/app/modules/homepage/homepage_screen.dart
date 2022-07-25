@@ -12,6 +12,7 @@ import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
+import '../add_feed/widgets/video_trimmer_view.dart';
 import 'comment_screen.dart';
 
 class HomePageScreen extends StatelessWidget {
@@ -32,7 +33,10 @@ class HomePageScreen extends StatelessWidget {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 leading: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios), onPressed: () {}),
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      _controller.signOut();
+                    }),
                 title: const Center(
                     child: Text(
                   "Rolls For You",
@@ -76,11 +80,10 @@ class HomePageScreen extends StatelessWidget {
                           var video = await ImagePicker()
                               .pickVideo(source: ImageSource.gallery);
                           if (video != null) {
-                            Get.to(
-                              () => AddFeedScreen(
-                                file: File(video.path),
-                                type: 0,
-                              ),
+                            Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return VideoTrimmerView(File(video.path));
+                              }),
                             );
                           }
                         } else {

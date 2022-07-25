@@ -15,8 +15,7 @@ class ProfileController extends GetxController {
   final _authService = Get.find<AuthService>();
   final _profileRepo = Get.put(ProfileRepository());
   final _reelRepo = Get.put(ReelRepository());
-
-  late ProfileModel profileModel;
+  ProfileModel get profileModel => _authService.profileModel!;
   late List<ReelModel> reels = [];
   late List<PhotoModel> photos = [];
   final _authRepo = Get.put(AuthRepository());
@@ -33,31 +32,29 @@ class ProfileController extends GetxController {
 
   @override
   void onInit() {
-    getProfile();
-    // getReelsById();
-    // getPhotosById();
+    print('2121 on init called');
     super.onInit();
   }
 
-  void getProfile() async {
-    loading = true;
-    try {
-      profileModel = await _profileRepo.getProfileById(profileId!, token!);
-    } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
-      print("getProfile: $e");
-    }
-    loading = false;
-  }
+  // void getProfile() async {
+  //   loading = true;
+  //   try {
+  //     profileModel = await _profileRepo.getProfileById(profileId!, token!);
+  //   } catch (e) {
+  //     showSnackBar(e.toString(), color: Colors.red);
+  //     print("getProfile: $e");
+  //   }
+  //   loading = false;
+  // }
 
   // void getReelsById() async{
   //   try {
-      
+
   //   } catch (e) {
   //     print("getReelsById: $e");
   //   }
   // }
-  void signOut()async{
+  void signOut() async {
     await _authRepo.signOut();
   }
 }
