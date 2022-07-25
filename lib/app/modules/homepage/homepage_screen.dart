@@ -118,7 +118,8 @@ class HomePageScreen extends StatelessWidget {
                             return Stack(
                               children: [
                                 VideoPlayerWidget(
-                                  url: data.video.url,
+                                  url:
+                                      "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/1/20220723/98989/reel_1_20220723_98989_file1.mp4/MP4/reel_1_20220723_98989_file1.mp4",
                                   doubleTap: () {
                                     _controller.likeToggle(index);
                                   },
@@ -165,14 +166,14 @@ class HomePageScreen extends StatelessWidget {
                                                         .spaceEvenly,
                                                 children: [
                                                   Text(
-                                                    "@${data.profile.username}",
+                                                    "@${data.user.username}",
                                                     style: style.titleLarge!
                                                         .copyWith(
                                                       color: Colors.white,
                                                     ),
                                                   ),
                                                   Text(
-                                                    data.title,
+                                                    'data.title',
                                                     style: const TextStyle(
                                                       fontSize: 20,
                                                       color: Colors.white,
@@ -195,7 +196,7 @@ class HomePageScreen extends StatelessWidget {
                                                         color: Colors.white,
                                                       ),
                                                       Text(
-                                                        data.song,
+                                                        'data.song',
                                                         style: const TextStyle(
                                                           fontSize: 15,
                                                           color: Colors.white,
@@ -245,19 +246,22 @@ class HomePageScreen extends StatelessWidget {
                                                       onTap: () {},
                                                       // _controller.likeVideo(data.id),
                                                       child: Icon(
-                                                        data.isLiked
+                                                        true
+                                                            //data.isLiked
                                                             ? Icons.favorite
                                                             : Icons
                                                                 .favorite_border,
                                                         size: 30,
-                                                        color: data.isLiked
+                                                        color: true
+                                                            //data.isLiked
                                                             ? Colors.red
                                                             : Colors.white,
                                                       ),
                                                     ),
                                                     // const SizedBox(height: 7),
                                                     Text(
-                                                      data.likeCount.toString(),
+                                                      '20',
+                                                      // data.likeCount.toString(),
                                                       style: style
                                                           .headlineSmall!
                                                           .copyWith(
@@ -272,7 +276,8 @@ class HomePageScreen extends StatelessWidget {
                                                       onTap: () {
                                                         Get.bottomSheet(
                                                           CommentSheet(
-                                                            reelId: data.reelId,
+                                                            reelId: data.id
+                                                                .toString(),
                                                           ),
                                                           backgroundColor:
                                                               Colors.white,
@@ -285,8 +290,7 @@ class HomePageScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Text(
-                                                      data.reelComments.length
-                                                          .toString(),
+                                                      '21'.toString(),
                                                       style: style
                                                           .headlineSmall!
                                                           .copyWith(

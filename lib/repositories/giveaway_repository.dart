@@ -15,11 +15,13 @@ import '../utils/snackbar.dart';
 class GiveawayRepository {
   Future<void> createGiveaway(
       Map<String, dynamic> giveawayData, String token) async {
+    print(jsonEncode(giveawayData));
     final response = await http.post(
-      Uri.parse(Base.CreateGiveaway),
+      Uri.parse(Base.giveaway),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'accept': 'application/json',
         HttpHeaders.authorizationHeader: "Bearer $token",
+        'Content-Type': 'application/json'
       },
       body: jsonEncode(giveawayData),
     );
@@ -112,7 +114,6 @@ class GiveawayRepository {
   }
 
   Future<List<ContestModel>> getContests(int profileId, String token) async {
-    List<ContestModel> contests = [];
     final response = await http.get(
       Uri.parse(Base.giveaway),
       headers: <String, String>{
@@ -123,32 +124,14 @@ class GiveawayRepository {
     final body = jsonDecode(response.body);
     print('list212121body $body');
     if (response.statusCode == 200) {
-      for (var item in body) {
-        var cm = ContestModel(
-            id: item['id'] as int,
-            createdBy: item['createdBy']['id'] ?? 0,
-            contestName: (item['contestName'] ?? '') as String,
-            endDate: DateTime.parse((item['endDate'] ?? '') as String),
-            creatorType: (item['creatorType'] ?? '') as String,
-            prizeName:
-                // '',
-                (item['prizes'] as List<dynamic>).isNotEmpty
-                    ? (item['prizes'][0]['prizeName'] ?? '') as String
-                    : '',
-            prizeImageUrl:
-                'https://reelro-strapi.s3.ap-south-1.amazonaws.com/image_picker1761878752343692204_9ff2c4915a.jpg',
-            rules: (item['rules'] ?? '') as String);
-
-        contests.add(cm);
-      }
-      return contests;
+      Iterable list = body;
+      return list.map((e) => ContestModel.fromMap(e)).toList();
     } else {
       return Future.error(body);
     }
   }
 
   Future<ContestModel> getContestsByUserId(int profileId, String token) async {
-    ContestModel contest;
     final response = await http.get(
       Uri.parse('${Base.giveaway}?createdBy=$profileId'),
       headers: <String, String>{
@@ -158,25 +141,9 @@ class GiveawayRepository {
     );
     final body = jsonDecode(response.body);
     print('list212121body');
-    print('list212121body $body[0]');
+    print('list212121body $body');
     if (response.statusCode == 200) {
-      contest = ContestModel(
-        id: body[0]['id'] as int,
-        createdBy: body[0]['createdBy']['id'] ?? 0,
-        contestName: (body[0]['contestName'] ?? '') as String,
-        endDate: DateTime.parse((body[0]['endDate'] ?? '') as String),
-        creatorType: (body[0]['creatorType'] ?? '') as String,
-        prizeName:
-            // '',
-            (body[0]['prizes'] as List<dynamic>).isNotEmpty
-                ? (body[0]['prizes'][0]['prizeName'] ?? '') as String
-                : '',
-        prizeImageUrl:
-            'https://reelro-strapi.s3.ap-south-1.amazonaws.com/image_picker1761878752343692204_9ff2c4915a.jpg',
-        rules: (body[0]['rules'] ?? '') as String,
-      );
-
-      return contest;
+      return ContestModel.fromJson(response.body);
     } else {
       return Future.error(body);
     }
@@ -194,21 +161,8 @@ class GiveawayRepository {
     final body = jsonDecode(response.body);
     print('list212121winnerbody $body');
     if (response.statusCode == 200) {
-      for (var item in body) {
-        var winner = WinnerModel(
-            id: (item['id'] ?? 0) as int,
-            contestName: (item['contestId']['contestName'] ?? '') as String,
-            prizeName: 'prizename',
-            // (item['prizes'][0]['prizeName'] ?? '') as String,
-            winnerName: 'WinnerName',
-            //item['profileId']['fullname'],
-            winnerImageUrl: 'WinnerUrl'
-            // item['profileId']['profileUrl']
-            );
-        print('list212121winnerbody ${winner.toString()}');
-        winners.add(winner);
-      }
-      return winners;
+      final Iterable list = body;
+      return list.map((e) => WinnerModel.fromMap(e)).toList();
     } else {
       return Future.error(body);
     }

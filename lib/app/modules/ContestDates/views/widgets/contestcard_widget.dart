@@ -31,13 +31,11 @@ class ContestCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(contest.contestName,
+          Text("contest.contestName",
               style:
-                  style.titleLarge!.copyWith(
-            color: AppColors.winnercardbrown
-          )),
+                  style.titleLarge!.copyWith(color: AppColors.winnercardbrown)),
           Image.network(
-            contest.prizeImageUrl,
+            "contest.prizeImageUrl",
             fit: BoxFit.cover,
             width: 150,
             height: 90,
@@ -46,11 +44,10 @@ class ContestCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('Prize',
-                  style: style.titleLarge),
+              Text('Prize', style: style.titleLarge),
               const SizedBox(width: 10),
               Text(
-                contest.prizeName,
+                "contest.prizeName",
                 style: style.headline5!.copyWith(
                   color: AppColors.winnercardpink,
                 ),
@@ -58,11 +55,10 @@ class ContestCard extends StatelessWidget {
             ],
           ),
           Text(
-              'Contest ends on ${DateFormat("MMMM dd, yyyy").format(contest.endDate!)}',
-            style: style.titleMedium!.copyWith(
-              fontWeight: FontWeight.w600,
-            )
-          ),
+              'Contest ends on ${DateFormat("MMMM dd, yyyy").format(contest.end_date)}',
+              style: style.titleMedium!.copyWith(
+                fontWeight: FontWeight.w600,
+              )),
         ],
       ),
     );

@@ -46,9 +46,18 @@ class CreateProfileView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Set your Profile',
-                              textScaleFactor: Get.textScaleFactor,
-                              style: style.headlineSmall),
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    _controller.signOut();
+                                  },
+                                  icon: const Icon(Icons.chevron_left)),
+                              Text('Set your Profile',
+                                  textScaleFactor: Get.textScaleFactor,
+                                  style: style.headlineSmall),
+                            ],
+                          ),
                           SizedBox(height: Get.height * 0.02),
                           Text(
                             'Please fill following details',
@@ -309,7 +318,8 @@ class CreateProfileView extends StatelessWidget {
                                       return;
                                     }
                                     if (_controller.file == null) {
-                                      showSnackBar("Please select image",color: Colors.red);
+                                      showSnackBar("Please select image",
+                                          color: Colors.red);
                                       return;
                                     }
                                     _formKey.currentState!.save();

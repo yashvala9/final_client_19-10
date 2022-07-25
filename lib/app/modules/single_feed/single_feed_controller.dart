@@ -54,15 +54,15 @@ class SingleFeedController extends GetxController {
   }
 
   void likeToggle(ReelModel reel) async {
-    if (reel.isLiked) {
-      reel.likeCount--;
-    } else {
-      toggleLikeShow();
-      reel.likeCount++;
-    }
-    reel.isLiked = !reel.isLiked;
-    _reelRepo.toggleLike(reel.reelId, profileId!, token!);
-    update();
+    // if (reel.isLiked) {
+    //   reel.likeCount--;
+    // } else {
+    //   toggleLikeShow();
+    //   reel.likeCount++;
+    // }
+    // reel.isLiked = !reel.isLiked;
+    // _reelRepo.toggleLike(reel.reelId, profileId!, token!);
+    // update();
   }
 }
 

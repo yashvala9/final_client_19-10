@@ -1,79 +1,71 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
 class ContestModel {
+  final String contest_name;
+  final String creator_type;
+  final DateTime end_date;
   final int id;
-  final String contestName;
-  final int createdBy;
-  final String creatorType;
-  final DateTime? endDate;
+  final int creator_id;
+  final DateTime start_date;
   final String rules;
-  final String prizeName;
-  final String prizeImageUrl;
-  final String winnerName;
+  final bool is_deleted;
   ContestModel({
-    this.id = 0,
-    this.contestName = '',
-    this.createdBy = 0,
-    this.creatorType = '',
-    this.endDate,
-    this.rules = '',
-    this.prizeName = '',
-    this.prizeImageUrl = '',
-    this.winnerName = '',
+    required this.contest_name,
+    required this.creator_type,
+    required this.end_date,
+    required this.id,
+    required this.creator_id,
+    required this.start_date,
+    required this.rules,
+    required this.is_deleted,
   });
 
   ContestModel copyWith({
+    String? contest_name,
+    String? creator_type,
+    DateTime? end_date,
     int? id,
-    String? contestName,
-    int? createdBy,
-    String? creatorType,
-    DateTime? endDate,
+    int? creator_id,
+    DateTime? start_date,
     String? rules,
-    String? prizeName,
-    String? prizeImageUrl,
-    String? winnerName,
+    bool? is_deleted,
   }) {
     return ContestModel(
+      contest_name: contest_name ?? this.contest_name,
+      creator_type: creator_type ?? this.creator_type,
+      end_date: end_date ?? this.end_date,
       id: id ?? this.id,
-      contestName: contestName ?? this.contestName,
-      createdBy: createdBy ?? this.createdBy,
-      creatorType: creatorType ?? this.creatorType,
-      endDate: endDate ?? this.endDate,
+      creator_id: creator_id ?? this.creator_id,
+      start_date: start_date ?? this.start_date,
       rules: rules ?? this.rules,
-      prizeName: prizeName ?? this.prizeName,
-      prizeImageUrl: prizeImageUrl ?? this.prizeImageUrl,
-      winnerName: winnerName ?? this.winnerName,
+      is_deleted: is_deleted ?? this.is_deleted,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'contest_name': contest_name,
+      'creator_type': creator_type,
+      'end_date': end_date.toString(),
       'id': id,
-      'contestName': contestName,
-      'createdBy': createdBy,
-      'creatorType': creatorType,
-      'endDate': endDate?.millisecondsSinceEpoch,
+      'creator_id': creator_id,
+      'start_date': start_date.toString(),
       'rules': rules,
-      'prizeName': prizeName,
-      'prizeImageUrl': prizeImageUrl,
-      'winnerName': winnerName,
+      'is_deleted': is_deleted,
     };
   }
 
   factory ContestModel.fromMap(Map<String, dynamic> map) {
     return ContestModel(
-      id: (map['id'] ?? 0) as int,
-      contestName: (map['contestName'] ?? '') as String,
-      createdBy: (map['createdBy'] ?? 0) as int,
-      creatorType: (map['creatorType'] ?? '') as String,
-      endDate: map['endDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch((map['endDate'] ?? 0) as int)
-          : null,
-      rules: (map['rules'] ?? '') as String,
-      prizeName: (map['prizeName'] ?? '') as String,
-      prizeImageUrl: (map['prizeImageUrl'] ?? '') as String,
-      winnerName: (map['winnerName'] ?? '') as String,
+      contest_name: map['contest_name'] as String,
+      creator_type: map['creator_type'] as String,
+      end_date: DateTime.parse(map['end_date']),
+      id: map['id'] as int,
+      creator_id: map['creator_id'] as int,
+      start_date: DateTime.parse(map['start_date']),
+      rules: map['rules'] as String,
+      is_deleted: map['is_deleted'] as bool,
     );
   }
 
@@ -84,34 +76,32 @@ class ContestModel {
 
   @override
   String toString() {
-    return 'ContestModel(id: $id, contestName: $contestName, createdBy: $createdBy, creatorType: $creatorType, endDate: $endDate, rules: $rules, prizeName: $prizeName, prizeImageUrl: $prizeImageUrl, winnerName: $winnerName)';
+    return 'Contestmodel(contest_name: $contest_name, creator_type: $creator_type, end_date: $end_date, id: $id, creator_id: $creator_id, start_date: $start_date, rules: $rules, is_deleted: $is_deleted)';
   }
 
   @override
   bool operator ==(covariant ContestModel other) {
     if (identical(this, other)) return true;
-  
-    return other.id == id &&
-        other.contestName == contestName &&
-        other.createdBy == createdBy &&
-        other.creatorType == creatorType &&
-        other.endDate == endDate &&
+
+    return other.contest_name == contest_name &&
+        other.creator_type == creator_type &&
+        other.end_date == end_date &&
+        other.id == id &&
+        other.creator_id == creator_id &&
+        other.start_date == start_date &&
         other.rules == rules &&
-        other.prizeName == prizeName &&
-        other.prizeImageUrl == prizeImageUrl &&
-        other.winnerName == winnerName;
+        other.is_deleted == is_deleted;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        contestName.hashCode ^
-        createdBy.hashCode ^
-        creatorType.hashCode ^
-        endDate.hashCode ^
+    return contest_name.hashCode ^
+        creator_type.hashCode ^
+        end_date.hashCode ^
+        id.hashCode ^
+        creator_id.hashCode ^
+        start_date.hashCode ^
         rules.hashCode ^
-        prizeName.hashCode ^
-        prizeImageUrl.hashCode ^
-        winnerName.hashCode;
+        is_deleted.hashCode;
   }
 }

@@ -45,22 +45,24 @@ class AddFeedController extends GetxController {
 
   void addFeed(File file, int type) async {
     loading = true;
-    file = await changeFileNameOnly(file, 'video-$profileId!');
+    file = await changeFileNameOnly(file, 'video-$profileId');
     final String _fileName =
         genFileName(profileId!.toString(), path.basename(file.path));
     var data = {
       "description": description,
-      "filename": _fileName + path.extension(file.path),
-      "media_ext": path.extension(file.path),
+      "filename": _fileName,
+      "media_ext": path.extension(file.path).replaceAll('.', ''),
       "media_size": 65
     };
     print('2121 data $data');
     try {
-      // final videoId = await _reelRepo.addPhotoOrVideo(file, token!);
+      //step 1: make entry in DB
+      await _reelRepo.addReel(data, token!);
+      //step 2: upload file to s3
       final s3File = await _reelRepo.uploadFileToAwsS3(
           userID: profileId!.toString(), file: file, fileName: _fileName);
-      print('2121 s3File $s3File');
-      await _reelRepo.addReel(data, token!);
+      print('2121 s3File ${s3File ?? ''}');
+      //TODO step 3: make entry of upload status in db
       showSnackBar("Reel added successfully: $s3File");
       clean();
       Get.back();
@@ -80,9 +82,11 @@ class AddFeedController extends GetxController {
   }
 
   Future<File> changeFileNameOnly(File file, String newFileName) {
-    var path = file.path;
-    var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
-    var newPath = path.substring(0, lastSeparator + 1) + newFileName;
+    var filepath = file.path;
+    var lastSeparator = filepath.lastIndexOf(Platform.pathSeparator);
+    var extension = path.extension(file.path).toString();
+    var newPath =
+        filepath.substring(0, lastSeparator + 1) + newFileName + extension;
     return file.rename(newPath);
   }
 }

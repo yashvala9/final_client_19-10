@@ -72,16 +72,16 @@ class HomePageController extends GetxController {
   }
 
   void likeToggle(int index) async {
-    print("Index: $index");
-    if (reelList[index].isLiked) {
-      reelList[index].likeCount--;
-    } else {
-      toggleLikeShow();
-      reelList[index].likeCount++;
-    }
-    reelList[index].isLiked = !reelList[index].isLiked;
-    _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
-    update();
+    // print("Index: $index");
+    // if (reelList[index].isLiked) {
+    //   reelList[index].likeCount--;
+    // } else {
+    //   toggleLikeShow();
+    //   reelList[index].likeCount++;
+    // }
+    // reelList[index].isLiked = !reelList[index].isLiked;
+    // _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
+    // update();
   }
 
   void signOut() {

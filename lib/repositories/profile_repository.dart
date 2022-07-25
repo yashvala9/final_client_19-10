@@ -20,8 +20,8 @@ class ProfileRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('2121 $body');
-    if (response.statusCode == 200) {
+    print('2121 body $body');
+    if (response.statusCode == 200 && body['id'] != null) {
       return ProfileModel.fromMap(body);
     } else {
       return null;

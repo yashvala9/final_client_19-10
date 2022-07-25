@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:intl/intl.dart';
+import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/giveaway_repository.dart';
 
@@ -27,19 +28,23 @@ class GiveawayCampaignController extends GetxController {
   Future<void> createGiveaway() async {
     loading = true;
     print('21212121 $campaignName');
-    print('21212121 $endDate');
+    print('21212121 ${endDate.toString()}');
     try {
       var map = {
-        "createdBy": _authService.profileModel!.id,
-        "creatorType": "admin",
-        "name": campaignName,
-        "rules": "I lob u gal",
-        "startDate": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-        "endDate": DateFormat("yyyy-MM-dd").format(endDate),
-        "prize": {"img": photoId, "name": prizeName},
-        "prizeCount": 1,
-        "minimumEligibilityCriteria": "others"
+        "contest_name": campaignName,
+        "creator_type": "INFLUENCER",
+        "creator_id": _authService.profileModel!.id,
+        "start_date": DateTime.now().toString(),
+        "end_date": endDate.toString(),
+        "rules": "My life My rules"
       };
+      //   "contest_name": campaignName,
+      //   "creator_type": "INFLUENCER",
+      //   "creator_id": _authService.profileModel!.id,
+      //   "start_date": DateTime.now(),
+      //   "end_date": endDate,
+      //   "rules": "My life My rules"
+      // };
       // var map1 = {
       //   "contestName": campaignName,
       //   "createdBy": 14,
@@ -58,7 +63,7 @@ class GiveawayCampaignController extends GetxController {
       // _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("login: $e");
+      print("createGiveaway: $e");
     }
     loading = false;
   }

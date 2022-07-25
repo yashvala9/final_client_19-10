@@ -6,8 +6,8 @@ class Base {
   // static const createProfile = '$_url/profiles';
   static const forgetPassword = '$_url/auth/forgot-password';
   static const verifyOtp = '$_url/auth/register/verifyOTP';
-  static const getProfileId =  '$_url/users/me';
-  static const getProfileByToken = '$_url/users/getcurrent_user';  
+  static const getProfileId = '$_url/users/me';
+  static const getProfileByToken = '$_url/users/getcurrent_user';
   static const getProfilebyId = '$_url/user-profiles';
   static const getReelsbyId = '$_url/getReelsByUserId';
   static const createProfile = '$_url/user-profiles';
@@ -16,9 +16,9 @@ class Base {
 
   //Reels
   static const getReelsByUserId = '$_url/getReelsByUserId';
-  static const getFeedsByUserId ='$_url/getFeed';
-  static const getPhotosByUserId ='$_url/getPhotosByUserId';
-  static const addReel = '$_url/reels';
+  static const getFeedsByUserId = '$_url/getFeed';
+  static const getPhotosByUserId = '$_url/getPhotosByUserId';
+  static const reels = '$_url/reels';
 
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';
@@ -44,9 +44,4 @@ class Base {
   static const getBuddyPairByUserId = '$_url/getBuddy';
   static const imageUpload = '$_url/upload';
   static const winners = '$_url/winners';
-  
-  
-
-
-
 }
