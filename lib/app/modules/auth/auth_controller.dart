@@ -52,39 +52,68 @@ class AuthController extends GetxController {
 
   void login() async {
     loading = true;
+    var data = {
+      'email': email.trim(),
+      'password': password.trim(),
+    };
     try {
       final message = await _authRepo.signIn(email: email, password: password);
       print("LoginSuccess: $message");
-      _authService.redirectUser();
-    } catch (e) {
-      if (e == "Your account email is not confirmed") {
-        var data = {
-          'email': email.trim(),
-          'password': password.trim(),
-        };
-        await _authRepo.signUp(data);
-        Get.offAll(() => VerifyEmailView(data: data));
-        return;
+      if (message == Constants.unverified) {
+        await _storage.write(Constants.email, email);
+        await _storage.write(Constants.password, password);
+        Get.offAll(() => VerifyEmailView());
+      } else {
+        _authService.redirectUser();
       }
+    } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("login: $e");
     }
     loading = false;
   }
 
+  void refereshVerifyEmail(String e, String p) async {
+    loading = true;
+
+    try {
+      final message = await _authRepo.signIn(email: e, password: p);
+      print("LoginSuccess: $message");
+      if (message == Constants.unverified) {
+        Get.offAll(() => VerifyEmailView());
+      } else {
+        _authService.redirectUser();
+      }
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("login: $e");
+    }
+    loading = false;
+  }
+
+  void sendVeifyEmailLink(String email) async {
+    try {
+      await _authRepo.sendVerifyEmailLink(email);
+      showSnackBar("Veification email has been send");
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      debugPrint(e.toString());
+    }
+  }
+
   void signup() async {
     loading = true;
     try {
       var map = {
-        "username": "",
+        "username": userName.trim(),
         "email": email.trim(),
         "password": password.trim(),
       };
       await _authRepo.signUp(map);
+      await _storage.write(Constants.email, email);
+      await _storage.write(Constants.password, password);
       Get.off(
-        () => VerifyEmailView(
-          data: map,
-        ),
+        () => VerifyEmailView(),
       );
       // _storage.write(Constants.token, token);
       // await _userRepo.createProfile(userModel);
@@ -118,10 +147,11 @@ class AuthController extends GetxController {
     }
   }
 
-  void forgetPassword(String email) async {
+  void generateForgetPasswordToken(String email) async {
     loading = true;
     try {
-      await _authRepo.forgetPassword(email);
+      final message = await _authRepo.generateForgetPassword(email);
+      showSnackBar(message);
     } catch (e) {
       print("forgetPassword: $e");
     }

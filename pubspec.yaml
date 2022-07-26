@@ -9,6 +9,10 @@ environment:
   sdk: ">=2.16.2 <3.0.0"
 
 dependencies:
+  aws_s3_upload: ^1.4.0
+  better_player:
+    path: ./plugins/betterplayer/
+  cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.18
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.3.18
@@ -18,21 +22,17 @@ dependencies:
   flutter_keyboard_visibility: ^5.3.0
   font_awesome_flutter: ^10.1.0
   get: 4.6.1
+  get_storage: ^2.0.3
   google_sign_in: ^5.3.1
   http: ^0.13.4
   image_cropper: ^1.4.1
   image_picker: ^0.8.4+6
+  intl: null
   package_info_plus: ^1.4.0
-  get_storage: ^2.0.3
-  video_player: ^2.4.5
-  cached_network_image: ^3.2.0
+  path_provider: ^2.0.11
   sliding_up_panel: ^2.0.0+1
-  intl:
-  aws_s3_upload: ^1.4.0
+  video_player: ^2.4.5
   video_trimmer: ^1.1.2
-  better_player:
-    path: ./plugins/betterplayer/
-
 
 dev_dependencies:
   flutter_lints: ^1.0.0

@@ -84,7 +84,7 @@ class GiveawayRepository {
     if (response.statusCode == 200) {
       return body['data']['totalEntries'].toString();
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 

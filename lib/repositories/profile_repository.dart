@@ -11,6 +11,22 @@ import '../models/reel_model.dart';
 import '../utils/base.dart';
 
 class ProfileRepository {
+  Future<ProfileModel> getCurrentUsesr(String token) async {
+    final response = await http.get(
+      Uri.parse(Base.currentUser),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return ProfileModel.fromMap(body);
+    } else {
+      return Future.error("Something went wrong");
+    }
+  }
+
   Future<ProfileModel?> getProfileByToken(String token) async {
     final response = await http.get(
       Uri.parse(Base.getProfileByToken),
@@ -67,8 +83,8 @@ class ProfileRepository {
 
   Future<void> updateProfile(
       Map<String, dynamic> profileData, String token) async {
-    final response = await http.put(
-      Uri.parse(Base.updateProfile),
+    final response = await http.post(
+      Uri.parse(Base.createProfile),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -76,11 +92,11 @@ class ProfileRepository {
       body: jsonEncode(profileData),
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      AuthService().redirectUser();
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // AuthService().redirectUser();
       return;
     } else {
-      return Future.error(body['error']['message']);
+      return Future.error(body['detail']);
     }
   }
 

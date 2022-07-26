@@ -175,32 +175,32 @@ class CreateProfileView extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: Get.height * 0.02),
-                          Text('Username',
-                              textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge),
-                          SizedBox(height: Get.height * 0.01),
-                          TextFormField(
-                            enabled: !_controller.loading,
-                            decoration: InputDecoration(
-                              hintText: 'jamesbond123',
-                              prefixIcon: Icon(
-                                CupertinoIcons.person_solid,
-                                color: AppColors.headline5Color.withOpacity(.5),
-                              ),
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp('[a-zA-Z0-9]')),
-                            ],
-                            keyboardType: TextInputType.name,
-                            validator: (value) {
-                              return value!.isEmpty
-                                  ? 'Username is required'
-                                  : null;
-                            },
-                            onSaved: (v) => _controller.username = v!,
-                          ),
+                          // SizedBox(height: Get.height * 0.02),
+                          // Text('Username',
+                          //     textScaleFactor: Get.textScaleFactor,
+                          //     style: style.labelLarge),
+                          // SizedBox(height: Get.height * 0.01),
+                          // TextFormField(
+                          //   enabled: !_controller.loading,
+                          //   decoration: InputDecoration(
+                          //     hintText: 'jamesbond123',
+                          //     prefixIcon: Icon(
+                          //       CupertinoIcons.person_solid,
+                          //       color: AppColors.headline5Color.withOpacity(.5),
+                          //     ),
+                          //   ),
+                          //   inputFormatters: [
+                          //     FilteringTextInputFormatter.allow(
+                          //         RegExp('[a-zA-Z0-9]')),
+                          //   ],
+                          //   keyboardType: TextInputType.name,
+                          //   validator: (value) {
+                          //     return value!.isEmpty
+                          //         ? 'Username is required'
+                          //         : null;
+                          //   },
+                          //   onSaved: (v) => _controller.username = v!,
+                          // ),
                           SizedBox(height: Get.height * 0.02),
                           Text('Full Name',
                               textScaleFactor: Get.textScaleFactor,
@@ -261,6 +261,7 @@ class CreateProfileView extends StatelessWidget {
                                           .withOpacity(.5),
                                     ),
                                   ),
+                                  maxLength: 10,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
@@ -309,7 +310,8 @@ class CreateProfileView extends StatelessWidget {
                                       return;
                                     }
                                     if (_controller.file == null) {
-                                      showSnackBar("Please select image",color: Colors.red);
+                                      showSnackBar("Please select image",
+                                          color: Colors.red);
                                       return;
                                     }
                                     _formKey.currentState!.save();
