@@ -82,6 +82,7 @@ class ForgotPasswordView extends StatelessWidget {
                         //   return;
                         // }
                         // _formKey.currentState!.save();
+                        // _controller.generateForgetPasswordToken("salman@yopmail.com");
                         Get.toNamed(AppRoutes.verifyEmail);
                       },
                     ),
