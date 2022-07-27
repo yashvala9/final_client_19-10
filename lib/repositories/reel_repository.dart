@@ -27,7 +27,7 @@ class ReelRepository {
       final Iterable list = body;
       return list.map((e) => ReelModel.fromMap(e)).toList();
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 

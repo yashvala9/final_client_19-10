@@ -36,11 +36,10 @@ class CreateProfileController extends GetxController {
       var profileData = {
         'fullname': fullname,
         'bio': bio,
-        'countryCode': countryCode,
-        'username': username,
-        'phoneNumber': mobileNumber,
-        'isVerified': false,
-        'user': _authService.userId,
+        'phone_pin': countryCode,
+        'current_language': 'en',
+        'phone_number': mobileNumber,
+        'profile_img': "",
       };
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _authService.redirectUser();

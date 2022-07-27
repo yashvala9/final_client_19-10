@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/assets.dart';
 import '../../edit_profile/views/edit_profile_view.dart';
 import '../../follower_picker/views/follower_picker_view.dart';
@@ -10,6 +11,7 @@ import '../controllers/account_settings_controller.dart';
 class AccountSettingsView extends GetView<AccountSettingsController> {
   AccountSettingsView({Key? key}) : super(key: key);
   final _controller = Get.put(AccountSettingsController());
+  final _authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +191,13 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             asset: Assets.help,
             title: "Help",
             onPressed: () {},
+          ),
+           AccountTile(
+            asset: Assets.bell,
+            title: "Logout",
+            onPressed: () {
+              _authService.signOut();
+            },
           ),
         ],
       ),
