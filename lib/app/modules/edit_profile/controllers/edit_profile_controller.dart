@@ -50,8 +50,9 @@ class EditProfileController extends GetxController {
       };
       print('2121 profileData $profileData');
       await _profileRepo.updateProfile(profileData, _authService.token!);
+      _authService.redirectUser();
     } catch (e) {
-      print("addProfileDate: $e");
+      print("updateProfile: $e");
     }
     loading = false;
   }

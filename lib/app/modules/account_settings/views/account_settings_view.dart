@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/assets.dart';
-import '../../edit_profile/views/edit_profile_view.dart';
+import '../../create_giveaway/views/create_giveaway_view.dart';
 import '../../follower_picker/views/follower_picker_view.dart';
-import '../../giveaway_campaign/views/giveaway_campaign_view.dart';
 import '../../my_contest/views/my_contest_view.dart';
 import '../controllers/account_settings_controller.dart';
 
@@ -118,7 +117,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                                   ),
                                   onPressed: () {
                                     Get.back();
-                                    Get.to(GiveawayCampaignView());
+                                    Get.to(CreateGiveawayView());
                                   },
                                   child: const Text(
                                     "Yes",
@@ -192,7 +191,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             title: "Help",
             onPressed: () {},
           ),
-           AccountTile(
+          AccountTile(
             asset: Assets.bell,
             title: "Logout",
             onPressed: () {

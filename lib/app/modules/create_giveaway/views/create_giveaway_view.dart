@@ -11,12 +11,12 @@ import '../../../../repositories/giveaway_repository.dart';
 import '../../../../widgets/loading.dart';
 import '../../account_settings/views/account_settings_view.dart';
 import '../../add_feed/add_feed_screen.dart';
-import '../controllers/giveaway_campaign_controller.dart';
+import '../controllers/create_giveaway_controller.dart';
 
-class GiveawayCampaignView extends GetView<GiveawayCampaignController> {
-  GiveawayCampaignView({Key? key}) : super(key: key);
+class CreateGiveawayView extends GetView<CreateGiveawayController> {
+  CreateGiveawayView({Key? key}) : super(key: key);
   final _giveawayRepo = Get.put(GiveawayRepository());
-  final _controller = Get.put(GiveawayCampaignController());
+  final _controller = Get.put(CreateGiveawayController());
   TextEditingController dateInput = TextEditingController();
 
   @override

@@ -12,7 +12,6 @@ class Base {
   static const getReelsbyId = '$_url/getReelsByUserId';
   // static const createProfile = '$_url/user-profiles';
   static const searchUser = '$_url/searchByUserName';
-  static const updateProfile = '$_url/users/profile/update';
 
   //Forget password
   static const generateForgetPasswordToken =
@@ -24,6 +23,7 @@ class Base {
   //Profile
   static const currentUser = '$_url/users/getcurrent_user';
   static const createProfile = '$_url/users/profile';
+  static const updateProfile = '$_url/users/profile/update';
 
   //Reels
   static const getReelsByUserId = '$_url/getReelsByUserId';
@@ -54,7 +54,8 @@ class Base {
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';
   static const getTotalEntryCountByUserId = '$_url/totalEntries';
-  static const getBuddyPairByUserId = '$_url/getBuddy';
+  static const getBuddyPairByUserId = '$_url/referrals/get_buddy';
   static const imageUpload = '$_url/upload';
   static const winners = '$_url/winners';
+  static const referrals = '$_url/referrals';
 }

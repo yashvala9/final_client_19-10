@@ -2,16 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:intl/intl.dart';
-import 'package:reel_ro/models/contest_model.dart';
-import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/giveaway_repository.dart';
 
 import '../../../../services/auth_service.dart';
 import '../../../../utils/snackbar.dart';
 
-class GiveawayCampaignController extends GetxController {
+class CreateGiveawayController extends GetxController {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _authService = Get.put(AuthService());
 
@@ -36,7 +32,13 @@ class GiveawayCampaignController extends GetxController {
         "creator_id": _authService.profileModel!.id,
         "start_date": DateTime.now().toString(),
         "end_date": endDate.toString(),
-        "rules": "My life My rules"
+        "rules": "My life My rules",
+        "prize_count": 1,
+        "prize": {
+          "prize_name": prizeName,
+          "prize_image": photoUrl.value,
+          "prize_description": ""
+        }
       };
       print('21212121 $map');
       await _giveawayRepo.createGiveaway(map, token!);

@@ -40,7 +40,7 @@ class GiveawayRepository {
 
   Future<String> getAdsEntryCountByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getTotalEntryCountByUserId}?userId=$profileId"),
+      Uri.parse("${Base.giveaway}$profileId/entries"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -50,7 +50,7 @@ class GiveawayRepository {
     print('list21213 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['data']['adEntries'].toString();
+      return body['ads_entries'].toString();
     } else {
       return Future.error(body['message']);
     }
@@ -59,17 +59,17 @@ class GiveawayRepository {
   Future<String> getReferralsEntryCountByUserId(
       int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getTotalEntryCountByUserId}?userId=$profileId"),
+      Uri.parse("${Base.giveaway}$profileId/entries"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    print('list21213 ' + body.toString());
+    print('list212131 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['data']['referralEntries'].toString();
+      return body['referrals_entries'].toString();
     } else {
       return Future.error(body['message']);
     }
@@ -77,17 +77,17 @@ class GiveawayRepository {
 
   Future<String> getTotalEntryCountByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getTotalEntryCountByUserId}?userId=$profileId"),
+      Uri.parse("${Base.giveaway}$profileId/entries"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    print('list21213 ' + body.toString());
+    print('list212133 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['data']['totalEntries'].toString();
+      return body['total_entries'].toString();
     } else {
       return Future.error(body['detail']);
     }
@@ -96,7 +96,7 @@ class GiveawayRepository {
   Future<List<String>> getBuddyPairByUserId(int profileId, String token) async {
     List<String> list = [];
     final response = await http.get(
-      Uri.parse("${Base.getBuddyPairByUserId}?userId=14"),
+      Uri.parse(Base.getBuddyPairByUserId),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -106,8 +106,8 @@ class GiveawayRepository {
     // print('list2121 ' + body.toString());
 
     if (response.statusCode == 200) {
-      list.add(body['data']['profileUrl'].toString());
-      list.add(body['data']['fullname'].toString());
+      list.add(body['profileUrl'].toString());
+      list.add(body['fullname'].toString());
       return list;
     } else {
       list.add('');
@@ -199,6 +199,24 @@ class GiveawayRepository {
       return map;
     } else {
       return Future.error(resData['message']);
+    }
+  }
+
+  Future<List<ProfileModel>> getReferrals(int profileId, String token) async {
+    final response = await http.get(
+      Uri.parse(Base.referrals),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print('list212121winnerbody $body');
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body);
     }
   }
 }
