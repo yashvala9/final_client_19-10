@@ -62,7 +62,8 @@ class AddFeedController extends GetxController {
       final s3File = await _reelRepo.uploadFileToAwsS3(
           userID: profileId!.toString(), file: file, fileName: _fileName);
       print('2121 s3File ${s3File ?? ''}');
-      //TODO step 3: make entry of upload status in db
+      //step 3: make entry of upload status in db
+      await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
       showSnackBar("Reel added successfully: $s3File");
       clean();
       Get.back();

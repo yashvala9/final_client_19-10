@@ -38,28 +38,10 @@ class GiveawayCampaignController extends GetxController {
         "end_date": endDate.toString(),
         "rules": "My life My rules"
       };
-      //   "contest_name": campaignName,
-      //   "creator_type": "INFLUENCER",
-      //   "creator_id": _authService.profileModel!.id,
-      //   "start_date": DateTime.now(),
-      //   "end_date": endDate,
-      //   "rules": "My life My rules"
-      // };
-      // var map1 = {
-      //   "contestName": campaignName,
-      //   "createdBy": 14,
-      //   "creatorType": "admin",
-      //   "startDate": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-      //   "endDate": DateFormat("yyyy-MM-dd").format(endDate),
-      //   "rules": "Rule 1b, Rule 2b, Rule 3b",
-      //   "minimumEligibilityCriteria": "follower",
-      //   "prizeCount": 1,
-      //   "prizes": [4]
-      // };
       print('21212121 $map');
       await _giveawayRepo.createGiveaway(map, token!);
-      // _storage.write(Constants.token, token);
-      // await _userRepo.createProfile(userModel);
+      Get.back();
+
       // _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);

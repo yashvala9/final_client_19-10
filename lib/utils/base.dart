@@ -18,7 +18,8 @@ class Base {
   static const getReelsByUserId = '$_url/getReelsByUserId';
   static const getFeedsByUserId = '$_url/getFeed';
   static const getPhotosByUserId = '$_url/getPhotosByUserId';
-  static const reels = '$_url/reels';
+  static const updateStatus = '$_url/reels/update/status/';
+  static const reels = '$_url/reels/';
 
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';
@@ -36,7 +37,7 @@ class Base {
   static const toggleFollow = '${_url}/sendFollowRequest';
 
   //Giveaway
-  static const giveaway = '$_url/contests';
+  static const giveaway = '$_url/contests/';
   static const CreateGiveaway = '$_url/createContest';
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';

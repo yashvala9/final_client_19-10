@@ -115,6 +115,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                                     elevation: 9,
                                   ),
                                   onPressed: () {
+                                    Get.back();
                                     Get.to(GiveawayCampaignView());
                                   },
                                   child: const Text(

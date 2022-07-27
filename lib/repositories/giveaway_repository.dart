@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/winner_model.dart';
+import 'package:reel_ro/utils/colors.dart';
 
 import '../models/profile_model.dart';
 import '../models/reel_model.dart';
@@ -19,19 +20,21 @@ class GiveawayRepository {
     final response = await http.post(
       Uri.parse(Base.giveaway),
       headers: <String, String>{
-        'accept': 'application/json',
         HttpHeaders.authorizationHeader: "Bearer $token",
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(giveawayData),
     );
+
+    print('21212121 ${Base.giveaway}');
+    print('21212121 ${response.statusCode}');
     final body = jsonDecode(response.body);
+
     print('21212121 ${response.body}');
-    if (response.statusCode == 200) {
-      showSnackBar(response.body);
-      return;
+    if (response.statusCode == 201) {
+      showSnackBar("Giveaway created successfully!");
     } else {
-      return Future.error(body['error']['message']);
+      showSnackBar("Giveaway creation failed! please try again.");
     }
   }
 
@@ -133,7 +136,8 @@ class GiveawayRepository {
 
   Future<ContestModel> getContestsByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse('${Base.giveaway}?createdBy=$profileId'),
+      Uri.parse('${Base.giveaway}'),
+      // user?user_id=$profileId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",

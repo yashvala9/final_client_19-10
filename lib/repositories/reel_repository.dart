@@ -94,8 +94,10 @@ class ReelRepository {
       },
       body: jsonEncode(data),
     );
+    print('2121 ${Base.reels}');
+    print('2121 ${response.statusCode}');
     print('2121 ${response.body}');
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return;
     } else {
       final body = jsonDecode(response.body);
@@ -178,22 +180,39 @@ class ReelRepository {
         accessKey: "AKIARYAXXOSN5XYB5M67",
         secretKey: "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",
         file: file,
-        bucket: "reelro-vod-destinationbucket",
+        bucket: "reelro-mediaconvert-source",
         region: "ap-south-1",
         filename: fileName,
-        destDir: 'videos',
+        destDir: 'inputs',
       ).then((String? _response) {
         if (_response == null) {
           print('2121 response null');
           return null;
         } else {
-          return "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/videos/$fileName";
+          return "https://reelro-mediaconvert-source.s3.ap-south-1.amazonaws.com/inputs/$fileName";
         }
       });
     } catch (e) {
       showSnackBar("Error Uploading File");
       printInfo(info: "File Uploading error.......");
       return null;
+    }
+  }
+
+  Future<void> updateStatus(
+      String fileName, String status, String token) async {
+    final response = await http.put(
+      Uri.parse('${Base.updateStatus}$fileName/$status'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(body['error']['message']);
     }
   }
 }

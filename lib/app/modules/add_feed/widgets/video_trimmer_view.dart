@@ -98,16 +98,6 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
                       backgroundColor: Colors.red,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: MyElevatedButton(
-                      onPressed: () async {
-                        _progressVisibility.value ? '' : await _saveVideo();
-                        _isPlaying.value = false;
-                      },
-                      buttonText: 'Save',
-                    ),
-                  ),
                   Expanded(
                     child: VideoViewer(trimmer: _trimmer),
                   ),
@@ -147,7 +137,17 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
                       );
                       _isPlaying.value = playbackState;
                     },
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: MyElevatedButton(
+                      onPressed: () async {
+                        _progressVisibility.value ? '' : await _saveVideo();
+                        _isPlaying.value = false;
+                      },
+                      buttonText: 'Save',
+                    ),
+                  ),
                 ],
               ),
             ),
