@@ -51,7 +51,7 @@ class ReelModel {
   factory ReelModel.fromMap(Map<String, dynamic> map) {
     return ReelModel(
       id: map['id'] as int,
-      video_title: map['video_title'] as String,
+      video_title: map['video_title'] != null? map['video_title'] as String: "",
       description: map['description'] as String,
       filename: map['filename'] as String,
       media_ext: map['media_ext'] as String,

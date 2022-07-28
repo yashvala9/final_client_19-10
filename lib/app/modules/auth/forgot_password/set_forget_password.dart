@@ -55,13 +55,13 @@ class SetForgetPassword extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Forgot password?',
+                        'New Password',
                         textScaleFactor: Get.textScaleFactor,
                         style: style.headlineSmall,
                       ),
                       SizedBox(height: Get.height * 0.02),
                       Text(
-                        'Enter your email address for recovery\nyour account.',
+                        'Reset your password to recovery & login to your account.',
                         textAlign: TextAlign.center,
                         textScaleFactor: Get.textScaleFactor,
                         style: style.bodyLarge?.copyWith(
@@ -74,9 +74,20 @@ class SetForgetPassword extends StatelessWidget {
                           child: Column(
                             children: [
                               TextFormField(
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   hintText: 'New Password',
+                                  suffixIcon: GestureDetector(
+                                      onTap: () => _controller.obsecure =
+                                          !_controller.obsecure,
+                                      child: Icon(
+                                        _controller.obsecure
+                                            ? Icons.visibility_sharp
+                                            : Icons.visibility_off_sharp,
+                                        color: AppColors.headline5Color
+                                            .withOpacity(.5),
+                                      )),
                                 ),
+                                obscureText: !_controller.obsecure,
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) => value!.isEmpty
                                     ? 'New password is required'
@@ -84,11 +95,23 @@ class SetForgetPassword extends StatelessWidget {
                                 onSaved: (v) =>
                                     _controller.newPassword = v!.trim(),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 20),
                               TextFormField(
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   hintText: 'Confirm Password',
+                                  suffixIcon: GestureDetector(
+                                    onTap: () => _controller.obsecure2 =
+                                        !_controller.obsecure2,
+                                    child: Icon(
+                                      _controller.obsecure2
+                                          ? Icons.visibility_sharp
+                                          : Icons.visibility_off_sharp,
+                                      color: AppColors.headline5Color
+                                          .withOpacity(.5),
+                                    ),
+                                  ),
                                 ),
+                                obscureText: !_controller.obsecure2,
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) => value!.isEmpty
                                     ? 'Confirm Password is required'
@@ -102,7 +125,7 @@ class SetForgetPassword extends StatelessWidget {
                       _controller.loading
                           ? const Loading()
                           : MyElevatedButton(
-                              buttonText: 'Reset Password',
+                              buttonText: 'Change',
                               onPressed: () {
                                 if (!_formKey.currentState!.validate()) {
                                   return;

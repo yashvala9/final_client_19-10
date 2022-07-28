@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
@@ -48,13 +49,13 @@ class ValidateForgetPassword extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Validate Forget Password Token',
+                        'Enter Token',
                         textScaleFactor: Get.textScaleFactor,
                         style: style.headlineSmall,
                       ),
                       SizedBox(height: Get.height * 0.02),
                       Text(
-                        'Enter token which has been shared to you respected email.',
+                        'Please enter the token that has been shared with your respected email address.',
                         textAlign: TextAlign.center,
                         textScaleFactor: Get.textScaleFactor,
                         style: style.bodyLarge?.copyWith(
@@ -70,18 +71,21 @@ class ValidateForgetPassword extends StatelessWidget {
                           ),
                           maxLength: 7,
                           keyboardType: TextInputType.emailAddress,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))
+                          ],
                           validator: (value) => value!.isEmpty
                               ? 'Token is required'
                               : value.length != 7
                                   ? "Token must be 7 character"
                                   : null,
                           onSaved: (v) =>
-                              _controller.forgetPassworedToken = v!.trim(),
+                              _controller.forgetPassworedToken = v!.trim().toUpperCase(),
                         ),
                       ),
                       SizedBox(height: Get.height * 0.03),
                      _controller.loading? const Loading(): MyElevatedButton(
-                        buttonText: 'Validate Token',
+                        buttonText: 'Submit',
                         onPressed: () {
                           if (!_formKey.currentState!.validate()) {
                             return;
