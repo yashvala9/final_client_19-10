@@ -36,11 +36,11 @@ class WinnerCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              "winner.contestName",
+              winner.contest.contest_name,
               style: style.subtitle1,
             ),
             Text(
-              "winner.prizeName",
+              winner.prize.prize_name,
               style: style.titleLarge!.copyWith(
                 color: AppColors.winnercardpink,
               ),

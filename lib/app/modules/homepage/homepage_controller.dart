@@ -58,6 +58,7 @@ class HomePageController extends GetxController {
     loading = true;
     try {
       reelList = await _reelRepo.getFeeds(profileId!, token!);
+      print(reelList.length);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");

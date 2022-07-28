@@ -17,7 +17,7 @@ class WinnersController extends GetxController {
   }
 
   _fetch() async {
-    await getWinnerList();
+    // await getWinnerList();
   }
 
   Future<void> getWinnerList() async {

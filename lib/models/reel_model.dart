@@ -2,38 +2,37 @@
 import 'dart:convert';
 
 import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/models/user_model.dart';
 
 class ReelModel {
   final int id;
+  final String video_title;
   final String description;
   final String filename;
-  final String status;
-  final int userid;
+  final String media_ext;
   final ProfileModel user;
   ReelModel({
     required this.id,
+    required this.video_title,
     required this.description,
     required this.filename,
-    required this.status,
-    required this.userid,
+    required this.media_ext,
     required this.user,
   });
 
   ReelModel copyWith({
     int? id,
+    String? video_title,
     String? description,
     String? filename,
-    String? status,
-    int? userid,
+    String? media_ext,
     ProfileModel? user,
   }) {
     return ReelModel(
       id: id ?? this.id,
+      video_title: video_title ?? this.video_title,
       description: description ?? this.description,
       filename: filename ?? this.filename,
-      status: status ?? this.status,
-      userid: userid ?? this.userid,
+      media_ext: media_ext ?? this.media_ext,
       user: user ?? this.user,
     );
   }
@@ -41,10 +40,10 @@ class ReelModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
+      'video_title': video_title,
       'description': description,
       'filename': filename,
-      'status': status,
-      'userid': userid,
+      'media_ext': media_ext,
       'user': user.toMap(),
     };
   }
@@ -52,10 +51,10 @@ class ReelModel {
   factory ReelModel.fromMap(Map<String, dynamic> map) {
     return ReelModel(
       id: map['id'] as int,
+      video_title: map['video_title'] as String,
       description: map['description'] as String,
       filename: map['filename'] as String,
-      status: map['status'] as String,
-      userid: map['userid'] as int,
+      media_ext: map['media_ext'] as String,
       user: ProfileModel.fromMap(map['user'] as Map<String, dynamic>),
     );
   }
@@ -67,7 +66,7 @@ class ReelModel {
 
   @override
   String toString() {
-    return 'Reelmodel(id: $id, description: $description, filename: $filename, status: $status, userid: $userid, user: $user)';
+    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, media_ext: $media_ext, user: $user)';
   }
 
   @override
@@ -75,20 +74,20 @@ class ReelModel {
     if (identical(this, other)) return true;
 
     return other.id == id &&
+        other.video_title == video_title &&
         other.description == description &&
         other.filename == filename &&
-        other.status == status &&
-        other.userid == userid &&
+        other.media_ext == media_ext &&
         other.user == user;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
+        video_title.hashCode ^
         description.hashCode ^
         filename.hashCode ^
-        status.hashCode ^
-        userid.hashCode ^
+        media_ext.hashCode ^
         user.hashCode;
   }
 }

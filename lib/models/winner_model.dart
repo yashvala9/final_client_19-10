@@ -1,57 +1,50 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 
+import 'package:reel_ro/models/prize_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 
 class WinnerModel {
   final int id;
-  final int user_id;
   final ProfileModel user;
-  final int contest_id;
-  final int prize_id;
+  final Contest contest;
+  final PrizeModel prize;
   WinnerModel({
     required this.id,
-    required this.user_id,
     required this.user,
-    required this.contest_id,
-    required this.prize_id,
+    required this.contest,
+    required this.prize,
   });
 
   WinnerModel copyWith({
     int? id,
-    int? user_id,
     ProfileModel? user,
-    int? contest_id,
-    int? prize_id,
+    Contest? contest,
+    PrizeModel? prize,
   }) {
     return WinnerModel(
       id: id ?? this.id,
-      user_id: user_id ?? this.user_id,
       user: user ?? this.user,
-      contest_id: contest_id ?? this.contest_id,
-      prize_id: prize_id ?? this.prize_id,
+      contest: contest ?? this.contest,
+      prize: prize ?? this.prize,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'user_id': user_id,
       'user': user.toMap(),
-      'contest_id': contest_id,
-      'prize_id': prize_id,
+      'contest': contest.toMap(),
+      'prize': prize.toMap(),
     };
   }
 
   factory WinnerModel.fromMap(Map<String, dynamic> map) {
     return WinnerModel(
       id: map['id'] as int,
-      user_id: map['user_id'] as int,
       user: ProfileModel.fromMap(map['user'] as Map<String, dynamic>),
-      contest_id: map['contest_id'] as int,
-      prize_id: map['prize_id'] as int,
+      contest: Contest.fromMap(map['contest'] as Map<String, dynamic>),
+      prize: PrizeModel.fromMap(map['prize'] as Map<String, dynamic>),
     );
   }
 
@@ -62,7 +55,7 @@ class WinnerModel {
 
   @override
   String toString() {
-    return 'Winnermodel(id: $id, user_id: $user_id, user: $user, contest_id: $contest_id, prize_id: $prize_id)';
+    return 'WinnerModel(id: $id, user: $user, contest: $contest, prize: $prize)';
   }
 
   @override
@@ -70,18 +63,64 @@ class WinnerModel {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.user_id == user_id &&
         other.user == user &&
-        other.contest_id == contest_id &&
-        other.prize_id == prize_id;
+        other.contest == contest &&
+        other.prize == prize;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        user_id.hashCode ^
-        user.hashCode ^
-        contest_id.hashCode ^
-        prize_id.hashCode;
+    return id.hashCode ^ user.hashCode ^ contest.hashCode ^ prize.hashCode;
   }
+}
+
+class Contest {
+  final int id;
+  final String contest_name;
+  Contest({
+    required this.id,
+    required this.contest_name,
+  });
+
+  Contest copyWith({
+    int? id,
+    String? contest_name,
+  }) {
+    return Contest(
+      id: id ?? this.id,
+      contest_name: contest_name ?? this.contest_name,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'contest_name': contest_name,
+    };
+  }
+
+  factory Contest.fromMap(Map<String, dynamic> map) {
+    return Contest(
+      id: map['id'] as int,
+      contest_name: map['contest_name'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Contest.fromJson(String source) =>
+      Contest.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'Contest(id: $id, contest_name: $contest_name)';
+
+  @override
+  bool operator ==(covariant Contest other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id && other.contest_name == contest_name;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ contest_name.hashCode;
 }

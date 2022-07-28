@@ -50,7 +50,7 @@ class GiveawayRepository {
     print('list21213 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['ads_entries'].toString();
+      return body['ad_count'].toString();
     } else {
       return Future.error(body['message']);
     }
@@ -69,7 +69,7 @@ class GiveawayRepository {
     print('list212131 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['referrals_entries'].toString();
+      return body['referral_count'].toString();
     } else {
       return Future.error(body['message']);
     }
@@ -87,7 +87,7 @@ class GiveawayRepository {
     print('list212133 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['total_entries'].toString();
+      return body['total'].toString();
     } else {
       return Future.error(body['detail']);
     }
@@ -144,10 +144,10 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list212121body');
-    print('list212121body $body');
+    print('list212121body2');
+    print('list212121body2 $body');
     if (response.statusCode == 200) {
-      return ContestModel.fromJson(response.body);
+      return ContestModel.fromMap(json.decode(response.body)[0]);
     } else {
       return Future.error(body);
     }

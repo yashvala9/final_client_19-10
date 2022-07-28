@@ -173,7 +173,7 @@ class HomePageScreen extends StatelessWidget {
                                                     ),
                                                   ),
                                                   Text(
-                                                    'data.title',
+                                                    data.video_title,
                                                     style: const TextStyle(
                                                       fontSize: 20,
                                                       color: Colors.white,
@@ -188,24 +188,24 @@ class HomePageScreen extends StatelessWidget {
                                                       color: Colors.white,
                                                     ),
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.music_note,
-                                                        size: 15,
-                                                        color: Colors.white,
-                                                      ),
-                                                      Text(
-                                                        'data.song',
-                                                        style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
+                                                  // Row(
+                                                  //   children: [
+                                                  //     const Icon(
+                                                  //       Icons.music_note,
+                                                  //       size: 15,
+                                                  //       color: Colors.white,
+                                                  //     ),
+                                                  //     Text(
+                                                  //       'data.song',
+                                                  //       style: const TextStyle(
+                                                  //         fontSize: 15,
+                                                  //         color: Colors.white,
+                                                  //         fontWeight:
+                                                  //             FontWeight.bold,
+                                                  //       ),
+                                                  //     ),
+                                                  //   ],
+                                                  // )
                                                 ],
                                               ),
                                             ),
