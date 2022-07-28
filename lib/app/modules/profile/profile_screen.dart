@@ -8,6 +8,7 @@ import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
@@ -270,8 +271,8 @@ class ProfileScreen extends StatelessWidget {
                                           shape: CircleBorder(),
                                           child: CircleAvatar(
                                             radius: 40,
-                                            backgroundImage:
-                                                AssetImage(Assets.profile),
+                                            backgroundImage: NetworkImage(
+                                                "${Base.profileBucketUrl}/${_controller.profileModel.user_profile!.profile_img}"),
                                           ),
                                         ),
                                       ],

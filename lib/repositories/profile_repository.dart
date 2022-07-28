@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/photo_model.dart';
@@ -9,6 +11,7 @@ import 'package:reel_ro/services/auth_service.dart';
 
 import '../models/reel_model.dart';
 import '../utils/base.dart';
+import '../utils/snackbar.dart';
 
 class ProfileRepository {
   Future<ProfileModel> getCurrentUsesr(String token) async {
@@ -78,6 +81,51 @@ class ProfileRepository {
       return list.map((e) => ProfileModel.fromMap(e)).toList();
     } else {
       return Future.error(body['error']['message']);
+    }
+  }
+
+  Future<String?> uploadProfileToAwsS3({
+    required String userID,
+    required File file,
+    required String fileName,
+  }) async {
+    print('2121 s3 filename $fileName');
+    try {
+      final response = await AwsS3.uploadFile(
+        accessKey: "AKIARYAXXOSN6RLGJZRH",
+        secretKey: "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",
+        file: file,
+        bucket: "reelro-image-bucket",
+        region: "ap-south-1",
+        filename: fileName,
+        destDir: 'inputs',
+      );
+      log("UploadProfiletoS3: $response");
+      return "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/$fileName";
+    } catch (e) {
+      showSnackBar("Error Uploading File");
+      printInfo(info: "File Uploading error.......");
+      return null;
+    }
+  }
+
+  Future<void> createProfile(
+      Map<String, dynamic> profileData, String token) async {
+    final response = await http.post(
+      Uri.parse(Base.createProfile),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode(profileData),
+    );
+    print(response.statusCode);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // AuthService().redirectUser();
+      return;
+    } else {
+      return Future.error(body['detail']);
     }
   }
 

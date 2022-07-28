@@ -36,6 +36,9 @@ class Base {
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';
 
+  //Profile Bucket base url
+  static const profileBucketUrl = 'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
+
   //Like
   static const toggleLike = '$_url/toggleLike';
   static const getLikeFlag = '$_url/getLikeFlag';

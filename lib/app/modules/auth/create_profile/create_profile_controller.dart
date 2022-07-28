@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:path/path.dart' as path;
 
 class CreateProfileController extends GetxController {
   // final _authRepo = Get.put(AuthRepository());
   final _authService = Get.find<AuthService>();
   final _profileRepo = Get.put(ProfileRepository());
+
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
@@ -29,19 +32,40 @@ class CreateProfileController extends GetxController {
   int mobileNumber = 0;
   String bio = "";
 
+  Future<File> changeFileNameOnly(File file, String newFileName) {
+    var filepath = file.path;
+    var lastSeparator = filepath.lastIndexOf(Platform.pathSeparator);
+    var extension = path.extension(file.path).toString();
+    var newPath =
+        filepath.substring(0, lastSeparator + 1) + newFileName + extension;
+    return file.rename(newPath);
+  }
+
+  String genFileName(String userID, String fileName) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final date = DateFormat('yyyyMMdd').format(DateTime.now());
+    return 'reel_${userID}_${date}_${timestamp}_$fileName';
+  }
+
   void addProfileData() async {
     loading = true;
     printInfo(info: "Id: ${_authService.userId}");
     try {
+      file = await changeFileNameOnly(file!, 'video');
+      final String _fileName =
+          genFileName("Profile", path.basename(file!.path));
+
+      final s3File = await _profileRepo.uploadProfileToAwsS3(
+          userID: "Profile", file: file!, fileName: _fileName);
       var profileData = {
         'fullname': fullname,
         'bio': bio,
         'phone_pin': countryCode,
         'current_language': 'en',
         'phone_number': mobileNumber,
-        'profile_img': "",
+        'profile_img': _fileName,
       };
-      await _profileRepo.updateProfile(profileData, _authService.token!);
+      await _profileRepo.createProfile(profileData, _authService.token!);
       _authService.redirectUser();
     } catch (e) {
       print("addProfileDate: $e");
