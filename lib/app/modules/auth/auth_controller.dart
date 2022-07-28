@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:reel_ro/app/modules/auth/forgot_password/set_forget_password.dart';
+import 'package:reel_ro/app/modules/auth/forgot_password/validate_forget_password.dart';
+import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/auth/verify_email/verify_email.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
@@ -49,6 +52,9 @@ class AuthController extends GetxController {
   String countryCode = "";
 
   String forgetPasswordEmail = "";
+  String forgetPassworedToken = '';
+  String newPassword = '';
+  String confirmPassword = '';
 
   void login() async {
     loading = true;
@@ -152,7 +158,37 @@ class AuthController extends GetxController {
     try {
       final message = await _authRepo.generateForgetPassword(email);
       showSnackBar(message);
+      Get.off(() => ValidateForgetPassword(
+            email: email,
+          ));
     } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("forgetPassword: $e");
+    }
+    loading = false;
+  }
+
+  void validateForgetPassword(String email, String token) async {
+    loading = true;
+    try {
+      final message = await _authRepo.validateForgetPasswordtoken(email, token);
+      showSnackBar(message);
+      Get.off(() => SetForgetPassword(email: email, token: token));
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("forgetPassword: $e");
+    }
+    loading = false;
+  }
+
+  void setForgettPassword(String email, String token, String password) async {
+    loading = true;
+    try {
+      final message = await _authRepo.setForgetPassword(email, token, password);
+      showSnackBar(message);
+      Get.offAll(() => LoginScreen());
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
       print("forgetPassword: $e");
     }
     loading = false;

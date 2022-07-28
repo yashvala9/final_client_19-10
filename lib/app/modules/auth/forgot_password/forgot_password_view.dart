@@ -5,6 +5,7 @@ import 'package:reel_ro/app/modules/auth/auth_controller.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
+import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
 class ForgotPasswordView extends StatelessWidget {
@@ -71,21 +72,24 @@ class ForgotPasswordView extends StatelessWidget {
                             : !value.isEmail
                                 ? "Invalid email"
                                 : null,
-                      onSaved: (v) => _controller.forgetPasswordEmail = v!,
+                        onSaved: (v) =>
+                            _controller.forgetPasswordEmail = v!.trim(),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.03),
-                    MyElevatedButton(
-                      buttonText: 'Reset Password',
-                      onPressed: () {
-                        // if(!_formKey.currentState!.validate()){
-                        //   return;
-                        // }
-                        // _formKey.currentState!.save();
-                        // _controller.generateForgetPasswordToken("salman@yopmail.com");
-                        Get.toNamed(AppRoutes.verifyEmail);
-                      },
-                    ),
+                    _controller.loading
+                        ? const Loading()
+                        : MyElevatedButton(
+                            buttonText: 'Reset Password',
+                            onPressed: () {
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
+                              _formKey.currentState!.save();
+                              _controller.generateForgetPasswordToken(
+                                  _controller.forgetPasswordEmail);
+                            },
+                          ),
                   ],
                 ),
               ),
