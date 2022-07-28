@@ -14,8 +14,9 @@ import 'package:reel_ro/utils/snackbar.dart';
 
 class ReelRepository {
   Future<List<ReelModel>> getFeeds(int profileId, String token) async {
+    print('343434');
     final response = await http.get(
-      Uri.parse("${Base.getReelsByUserId}?currentUserId=$profileId"),
+      Uri.parse(Base.reels),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -85,19 +86,22 @@ class ReelRepository {
   }
 
   Future<void> addReel(Map<String, dynamic> data, String token) async {
+    print('2121 ${jsonEncode(data)}');
     final response = await http.post(
-      Uri.parse(Base.addReel),
+      Uri.parse(Base.reels),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode(data),
     );
-    final body = jsonDecode(response.body);
-    print('2121 $body');
-    if (response.statusCode == 200) {
+    print('2121 ${Base.reels}');
+    print('2121 ${response.statusCode}');
+    print('2121 ${response.body}');
+    if (response.statusCode == 201) {
       return;
     } else {
+      final body = jsonDecode(response.body);
       return Future.error(body['message']);
     }
   }
@@ -171,28 +175,45 @@ class ReelRepository {
     required File file,
     required String fileName,
   }) async {
+    print('2121 s3 filename $fileName');
     try {
       return await AwsS3.uploadFile(
         accessKey: "AKIARYAXXOSN5XYB5M67",
         secretKey: "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",
         file: file,
-        bucket: "reelro-vod-destinationbucket",
+        bucket: "reelro-mediaconvert-source",
         region: "ap-south-1",
-        filename: "$fileName${path.extension(file.path)}",
-        // filename:
-        //     "${path.basenameWithoutExtension(file.path)}${path.extension(file.path)}",
-        destDir: 'videos',
+        filename: fileName,
+        destDir: 'inputs',
       ).then((String? _response) {
         if (_response == null) {
+          print('2121 response null');
           return null;
         } else {
-          return "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/videos/$fileName${path.extension(file.path)}";
+          return "https://reelro-mediaconvert-source.s3.ap-south-1.amazonaws.com/inputs/$fileName";
         }
       });
     } catch (e) {
       showSnackBar("Error Uploading File");
       printInfo(info: "File Uploading error.......");
       return null;
+    }
+  }
+
+  Future<void> updateStatus(
+      String fileName, String status, String token) async {
+    final response = await http.put(
+      Uri.parse('${Base.updateStatus}$fileName/$status'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(body['error']['message']);
     }
   }
 }

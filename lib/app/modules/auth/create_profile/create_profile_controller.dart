@@ -48,4 +48,8 @@ class CreateProfileController extends GetxController {
     }
     loading = false;
   }
+
+  void signOut() async {
+    await _authService.signOut();
+  }
 }

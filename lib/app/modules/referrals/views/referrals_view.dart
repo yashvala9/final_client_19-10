@@ -37,18 +37,18 @@ class ReferralsView extends GetView<ReferralsController> {
                   builder: (context, snapshot) {
                     return Padding(
                       padding: EdgeInsets.all(16.0),
-                  child: Container(
-                    height: Get.height * 0.13,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xffFFD669), Color(0xffFFEAB4)],
-                        stops: [0.0, 1.0],
-                        begin: FractionalOffset.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                      ),
-                    ),
-                    child: Row(
+                      child: Container(
+                        height: Get.height * 0.13,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xffFFD669), Color(0xffFFEAB4)],
+                            stops: [0.0, 1.0],
+                            begin: FractionalOffset.topCenter,
+                            end: FractionalOffset.bottomCenter,
+                          ),
+                        ),
+                        child: Row(
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -57,8 +57,8 @@ class ReferralsView extends GetView<ReferralsController> {
                                 radius: 30,
                                 child: (!snapshot.hasData)
                                     ? const Loading()
-                                    : Image.asset(
-                                        'assets/Ellipse_3.png',
+                                    : Image.network(
+                                        'https://s3.amazonaws.com/babelcube/users/61f7c584d9efd_fault-avatar-profile-icon-vector-social-media-user-image-182145777.jpg',
                                       ),
                               ),
                             ),
@@ -82,7 +82,7 @@ class ReferralsView extends GetView<ReferralsController> {
                             )
                           ],
                         ),
-                  ),
+                      ),
                     );
                   },
                 ),
@@ -178,48 +178,52 @@ class ReferralsView extends GetView<ReferralsController> {
                                 label: Text("Poke"),
                               )
                             ],
-                            rows: [
-                              DataRow(
-                                cells: [
-                                  DataCell(
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 12,
-                                          child: Image.asset(
-                                            'assets/Ellipse_1.png',
+                            rows: _controller
+                                .referrals // Loops through dataColumnText, each iteration assigning the value to element
+                                .map(
+                                  ((element) => DataRow(
+                                        cells: <DataCell>[
+                                          DataCell(
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                CircleAvatar(
+                                                  radius: 12,
+                                                  child: Image.asset(
+                                                    'assets/Ellipse_1.png',
+                                                  ),
+                                                ),
+                                                const Text(
+                                                  "Mike Torello",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      overflow: TextOverflow
+                                                          .ellipsis),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        const Text(
-                                          "Mike Torello",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                        child: Text(
-                                      "2345",
-                                      style: style.headlineSmall
-                                          ?.copyWith(fontSize: 14),
-                                    )),
-                                  ),
-                                  DataCell(
-                                    Center(
-                                      child: activitygreen(),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    pokebtn(),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                          DataCell(
+                                            Center(
+                                                child: Text(
+                                              "2345",
+                                              style: style.headlineSmall
+                                                  ?.copyWith(fontSize: 14),
+                                            )),
+                                          ),
+                                          DataCell(
+                                            Center(
+                                              child: activitygreen(),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            pokebtn(),
+                                          ),
+                                        ],
+                                      )),
+                                )
+                                .toList(),
                           ),
                         ],
                       )),

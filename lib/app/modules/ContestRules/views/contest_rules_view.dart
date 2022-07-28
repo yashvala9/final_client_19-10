@@ -20,19 +20,19 @@ class ContestRulesView extends GetView<ContestRulesController> {
     final style = theme.textTheme;
     Get.put(ContestRulesController());
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Contest Rules',
-            style: TextStyle(fontSize: 14),
-          ),
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-              )),
+      appBar: AppBar(
+        title: const Text(
+          'Contest Rules',
+          style: TextStyle(fontSize: 14),
         ),
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+            )),
+      ),
       body: FutureBuilder<List<ContestModel>>(
         future: _giveawayRepo.getContests(
             _controller.profileId!, _controller.token!),
@@ -45,36 +45,35 @@ class ContestRulesView extends GetView<ContestRulesController> {
             return Container();
           }
           return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
             itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: const EdgeInsets.all(16),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            AppColors.contestrulesbrown,
-                            AppColors.contestrulesligthbrown,
-                          ],
-                        ),
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                margin: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      AppColors.contestrulesbrown,
+                      AppColors.contestrulesligthbrown,
+                    ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "snapshot.data![index].contestName",
+                      style: style.titleLarge!.copyWith(
+                        color: AppColors.winnercardbrown,
+                        fontWeight: FontWeight.w600,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                      snapshot.data![index].contestName,
-                            style: style.titleLarge!.copyWith(
-                              color: AppColors.winnercardbrown,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          
+                    ),
                     Text(snapshot.data![index].rules.replaceAll(', ', '\n')),
                   ],
                 ),
