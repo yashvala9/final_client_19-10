@@ -36,11 +36,11 @@ class WinnerCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              winner.contestName,
+              winner.contest.contest_name,
               style: style.subtitle1,
             ),
             Text(
-              winner.prizeName,
+              winner.prize.prize_name,
               style: style.titleLarge!.copyWith(
                 color: AppColors.winnercardpink,
               ),
@@ -59,13 +59,12 @@ class WinnerCardWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(winner.winnerImageUrl),
+                    backgroundImage:
+                        NetworkImage(winner.user.user_profile!.profile_img!),
                     radius: 25,
                   ),
-                  Text(
-                    winner.winnerName,
-                    style: style.subtitle1
-                  ),
+                  Text(winner.user.user_profile!.fullname!,
+                      style: style.subtitle1),
                 ],
               ),
             ),

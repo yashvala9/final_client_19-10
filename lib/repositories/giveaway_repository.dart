@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/winner_model.dart';
+import 'package:reel_ro/utils/colors.dart';
 
 import '../models/profile_model.dart';
 import '../models/reel_model.dart';
@@ -15,27 +16,31 @@ import '../utils/snackbar.dart';
 class GiveawayRepository {
   Future<void> createGiveaway(
       Map<String, dynamic> giveawayData, String token) async {
+    print(jsonEncode(giveawayData));
     final response = await http.post(
-      Uri.parse(Base.CreateGiveaway),
+      Uri.parse(Base.giveaway),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(giveawayData),
     );
+
+    print('21212121 ${Base.giveaway}');
+    print('21212121 ${response.statusCode}');
     final body = jsonDecode(response.body);
+
     print('21212121 ${response.body}');
-    if (response.statusCode == 200) {
-      showSnackBar(response.body);
-      return;
+    if (response.statusCode == 201) {
+      showSnackBar("Giveaway created successfully!");
     } else {
-      return Future.error(body['error']['message']);
+      showSnackBar("Giveaway creation failed! please try again.");
     }
   }
 
   Future<String> getAdsEntryCountByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getTotalEntryCountByUserId}?userId=$profileId"),
+      Uri.parse("${Base.giveaway}$profileId/entries"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -45,7 +50,7 @@ class GiveawayRepository {
     print('list21213 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['data']['adEntries'].toString();
+      return body['ad_count'].toString();
     } else {
       return Future.error(body['message']);
     }
@@ -54,17 +59,17 @@ class GiveawayRepository {
   Future<String> getReferralsEntryCountByUserId(
       int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getTotalEntryCountByUserId}?userId=$profileId"),
+      Uri.parse("${Base.giveaway}$profileId/entries"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    print('list21213 ' + body.toString());
+    print('list212131 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['data']['referralEntries'].toString();
+      return body['referral_count'].toString();
     } else {
       return Future.error(body['message']);
     }
@@ -72,17 +77,17 @@ class GiveawayRepository {
 
   Future<String> getTotalEntryCountByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getTotalEntryCountByUserId}?userId=$profileId"),
+      Uri.parse("${Base.giveaway}$profileId/entries"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    print('list21213 ' + body.toString());
+    print('list212133 ' + body.toString());
 
     if (response.statusCode == 200) {
-      return body['data']['totalEntries'].toString();
+      return body['total'].toString();
     } else {
       return Future.error(body['detail']);
     }
@@ -91,7 +96,7 @@ class GiveawayRepository {
   Future<List<String>> getBuddyPairByUserId(int profileId, String token) async {
     List<String> list = [];
     final response = await http.get(
-      Uri.parse("${Base.getBuddyPairByUserId}?userId=14"),
+      Uri.parse(Base.getBuddyPairByUserId),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -101,8 +106,8 @@ class GiveawayRepository {
     // print('list2121 ' + body.toString());
 
     if (response.statusCode == 200) {
-      list.add(body['data']['profileUrl'].toString());
-      list.add(body['data']['fullname'].toString());
+      list.add(body['profileUrl'].toString());
+      list.add(body['fullname'].toString());
       return list;
     } else {
       list.add('');
@@ -112,7 +117,6 @@ class GiveawayRepository {
   }
 
   Future<List<ContestModel>> getContests(int profileId, String token) async {
-    List<ContestModel> contests = [];
     final response = await http.get(
       Uri.parse(Base.giveaway),
       headers: <String, String>{
@@ -123,60 +127,27 @@ class GiveawayRepository {
     final body = jsonDecode(response.body);
     print('list212121body $body');
     if (response.statusCode == 200) {
-      for (var item in body) {
-        var cm = ContestModel(
-            id: item['id'] as int,
-            createdBy: item['createdBy']['id'] ?? 0,
-            contestName: (item['contestName'] ?? '') as String,
-            endDate: DateTime.parse((item['endDate'] ?? '') as String),
-            creatorType: (item['creatorType'] ?? '') as String,
-            prizeName:
-                // '',
-                (item['prizes'] as List<dynamic>).isNotEmpty
-                    ? (item['prizes'][0]['prizeName'] ?? '') as String
-                    : '',
-            prizeImageUrl:
-                'https://reelro-strapi.s3.ap-south-1.amazonaws.com/image_picker1761878752343692204_9ff2c4915a.jpg',
-            rules: (item['rules'] ?? '') as String);
-
-        contests.add(cm);
-      }
-      return contests;
+      Iterable list = body;
+      return list.map((e) => ContestModel.fromMap(e)).toList();
     } else {
       return Future.error(body);
     }
   }
 
   Future<ContestModel> getContestsByUserId(int profileId, String token) async {
-    ContestModel contest;
     final response = await http.get(
-      Uri.parse('${Base.giveaway}?createdBy=$profileId'),
+      Uri.parse('${Base.giveaway}'),
+      // user?user_id=$profileId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    print('list212121body');
-    print('list212121body $body[0]');
+    print('list212121body2');
+    print('list212121body2 $body');
     if (response.statusCode == 200) {
-      contest = ContestModel(
-        id: body[0]['id'] as int,
-        createdBy: body[0]['createdBy']['id'] ?? 0,
-        contestName: (body[0]['contestName'] ?? '') as String,
-        endDate: DateTime.parse((body[0]['endDate'] ?? '') as String),
-        creatorType: (body[0]['creatorType'] ?? '') as String,
-        prizeName:
-            // '',
-            (body[0]['prizes'] as List<dynamic>).isNotEmpty
-                ? (body[0]['prizes'][0]['prizeName'] ?? '') as String
-                : '',
-        prizeImageUrl:
-            'https://reelro-strapi.s3.ap-south-1.amazonaws.com/image_picker1761878752343692204_9ff2c4915a.jpg',
-        rules: (body[0]['rules'] ?? '') as String,
-      );
-
-      return contest;
+      return ContestModel.fromMap(json.decode(response.body)[0]);
     } else {
       return Future.error(body);
     }
@@ -194,21 +165,8 @@ class GiveawayRepository {
     final body = jsonDecode(response.body);
     print('list212121winnerbody $body');
     if (response.statusCode == 200) {
-      for (var item in body) {
-        var winner = WinnerModel(
-            id: (item['id'] ?? 0) as int,
-            contestName: (item['contestId']['contestName'] ?? '') as String,
-            prizeName: 'prizename',
-            // (item['prizes'][0]['prizeName'] ?? '') as String,
-            winnerName: 'WinnerName',
-            //item['profileId']['fullname'],
-            winnerImageUrl: 'WinnerUrl'
-            // item['profileId']['profileUrl']
-            );
-        print('list212121winnerbody ${winner.toString()}');
-        winners.add(winner);
-      }
-      return winners;
+      final Iterable list = body;
+      return list.map((e) => WinnerModel.fromMap(e)).toList();
     } else {
       return Future.error(body);
     }
@@ -241,6 +199,24 @@ class GiveawayRepository {
       return map;
     } else {
       return Future.error(resData['message']);
+    }
+  }
+
+  Future<List<ProfileModel>> getReferrals(int profileId, String token) async {
+    final response = await http.get(
+      Uri.parse(Base.referrals),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print('list212121winnerbody $body');
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body);
     }
   }
 }

@@ -39,6 +39,7 @@ class EditProfileController extends GetxController {
         "fullname":
             fullname == '' ? profileModel.user_profile!.fullname! : fullname,
         "bio": bio == '' ? profileModel.user_profile!.bio! : bio,
+        "profile_img": "",
         "phone_pin": phone_pin == 0
             ? profileModel.user_profile!.phone_pin!
             : phone_pin.toString(),
@@ -49,8 +50,9 @@ class EditProfileController extends GetxController {
       };
       print('2121 profileData $profileData');
       await _profileRepo.updateProfile(profileData, _authService.token!);
+      _authService.redirectUser();
     } catch (e) {
-      print("addProfileDate: $e");
+      print("updateProfile: $e");
     }
     loading = false;
   }

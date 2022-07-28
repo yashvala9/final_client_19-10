@@ -36,8 +36,8 @@ class ProfileRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('2121 $body');
-    if (response.statusCode == 200) {
+    print('2121 body $body');
+    if (response.statusCode == 200 && body['id'] != null) {
       return ProfileModel.fromMap(body);
     } else {
       return null;
@@ -83,14 +83,15 @@ class ProfileRepository {
 
   Future<void> updateProfile(
       Map<String, dynamic> profileData, String token) async {
-    final response = await http.post(
-      Uri.parse(Base.createProfile),
+    final response = await http.put(
+      Uri.parse(Base.updateProfile),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode(profileData),
     );
+    print(response.statusCode);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // AuthService().redirectUser();

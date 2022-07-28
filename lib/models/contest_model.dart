@@ -1,79 +1,80 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
+import 'package:reel_ro/models/prize_model.dart';
+import 'package:reel_ro/models/winner_model.dart';
+
 class ContestModel {
-  final int id;
-  final String contestName;
-  final int createdBy;
-  final String creatorType;
-  final DateTime? endDate;
+  final String contest_name;
+  final String creator_type;
+  final DateTime start_date;
+  final DateTime end_date;
   final String rules;
-  final String prizeName;
-  final String prizeImageUrl;
-  final String winnerName;
+  final List<PrizeModel> prizes;
+  final List<WinnerModel>? winners;
   ContestModel({
-    this.id = 0,
-    this.contestName = '',
-    this.createdBy = 0,
-    this.creatorType = '',
-    this.endDate,
-    this.rules = '',
-    this.prizeName = '',
-    this.prizeImageUrl = '',
-    this.winnerName = '',
+    required this.contest_name,
+    required this.creator_type,
+    required this.start_date,
+    required this.end_date,
+    required this.rules,
+    required this.prizes,
+    required this.winners,
   });
 
   ContestModel copyWith({
-    int? id,
-    String? contestName,
-    int? createdBy,
-    String? creatorType,
-    DateTime? endDate,
+    String? contest_name,
+    String? creator_type,
+    DateTime? start_date,
+    DateTime? end_date,
     String? rules,
-    String? prizeName,
-    String? prizeImageUrl,
-    String? winnerName,
+    List<PrizeModel>? prizes,
+    List<WinnerModel>? winners,
   }) {
     return ContestModel(
-      id: id ?? this.id,
-      contestName: contestName ?? this.contestName,
-      createdBy: createdBy ?? this.createdBy,
-      creatorType: creatorType ?? this.creatorType,
-      endDate: endDate ?? this.endDate,
+      contest_name: contest_name ?? this.contest_name,
+      creator_type: creator_type ?? this.creator_type,
+      start_date: start_date ?? this.start_date,
+      end_date: end_date ?? this.end_date,
       rules: rules ?? this.rules,
-      prizeName: prizeName ?? this.prizeName,
-      prizeImageUrl: prizeImageUrl ?? this.prizeImageUrl,
-      winnerName: winnerName ?? this.winnerName,
+      prizes: prizes ?? this.prizes,
+      winners: winners ?? this.winners,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'contestName': contestName,
-      'createdBy': createdBy,
-      'creatorType': creatorType,
-      'endDate': endDate?.millisecondsSinceEpoch,
+      'contest_name': contest_name,
+      'creator_type': creator_type,
+      'start_date': start_date.toString(),
+      'end_date': end_date.toString(),
       'rules': rules,
-      'prizeName': prizeName,
-      'prizeImageUrl': prizeImageUrl,
-      'winnerName': winnerName,
+      'prizes': prizes.map((x) => x.toMap()).toList(),
+      'winners': winners?.map((x) => x.toMap()).toList(),
     };
   }
 
   factory ContestModel.fromMap(Map<String, dynamic> map) {
     return ContestModel(
-      id: (map['id'] ?? 0) as int,
-      contestName: (map['contestName'] ?? '') as String,
-      createdBy: (map['createdBy'] ?? 0) as int,
-      creatorType: (map['creatorType'] ?? '') as String,
-      endDate: map['endDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch((map['endDate'] ?? 0) as int)
+      contest_name: map['contest_name'] as String,
+      creator_type: map['creator_type'] as String,
+      start_date: DateTime.parse(map['start_date']),
+      end_date: DateTime.parse(map['end_date']),
+      rules: map['rules'] as String,
+      prizes: List<PrizeModel>.from(
+        (map['prizes'] as List<dynamic>).map<PrizeModel>(
+          (x) => PrizeModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+      winners: map['winners'] != null
+          ? List<WinnerModel>.from(
+              (map['winners'] as List<dynamic>).map<WinnerModel?>(
+                (x) => WinnerModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
           : null,
-      rules: (map['rules'] ?? '') as String,
-      prizeName: (map['prizeName'] ?? '') as String,
-      prizeImageUrl: (map['prizeImageUrl'] ?? '') as String,
-      winnerName: (map['winnerName'] ?? '') as String,
     );
   }
 
@@ -84,34 +85,30 @@ class ContestModel {
 
   @override
   String toString() {
-    return 'ContestModel(id: $id, contestName: $contestName, createdBy: $createdBy, creatorType: $creatorType, endDate: $endDate, rules: $rules, prizeName: $prizeName, prizeImageUrl: $prizeImageUrl, winnerName: $winnerName)';
+    return 'ContestModel(contest_name: $contest_name, creator_type: $creator_type, start_date: $start_date, end_date: $end_date, rules: $rules, prizes: $prizes, winners: $winners)';
   }
 
   @override
   bool operator ==(covariant ContestModel other) {
     if (identical(this, other)) return true;
-  
-    return other.id == id &&
-        other.contestName == contestName &&
-        other.createdBy == createdBy &&
-        other.creatorType == creatorType &&
-        other.endDate == endDate &&
+
+    return other.contest_name == contest_name &&
+        other.creator_type == creator_type &&
+        other.start_date == start_date &&
+        other.end_date == end_date &&
         other.rules == rules &&
-        other.prizeName == prizeName &&
-        other.prizeImageUrl == prizeImageUrl &&
-        other.winnerName == winnerName;
+        listEquals(other.prizes, prizes) &&
+        listEquals(other.winners, winners);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        contestName.hashCode ^
-        createdBy.hashCode ^
-        creatorType.hashCode ^
-        endDate.hashCode ^
+    return contest_name.hashCode ^
+        creator_type.hashCode ^
+        start_date.hashCode ^
+        end_date.hashCode ^
         rules.hashCode ^
-        prizeName.hashCode ^
-        prizeImageUrl.hashCode ^
-        winnerName.hashCode;
+        prizes.hashCode ^
+        winners.hashCode;
   }
 }

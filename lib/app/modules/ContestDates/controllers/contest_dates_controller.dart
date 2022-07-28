@@ -18,7 +18,7 @@ class ContestDatesController extends GetxController {
   }
 
   _fetch() async {
-    await getContestDates();
+    // await getContestDates();
   }
 
   Future<void> getContestDates() async {

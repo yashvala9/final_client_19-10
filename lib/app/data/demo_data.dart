@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 class DemoData {
   static List<WinnerList> demoWinnerList = [
     WinnerList(
@@ -64,7 +62,8 @@ class DemoData {
         "5": " 5.Praesent tempor ut cras vestibulum, enim",
         "6": "6.sagittis, aliquet dui pellentesque. Massa duis",
         "7": "7.risus egestas orci placerat ipsum donec purus.",
-        "8": "8.tempor ut cras vestibulum, enim sagittis, aliquet dui pellentesque.",
+        "8":
+            "8.tempor ut cras vestibulum, enim sagittis, aliquet dui pellentesque.",
       },
     ),
   ];

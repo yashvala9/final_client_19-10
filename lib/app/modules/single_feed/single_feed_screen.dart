@@ -59,7 +59,7 @@ class SingleFeedScreen extends StatelessWidget {
                                     ),
                                   )
                                 : VideoPlayerItem(
-                                    videoUrl: reel!.video.url,
+                                    videoUrl: reel!.filename,
                                     doubleTap: () {
                                       _controller.likeToggle(reel!);
                                     },
@@ -89,7 +89,7 @@ class SingleFeedScreen extends StatelessWidget {
                                               Text(
                                                 reel == null
                                                     ? photo!.title
-                                                    : reel!.title,
+                                                    : 'reel!.title',
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.white,
@@ -115,7 +115,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                   Text(
                                                     reel == null
                                                         ? photo!.song
-                                                        : reel!.song,
+                                                        : 'reel!.song',
                                                     style: const TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.white,
@@ -169,7 +169,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                             ? Icons.favorite
                                                             : Icons
                                                                 .favorite_border
-                                                        : reel!.isLiked
+                                                        : true
+                                                            //reel!.isLiked
                                                             ? Icons.favorite
                                                             : Icons
                                                                 .favorite_border,
@@ -178,7 +179,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                         ? photo!.isLiked
                                                             ? Colors.red
                                                             : Colors.white
-                                                        : reel!.isLiked
+                                                        : true
+                                                            //reel!.isLiked
                                                             ? Colors.red
                                                             : Colors.white,
                                                   ),
@@ -188,7 +190,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                   reel == null
                                                       ? photo!.likeCount
                                                           .toString()
-                                                      : reel!.likeCount
+                                                      : '20'
+                                                          // reel!.likeCount
                                                           .toString(),
                                                   style: style.headlineSmall!
                                                       .copyWith(
@@ -207,7 +210,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                           return CommentSheet(
                                                             reelId: reel == null
                                                                 ? photo!.reelId
-                                                                : reel!.reelId,
+                                                                : reel!.id
+                                                                    .toString(),
                                                           );
                                                         });
                                                   },
@@ -222,9 +226,10 @@ class SingleFeedScreen extends StatelessWidget {
                                                       ? photo!
                                                           .reelComments.length
                                                           .toString()
-                                                      : reel!
-                                                          .reelComments.length
-                                                          .toString(),
+                                                      : '20',
+                                                  // reel!
+                                                  //     .reelComments.length
+                                                  //     .toString(),
                                                   style: style.headlineSmall!
                                                       .copyWith(
                                                     color: Colors.white,

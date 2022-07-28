@@ -58,6 +58,7 @@ class HomePageController extends GetxController {
     loading = true;
     try {
       reelList = await _reelRepo.getFeeds(profileId!, token!);
+      print(reelList.length);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
@@ -72,16 +73,16 @@ class HomePageController extends GetxController {
   }
 
   void likeToggle(int index) async {
-    print("Index: $index");
-    if (reelList[index].isLiked) {
-      reelList[index].likeCount--;
-    } else {
-      toggleLikeShow();
-      reelList[index].likeCount++;
-    }
-    reelList[index].isLiked = !reelList[index].isLiked;
-    _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
-    update();
+    // print("Index: $index");
+    // if (reelList[index].isLiked) {
+    //   reelList[index].likeCount--;
+    // } else {
+    //   toggleLikeShow();
+    //   reelList[index].likeCount++;
+    // }
+    // reelList[index].isLiked = !reelList[index].isLiked;
+    // _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
+    // update();
   }
 
   void signOut() {
