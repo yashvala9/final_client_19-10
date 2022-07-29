@@ -32,12 +32,14 @@ class Base {
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
   static const addReel = '$_url/reels';
+  static const getComment = '$_url/reels/comments/';
 
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';
 
   //Profile Bucket base url
-  static const profileBucketUrl = 'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
+  static const profileBucketUrl =
+      'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
 
   //Like
   static const toggleLike = '$_url/toggleLike';
@@ -45,7 +47,7 @@ class Base {
 
   //Comment
   static const getCommentByReelId = '$_url/getCommentsByReelId';
-  static const addCommentToReelId = '$_url/addComment';
+  static const addCommentToReelId = '$_url/reels/comments';
   static const toggleCommentLike = '$_url/toggleCommentLike';
 
   //Follow UnFollow

@@ -51,7 +51,7 @@ class CreateProfileController extends GetxController {
     loading = true;
     printInfo(info: "Id: ${_authService.userId}");
     try {
-      file = await changeFileNameOnly(file!, 'video');
+      file = await changeFileNameOnly(file!, 'image');
       final String _fileName =
           genFileName("Profile", path.basename(file!.path));
 

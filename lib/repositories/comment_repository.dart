@@ -30,9 +30,9 @@ class CommentRepository {
   }
 
   Future<String> addCommentToReelId(
-      String token, Map<String, dynamic> data) async {
+      String reelId, String token, Map<String, dynamic> data) async {
     final response = await http.post(
-      Uri.parse(Base.addCommentToReelId),
+      Uri.parse('${Base.addCommentToReelId}/$reelId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",

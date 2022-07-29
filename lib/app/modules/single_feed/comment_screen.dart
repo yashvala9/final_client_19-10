@@ -33,12 +33,13 @@ class CommentScreen extends StatelessWidget {
                         return ListTile(
                           leading: CircleAvatar(
                             backgroundColor: Colors.black,
-                            backgroundImage: NetworkImage(comment.profilePhoto),
+                            backgroundImage: NetworkImage(
+                                comment.user.user_profile!.profile_img!),
                           ),
                           title: Row(
                             children: [
                               Text(
-                                "${comment.username}  ",
+                                "${comment.user.username}  ",
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.red,
@@ -58,7 +59,7 @@ class CommentScreen extends StatelessWidget {
                           subtitle: Row(
                             children: [
                               Text(
-                                comment.datePublished.toString(),
+                                "comment.datePublished.toString()",
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,
@@ -68,7 +69,7 @@ class CommentScreen extends StatelessWidget {
                                 width: 10,
                               ),
                               Text(
-                                '${comment.likes.length} likes',
+                                '{comment.likes.length} likes',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.white,
