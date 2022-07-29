@@ -249,18 +249,40 @@ class HomePageScreen extends StatelessWidget {
                                                     InkWell(
                                                       onTap: () {},
                                                       // _controller.likeVideo(data.id),
-                                                      child: Icon(
-                                                        true
-                                                            //data.isLiked
-                                                            ? Icons.favorite
-                                                            : Icons
-                                                                .favorite_border,
-                                                        size: 30,
-                                                        color: true
-                                                            //data.isLiked
-                                                            ? Colors.red
-                                                            : Colors.white,
-                                                      ),
+                                                      child: FutureBuilder<
+                                                              bool>(
+                                                          future: _reelRepo
+                                                              .isReelLikedByCurrentUser(
+                                                                  data.id,
+                                                                  _controller
+                                                                      .token!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return const Loading();
+                                                            }
+                                                            if (snapshot
+                                                                .hasError) {
+                                                              printInfo(
+                                                                  info:
+                                                                      "isReelLikedByCurrentUser: ${snapshot.hasError}");
+                                                              return Container();
+                                                            }
+                                                            return Icon(
+                                                              snapshot.data!
+                                                                  ? Icons
+                                                                      .favorite
+                                                                  : Icons
+                                                                      .favorite_border,
+                                                              size: 30,
+                                                              color: snapshot
+                                                                      .data!
+                                                                  ? Colors.red
+                                                                  : Colors
+                                                                      .white,
+                                                            );
+                                                          }),
                                                     ),
                                                     // const SizedBox(height: 7),
                                                     Text(

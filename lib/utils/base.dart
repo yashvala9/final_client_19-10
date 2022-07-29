@@ -33,6 +33,7 @@ class Base {
   static const reels = '$_url/reels/';
   static const addReel = '$_url/reels';
   static const getComment = '$_url/reels/comments/';
+  static const isLiked = '$_url/reels/isLiked/';
 
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';

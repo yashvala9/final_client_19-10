@@ -77,12 +77,29 @@ class ReelRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-
     final body = jsonDecode(response.body);
     print('2121 commentbody $body');
     if (response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => CommentModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<bool> isReelLikedByCurrentUser(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.isLiked}$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    final body = jsonDecode(response.body);
+    print('2121 commentbody $body');
+    if (response.statusCode == 201) {
+      return false;
     } else {
       return Future.error(body['message']);
     }

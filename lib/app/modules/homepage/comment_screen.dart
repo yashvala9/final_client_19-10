@@ -45,6 +45,10 @@ class CommentSheet extends StatelessWidget {
               printInfo(info: "getCommentByReelId: ${snapshot.hasError}");
               return Container();
             }
+            if (_controller.commentList.isNotEmpty) {
+              snapshot.data!.addAll(_controller.commentList);
+              _controller.commentList.clear();
+            }
             return Column(
               children: [
                 ListTile(
