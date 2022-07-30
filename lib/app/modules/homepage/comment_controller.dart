@@ -37,38 +37,32 @@ class CommentController extends GetxController {
   }
 
   void getCommentsByReelId(String reelId) async {
-    loading = true;
-    try {
-      commentList =
-          await _commentRepo.getCommentByReelId(reelId, profileId!, token!);
-      printInfo(info: "commentList: $commentList");
-    } catch (e) {
-      print("getCommentsByReelId: $e");
-    }
-    loading = false;
-    update();
+    // loading = true;
+    // try {
+    //   commentList =
+    //       await _commentRepo.getCommentByReelId(reelId, profileId!, token!);
+    //   printInfo(info: "commentList: $commentList");
+    // } catch (e) {
+    //   print("getCommentsByReelId: $e");
+    // }
+    // loading = false;
+    // update();
   }
 
   void toggleLike(int index) {
-    commentList[index].isLiked = !commentList[index].isLiked;
-    if (commentList[index].isLiked) {
-      commentList[index].likeCount++;
-    } else {
-      commentList[index].likeCount--;
-    }
-    _commentRepo.toggleCommentLike(commentList[index].id, profileId!, token!);
-    update();
+    // commentList[index].isLiked = !commentList[index].isLiked;
+    // if (commentList[index].isLiked) {
+    //   commentList[index].likeCount++;
+    // } else {
+    //   commentList[index].likeCount--;
+    // }
+    // _commentRepo.toggleCommentLike(commentList[index].id, profileId!, token!);
+    // update();
   }
 
   void addCommentLocally(Map<String, dynamic> data, String reelId) {
     var comment = CommentModel(
-        id: 0,
-        comment: data['comment'],
-        likeCount: 0,
-        responseCount: 0,
-        profile: profileId!,
-        isLiked: false,
-        reelId: reelId);
+        id: 0, comment: data['comment'], user: _authService.profileModel!);
     _commentList.add(comment);
     update();
   }
@@ -79,14 +73,13 @@ class CommentController extends GetxController {
       return;
     }
     var map = {
-      'userId': profileId,
-      'reelId': reelId,
       'comment': comment.trim(),
     };
     comment = "";
     addCommentLocally(map, reelId);
     try {
-      final message = await _commentRepo.addCommentToReelId(token!, map);
+      final message =
+          await _commentRepo.addCommentToReelId(reelId, token!, map);
       onDone();
       print("addCommentSuccess: $message");
     } catch (e) {

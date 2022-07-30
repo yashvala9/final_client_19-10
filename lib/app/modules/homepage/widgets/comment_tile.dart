@@ -18,60 +18,53 @@ class CommentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ProfileModel>(
-        future: _profileRepo.getProfileById(
-            commentModel.profile, _authService.token!),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Loading();
-          }
-          var profile = snapshot.data!;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    '@${profile.username}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    '1 day ago',
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    commentModel.comment,
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            likeToggle();
-                          },
-                          icon: const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )),
-                      Text(commentModel.likeCount.toString()),
-                    ],
-                  )
-                ],
-              ),
-              // InkWell(
-              //     onTap: () {},
-              //     child: const Text(
-              //       '2 Responses',
-              //       style: TextStyle(color: Colors.blue),
-              //     )),
-            ],
-          );
-        });
+    var profile = commentModel.user;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              '@${profile.username}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Text(
+              '1 day ago',
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              commentModel.comment,
+            ),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      likeToggle();
+                    },
+                    icon: const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )),
+                Text('#'),
+                // "commentModel.likeCount.toString()"),
+              ],
+            )
+          ],
+        ),
+        // InkWell(
+        //     onTap: () {},
+        //     child: const Text(
+        //       '2 Responses',
+        //       style: TextStyle(color: Colors.blue),
+        //     )),
+      ],
+    );
   }
 }

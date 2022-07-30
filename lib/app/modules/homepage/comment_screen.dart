@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 
+import '../../../models/comment_model.dart';
+import '../../../repositories/reel_repository.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import 'comment_controller.dart';
-
 
 class CommentSheet extends StatelessWidget {
   final String reelId;
@@ -20,6 +21,7 @@ class CommentSheet extends StatelessWidget {
     );
   }
 
+  final _reelRepo = Get.put(ReelRepository());
   final _formKey = GlobalKey<FormState>();
   final _commentTextController = TextEditingController();
   final _scrollController = ScrollController();
@@ -32,15 +34,25 @@ class CommentSheet extends StatelessWidget {
     });
     // _controller.customeInit();
     return GetBuilder<CommentController>(
-      builder: (_) => _controller.loading
-          ? const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Loading(),
-            )
-          : Column(
+      builder: (_) => FutureBuilder<List<CommentModel>>(
+          future: _reelRepo.getCommentByReelId(
+              int.parse(reelId), _controller.token!),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Loading();
+            }
+            if (snapshot.hasError) {
+              printInfo(info: "getCommentByReelId: ${snapshot.hasError}");
+              return Container();
+            }
+            if (_controller.commentList.isNotEmpty) {
+              snapshot.data!.addAll(_controller.commentList);
+              _controller.commentList.clear();
+            }
+            return Column(
               children: [
                 ListTile(
-                  leading: Text('${_controller.commentList.length} Comments',
+                  leading: Text('${snapshot.data!.length} Comments',
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   trailing: IconButton(
                       icon: const Icon(Icons.close),
@@ -55,15 +67,15 @@ class CommentSheet extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (_controller.commentList.isEmpty)
+                        if (snapshot.data!.isEmpty)
                           const EmptyWidget("No comments available!")
                         else
                           ...List.generate(
-                            _controller.commentList.length,
+                            snapshot.data!.length,
                             (index) => ListTile(
                               leading: buildProfile(""),
                               title: CommentWidget(
-                                commentModel: _controller.commentList[index],
+                                commentModel: snapshot.data![index],
                                 likeToggle: () {
                                   _controller.toggleLike(index);
                                 },
@@ -116,7 +128,8 @@ class CommentSheet extends StatelessWidget {
                   ],
                 ),
               ],
-            ),
+            );
+          }),
     );
   }
 }

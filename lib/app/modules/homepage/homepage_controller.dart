@@ -5,7 +5,6 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-import '../../../models/comment.dart';
 import '../../../models/reel_model.dart';
 
 class HomePageController extends GetxController {
@@ -36,17 +35,17 @@ class HomePageController extends GetxController {
     update();
   }
 
-  final Rx<List<Comment>> _comments = Rx<List<Comment>>([
-    Comment(
-        username: "yashvala9",
-        comment: "comment",
-        datePublished: "datePublished",
-        likes: [],
-        profilePhoto: "profilePhoto",
-        uid: "1",
-        id: "1")
+  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
+    // CommentModel(
+    //     username: "yashvala9",
+    //     comment: "comment",
+    //     datePublished: "datePublished",
+    //     likes: [],
+    //     profilePhoto: "profilePhoto",
+    //     uid: "1",
+    //     id: "1")
   ]);
-  List<Comment> get comments => _comments.value;
+  List<CommentModel> get comments => _comments.value;
 
   @override
   void onInit() {

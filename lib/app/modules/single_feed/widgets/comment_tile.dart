@@ -17,7 +17,7 @@ class CommentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<ProfileModel>(
         future: _profileRepo.getProfileById(
-            commentModel.profile, _authService.token!),
+            commentModel.user.id, _authService.token!),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Loading();
@@ -54,7 +54,7 @@ class CommentWidget extends StatelessWidget {
                             Icons.favorite,
                             color: Colors.red,
                           )),
-                      Text(commentModel.likeCount.toString()),
+                      Text('commentModel.likeCount.toString()'),
                     ],
                   )
                 ],

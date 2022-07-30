@@ -8,9 +8,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_screen.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
+import 'package:reel_ro/models/comment_model.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../repositories/reel_repository.dart';
 import '../../../utils/circle_animation.dart';
+import '../../../utils/colors.dart';
 import '../../../utils/video_player_iten.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import 'comment_screen.dart';
@@ -18,6 +21,7 @@ import 'comment_screen.dart';
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
+  final _reelRepo = Get.put(ReelRepository());
   final _controller = Get.put(HomePageController());
 
   @override
@@ -245,18 +249,40 @@ class HomePageScreen extends StatelessWidget {
                                                     InkWell(
                                                       onTap: () {},
                                                       // _controller.likeVideo(data.id),
-                                                      child: Icon(
-                                                        true
-                                                            //data.isLiked
-                                                            ? Icons.favorite
-                                                            : Icons
-                                                                .favorite_border,
-                                                        size: 30,
-                                                        color: true
-                                                            //data.isLiked
-                                                            ? Colors.red
-                                                            : Colors.white,
-                                                      ),
+                                                      child: FutureBuilder<
+                                                              bool>(
+                                                          future: _reelRepo
+                                                              .isReelLikedByCurrentUser(
+                                                                  data.id,
+                                                                  _controller
+                                                                      .token!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return const Loading();
+                                                            }
+                                                            if (snapshot
+                                                                .hasError) {
+                                                              printInfo(
+                                                                  info:
+                                                                      "isReelLikedByCurrentUser: ${snapshot.hasError}");
+                                                              return Container();
+                                                            }
+                                                            return Icon(
+                                                              snapshot.data!
+                                                                  ? Icons
+                                                                      .favorite
+                                                                  : Icons
+                                                                      .favorite_border,
+                                                              size: 30,
+                                                              color: snapshot
+                                                                      .data!
+                                                                  ? Colors.red
+                                                                  : Colors
+                                                                      .white,
+                                                            );
+                                                          }),
                                                     ),
                                                     // const SizedBox(height: 7),
                                                     Text(
@@ -270,35 +296,60 @@ class HomePageScreen extends StatelessWidget {
                                                     )
                                                   ],
                                                 ),
-                                                Column(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Get.bottomSheet(
-                                                          CommentSheet(
-                                                            reelId: data.id
-                                                                .toString(),
+                                                //TODO need to replace it with comment count api
+                                                FutureBuilder<
+                                                        List<CommentModel>>(
+                                                    future: _reelRepo
+                                                        .getCommentByReelId(
+                                                            data.id,
+                                                            _controller.token!),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return const Loading();
+                                                      }
+                                                      if (snapshot.hasError) {
+                                                        printInfo(
+                                                            info:
+                                                                "getCommentByReelId: ${snapshot.hasError}");
+                                                        return Container();
+                                                      }
+                                                      return Column(
+                                                        children: [
+                                                          InkWell(
+                                                            onTap: () {
+                                                              Get.bottomSheet(
+                                                                CommentSheet(
+                                                                  reelId: data
+                                                                      .id
+                                                                      .toString(),
+                                                                ),
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .white,
+                                                              );
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.comment,
+                                                              size: 30,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
                                                           ),
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                        );
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.comment,
-                                                        size: 30,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '21'.toString(),
-                                                      style: style
-                                                          .headlineSmall!
-                                                          .copyWith(
-                                                        color: Colors.white,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                                          Text(
+                                                            snapshot
+                                                                .data!.length
+                                                                .toString(),
+                                                            style: style
+                                                                .headlineSmall!
+                                                                .copyWith(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      );
+                                                    }),
                                                 Column(
                                                   children: [
                                                     InkWell(

@@ -5,7 +5,6 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-import '../../../models/comment.dart';
 import '../../../models/reel_model.dart';
 
 class SingleFeedController extends GetxController {
@@ -29,17 +28,17 @@ class SingleFeedController extends GetxController {
     update();
   }
 
-  final Rx<List<Comment>> _comments = Rx<List<Comment>>([
-    Comment(
-        username: "yashvala9",
-        comment: "comment",
-        datePublished: "datePublished",
-        likes: [],
-        profilePhoto: "profilePhoto",
-        uid: "1",
-        id: "1")
+  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
+    // Comment(
+    //     username: "yashvala9",
+    //     comment: "comment",
+    //     datePublished: "datePublished",
+    //     likes: [],
+    //     profilePhoto: "profilePhoto",
+    //     uid: "1",
+    //     id: "1")
   ]);
-  List<Comment> get comments => _comments.value;
+  List<CommentModel> get comments => _comments.value;
 
   @override
   void onInit() {
@@ -120,15 +119,15 @@ class CommentController extends GetxController {
   }
 
   void addCommentLocally(Map<String, dynamic> data) {
-    var comment = CommentModel(
-        id: 0,
-        comment: data['comment'],
-        likeCount: 0,
-        responseCount: 0,
-        profile: profileId!,
-        isLiked: false,
-        reelId: reelId);
-    _commentList.add(comment);
+    // var comment = CommentModel(
+    //     id: 0,
+    //     comment: data['comment'],
+    //     likeCount: 0,
+    //     responseCount: 0,
+    //     profile: profileId!,
+    //     isLiked: false,
+    //     reelId: reelId);
+    // _commentList.add(comment);
     update();
   }
 
@@ -144,8 +143,8 @@ class CommentController extends GetxController {
     };
     addCommentLocally(map);
     try {
-      final message = await _commentRepo.addCommentToReelId(token!, map);
-      print("addCommentSuccess: $message");
+      // // final message = await _commentRepo.addCommentToReelId(token!, map);
+      // print("addCommentSuccess: $message");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("addComment: $e");
