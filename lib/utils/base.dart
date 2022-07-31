@@ -11,7 +11,7 @@ class Base {
   static const getProfilebyId = '$_url/user-profiles';
   static const getReelsbyId = '$_url/getReelsByUserId';
   // static const createProfile = '$_url/user-profiles';
-  static const searchUser = '$_url/searchByUserName';
+  static const searchUser = '$_url/search';
 
   //Forget password
   static const generateForgetPasswordToken =
@@ -26,30 +26,37 @@ class Base {
   static const updateProfile = '$_url/users/profile/update';
 
   //Reels
-  static const getReelsByUserId = '$_url/getReelsByUserId';
+  static const getReelsByUserId = '$_url/reels/user';
   static const getFeedsByUserId = '$_url/getFeed';
   static const getPhotosByUserId = '$_url/getPhotosByUserId';
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
   static const addReel = '$_url/reels';
 
+  //Following Followers
+  static const getFollowing = '$_url/users';
+  static const isFollowing = '$_url/users/follow';
+  static const toggleFollow = '$_url/users/follow';
+
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';
 
   //Profile Bucket base url
-  static const profileBucketUrl = 'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
+  static const profileBucketUrl =
+      'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
 
   //Like
-  static const toggleLike = '$_url/toggleLike';
-  static const getLikeFlag = '$_url/getLikeFlag';
+  static const toggleLike = '$_url/reels/likes';
+  static const getLikeFlag = '$_url/reels/isLiked';
+  static const getLikeCount = '$_url/count/likes/reels';
 
   //Comment
-  static const getCommentByReelId = '$_url/getCommentsByReelId';
-  static const addCommentToReelId = '$_url/addComment';
-  static const toggleCommentLike = '$_url/toggleCommentLike';
 
-  //Follow UnFollow
-  static const toggleFollow = '${_url}/sendFollowRequest';
+  static const getCommentCount = '$_url/count/comments';
+  static const getCommentByReelId = '$_url/reels/comments';
+  static const addCommentToReelId = '$_url/reels/comments';
+  static const toggleCommentLike = '$_url/reels/likes/comments';
+
 
   //Giveaway
   static const giveaway = '$_url/contests/';

@@ -6,9 +6,8 @@ import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import 'comment_controller.dart';
 
-
 class CommentSheet extends StatelessWidget {
-  final String reelId;
+  final int reelId;
   CommentSheet({Key? key, required this.reelId}) : super(key: key);
 
   buildProfile(String profilePhoto) {
@@ -27,7 +26,7 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.getCommentsByReelId(reelId);
     });
     // _controller.customeInit();
@@ -67,6 +66,8 @@ class CommentSheet extends StatelessWidget {
                                 likeToggle: () {
                                   _controller.toggleLike(index);
                                 },
+                                profileModel:
+                                    _controller.commentList[index].user,
                               ),
                             ),
                           ).toList(),
@@ -105,12 +106,12 @@ class CommentSheet extends StatelessWidget {
                             _controller.addComment(reelId, () {
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
-                                  duration: Duration(milliseconds: 500),
+                                  duration: const Duration(milliseconds: 500),
                                   curve: Curves.fastOutSlowIn);
                             });
                           }
                         },
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                       ),
                     ),
                   ],

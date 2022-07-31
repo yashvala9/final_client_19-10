@@ -128,7 +128,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
           enableSkips: false,
           enableSubtitles: false,
           enableRetry: true,
-          enablePlayPause: true,
+          enablePlayPause: false,
           controlBarColor: Colors.black.withOpacity(0.2),
           playIcon: Icons.play_arrow_outlined,
           pauseIcon: Icons.pause_circle_outline,

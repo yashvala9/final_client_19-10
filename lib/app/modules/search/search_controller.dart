@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -32,8 +33,7 @@ class SearchController extends GetxController {
   }
 
   List<ProfileModel> _searchProfiles = [];
-  List<ProfileModel> get searchProfiles =>
-      _searchProfiles.where((element) => element.id != profileId).toList();
+  List<ProfileModel> get searchProfiles => _searchProfiles;
   set searchProfiles(List<ProfileModel> searchProfiles) {
     _searchProfiles = searchProfiles;
     update();
@@ -49,8 +49,8 @@ class SearchController extends GetxController {
     print("username: $username");
     loading = true;
     try {
-      searchProfiles =
-          await _profileRepo.getProfileByUserName(username, profileId!, token!);
+      searchProfiles = await _profileRepo.searchByUserName(username, token!);
+      log("searchResult: $searchProfiles");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("searchUser: $e");
@@ -59,15 +59,19 @@ class SearchController extends GetxController {
   }
 
   void toggleFollowing(int index) async {
-    searchProfiles[index].isFollowing = !searchProfiles[index].isFollowing!;
-    if (searchProfiles[index].isFollowing!) {
-      searchProfiles[index].followerCount++;
-      _profileControllere.profileModel.followingCount++;
-    } else {
-      searchProfiles[index].followerCount--;
-      _profileControllere.profileModel.followingCount--;
+    // searchProfiles[index].isFollowing = !searchProfiles[index].isFollowing!;
+    // if (searchProfiles[index].isFollowing!) {
+    //   searchProfiles[index].followerCount++;
+    //   _profileControllere.profileModel.followingCount++;
+    // } else {
+    //   searchProfiles[index].followerCount--;
+    //   _profileControllere.profileModel.followingCount--;
+    // }
+    try {
+      _profileRepo.toggleFollow(searchProfiles[index].id, token!);
+      update();
+    } catch (e) {
+      log("toggleFollowingError: $e");
     }
-    _profileRepo.toggleFollow(searchProfiles[index].id, profileId!, token!);
-    update();
   }
 }

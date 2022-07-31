@@ -129,6 +129,7 @@ class ProfileScreen extends StatelessWidget {
                                                   )),
                                                   Expanded(
                                                       child: ListTile(
+                                                    onTap: () {},
                                                     title: Text(
                                                         _controller.profileModel
                                                             .followingCount
@@ -372,51 +373,51 @@ class ProfileReel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     printInfo(info: "ProfileId: ${_controller.profileId}");
-    return Container();
-    // FutureBuilder<List<ReelModel>>(
-    //     future: profileId != null
-    //         ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
-    //         : _profileRepo.getReelByProfileId(
-    //             _controller.profileId!, _controller.token!),
-    //     builder: (context, snapshot) {
-    //       if (!snapshot.hasData) {
-    //         return Center(
-    //           child: CircularProgressIndicator(),
-    //         );
-    //       }
-    //       if (snapshot.hasError) {
-    //         printInfo(info: "profileReels: ${snapshot.error}");
-    //       }
-    //       var reels = snapshot.data!;
-    //       printInfo(info: "Reels: $reels");
-    //       if (reels.isEmpty) {
-    //         return Center(
-    //           child: Text("No reels available"),
-    //         );
-    //       }
-    //       return GridView.builder(
-    //         shrinkWrap: true,
-    //         physics: const NeverScrollableScrollPhysics(),
-    //         itemCount: reels.length,
-    //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    //           crossAxisCount: 3,
-    //           childAspectRatio: 1,
-    //           crossAxisSpacing: 5,
-    //           mainAxisSpacing: 5,
-    //         ),
-    //         itemBuilder: (context, index) {
-    //           return GestureDetector(
-    //             onTap: () {
-    //               Get.to(SingleFeedScreen(reels[index], null));
-    //             },
-    //             child: CachedNetworkImage(
-    //               imageUrl:
-    //                   "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-    //               fit: BoxFit.cover,
-    //             ),
-    //           );
-    //         },
-    //       );
-    //     });
+
+    return FutureBuilder<List<ReelModel>>(
+        future: profileId != null
+            ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
+            : _profileRepo.getReelByProfileId(
+                _controller.profileId!, _controller.token!),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            printInfo(info: "profileReels: ${snapshot.error}");
+          }
+          var reels = snapshot.data!;
+          printInfo(info: "Reels: $reels");
+          if (reels.isEmpty) {
+            return Center(
+              child: Text("No reels available"),
+            );
+          }
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: reels.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1,
+              crossAxisSpacing: 5,
+              mainAxisSpacing: 5,
+            ),
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Get.to(SingleFeedScreen(reels[index], null));
+                },
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                  fit: BoxFit.cover,
+                ),
+              );
+            },
+          );
+        });
   }
 }

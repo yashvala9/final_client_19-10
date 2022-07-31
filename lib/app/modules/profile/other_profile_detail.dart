@@ -1,35 +1,47 @@
+import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/search/profile_detail_controller.dart';
+import 'package:reel_ro/app/modules/auth/auth_controller.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
-
-import '../../../models/photo_model.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
-import '../../../utils/empty_widget.dart';
-import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
-import '../profile/profile_screen.dart';
 import '../single_feed/single_feed_screen.dart';
 
-class ProfileDetail extends StatelessWidget {
-  final int index;
-  ProfileDetail({Key? key, required this.index}) : super(key: key);
-  final _controller = Get.find<SearchController>();
+class OtherProfileDetail extends StatefulWidget {
+  final ProfileModel profileModel;
+  const OtherProfileDetail({Key? key, required this.profileModel})
+      : super(key: key);
+
+  @override
+  State<OtherProfileDetail> createState() => _OtherProfileDetailState();
+}
+
+class _OtherProfileDetailState extends State<OtherProfileDetail> {
   final _profileRepo = Get.put(ProfileRepository());
+
+  final _authService = Get.put(AuthService());
+
+  void toggleFollowing(int profileId, String token) async {
+    try {
+      _profileRepo.toggleFollow(profileId, token);
+      setState(() {});
+    } catch (e) {
+      log("toggleFollowingError: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return DefaultTabController(
-      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 3 : 2,
+      length: widget.profileModel.status == 'VERIFIED' ? 3 : 2,
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -38,8 +50,7 @@ class ProfileDetail extends StatelessWidget {
             return [
               SliverList(
                 delegate: SliverChildListDelegate([
-                  GetBuilder<SearchController>(builder: (_) {
-                    var profileModel = _controller.searchProfiles[index];
+                  GetBuilder<AuthController>(builder: (_) {
                     return Stack(
                       children: [
                         Container(
@@ -69,7 +80,8 @@ class ProfileDetail extends StatelessWidget {
                                         height: Get.height * 0.08,
                                       ),
                                       Text(
-                                        profileModel.user_profile!.fullname!,
+                                        widget.profileModel.user_profile!
+                                            .fullname!,
                                         style: style.headline5,
                                       ),
                                       SizedBox(
@@ -81,7 +93,7 @@ class ProfileDetail extends StatelessWidget {
                                             Expanded(
                                                 child: ListTile(
                                               title: Text(
-                                                  profileModel.noOfPosts
+                                                  widget.profileModel.noOfPosts
                                                       .toString(),
                                                   textAlign: TextAlign.center,
                                                   style: style.headline6),
@@ -94,7 +106,8 @@ class ProfileDetail extends StatelessWidget {
                                             Expanded(
                                                 child: ListTile(
                                               title: Text(
-                                                  profileModel.followerCount
+                                                  widget.profileModel
+                                                      .followerCount
                                                       .toString(),
                                                   textAlign: TextAlign.center,
                                                   style: style.headline6),
@@ -105,7 +118,8 @@ class ProfileDetail extends StatelessWidget {
                                             Expanded(
                                                 child: ListTile(
                                               title: Text(
-                                                  profileModel.followingCount
+                                                  widget.profileModel
+                                                      .followingCount
                                                       .toString(),
                                                   textAlign: TextAlign.center,
                                                   style: style.headline6),
@@ -118,8 +132,8 @@ class ProfileDetail extends StatelessWidget {
                                       ),
                                       FutureBuilder<bool>(
                                           future: _profileRepo.isFollowing(
-                                              profileModel.id,
-                                              _controller.token!),
+                                              widget.profileModel.id,
+                                              _authService.token!),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
                                               return Container();
@@ -133,9 +147,11 @@ class ProfileDetail extends StatelessWidget {
                                                     ),
                                                     child: OutlinedButton(
                                                       onPressed: () {
-                                                        _controller
-                                                            .toggleFollowing(
-                                                                index);
+                                                        toggleFollowing(
+                                                            widget.profileModel
+                                                                .id,
+                                                            _authService
+                                                                .token!);
                                                       },
                                                       style: OutlinedButton
                                                           .styleFrom(
@@ -165,9 +181,12 @@ class ProfileDetail extends StatelessWidget {
                                                               buttonText:
                                                                   "Follow",
                                                               onPressed: () {
-                                                                _controller
-                                                                    .toggleFollowing(
-                                                                        index);
+                                                                toggleFollowing(
+                                                                    widget
+                                                                        .profileModel
+                                                                        .id,
+                                                                    _authService
+                                                                        .token!);
                                                               },
                                                               height: 30,
                                                               style: style
@@ -272,7 +291,7 @@ class ProfileDetail extends StatelessWidget {
               )
             ];
           },
-          body: _tabSection(context, _controller.searchProfiles[index]),
+          body: _tabSection(context, widget.profileModel),
         ),
       ),
     );
@@ -284,9 +303,9 @@ class ProfileDetail extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TabBar(tabs: [
-          Tab(text: "Rolls"),
-          Tab(text: "Photos"),
-          if (profileModel.status == 'VERIFIED') Tab(text: "Giveaway"),
+          const Tab(text: "Rolls"),
+          const Tab(text: "Photos"),
+          if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
         const SizedBox(
           height: 8,
@@ -294,51 +313,9 @@ class ProfileDetail extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(profileId: profileModel.id),
-            FutureBuilder<List<PhotoModel>>(
-                future: _profileRepo.getPhotosByProfileId(
-                    profileModel.id, _controller.token!),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Loading();
-                  }
-                  if (snapshot.hasError) {
-                    printInfo(
-                        info: "getCurrentUserPhoto: ${snapshot.hasError}");
-                    return Container();
-                  }
-                  var photos = snapshot.data!;
-                  return photos.isEmpty
-                      ? EmptyWidget("No photos available")
-                      : GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: photos.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 5,
-                          ),
-                          itemBuilder: (context, index) {
-                            String thumbnail = photos[index].videoId.url;
-                            printInfo(
-                                info: "ProfileId: ${_controller.profileId}");
-                            printInfo(info: "tumbnail: $thumbnail");
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(SingleFeedScreen(null, photos[index]));
-                              },
-                              child: CachedNetworkImage(
-                                imageUrl: thumbnail,
-                                fit: BoxFit.cover,
-                                errorWidget: (c, s, e) => Icon(Icons.error),
-                              ),
-                            );
-                          },
-                        );
-                }),
+            Container(),
             if (profileModel.status == 'VERIFIED')
-              Center(child: Text("Giveaway")),
+              const Center(child: Text("Giveaway")),
           ]),
         ),
       ],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
@@ -73,7 +75,7 @@ class HomePageController extends GetxController {
   }
 
   void likeToggle(int index) async {
-    // print("Index: $index");
+    print("Toggle Like working"); // print("Index: $index");
     // if (reelList[index].isLiked) {
     //   reelList[index].likeCount--;
     // } else {
@@ -83,6 +85,14 @@ class HomePageController extends GetxController {
     // reelList[index].isLiked = !reelList[index].isLiked;
     // _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
     // update();
+    toggleLikeShow();
+    try {
+      _reelRepo.toggleLike(reelList[index].id, token!);
+      // if(_reelRepo.getLikeFlag(reelList[index], token))
+    } catch (e) {
+      log("TogglelikeError: $e");
+    }
+    update();
   }
 
   void signOut() {

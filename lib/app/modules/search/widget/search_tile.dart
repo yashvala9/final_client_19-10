@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
+
+import '../../../../utils/base.dart';
 
 class SearchTile extends StatelessWidget {
   final int index;
   SearchTile({Key? key, required this.index}) : super(key: key);
 
   final _controller = Get.find<SearchController>();
+  final _profileRepo = Get.put(ProfileRepository());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -25,8 +29,10 @@ class SearchTile extends StatelessWidget {
         leading: CircleAvatar(
           radius: 25,
           backgroundColor: colorSchem.primary,
-          backgroundImage: const NetworkImage(
-            "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+          backgroundImage: NetworkImage(
+            profileModel.user_profile != null
+                ? "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"
+                : "",
           ),
         ),
         title: Text(
@@ -46,9 +52,19 @@ class SearchTile extends StatelessWidget {
             onPressed: () {
               _controller.toggleFollowing(index);
             },
-            child: Text(
-              profileModel.isFollowing! ? "Following" : "Follow",
-              style: style.caption,
+            child: FutureBuilder<bool>(
+              future:
+                  _profileRepo.isFollowing(profileModel.id, _controller.token!),
+              builder: (context, snap) {
+                return Text(
+                  snap.hasData
+                      ? snap.data!
+                          ? "Following"
+                          : "Follow"
+                      : "",
+                  style: style.caption,
+                );
+              },
             ),
           ),
         ),

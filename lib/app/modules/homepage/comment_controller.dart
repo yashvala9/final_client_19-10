@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/models/profile_model.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/comment_repository.dart';
@@ -14,6 +15,7 @@ class CommentController extends GetxController {
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
+  ProfileModel get profileModel => _authService.profileModel!;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -36,11 +38,10 @@ class CommentController extends GetxController {
     comment = "";
   }
 
-  void getCommentsByReelId(String reelId) async {
+  void getCommentsByReelId(int reelId) async {
     loading = true;
     try {
-      commentList =
-          await _commentRepo.getCommentByReelId(reelId, profileId!, token!);
+      commentList = await _commentRepo.getCommentByReelId(reelId, token!);
       printInfo(info: "commentList: $commentList");
     } catch (e) {
       print("getCommentsByReelId: $e");
@@ -60,20 +61,21 @@ class CommentController extends GetxController {
     update();
   }
 
-  void addCommentLocally(Map<String, dynamic> data, String reelId) {
+  void addCommentLocally(Map<String, dynamic> data, int reelId) {
     var comment = CommentModel(
-        id: 0,
-        comment: data['comment'],
-        likeCount: 0,
-        responseCount: 0,
-        profile: profileId!,
-        isLiked: false,
-        reelId: reelId);
+      id: 0,
+      comment: data['comment'],
+      likeCount: 0,
+      responseCount: 0,
+      user: profileModel,
+      isLiked: false,
+      reelId: reelId.toString(),
+    );
     _commentList.add(comment);
     update();
   }
 
-  void addComment(String reelId, VoidCallback onDone) async {
+  void addComment(int reelId, VoidCallback onDone) async {
     if (comment.isEmpty) {
       showSnackBar("Please add comment", color: Colors.red);
       return;
@@ -86,7 +88,8 @@ class CommentController extends GetxController {
     comment = "";
     addCommentLocally(map, reelId);
     try {
-      final message = await _commentRepo.addCommentToReelId(token!, map);
+      final message =
+          await _commentRepo.addCommentToReelId(token!, map, reelId);
       onDone();
       print("addCommentSuccess: $message");
     } catch (e) {

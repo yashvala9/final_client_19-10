@@ -8,8 +8,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_screen.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
+import 'package:reel_ro/app/modules/profile/other_profile_detail.dart';
+import 'package:reel_ro/repositories/comment_repository.dart';
+import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
@@ -19,6 +23,8 @@ class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
   final _controller = Get.put(HomePageController());
+  final _reelRepo = Get.put(ReelRepository());
+  final _commentRepo = Get.put(CommentRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -52,52 +58,14 @@ class HomePageScreen extends StatelessWidget {
                       Icons.add_box_outlined,
                     ),
                     onPressed: () async {
-                      final val = await showDialog(
-                        context: context,
-                        builder: (_) => Dialog(
-                            child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              onTap: () {
-                                Navigator.pop(context, true);
-                              },
-                              leading: Icon(Icons.video_call),
-                              title: Text("Video"),
-                            ),
-                            ListTile(
-                              onTap: () {
-                                Navigator.pop(context, false);
-                              },
-                              leading: Icon(Icons.photo),
-                              title: Text("Photo"),
-                            ),
-                          ],
-                        )),
-                      );
-                      if (val != null) {
-                        if (val) {
-                          var video = await ImagePicker()
-                              .pickVideo(source: ImageSource.gallery);
-                          if (video != null) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return VideoTrimmerView(File(video.path));
-                              }),
-                            );
-                          }
-                        } else {
-                          var photo = await ImagePicker()
-                              .pickImage(source: ImageSource.gallery);
-                          if (photo != null) {
-                            Get.to(
-                              () => AddFeedScreen(
-                                file: File(photo.path),
-                                type: 1,
-                              ),
-                            );
-                          }
-                        }
+                      var video = await ImagePicker()
+                          .pickVideo(source: ImageSource.gallery);
+                      if (video != null) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return VideoTrimmerView(File(video.path));
+                          }),
+                        );
                       }
                     },
                   ),
@@ -117,14 +85,23 @@ class HomePageScreen extends StatelessWidget {
                             printInfo(info: "Data: ${data.toJson()}");
                             return Stack(
                               children: [
+                                // VideoPlayerItem(
+                                //   videoUrl:
+                                //       "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/8/20220727/uuidd/reel_8_20220727_uuidd_file4.mp4/HLS/reel_8_20220727_uuidd_file4_360.m3u",
+                                //   doubleTap: () {
+                                //     _controller.likeToggle(index);
+                                //   },
+                                //   showLike: _controller.showLike,
+                                // ),
                                 VideoPlayerWidget(
                                   url:
-                                      "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/1/20220723/98989/reel_1_20220723_98989_file1.mp4/MP4/reel_1_20220723_98989_file1.mp4",
+                                      "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/8/20220727/uuidd/reel_8_20220727_uuidd_file4.mp4/HLS/reel_8_20220727_uuidd_file4_360.m3u",
                                   doubleTap: () {
                                     _controller.likeToggle(index);
                                   },
                                   showLike: _controller.showLike,
                                 ),
+
                                 // data.type
                                 //     ?
                                 //  VideoPlayerItem(
@@ -165,11 +142,21 @@ class HomePageScreen extends StatelessWidget {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Text(
-                                                    "@${data.user.username}",
-                                                    style: style.titleLarge!
-                                                        .copyWith(
-                                                      color: Colors.white,
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Get.to(
+                                                        () =>
+                                                            OtherProfileDetail(
+                                                                profileModel:
+                                                                    data.user),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      "@${data.user.username}",
+                                                      style: style.titleLarge!
+                                                          .copyWith(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                   Text(
@@ -243,31 +230,61 @@ class HomePageScreen extends StatelessWidget {
                                                 Column(
                                                   children: [
                                                     InkWell(
-                                                      onTap: () {},
-                                                      // _controller.likeVideo(data.id),
-                                                      child: Icon(
-                                                        true
-                                                            //data.isLiked
-                                                            ? Icons.favorite
-                                                            : Icons
-                                                                .favorite_border,
-                                                        size: 30,
-                                                        color: true
-                                                            //data.isLiked
-                                                            ? Colors.red
-                                                            : Colors.white,
-                                                      ),
-                                                    ),
+                                                        onTap: () {},
+                                                        // _controller.likeVideo(data.id),
+                                                        child: FutureBuilder<
+                                                                bool>(
+                                                            future: _reelRepo
+                                                                .getLikeFlag(
+                                                                    data.id,
+                                                                    _controller
+                                                                        .token!),
+                                                            builder: (context,
+                                                                snap) {
+                                                              return Icon(
+                                                                snap.hasData
+                                                                    ? snap.data!
+                                                                        ? Icons
+                                                                            .favorite
+                                                                        : Icons
+                                                                            .favorite_border
+                                                                    : Icons
+                                                                        .favorite_border,
+                                                                size: 30,
+                                                                color: snap
+                                                                        .hasData
+                                                                    ? snap.data!
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .white
+                                                                    : Colors
+                                                                        .white,
+                                                              );
+                                                            })),
                                                     // const SizedBox(height: 7),
-                                                    Text(
-                                                      '20',
-                                                      // data.likeCount.toString(),
-                                                      style: style
-                                                          .headlineSmall!
-                                                          .copyWith(
-                                                        color: Colors.white,
-                                                      ),
-                                                    )
+                                                    FutureBuilder<int>(
+                                                        future: _reelRepo
+                                                            .getLikeCountByReelId(
+                                                                data.id,
+                                                                _controller
+                                                                    .token!),
+                                                        builder:
+                                                            (context, snap) {
+                                                          return Text(
+                                                            snap.hasData
+                                                                ? snap.data!
+                                                                    .toString()
+                                                                : '0',
+                                                            // data.likeCount.toString(),
+                                                            style: style
+                                                                .headlineSmall!
+                                                                .copyWith(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          );
+                                                        }),
                                                   ],
                                                 ),
                                                 Column(
@@ -276,8 +293,7 @@ class HomePageScreen extends StatelessWidget {
                                                       onTap: () {
                                                         Get.bottomSheet(
                                                           CommentSheet(
-                                                            reelId: data.id
-                                                                .toString(),
+                                                            reelId: data.id,
                                                           ),
                                                           backgroundColor:
                                                               Colors.white,
@@ -289,14 +305,29 @@ class HomePageScreen extends StatelessWidget {
                                                         color: Colors.white,
                                                       ),
                                                     ),
-                                                    Text(
-                                                      '21'.toString(),
-                                                      style: style
-                                                          .headlineSmall!
-                                                          .copyWith(
-                                                        color: Colors.white,
-                                                      ),
-                                                    )
+                                                    FutureBuilder<int>(
+                                                        future: _commentRepo
+                                                            .getCommentCountByReelId(
+                                                                data.id,
+                                                                _controller
+                                                                    .token!),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          print(
+                                                              "ReelId: ${data.id} CommentCount: ${snapshot.data}");
+                                                          return Text(
+                                                            snapshot.hasData
+                                                                ? snapshot.data!
+                                                                    .toString()
+                                                                : "0",
+                                                            style: style
+                                                                .headlineSmall!
+                                                                .copyWith(
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          );
+                                                        })
                                                   ],
                                                 ),
                                                 Column(
@@ -321,7 +352,7 @@ class HomePageScreen extends StatelessWidget {
                                                 ),
                                                 CircleAnimation(
                                                   child: buildMusicAlbum(
-                                                      "https://firebasestorage.googleapis.com/v0/b/cucumia-369c1.appspot.com/o/images%2FMagazines%2F2022-06-17%2015%3A03%3A33.892_2022-06-17%2015%3A03%3A33.893.jpg?alt=media&token=75624798-52a6-4735-a422-092955a6aa3a"),
+                                                      "${Base.profileBucketUrl}/${data.user.user_profile}"),
                                                 ),
                                               ],
                                             ),

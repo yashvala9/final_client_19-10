@@ -63,12 +63,11 @@ class ProfileRepository {
     }
   }
 
-  Future<List<ProfileModel>> getProfileByUserName(
-      String userName, int profileId, String token) async {
+  Future<List<ProfileModel>> searchByUserName(
+      String userName, String token) async {
     print('username:' + userName);
     final response = await http.get(
-      Uri.parse(
-          "${Base.searchUser}/?username=$userName&currentUserId=$profileId"),
+      Uri.parse("${Base.searchUser}/$userName"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -76,11 +75,11 @@ class ProfileRepository {
     );
     print(response.body);
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => ProfileModel.fromMap(e)).toList();
     } else {
-      return Future.error(body['error']['message']);
+      return Future.error(body['detail']);
     }
   }
 
@@ -172,9 +171,8 @@ class ProfileRepository {
 
   Future<List<ReelModel>> getReelByProfileId(
       int profileId, String token) async {
-    List<ReelModel> reels = [];
     final response = await http.get(
-      Uri.parse("${Base.getReelsByUserId}?currentUserId=$profileId"),
+      Uri.parse("${Base.getReelsByUserId}/$profileId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -183,14 +181,53 @@ class ProfileRepository {
 
     final body = jsonDecode(response.body);
     print('listRolls $body');
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
-
       return list.map((e) => ReelModel.fromMap(e)).toList();
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
+
+  Future<bool> isFollowing(int profileId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.isFollowing}/$profileId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    final body = jsonDecode(response.body);
+    print('listRolls $body');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['is_following'];
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  // Future<List<ReelModel>> getReelByProfileId(
+  //     int profileId, String token) async {
+  //   List<ReelModel> reels = [];
+  //   final response = await http.get(
+  //     Uri.parse("${Base.getReelsByUserId}?currentUserId=$profileId"),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //       HttpHeaders.authorizationHeader: "Bearer $token",
+  //     },
+  //   );
+
+  //   final body = jsonDecode(response.body);
+  //   print('listRolls $body');
+  //   if (response.statusCode == 200) {
+  //     final Iterable list = body;
+
+  //     return list.map((e) => ReelModel.fromMap(e)).toList();
+  //   } else {
+  //     return Future.error(body['message']);
+  //   }
+  // }
 
   Future<List<PhotoModel>> getPhotosByProfileId(
       int profileId, String token) async {
@@ -215,25 +252,26 @@ class ProfileRepository {
     }
   }
 
-  Future<void> toggleFollow(
-      int followingProfileId, int profileId, String token) async {
+  Future<void> toggleFollow(int followingProfileId, String token) async {
     printInfo(info: "FolloingProfileId: $followingProfileId");
-    printInfo(info: "Profile Id $profileId");
+
     final response = await http.post(
-      Uri.parse(
-          "${Base.toggleFollow}?currentUserId=$profileId&followingUserId=$followingProfileId"),
+      Uri.parse(Base.toggleFollow),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
+      body: jsonEncode({
+        'user_id': followingProfileId,
+      }),
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      printInfo(info: "${body['message']}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      printInfo(info: "$body");
       return;
     } else {
-      printInfo(info: "toggleFollowError: ${body['message']}");
-      return Future.error(body['message']);
+      printInfo(info: "toggleFollowError: ${body['detail']}");
+      return Future.error(body['detail']);
     }
   }
 }

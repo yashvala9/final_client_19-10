@@ -9,8 +9,12 @@ import 'package:reel_ro/widgets/loading.dart';
 class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
   final VoidCallback likeToggle;
+  final ProfileModel profileModel;
   CommentWidget(
-      {Key? key, required this.commentModel, required this.likeToggle})
+      {Key? key,
+      required this.commentModel,
+      required this.likeToggle,
+      required this.profileModel})
       : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
@@ -18,60 +22,54 @@ class CommentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ProfileModel>(
-        future: _profileRepo.getProfileById(
-            commentModel.profile, _authService.token!),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Loading();
-          }
-          var profile = snapshot.data!;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Text(
-                    '@${profile.username}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    '1 day ago',
-                  ),
-                ],
+              Text(
+                '@${profileModel.username}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    commentModel.comment,
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            likeToggle();
-                          },
-                          icon: const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )),
-                      Text(commentModel.likeCount.toString()),
-                    ],
-                  )
-                ],
+              const SizedBox(
+                width: 10,
               ),
-              // InkWell(
-              //     onTap: () {},
-              //     child: const Text(
-              //       '2 Responses',
-              //       style: TextStyle(color: Colors.blue),
-              //     )),
+              const Text(
+                '1 day ago',
+              ),
             ],
-          );
-        });
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                commentModel.comment,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        likeToggle();
+                      },
+                      icon: const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      )),
+                  Text(commentModel.likeCount.toString()),
+                ],
+              )
+            ],
+          ),
+          InkWell(
+              onTap: () {},
+              child: Text(
+                '${commentModel.responseCount} Responses',
+                style: const TextStyle(color: Colors.blue),
+              )),
+        ],
+      ),
+    );
   }
 }

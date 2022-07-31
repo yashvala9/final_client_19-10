@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:reel_ro/models/profile_model.dart';
+
 class CommentModel {
   int id;
   String comment;
   int likeCount;
   int responseCount;
-  int profile;
+  ProfileModel user;
   String reelId;
   bool isLiked;
   CommentModel({
@@ -13,9 +15,9 @@ class CommentModel {
     required this.comment,
     required this.likeCount,
     required this.responseCount,
-    required this.profile,
+    required this.user,
     required this.reelId,
-   required this.isLiked ,
+    required this.isLiked,
   });
 
   CommentModel copyWith({
@@ -23,7 +25,7 @@ class CommentModel {
     String? comment,
     int? likeCount,
     int? responseCount,
-    int? profile,
+    ProfileModel? user,
     String? reelId,
     bool? isLiked,
   }) {
@@ -32,66 +34,69 @@ class CommentModel {
       comment: comment ?? this.comment,
       likeCount: likeCount ?? this.likeCount,
       responseCount: responseCount ?? this.responseCount,
-      profile: profile ?? this.profile,
+      user: user ?? this.user,
       reelId: reelId ?? this.reelId,
       isLiked: isLiked ?? this.isLiked,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'comment': comment,
-      'likeCount': likeCount,
-      'responseCount': responseCount,
-      'profile': profile,
-      'reelId': reelId,
-      'isLiked': isLiked,
-    };
+    final result = <String, dynamic>{};
+  
+    result.addAll({'id': id});
+    result.addAll({'comment': comment});
+    result.addAll({'likeCount': likeCount});
+    result.addAll({'responseCount': responseCount});
+    result.addAll({'user': user.toMap()});
+    result.addAll({'reelId': reelId});
+    result.addAll({'isLiked': isLiked});
+  
+    return result;
   }
 
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
       id: map['id']?.toInt() ?? 0,
       comment: map['comment'] ?? '',
-      likeCount: map['likeCount']?.toInt() ?? 0,
-      responseCount: map['responseCount']?.toInt() ?? 0,
-      profile: map['profile']?.toInt() ?? 0,
-      reelId: map['reelId']?.toString() ?? '',
-      isLiked: map['isLiked'] ?? false,
+      likeCount: map['likes_count']?.toInt() ?? 0,
+      responseCount: map['response_count']?.toInt() ?? 0,
+      user: ProfileModel.fromMap(map['user']),
+      reelId: map['reelId'] ?? '',
+      isLiked: map['is_liked'] ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory CommentModel.fromJson(String source) =>
-      CommentModel.fromMap(json.decode(source));
+  factory CommentModel.fromJson(String source) => CommentModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'CommentModel(id: $id, comment: $comment, likeCount: $likeCount,isLiked $isLiked,responseCount: $responseCount, profile: $profile, reelId: $reelId)';
+    return 'CommentModel(id: $id, comment: $comment, likeCount: $likeCount, responseCount: $responseCount, user: $user, reelId: $reelId, isLiked: $isLiked)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is CommentModel &&
-        other.id == id &&
-        other.comment == comment &&
-        other.likeCount == likeCount &&
-        other.responseCount == responseCount &&
-        other.profile == profile &&
-        other.reelId == reelId;
+      other.id == id &&
+      other.comment == comment &&
+      other.likeCount == likeCount &&
+      other.responseCount == responseCount &&
+      other.user == user &&
+      other.reelId == reelId &&
+      other.isLiked == isLiked;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        comment.hashCode ^
-        likeCount.hashCode ^
-        responseCount.hashCode ^
-        profile.hashCode ^
-        reelId.hashCode;
+      comment.hashCode ^
+      likeCount.hashCode ^
+      responseCount.hashCode ^
+      user.hashCode ^
+      reelId.hashCode ^
+      isLiked.hashCode;
   }
 }

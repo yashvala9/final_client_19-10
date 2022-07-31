@@ -9,11 +9,10 @@ import '../utils/base.dart';
 
 class CommentRepository {
   Future<List<CommentModel>> getCommentByReelId(
-      String reelId, int profileId, String token) async {
+      int reelId, String token) async {
     printInfo(info: "getCommentByreelId: $reelId");
     final response = await http.get(
-      Uri.parse(
-          "${Base.getCommentByReelId}?reelId=$reelId&currentUserId=$profileId"),
+      Uri.parse("${Base.getCommentByReelId}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -21,18 +20,18 @@ class CommentRepository {
     );
     final body = jsonDecode(response.body);
     printInfo(info: "getCommentsByReelIdBody: $body");
-    if (response.statusCode == 200) {
-      final Iterable list = body['comments'];
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
       return list.map((e) => CommentModel.fromMap(e)).toList();
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 
   Future<String> addCommentToReelId(
-      String token, Map<String, dynamic> data) async {
+      String token, Map<String, dynamic> data, int reelId) async {
     final response = await http.post(
-      Uri.parse(Base.addCommentToReelId),
+      Uri.parse("${Base.addCommentToReelId}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -40,9 +39,26 @@ class CommentRepository {
       body: jsonEncode(data),
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return "";
     } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<int> getCommentCountByReelId(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getCommentCount}/$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['comment_count'] as int;
+    } else {
+      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
