@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:reel_ro/app/routes/app_page.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'firebase_options.dart';
 
@@ -11,7 +12,7 @@ late PackageInfo kPackageInfo;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await GetStorage.init();
+  await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -99,8 +100,7 @@ class MyApp extends StatelessWidget {
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: ButtonStyle(
             shape: MaterialStateProperty.all(const RoundedRectangleBorder(
-               borderRadius: BorderRadius.all(Radius.circular(12))
-            )),
+                borderRadius: BorderRadius.all(Radius.circular(12)))),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -125,6 +125,9 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.initial,
+      // initialBinding: BindingsBuilder(() {
+      //   Get.lazyPut(() => AuthService());
+      // }),
     );
   }
 }

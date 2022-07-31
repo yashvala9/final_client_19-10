@@ -85,22 +85,22 @@ class HomePageScreen extends StatelessWidget {
                             printInfo(info: "Data: ${data.toJson()}");
                             return Stack(
                               children: [
-                                // VideoPlayerItem(
-                                //   videoUrl:
+                                VideoPlayerItem(
+                                  videoUrl:
+                                      "https://d2qwvdd0y3hlmq.cloudfront.net/reel/1/20220723/98989/reel_1_20220723_98989_file1.mp4/MP4/reel_1_20220723_98989_file1.mp4",
+                                  doubleTap: () {
+                                    _controller.likeToggle(index);
+                                  },
+                                  showLike: _controller.showLike,
+                                ),
+                                // VideoPlayerWidget(
+                                //   url:
                                 //       "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/8/20220727/uuidd/reel_8_20220727_uuidd_file4.mp4/HLS/reel_8_20220727_uuidd_file4_360.m3u",
                                 //   doubleTap: () {
                                 //     _controller.likeToggle(index);
                                 //   },
                                 //   showLike: _controller.showLike,
                                 // ),
-                                VideoPlayerWidget(
-                                  url:
-                                      "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/8/20220727/uuidd/reel_8_20220727_uuidd_file4.mp4/HLS/reel_8_20220727_uuidd_file4_360.m3u",
-                                  doubleTap: () {
-                                    _controller.likeToggle(index);
-                                  },
-                                  showLike: _controller.showLike,
-                                ),
 
                                 // data.type
                                 //     ?

@@ -54,17 +54,18 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
               alignment: Alignment.center,
               children: [
                 InkWell(
-                    onDoubleTap: () {
-                      widget.doubleTap();
-                    },
-                    onTap: () {
-                      if (videoPlayerController.value.isPlaying) {
-                        videoPlayerController.pause();
-                      } else {
-                        videoPlayerController.play();
-                      }
-                    },
-                    child: VideoPlayer(videoPlayerController)),
+                  onDoubleTap: () {
+                    widget.doubleTap();
+                  },
+                  onTap: () {
+                    if (videoPlayerController.value.isPlaying) {
+                      videoPlayerController.pause();
+                    } else {
+                      videoPlayerController.play();
+                    }
+                  },
+                  child: VideoPlayer(videoPlayerController),
+                ),
                 widget.showLike
                     ? const Icon(
                         Icons.favorite,
