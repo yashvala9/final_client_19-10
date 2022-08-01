@@ -66,6 +66,27 @@ class CommentSheet extends StatelessWidget {
                                 likeToggle: () {
                                   _controller.toggleLike(index);
                                 },
+                                deleteCallBack: () {
+                                  Get.dialog(AlertDialog(
+                                    title: const Text(
+                                        "Are you sure you want to delete this comment?"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: const Text("NO")),
+                                      MaterialButton(
+                                        onPressed: () {
+                                          Get.back();
+                                          _controller.deleteComment(index);
+                                        },
+                                        child: const Text("YES"),
+                                        color: Colors.red,
+                                      ),
+                                    ],
+                                  ));
+                                },
                                 profileModel:
                                     _controller.commentList[index].user,
                               ),

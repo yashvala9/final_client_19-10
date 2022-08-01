@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -57,8 +58,17 @@ class CommentController extends GetxController {
     } else {
       commentList[index].likeCount--;
     }
-    _commentRepo.toggleCommentLike(commentList[index].id, profileId!, token!);
+    _commentRepo.toggleCommentLike(commentList[index].id, token!);
     update();
+  }
+
+  void deleteComment(int index) async {
+    try {
+      await _commentRepo.toggleCommentLike(commentList[index].id, token!);
+      update();
+    } catch (e) {
+      log('Delete Comment: $e');
+    }
   }
 
   void addCommentLocally(Map<String, dynamic> data, int reelId) {

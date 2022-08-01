@@ -56,6 +56,7 @@ class Base {
   static const getCommentByReelId = '$_url/reels/comments';
   static const addCommentToReelId = '$_url/reels/comments';
   static const toggleCommentLike = '$_url/reels/likes/comments';
+  static const deleteComment = '$_url/reels/comments';
 
 
   //Giveaway

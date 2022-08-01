@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
@@ -6,12 +8,12 @@ import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
-class CommentWidget extends StatelessWidget {
+class NestedCommentWidget extends StatelessWidget {
   final CommentModel commentModel;
   final VoidCallback likeToggle;
   final VoidCallback deleteCallBack;
   final ProfileModel profileModel;
-  CommentWidget(
+  NestedCommentWidget(
       {Key? key,
       required this.commentModel,
       required this.likeToggle,
@@ -61,6 +63,7 @@ class CommentWidget extends StatelessWidget {
                   children: [
                     IconButton(
                         onPressed: () {
+                          log("CommentId: $commentModel");
                           likeToggle();
                         },
                         icon: const Icon(
@@ -72,20 +75,20 @@ class CommentWidget extends StatelessWidget {
                 )
               ],
             ),
-            StatefulBuilder(builder: (context, setState) {
-              if (!showNestedComment) {
-                return InkWell(
-                    onTap: () {},
-                    child: Text(
-                      '${commentModel.responseCount} Responses',
-                      style: const TextStyle(color: Colors.blue),
-                    ));
-              } else {
-                return FutureBuilder(builder: (context, snapshot) {
-                  return Container();
-                });
-              }
-            }),
+            // StatefulBuilder(builder: (context, setState) {
+            //   if (!showNestedComment) {
+            //     return InkWell(
+            //         onTap: () {},
+            //         child: Text(
+            //           '${commentModel.responseCount} Responses',
+            //           style: const TextStyle(color: Colors.blue),
+            //         ));
+            //   } else {
+            //     return FutureBuilder(builder: (context, snapshot) {
+            //       return Container();
+            //     });
+            //   }
+            // }),
           ],
         ),
       ),

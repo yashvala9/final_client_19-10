@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -83,11 +84,13 @@ class HomePageScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final data = _controller.reelList[index];
                             printInfo(info: "Data: ${data.toJson()}");
+                            var videoSplit = data.filename.split("_");
+                            log("VideoURl: ${"https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${videoSplit[3]}/${data.filename}/MP4/${data.filename}"}");
                             return Stack(
                               children: [
                                 VideoPlayerItem(
                                   videoUrl:
-                                      "https://d2qwvdd0y3hlmq.cloudfront.net/reel/1/20220723/98989/reel_1_20220723_98989_file1.mp4/MP4/reel_1_20220723_98989_file1.mp4",
+                                      "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${videoSplit[3]}/${data.filename}/MP4/${data.filename}",
                                   doubleTap: () {
                                     _controller.likeToggle(index);
                                   },

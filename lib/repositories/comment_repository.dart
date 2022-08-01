@@ -63,22 +63,37 @@ class CommentRepository {
     }
   }
 
-  Future<void> toggleCommentLike(
-      int commentId, int userId, String token) async {
+  Future<void> toggleCommentLike(int commentId, String token) async {
     final response = await http.post(
-      Uri.parse(
-          "${Base.toggleCommentLike}?commentId=$commentId&userId=$userId"),
+      Uri.parse("${Base.toggleCommentLike}/$commentId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+     
+      return;
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> deleteComment(int commentId, String token) async {
+    final response = await http.delete(
+      Uri.parse("${Base.deleteComment}/$commentId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
       printInfo(info: body['message']);
       return;
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 }

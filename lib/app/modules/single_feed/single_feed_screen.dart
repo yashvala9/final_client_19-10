@@ -414,6 +414,7 @@ class CommentSheet extends StatelessWidget {
                           title: CommentWidget(
                             commentModel: e,
                             likeToggle: () {},
+                            deleteCallBack: () {},
                             profileModel: e.user,
                           ),
                         ),
