@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/comment_model.dart';
+import 'package:reel_ro/models/nessted_comment_model.dart';
 
 import '../utils/base.dart';
 
@@ -28,7 +29,27 @@ class CommentRepository {
     }
   }
 
-  Future<String> addCommentToReelId(
+  Future<List<NestedCommentModel>> getNestedCommentByCommentId(
+      int commentId, String token) async {
+    printInfo(info: "getNestedCommentId: $commentId");
+    final response = await http.get(
+      Uri.parse("${Base.nestedComment}/$commentId/responses"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    printInfo(info: "getCommentsByReelIdBody: $body");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => NestedCommentModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<CommentModel> addCommentToReelId(
       String token, Map<String, dynamic> data, int reelId) async {
     final response = await http.post(
       Uri.parse("${Base.addCommentToReelId}/$reelId"),
@@ -40,7 +61,27 @@ class CommentRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return "";
+      return CommentModel.fromMap(body);
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<NestedCommentModel> addNestedComment(
+      int commentId,  String comment, String token) async {
+    final response = await http.post(
+      Uri.parse("${Base.nestedComment}/$commentId/responses"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode({
+        'response': comment,
+      }),
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return NestedCommentModel.fromMap(body);
     } else {
       return Future.error(body['detail']);
     }
@@ -73,7 +114,6 @@ class CommentRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-     
       return;
     } else {
       return Future.error(body['detail']);

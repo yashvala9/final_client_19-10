@@ -93,12 +93,12 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                             Expanded(
                                                 child: ListTile(
                                               title: Text(
-                                                  widget.profileModel.noOfPosts
+                                                  widget.profileModel.reelCount
                                                       .toString(),
                                                   textAlign: TextAlign.center,
                                                   style: style.headline6),
                                               subtitle: Text(
-                                                "Posts",
+                                                "Reels",
                                                 textAlign: TextAlign.center,
                                                 style: style.titleMedium,
                                               ),

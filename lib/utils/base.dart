@@ -22,6 +22,7 @@ class Base {
 
   //Profile
   static const currentUser = '$_url/users/getcurrent_user';
+  static const getUserProfile = '$_url/users/profile';
   static const createProfile = '$_url/users/profile';
   static const updateProfile = '$_url/users/profile/update';
 
@@ -32,6 +33,7 @@ class Base {
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
   static const addReel = '$_url/reels';
+  static const deleteReel = '$_url/reels/delete';
 
   //Following Followers
   static const getFollowing = '$_url/users';
@@ -57,7 +59,7 @@ class Base {
   static const addCommentToReelId = '$_url/reels/comments';
   static const toggleCommentLike = '$_url/reels/likes/comments';
   static const deleteComment = '$_url/reels/comments';
-
+  static const nestedComment = '$_url/reels/comments';
 
   //Giveaway
   static const giveaway = '$_url/contests/';

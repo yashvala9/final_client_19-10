@@ -81,12 +81,12 @@ class ProfileDetail extends StatelessWidget {
                                             Expanded(
                                                 child: ListTile(
                                               title: Text(
-                                                  profileModel.noOfPosts
+                                                  profileModel.reelCount
                                                       .toString(),
                                                   textAlign: TextAlign.center,
                                                   style: style.headline6),
                                               subtitle: Text(
-                                                "Posts",
+                                                "Reels",
                                                 textAlign: TextAlign.center,
                                                 style: style.titleMedium,
                                               ),
@@ -198,47 +198,53 @@ class ProfileDetail extends StatelessWidget {
                                                     ),
                                                   );
                                           }),
-                                      Container(
-                                        width: Get.width * 0.9,
-                                        decoration: BoxDecoration(
-                                            color: const Color.fromRGBO(
-                                                255, 240, 218, 1),
-                                            border: Border.all(
-                                              color: Colors.transparent,
-                                            ),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20))),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Column(
-                                            children: const [
-                                              Center(
-                                                  child: Text(
-                                                "Upcoming giveaway on 18th June.",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 18),
-                                              )),
-                                              Center(
-                                                  child: Text(
-                                                "Stay Tuned",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 18),
-                                              )),
-                                              Center(
-                                                child: Text(
-                                                  "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                  textAlign: TextAlign.center,
+                                      _controller.searchProfiles[index]
+                                                  .status ==
+                                              'VERIFIED'
+                                          ? Container(
+                                              width: Get.width * 0.9,
+                                              decoration: BoxDecoration(
+                                                  color: const Color.fromRGBO(
+                                                      255, 240, 218, 1),
+                                                  border: Border.all(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  children: const [
+                                                    Center(
+                                                        child: Text(
+                                                      "Upcoming giveaway on 18th June.",
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 18),
+                                                    )),
+                                                    Center(
+                                                        child: Text(
+                                                      "Stay Tuned",
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 18),
+                                                    )),
+                                                    Center(
+                                                      child: Text(
+                                                        "Engineer who love dancing, modelling, photography. DM me for collaboration",
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                            )
+                                          : Container(),
                                     ],
                                   ),
                                 ),
@@ -299,7 +305,7 @@ class ProfileDetail extends StatelessWidget {
                     profileModel.id, _controller.token!),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Loading();
+                    return const Loading();
                   }
                   if (snapshot.hasError) {
                     printInfo(
@@ -308,7 +314,7 @@ class ProfileDetail extends StatelessWidget {
                   }
                   var photos = snapshot.data!;
                   return photos.isEmpty
-                      ? EmptyWidget("No photos available")
+                      ? const EmptyWidget("No photos available")
                       : GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

@@ -44,12 +44,12 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
 
     return videoPlayerController.value.isBuffering
         ? const Loading()
-        : Container(
-            width: size.width,
-            height: size.height,
-            decoration: const BoxDecoration(
-              color: Colors.black,
-            ),
+        : SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            // decoration: const BoxDecoration(
+            //   color: Colors.black,
+            // ),
             child: Stack(
               alignment: Alignment.center,
               children: [

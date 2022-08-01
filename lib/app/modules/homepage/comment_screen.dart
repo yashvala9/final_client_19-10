@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 
+import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import 'comment_controller.dart';
@@ -11,10 +12,10 @@ class CommentSheet extends StatelessWidget {
   CommentSheet({Key? key, required this.reelId}) : super(key: key);
 
   buildProfile(String profilePhoto) {
-    return const CircleAvatar(
+    return CircleAvatar(
       radius: 20,
       backgroundImage: NetworkImage(
-        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+        profilePhoto,
       ),
     );
   }
@@ -60,7 +61,8 @@ class CommentSheet extends StatelessWidget {
                           ...List.generate(
                             _controller.commentList.length,
                             (index) => ListTile(
-                              leading: buildProfile(""),
+                              leading: buildProfile(
+                                  "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
                               title: CommentWidget(
                                 commentModel: _controller.commentList[index],
                                 likeToggle: () {

@@ -30,6 +30,22 @@ class ProfileRepository {
     }
   }
 
+  Future<ProfileModel> getUserProfile(String token) async {
+    final response = await http.get(
+      Uri.parse(Base.getUserProfile),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return ProfileModel.fromMap(body['user']);
+    } else {
+      return Future.error("Something went wrong");
+    }
+  }
+
   Future<ProfileModel?> getProfileByToken(String token) async {
     final response = await http.get(
       Uri.parse(Base.getProfileByToken),

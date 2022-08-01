@@ -3,23 +3,22 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
+import 'package:reel_ro/models/nessted_comment_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
 class NestedCommentWidget extends StatelessWidget {
-  final CommentModel commentModel;
+  final NestedCommentModel nestedCommentModel;
   final VoidCallback likeToggle;
   final VoidCallback deleteCallBack;
-  final ProfileModel profileModel;
-  NestedCommentWidget(
-      {Key? key,
-      required this.commentModel,
-      required this.likeToggle,
-      required this.deleteCallBack,
-      required this.profileModel})
-      : super(key: key);
+  NestedCommentWidget({
+    Key? key,
+    required this.nestedCommentModel,
+    required this.likeToggle,
+    required this.deleteCallBack,
+  }) : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
@@ -29,10 +28,15 @@ class NestedCommentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.only(
+        right: 8,
+        left: 16,
+        top: 4,
+        bottom: 4,
+      ),
       child: InkWell(
         onLongPress: () {
-          if (commentModel.user.id == _authService.profileModel!.id) {
+          if (nestedCommentModel.owner.id == _authService.profileModel!.id) {
             deleteCallBack();
           }
         },
@@ -42,7 +46,7 @@ class NestedCommentWidget extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '@${profileModel.username}',
+                  '@${nestedCommentModel.owner.username}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
@@ -57,22 +61,23 @@ class NestedCommentWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  commentModel.comment,
+                  nestedCommentModel.response,
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          log("CommentId: $commentModel");
-                          likeToggle();
-                        },
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        )),
-                    Text(commentModel.likeCount.toString()),
-                  ],
-                )
+                Container(),
+                // Row(
+                //   children: [
+                //     IconButton(
+                //         onPressed: () {
+                //           log("CommentId: $nestedCommentModel");
+                //           likeToggle();
+                //         },
+                //         icon: const Icon(
+                //           Icons.favorite,
+                //           color: Colors.red,
+                //         )),
+                //     Text(nest.likeCount.toString()),
+                //   ],
+                // )
               ],
             ),
             // StatefulBuilder(builder: (context, setState) {

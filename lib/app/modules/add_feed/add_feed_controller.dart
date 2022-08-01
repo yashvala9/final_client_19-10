@@ -69,6 +69,7 @@ class AddFeedController extends GetxController {
       showSnackBar("Reel added successfully: $s3File");
       clean();
       Get.back();
+      Get.back();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("addFeed: $e");

@@ -199,7 +199,7 @@ class ReelRepository {
         accessKey: "AKIARYAXXOSN5XYB5M67",
         secretKey: "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",
         file: file,
-        bucket: "reelro-mediaconvert-source",
+        bucket: "reelro-vod-sourcebucket",
         region: "ap-south-1",
         filename: fileName,
         destDir: 'inputs',
@@ -228,6 +228,22 @@ class ReelRepository {
       return;
     } else {
       return Future.error(body['error']['message']);
+    }
+  }
+
+  Future<void> deleteReel(int reelId, String token) async {
+    final response = await http.delete(
+      Uri.parse("${Base.deleteReel}/$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body['detail']);
     }
   }
 }

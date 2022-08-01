@@ -12,7 +12,7 @@ class ProfileModel {
   final String? created_at;
   final String? updated_at;
   final User_profile? user_profile;
-  int noOfPosts;
+  int reelCount;
   int postsCount;
   int followerCount;
   int followingCount;
@@ -28,7 +28,7 @@ class ProfileModel {
     this.created_at,
     this.updated_at,
     this.user_profile,
-    this.noOfPosts = 0,
+    this.reelCount = 0,
     this.postsCount = 0,
     this.followerCount = 0,
     this.followingCount = 0,
@@ -47,7 +47,7 @@ class ProfileModel {
       'created_at': created_at,
       'updated_at': updated_at,
       'user_profile': user_profile?.toMap(),
-      'noOfPosts': noOfPosts,
+      'noOfPosts': reelCount,
       'postsCount': postsCount,
       'followerCount': followerCount,
       'followingCount': followingCount,
@@ -72,10 +72,10 @@ class ProfileModel {
       user_profile: map['user_profile'] != null
           ? User_profile.fromMap(map['user_profile'] as Map<String, dynamic>)
           : null,
-      noOfPosts: (map['noOfPosts'] ?? 0) as int,
+      reelCount: (map['reels_count'] ?? 0) as int,
       postsCount: (map['postsCount'] ?? 0) as int,
-      followerCount: (map['followerCount'] ?? 0) as int,
-      followingCount: (map['followingCount'] ?? 0) as int,
+      followerCount: (map['followers_count'] ?? 0) as int,
+      followingCount: (map['following_count'] ?? 0) as int,
       isFollowing:
           map['isFollowing'] != null ? map['isFollowing'] as bool : null,
     );
@@ -88,13 +88,13 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, email: $email, username: $username, status: $status, user_type: $user_type, referrer_id: $referrer_id, is_deleted: $is_deleted, created_at: $created_at, updated_at: $updated_at, user_profile: $user_profile, noOfPosts: $noOfPosts, postsCount: $postsCount, followerCount: $followerCount, followingCount: $followingCount, isFollowing: $isFollowing)';
+    return 'ProfileModel(id: $id, email: $email, username: $username, status: $status, user_type: $user_type, referrer_id: $referrer_id, is_deleted: $is_deleted, created_at: $created_at, updated_at: $updated_at, user_profile: $user_profile, reelCount: $reelCount, postsCount: $postsCount, followerCount: $followerCount, followingCount: $followingCount, isFollowing: $isFollowing)';
   }
 
   @override
   bool operator ==(covariant ProfileModel other) {
     if (identical(this, other)) return true;
-  
+
     return other.id == id &&
         other.email == email &&
         other.username == username &&
@@ -105,7 +105,7 @@ class ProfileModel {
         other.created_at == created_at &&
         other.updated_at == updated_at &&
         other.user_profile == user_profile &&
-        other.noOfPosts == noOfPosts &&
+        other.reelCount == reelCount &&
         other.postsCount == postsCount &&
         other.followerCount == followerCount &&
         other.followingCount == followingCount &&

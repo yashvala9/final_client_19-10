@@ -71,17 +71,8 @@ class CommentController extends GetxController {
     }
   }
 
-  void addCommentLocally(Map<String, dynamic> data, int reelId) {
-    var comment = CommentModel(
-      id: 0,
-      comment: data['comment'],
-      likeCount: 0,
-      responseCount: 0,
-      user: profileModel,
-      isLiked: false,
-      reelId: reelId.toString(),
-    );
-    _commentList.add(comment);
+  void addCommentLocally(CommentModel commentModel) {
+    _commentList.add(commentModel);
     update();
   }
 
@@ -96,12 +87,11 @@ class CommentController extends GetxController {
       'comment': comment.trim(),
     };
     comment = "";
-    addCommentLocally(map, reelId);
     try {
-      final message =
+      final commentModel =
           await _commentRepo.addCommentToReelId(token!, map, reelId);
+      addCommentLocally(commentModel);
       onDone();
-      print("addCommentSuccess: $message");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("addComment: $e");

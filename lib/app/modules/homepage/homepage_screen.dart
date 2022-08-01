@@ -85,12 +85,12 @@ class HomePageScreen extends StatelessWidget {
                             final data = _controller.reelList[index];
                             printInfo(info: "Data: ${data.toJson()}");
                             var videoSplit = data.filename.split("_");
-                            log("VideoURl: ${"https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${videoSplit[3]}/${data.filename}/MP4/${data.filename}"}");
+                            log("VideoURl: ${"https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}"}");
                             return Stack(
                               children: [
                                 VideoPlayerItem(
                                   videoUrl:
-                                      "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${videoSplit[3]}/${data.filename}/MP4/${data.filename}",
+                                      "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}",
                                   doubleTap: () {
                                     _controller.likeToggle(index);
                                   },
@@ -147,12 +147,12 @@ class HomePageScreen extends StatelessWidget {
                                                 children: [
                                                   InkWell(
                                                     onTap: () {
-                                                      Get.to(
-                                                        () =>
-                                                            OtherProfileDetail(
-                                                                profileModel:
-                                                                    data.user),
-                                                      );
+                                                      // Get.to(
+                                                      //   () =>
+                                                      //       OtherProfileDetail(
+                                                      //           profileModel:
+                                                      //               data.user),
+                                                      // );
                                                     },
                                                     child: Text(
                                                       "@${data.user.username}",

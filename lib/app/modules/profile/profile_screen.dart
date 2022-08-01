@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
 import 'package:reel_ro/models/photo_model.dart';
+import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
@@ -34,262 +35,278 @@ class ProfileScreen extends StatelessWidget {
       builder: (_) => DefaultTabController(
         length: _controller.profileModel.status == "VERIFIED" ? 3 : 2,
         child: Scaffold(
-          backgroundColor: Colors.white,
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              IconButton(
-                icon: const Icon(
-                  Icons.settings,
+            backgroundColor: Colors.white,
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.settings,
+                  ),
+                  onPressed: () async {
+                    Get.to(AccountSettingsView());
+                  },
                 ),
-                onPressed: () async {
-                  Get.to(AccountSettingsView());
-                },
-              ),
-            ],
-          ),
-          body: _controller.loading
-              ? Loading()
-              : NestedScrollView(
-                  headerSliverBuilder: (context, _) {
-                    return [
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          Stack(
-                            children: [
-                              Container(
-                                height: Get.height * 0.2,
-                                color: colorScheme.primaryContainer,
-                              ),
-                              Stack(
-                                alignment: Alignment.topCenter,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 100, bottom: 10),
-                                    decoration: BoxDecoration(
+              ],
+            ),
+            body: FutureBuilder<ProfileModel>(
+                future: _profileRepo.getUserProfile(_controller.token!),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Loading();
+                  }
+                  var profileModel = snapshot.data!;
+                  return NestedScrollView(
+                    headerSliverBuilder: (context, _) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            Stack(
+                              children: [
+                                Container(
+                                  height: Get.height * 0.2,
+                                  color: colorScheme.primaryContainer,
+                                ),
+                                Stack(
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 100, bottom: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(40),
+                                              topRight: Radius.circular(40))),
+                                      child: ClipRRect(
                                         borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(40),
-                                            topRight: Radius.circular(40))),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(50),
-                                        topRight: Radius.circular(50),
-                                      ),
-                                      child: Material(
-                                        color: Colors.white,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: Get.height * 0.08,
-                                            ),
-                                            Text(
-                                              _controller.profileModel
-                                                  .user_profile!.fullname!,
-                                              style: style.headline5,
-                                            ),
-                                            SizedBox(
-                                              height: 80,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Expanded(
-                                                      child: ListTile(
-                                                    title: Text(
-                                                        _controller.profileModel
-                                                            .noOfPosts
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style.headline6),
-                                                    subtitle: Text(
-                                                      "Posts",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: style.titleMedium,
-                                                    ),
-                                                  )),
-                                                  Expanded(
-                                                      child: ListTile(
-                                                    title: Text(
-                                                        _controller.profileModel
-                                                            .followerCount
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style.headline6),
-                                                    subtitle: Text("Followers",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style:
-                                                            style.titleMedium),
-                                                  )),
-                                                  Expanded(
-                                                      child: ListTile(
-                                                    onTap: () {},
-                                                    title: Text(
-                                                        _controller.profileModel
-                                                            .followingCount
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style.headline6),
-                                                    subtitle: Text("Followings",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style:
-                                                            style.titleMedium),
-                                                  )),
-                                                ],
+                                          topLeft: Radius.circular(50),
+                                          topRight: Radius.circular(50),
+                                        ),
+                                        child: Material(
+                                          color: Colors.white,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: Get.height * 0.08,
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                                vertical: 8,
+                                              Text(
+                                                profileModel
+                                                    .user_profile!.fullname!,
+                                                style: style.headline5,
                                               ),
-                                              child: OutlinedButton(
-                                                onPressed: () {
-                                                  Get.to(EditProfileView());
-                                                },
-                                                style: OutlinedButton.styleFrom(
-                                                  minimumSize:
-                                                      Size.fromHeight(40),
-                                                ),
-                                                child: Text(
-                                                  "Edit Profile",
-                                                  style: style.titleMedium,
-                                                ),
-                                              ),
-                                            ),
-                                            // Padding(
-                                            //   padding:
-                                            //       const EdgeInsets.all(8.0),
-                                            //   child: Row(
-                                            //     children: [
-                                            //       Expanded(
-                                            //         child: Padding(
-                                            //           padding:
-                                            //               const EdgeInsets.all(
-                                            //                   8.0),
-                                            //           child: MyElevatedButton(
-                                            //             buttonText: "Follow",
-                                            //             onPressed: () {
-                                            //               _controller.signOut();
-                                            //               authService
-                                            //                   .redirectUser();
-                                            //             },
-                                            //             height: 30,
-                                            //             style:
-                                            //                 style.titleMedium,
-                                            //           ),
-                                            //         ),
-                                            //       ),
-                                            //       Expanded(
-                                            //           child: Padding(
-                                            //         padding:
-                                            //             const EdgeInsets.all(
-                                            //                 8.0),
-                                            //         child: OutlinedButton(
-                                            //           onPressed: () {},
-                                            //           style: OutlinedButton
-                                            //               .styleFrom(
-                                            //                   minimumSize: Size
-                                            //                       .fromHeight(
-                                            //                           50)),
-                                            //           child: Text(
-                                            //             "Message",
-                                            //             style:
-                                            //                 style.titleMedium,
-                                            //           ),
-                                            //         ),
-                                            //       ))
-                                            //     ],
-                                            //   ),
-                                            // ),
-                                            Container(
-                                              width: Get.width * 0.9,
-                                              decoration: BoxDecoration(
-                                                  color: Color.fromRGBO(
-                                                      255, 240, 218, 1),
-                                                  border: Border.all(
-                                                    color: Colors.transparent,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(20))),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
-                                                child: Column(
+                                              SizedBox(
+                                                height: 80,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: [
-                                                    Center(
-                                                        child: Text(
-                                                      "Upcoming giveaway on 18th June.",
-                                                      style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 18),
-                                                    )),
-                                                    Center(
-                                                        child: Text(
-                                                      "Stay Tuned",
-                                                      style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 18),
-                                                    )),
-                                                    Center(
-                                                      child: Text(
-                                                        "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                        style: TextStyle(
-                                                            fontSize: 16),
+                                                    Expanded(
+                                                        child: ListTile(
+                                                      title: Text(
+                                                          profileModel.reelCount
+                                                              .toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              style.headline6),
+                                                      subtitle: Text(
+                                                        "Reels",
                                                         textAlign:
                                                             TextAlign.center,
+                                                        style:
+                                                            style.titleMedium,
                                                       ),
-                                                    ),
+                                                    )),
+                                                    Expanded(
+                                                        child: ListTile(
+                                                      title: Text(
+                                                          profileModel
+                                                              .followerCount
+                                                              .toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              style.headline6),
+                                                      subtitle: Text(
+                                                          "Followers",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: style
+                                                              .titleMedium),
+                                                    )),
+                                                    Expanded(
+                                                        child: ListTile(
+                                                      onTap: () {},
+                                                      title: Text(
+                                                          profileModel
+                                                              .followingCount
+                                                              .toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              style.headline6),
+                                                      subtitle: Text(
+                                                          "Followings",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: style
+                                                              .titleMedium),
+                                                    )),
                                                   ],
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                  vertical: 8,
+                                                ),
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    Get.to(EditProfileView());
+                                                  },
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    minimumSize:
+                                                        Size.fromHeight(40),
+                                                  ),
+                                                  child: Text(
+                                                    "Edit Profile",
+                                                    style: style.titleMedium,
+                                                  ),
+                                                ),
+                                              ),
+                                              // Padding(
+                                              //   padding:
+                                              //       const EdgeInsets.all(8.0),
+                                              //   child: Row(
+                                              //     children: [
+                                              //       Expanded(
+                                              //         child: Padding(
+                                              //           padding:
+                                              //               const EdgeInsets.all(
+                                              //                   8.0),
+                                              //           child: MyElevatedButton(
+                                              //             buttonText: "Follow",
+                                              //             onPressed: () {
+                                              //               _controller.signOut();
+                                              //               authService
+                                              //                   .redirectUser();
+                                              //             },
+                                              //             height: 30,
+                                              //             style:
+                                              //                 style.titleMedium,
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //       Expanded(
+                                              //           child: Padding(
+                                              //         padding:
+                                              //             const EdgeInsets.all(
+                                              //                 8.0),
+                                              //         child: OutlinedButton(
+                                              //           onPressed: () {},
+                                              //           style: OutlinedButton
+                                              //               .styleFrom(
+                                              //                   minimumSize: Size
+                                              //                       .fromHeight(
+                                              //                           50)),
+                                              //           child: Text(
+                                              //             "Message",
+                                              //             style:
+                                              //                 style.titleMedium,
+                                              //           ),
+                                              //         ),
+                                              //       ))
+                                              //     ],
+                                              //   ),
+                                              // ),
+                                              if (profileModel.status ==
+                                                  "VERIFIED")
+                                                Container(
+                                                  width: Get.width * 0.9,
+                                                  decoration: BoxDecoration(
+                                                      color: Color.fromRGBO(
+                                                          255, 240, 218, 1),
+                                                      border: Border.all(
+                                                        color:
+                                                            Colors.transparent,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  20))),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            16.0),
+                                                    child: Column(
+                                                      children: [
+                                                        Center(
+                                                            child: Text(
+                                                          "Upcoming giveaway on 18th June.",
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 18),
+                                                        )),
+                                                        Center(
+                                                            child: Text(
+                                                          "Stay Tuned",
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 18),
+                                                        )),
+                                                        Center(
+                                                          child: Text(
+                                                            "Engineer who love dancing, modelling, photography. DM me for collaboration",
+                                                            style: TextStyle(
+                                                                fontSize: 16),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: Get.height * 0.08,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Material(
-                                          elevation: 3,
-                                          shape: CircleBorder(),
-                                          child: CircleAvatar(
-                                            radius: 40,
-                                            backgroundImage: NetworkImage(
-                                                "${Base.profileBucketUrl}/${_controller.profileModel.user_profile!.profile_img}"),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: Get.height * 0.08,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Material(
+                                            elevation: 3,
+                                            shape: CircleBorder(),
+                                            child: CircleAvatar(
+                                              radius: 40,
+                                              backgroundImage: NetworkImage(
+                                                  "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          )
-                        ]),
-                      )
-                    ];
-                  },
-                  body: _tabSection(context),
-                ),
-        ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ]),
+                        )
+                      ];
+                    },
+                    body: _tabSection(context),
+                  );
+                })),
       ),
     );
   }
@@ -409,6 +426,27 @@ class ProfileReel extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   Get.to(SingleFeedScreen(reels[index], null));
+                },
+                onLongPress: () {
+                  Get.dialog(AlertDialog(
+                    title: const Text(
+                        "Are you sure you want to delete this roll?"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text("NO")),
+                      MaterialButton(
+                        onPressed: () {
+                          Get.back();
+                          _controller.deleteReel(reels[index].id);
+                        },
+                        child: const Text("YES"),
+                        color: Colors.red,
+                      ),
+                    ],
+                  ));
                 },
                 child: CachedNetworkImage(
                   imageUrl:

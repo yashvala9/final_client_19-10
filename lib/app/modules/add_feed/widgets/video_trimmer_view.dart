@@ -123,12 +123,12 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
                         ? const Icon(
                             Icons.pause,
                             size: 80.0,
-                            color: AppColors.yellowOrange,
+                            color: Colors.amber,
                           )
                         : const Icon(
                             Icons.play_arrow,
                             size: 80.0,
-                            color: AppColors.yellowOrange,
+                            color: Colors.amber,
                           ),
                     onPressed: () async {
                       bool playbackState = await _trimmer.videPlaybackControl(

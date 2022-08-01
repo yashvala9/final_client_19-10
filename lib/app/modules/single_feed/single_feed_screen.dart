@@ -30,7 +30,10 @@ class SingleFeedScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    final data = reel ?? photo;
+
+    var videoSplit = reel!.filename.split("_");
+    var videoUrl =
+        "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel!.filename}/MP4/${reel!.filename}";
     return GetBuilder<SingleFeedController>(
         builder: (_) => Scaffold(
               extendBodyBehindAppBar: true,
@@ -55,8 +58,7 @@ class SingleFeedScreen extends StatelessWidget {
                         return Stack(
                           children: [
                             VideoPlayerItem(
-                              videoUrl:
-                                  "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/1/20220723/98989/reel_1_20220723_98989_file1.mp4",
+                              videoUrl: videoUrl,
                               doubleTap: () {
                                 // _controller.likeToggle(index);
                               },
