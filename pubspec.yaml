@@ -10,8 +10,9 @@ environment:
 
 dependencies:
   aws_s3_upload: ^1.4.0
-  better_player:
-    path: ./plugins/betterplayer/
+  better_player: ^0.0.83
+  # better_player:
+  #   path: ./plugins/betterplayer/
   cached_network_image: ^3.2.1
   cloud_firestore: ^3.1.18
   cupertino_icons: ^1.0.2

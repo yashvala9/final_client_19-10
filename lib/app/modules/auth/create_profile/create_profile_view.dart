@@ -156,32 +156,32 @@ class CreateProfileView extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              Positioned(
-                                bottom: 0,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: Get.width * 0.1,
-                                    height: Get.width * 0.1,
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(.1),
-                                          offset: const Offset(0, 5),
-                                          blurRadius: 3,
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(
-                                          Get.width * 0.1),
-                                      color: Colors.white,
-                                    ),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: AppColors.yellowOrange,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // Positioned(
+                              //   bottom: 0,
+                              //   child: GestureDetector(
+                              //     onTap: () {},
+                              //     child: Container(
+                              //       width: Get.width * 0.1,
+                              //       height: Get.width * 0.1,
+                              //       decoration: BoxDecoration(
+                              //         boxShadow: [
+                              //           BoxShadow(
+                              //             color: Colors.black.withOpacity(.1),
+                              //             offset: const Offset(0, 5),
+                              //             blurRadius: 3,
+                              //           ),
+                              //         ],
+                              //         borderRadius: BorderRadius.circular(
+                              //             Get.width * 0.1),
+                              //         color: Colors.white,
+                              //       ),
+                              //       child: const Icon(
+                              //         Icons.add,
+                              //         color: AppColors.yellowOrange,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           // SizedBox(height: Get.height * 0.02),

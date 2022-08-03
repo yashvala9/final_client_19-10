@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
 
@@ -26,9 +30,11 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
+    // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
         videoPlayerController.play();
         videoPlayerController.setVolume(1);
+        videoPlayerController.dataSource;
       });
   }
 
@@ -98,12 +104,15 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     with AutomaticKeepAliveClientMixin {
   late BetterPlayerController _betterPlayerController;
 
+  final _authService = Get.find<AuthService>();
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+    log("URL: ${widget.url}");
     _betterPlayerController = BetterPlayerController(
       BetterPlayerConfiguration(
         aspectRatio: 5.3 / 10,
@@ -140,6 +149,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
         BetterPlayerDataSourceType.network,
         widget.url,
         videoFormat: BetterPlayerVideoFormat.hls,
+        drmConfiguration: BetterPlayerDrmConfiguration(
+          drmType: BetterPlayerDrmType.token,
+          token: "Bearer=${_authService.token}",
+        ),
       ),
     );
   }

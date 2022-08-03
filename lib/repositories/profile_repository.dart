@@ -65,17 +65,17 @@ class ProfileRepository {
 
   Future<ProfileModel> getProfileById(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getProfilebyId}/$profileId"),
+      Uri.parse("${Base.getProfileById}/$profileId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      return ProfileModel.fromMap(body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return ProfileModel.fromMap(body['user']);
     } else {
-      return Future.error(body['error']['message']);
+      return Future.error(body['detail']);
     }
   }
 
@@ -264,7 +264,7 @@ class ProfileRepository {
       }
       return photos;
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 

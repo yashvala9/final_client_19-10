@@ -120,7 +120,7 @@ class ReelRepository {
       return;
     } else {
       final body = jsonDecode(response.body);
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 

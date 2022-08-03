@@ -7,6 +7,7 @@ import 'package:reel_ro/models/nessted_comment_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/datetime_extension.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
 class NestedCommentWidget extends StatelessWidget {
@@ -52,8 +53,8 @@ class NestedCommentWidget extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
-                const Text(
-                  '1 day ago',
+                Text(
+                  nestedCommentModel.createdAt.timeAgo(numericDates: false),
                 ),
               ],
             ),

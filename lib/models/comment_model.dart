@@ -10,6 +10,7 @@ class CommentModel {
   ProfileModel user;
   String reelId;
   bool isLiked;
+  DateTime createdAt;
   CommentModel({
     required this.id,
     required this.comment,
@@ -18,6 +19,7 @@ class CommentModel {
     required this.user,
     required this.reelId,
     required this.isLiked,
+    required this.createdAt,
   });
 
   CommentModel copyWith({
@@ -28,6 +30,7 @@ class CommentModel {
     ProfileModel? user,
     String? reelId,
     bool? isLiked,
+    DateTime? createdAt,
   }) {
     return CommentModel(
       id: id ?? this.id,
@@ -37,6 +40,7 @@ class CommentModel {
       user: user ?? this.user,
       reelId: reelId ?? this.reelId,
       isLiked: isLiked ?? this.isLiked,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -50,6 +54,7 @@ class CommentModel {
     result.addAll({'user': user.toMap()});
     result.addAll({'reelId': reelId});
     result.addAll({'isLiked': isLiked});
+    result.addAll({'createdAt': createdAt});
   
     return result;
   }
@@ -63,6 +68,7 @@ class CommentModel {
       user: ProfileModel.fromMap(map['user']),
       reelId: map['reelId'] ?? '',
       isLiked: map['is_liked'] ?? false,
+      createdAt: DateTime.parse(map['created_at']) 
     );
   }
 

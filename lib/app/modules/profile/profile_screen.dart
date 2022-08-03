@@ -4,17 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
-import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
-import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
-import 'package:reel_ro/widgets/my_elevated_button.dart';
-import 'package:video_player/video_player.dart';
-import '../../../utils/assets.dart';
 import '../edit_profile/views/edit_profile_view.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
@@ -112,7 +107,7 @@ class ProfileScreen extends StatelessWidget {
                                                           style:
                                                               style.headline6),
                                                       subtitle: Text(
-                                                        "Reels",
+                                                        "Rolls",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
@@ -449,8 +444,7 @@ class ProfileReel extends StatelessWidget {
                   ));
                 },
                 child: CachedNetworkImage(
-                  imageUrl:
-                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                  imageUrl: reels[index].thumbnail,
                   fit: BoxFit.cover,
                 ),
               );

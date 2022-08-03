@@ -67,6 +67,12 @@ class HomePageScreen extends StatelessWidget {
                             return VideoTrimmerView(File(video.path));
                           }),
                         );
+                        // Get.to(
+                        //   () => AddFeedScreen(
+                        //     file: File(video.path),
+                        //     type: 0,
+                        //   ),
+                        // );
                       }
                     },
                   ),
@@ -76,298 +82,315 @@ class HomePageScreen extends StatelessWidget {
                   ? Loading()
                   : _controller.reelList.isEmpty
                       ? EmptyWidget("No reels available!")
-                      : PageView.builder(
-                          itemCount: _controller.reelList.length,
-                          controller: PageController(
-                              initialPage: 0, viewportFraction: 1),
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            final data = _controller.reelList[index];
-                            printInfo(info: "Data: ${data.toJson()}");
-                            var videoSplit = data.filename.split("_");
-                            log("VideoURl: ${"https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}"}");
-                            return Stack(
-                              children: [
-                                VideoPlayerItem(
-                                  videoUrl:
-                                      "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}",
-                                  doubleTap: () {
-                                    _controller.likeToggle(index);
-                                  },
-                                  showLike: _controller.showLike,
-                                ),
-                                // VideoPlayerWidget(
-                                //   url:
-                                //       "https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/8/20220727/uuidd/reel_8_20220727_uuidd_file4.mp4/HLS/reel_8_20220727_uuidd_file4_360.m3u",
-                                //   doubleTap: () {
-                                //     _controller.likeToggle(index);
-                                //   },
-                                //   showLike: _controller.showLike,
-                                // ),
+                      : RefreshIndicator(
+                          onRefresh: () {
+                            _controller.getFeeds();
+                            return Future.value();
+                          },
+                          child: PageView.builder(
+                            itemCount: _controller.reelList.length,
+                            controller: PageController(
+                                initialPage: 0, viewportFraction: 1),
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              final data = _controller.reelList[index];
+                              printInfo(info: "Data: ${data.toJson()}");
+                              var videoSplit = data.filename.split("_");
+                              // var url = data.filepath + data.filename;
+                              // log("URL: $url");
+                              // log("VideoURl: ${"https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}"}");
+                              return Stack(
+                                children: [
+                                  VideoPlayerItem(
+                                    videoUrl:
+                                        "https://d2qwvdd0y3hlmq.cloudfront.net/reel/10/20220801/reel_10_20220801_1659347680729_video-10.mp4/HLS/reel_10_20220801_1659347680729_video-10_720.m3u8",
+                                    doubleTap: () {
+                                      _controller.likeToggle(index);
+                                    },
+                                    showLike: _controller.showLike,
+                                  ),
+                                  // VideoPlayerWidget(
+                                  //   url:
+                                  //       "https://d2qwvdd0y3hlmq.cloudfront.net/reel/10/20220801/reel_10_20220801_1659347680729_video-10.mp4/HLS/reel_10_20220801_1659347680729_video-10_720.m3u8",
+                                  //   doubleTap: () {
+                                  //     _controller.likeToggle(index);
+                                  //   },
+                                  //   showLike: _controller.showLike,
+                                  // ),
 
-                                // data.type
-                                //     ?
-                                //  VideoPlayerItem(
-                                //     videoUrl: data.video.url,
-                                //     doubleTap: () {
-                                //       _controller.likeToggle(index);
-                                //     },
-                                //     showLike: _controller.showLike,
-                                //   ),
-                                // : CachedNetworkImage(
-                                //     imageUrl: data.video.url,
-                                //     placeholder: (context, _) => Loading(),
-                                //     errorWidget: (context, s, e) => Icon(
-                                //       Icons.error,
-                                //       color: Colors.red,
-                                //     ),
-                                //   ),
-                                Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 100,
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20, bottom: 12),
+                                  // data.type
+                                  //     ?
+                                  //  VideoPlayerItem(
+                                  //     videoUrl: data.video.url,
+                                  //     doubleTap: () {
+                                  //       _controller.likeToggle(index);
+                                  //     },
+                                  //     showLike: _controller.showLike,
+                                  //   ),
+                                  // : CachedNetworkImage(
+                                  //     imageUrl: data.video.url,
+                                  //     placeholder: (context, _) => Loading(),
+                                  //     errorWidget: (context, s, e) => Icon(
+                                  //       Icons.error,
+                                  //       color: Colors.red,
+                                  //     ),
+                                  //   ),
+                                  Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 100,
+                                      ),
+                                      Expanded(
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20, bottom: 12),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        // Get.to(
+                                                        //   () =>
+                                                        //       OtherProfileDetail(
+                                                        //           profileModel:
+                                                        //               data.user),
+                                                        // );
+                                                      },
+                                                      child: Text(
+                                                        "@${data.user.username}",
+                                                        style: style.titleLarge!
+                                                            .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      data.video_title,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      data.description,
+                                                      style: const TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    // Row(
+                                                    //   children: [
+                                                    //     const Icon(
+                                                    //       Icons.music_note,
+                                                    //       size: 15,
+                                                    //       color: Colors.white,
+                                                    //     ),
+                                                    //     Text(
+                                                    //       'data.song',
+                                                    //       style: const TextStyle(
+                                                    //         fontSize: 15,
+                                                    //         color: Colors.white,
+                                                    //         fontWeight:
+                                                    //             FontWeight.bold,
+                                                    //       ),
+                                                    //     ),
+                                                    //   ],
+                                                    // )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 100,
+                                              margin: EdgeInsets.only(
+                                                  top: size.height / 5),
                                               child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      // Get.to(
-                                                      //   () =>
-                                                      //       OtherProfileDetail(
-                                                      //           profileModel:
-                                                      //               data.user),
-                                                      // );
-                                                    },
-                                                    child: Text(
-                                                      "@${data.user.username}",
-                                                      style: style.titleLarge!
-                                                          .copyWith(
-                                                        color: Colors.white,
+                                                  Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {},
+                                                        // _controller.likeVideo(data.id),
+                                                        child: const Icon(
+                                                          Icons.card_giftcard,
+                                                          size: 30,
+                                                          color: Colors.white,
+                                                        ),
                                                       ),
-                                                    ),
+                                                      // const SizedBox(height: 7),
+                                                      Text(
+                                                        '0',
+                                                        style: style
+                                                            .headlineSmall!
+                                                            .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    data.video_title,
-                                                    style: const TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                                  Column(
+                                                    children: [
+                                                      InkWell(
+                                                          onTap: () {
+                                                            _controller
+                                                                .likeToggle(
+                                                                    index);
+                                                          },
+                                                          // _controller.likeVideo(data.id),
+                                                          child: FutureBuilder<
+                                                                  bool>(
+                                                              future: _reelRepo
+                                                                  .getLikeFlag(
+                                                                      data.id,
+                                                                      _controller
+                                                                          .token!),
+                                                              builder: (context,
+                                                                  snap) {
+                                                                return Icon(
+                                                                  snap.hasData
+                                                                      ? snap
+                                                                              .data!
+                                                                          ? Icons
+                                                                              .favorite
+                                                                          : Icons
+                                                                              .favorite_border
+                                                                      : Icons
+                                                                          .favorite_border,
+                                                                  size: 30,
+                                                                  color: snap
+                                                                          .hasData
+                                                                      ? snap
+                                                                              .data!
+                                                                          ? Colors
+                                                                              .red
+                                                                          : Colors
+                                                                              .white
+                                                                      : Colors
+                                                                          .white,
+                                                                );
+                                                              })),
+                                                      // const SizedBox(height: 7),
+                                                      FutureBuilder<int>(
+                                                          future: _reelRepo
+                                                              .getLikeCountByReelId(
+                                                                  data.id,
+                                                                  _controller
+                                                                      .token!),
+                                                          builder:
+                                                              (context, snap) {
+                                                            return Text(
+                                                              snap.hasData
+                                                                  ? snap.data!
+                                                                      .toString()
+                                                                  : '0',
+                                                              // data.likeCount.toString(),
+                                                              style: style
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            );
+                                                          }),
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    data.description,
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white,
-                                                    ),
+                                                  Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          Get.bottomSheet(
+                                                            CommentSheet(
+                                                              reelId: data.id,
+                                                            ),
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                          );
+                                                        },
+                                                        child: const Icon(
+                                                          Icons.comment,
+                                                          size: 30,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      FutureBuilder<int>(
+                                                          future: _commentRepo
+                                                              .getCommentCountByReelId(
+                                                                  data.id,
+                                                                  _controller
+                                                                      .token!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            print(
+                                                                "ReelId: ${data.id} CommentCount: ${snapshot.data}");
+                                                            return Text(
+                                                              snapshot.hasData
+                                                                  ? snapshot
+                                                                      .data!
+                                                                      .toString()
+                                                                  : "0",
+                                                              style: style
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            );
+                                                          })
+                                                    ],
                                                   ),
-                                                  // Row(
-                                                  //   children: [
-                                                  //     const Icon(
-                                                  //       Icons.music_note,
-                                                  //       size: 15,
-                                                  //       color: Colors.white,
-                                                  //     ),
-                                                  //     Text(
-                                                  //       'data.song',
-                                                  //       style: const TextStyle(
-                                                  //         fontSize: 15,
-                                                  //         color: Colors.white,
-                                                  //         fontWeight:
-                                                  //             FontWeight.bold,
-                                                  //       ),
-                                                  //     ),
-                                                  //   ],
-                                                  // )
+                                                  Column(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {},
+                                                        child: const Icon(
+                                                          Icons.reply,
+                                                          size: 30,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      // const SizedBox(height: 7),
+                                                      // Text(
+                                                      //   '0',
+                                                      //   style: const TextStyle(
+                                                      //     fontSize: 20,
+                                                      //     color: Colors.white,
+                                                      //   ),
+                                                      // )
+                                                    ],
+                                                  ),
+                                                  CircleAnimation(
+                                                    child: buildMusicAlbum(
+                                                        "${Base.profileBucketUrl}/${data.user.user_profile!.profile_img}"),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            width: 100,
-                                            margin: EdgeInsets.only(
-                                                top: size.height / 5),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {},
-                                                      // _controller.likeVideo(data.id),
-                                                      child: const Icon(
-                                                        Icons.card_giftcard,
-                                                        size: 30,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    // const SizedBox(height: 7),
-                                                    Text(
-                                                      '0',
-                                                      style: style
-                                                          .headlineSmall!
-                                                          .copyWith(
-                                                        color: Colors.white,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    InkWell(
-                                                        onTap: () {},
-                                                        // _controller.likeVideo(data.id),
-                                                        child: FutureBuilder<
-                                                                bool>(
-                                                            future: _reelRepo
-                                                                .getLikeFlag(
-                                                                    data.id,
-                                                                    _controller
-                                                                        .token!),
-                                                            builder: (context,
-                                                                snap) {
-                                                              return Icon(
-                                                                snap.hasData
-                                                                    ? snap.data!
-                                                                        ? Icons
-                                                                            .favorite
-                                                                        : Icons
-                                                                            .favorite_border
-                                                                    : Icons
-                                                                        .favorite_border,
-                                                                size: 30,
-                                                                color: snap
-                                                                        .hasData
-                                                                    ? snap.data!
-                                                                        ? Colors
-                                                                            .red
-                                                                        : Colors
-                                                                            .white
-                                                                    : Colors
-                                                                        .white,
-                                                              );
-                                                            })),
-                                                    // const SizedBox(height: 7),
-                                                    FutureBuilder<int>(
-                                                        future: _reelRepo
-                                                            .getLikeCountByReelId(
-                                                                data.id,
-                                                                _controller
-                                                                    .token!),
-                                                        builder:
-                                                            (context, snap) {
-                                                          return Text(
-                                                            snap.hasData
-                                                                ? snap.data!
-                                                                    .toString()
-                                                                : '0',
-                                                            // data.likeCount.toString(),
-                                                            style: style
-                                                                .headlineSmall!
-                                                                .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          );
-                                                        }),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {
-                                                        Get.bottomSheet(
-                                                          CommentSheet(
-                                                            reelId: data.id,
-                                                          ),
-                                                          backgroundColor:
-                                                              Colors.white,
-                                                        );
-                                                      },
-                                                      child: const Icon(
-                                                        Icons.comment,
-                                                        size: 30,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    FutureBuilder<int>(
-                                                        future: _commentRepo
-                                                            .getCommentCountByReelId(
-                                                                data.id,
-                                                                _controller
-                                                                    .token!),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          print(
-                                                              "ReelId: ${data.id} CommentCount: ${snapshot.data}");
-                                                          return Text(
-                                                            snapshot.hasData
-                                                                ? snapshot.data!
-                                                                    .toString()
-                                                                : "0",
-                                                            style: style
-                                                                .headlineSmall!
-                                                                .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          );
-                                                        })
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.reply,
-                                                        size: 30,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    // const SizedBox(height: 7),
-                                                    // Text(
-                                                    //   '0',
-                                                    //   style: const TextStyle(
-                                                    //     fontSize: 20,
-                                                    //     color: Colors.white,
-                                                    //   ),
-                                                    // )
-                                                  ],
-                                                ),
-                                                CircleAnimation(
-                                                  child: buildMusicAlbum(
-                                                      "${Base.profileBucketUrl}/${data.user.user_profile}"),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
                         ),
             ));
   }

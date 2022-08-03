@@ -7,6 +7,7 @@ import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/datetime_extension.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
@@ -54,8 +55,8 @@ class CommentWidget extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    '1 day ago',
+                  Text(
+                    commentModel.createdAt.timeAgo(numericDates: false),
                   ),
                 ],
               ),
@@ -177,9 +178,7 @@ class CommentWidget extends StatelessWidget {
                               (e) => NestedCommentWidget(
                                 nestedCommentModel: e,
                                 likeToggle: () {},
-                                deleteCallBack: () {
-                                  
-                                },
+                                deleteCallBack: () {},
                               ),
                             )
                             .toList(),

@@ -8,7 +8,7 @@ class Base {
   static const verifyOtp = '$_url/auth/register/verifyOTP';
   static const getProfileId = '$_url/users/me';
   static const getProfileByToken = '$_url/users/getcurrent_user';
-  static const getProfilebyId = '$_url/user-profiles';
+  // static const getProfilebyId = '$_url/user-profiles';
   static const getReelsbyId = '$_url/getReelsByUserId';
   // static const createProfile = '$_url/user-profiles';
   static const searchUser = '$_url/search';
@@ -25,6 +25,7 @@ class Base {
   static const getUserProfile = '$_url/users/profile';
   static const createProfile = '$_url/users/profile';
   static const updateProfile = '$_url/users/profile/update';
+  static const getProfileById = '$_url/users/profile';
 
   //Reels
   static const getReelsByUserId = '$_url/reels/user';

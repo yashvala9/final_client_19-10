@@ -38,7 +38,7 @@ class NestedCommentModel {
     result.addAll({'id': id});
     result.addAll({'commentId': commentId});
     result.addAll({'response': response});
-    result.addAll({'createdAt': createdAt.millisecondsSinceEpoch});
+    result.addAll({'created_at': createdAt.millisecondsSinceEpoch});
     result.addAll({'owner': owner.toMap()});
   
     return result;

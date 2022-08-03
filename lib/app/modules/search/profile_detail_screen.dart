@@ -39,240 +39,278 @@ class ProfileDetail extends StatelessWidget {
               SliverList(
                 delegate: SliverChildListDelegate([
                   GetBuilder<SearchController>(builder: (_) {
-                    var profileModel = _controller.searchProfiles[index];
-                    return Stack(
-                      children: [
-                        Container(
-                          height: Get.height * 0.2,
-                          color: colorScheme.primaryContainer,
-                        ),
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(top: 100, bottom: 10),
-                              decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(40),
-                                      topRight: Radius.circular(40))),
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(50),
-                                  topRight: Radius.circular(50),
-                                ),
-                                child: Material(
-                                  color: Colors.white,
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: Get.height * 0.08,
+                    return FutureBuilder<ProfileModel>(
+                        future: _profileRepo.getProfileById(
+                            _controller.searchProfiles[index].id,
+                            _controller.token!),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Loading();
+                          }
+                          var profileModel = snapshot.data!;
+                          return Stack(
+                            children: [
+                              Container(
+                                height: Get.height * 0.2,
+                                color: colorScheme.primaryContainer,
+                              ),
+                              Stack(
+                                alignment: Alignment.topCenter,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 100, bottom: 10),
+                                    decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(40),
+                                            topRight: Radius.circular(40))),
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(50),
+                                        topRight: Radius.circular(50),
                                       ),
-                                      Text(
-                                        profileModel.user_profile!.fullname!,
-                                        style: style.headline5,
-                                      ),
-                                      SizedBox(
-                                        height: 80,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                      child: Material(
+                                        color: Colors.white,
+                                        child: Column(
                                           children: [
-                                            Expanded(
-                                                child: ListTile(
-                                              title: Text(
-                                                  profileModel.reelCount
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: style.headline6),
-                                              subtitle: Text(
-                                                "Reels",
-                                                textAlign: TextAlign.center,
-                                                style: style.titleMedium,
-                                              ),
-                                            )),
-                                            Expanded(
-                                                child: ListTile(
-                                              title: Text(
-                                                  profileModel.followerCount
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: style.headline6),
-                                              subtitle: Text("Followers",
-                                                  textAlign: TextAlign.center,
-                                                  style: style.titleMedium),
-                                            )),
-                                            Expanded(
-                                                child: ListTile(
-                                              title: Text(
-                                                  profileModel.followingCount
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: style.headline6),
-                                              subtitle: Text("Followings",
-                                                  textAlign: TextAlign.center,
-                                                  style: style.titleMedium),
-                                            )),
-                                          ],
-                                        ),
-                                      ),
-                                      FutureBuilder<bool>(
-                                          future: _profileRepo.isFollowing(
-                                              profileModel.id,
-                                              _controller.token!),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return Container();
-                                            }
-                                            return snapshot.data!
-                                                ? Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 8,
+                                            SizedBox(
+                                              height: Get.height * 0.08,
+                                            ),
+                                            Text(
+                                              profileModel
+                                                  .user_profile!.fullname!,
+                                              style: style.headline5,
+                                            ),
+                                            SizedBox(
+                                              height: 80,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                      child: ListTile(
+                                                    title: Text(
+                                                        profileModel.reelCount
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style.headline6),
+                                                    subtitle: Text(
+                                                      "Rolls",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: style.titleMedium,
                                                     ),
-                                                    child: OutlinedButton(
-                                                      onPressed: () {
-                                                        _controller
-                                                            .toggleFollowing(
-                                                                index);
-                                                      },
-                                                      style: OutlinedButton
-                                                          .styleFrom(
-                                                        minimumSize: const Size
-                                                            .fromHeight(40),
-                                                      ),
-                                                      child: Text(
-                                                        "Following",
+                                                  )),
+                                                  Expanded(
+                                                      child: ListTile(
+                                                    title: Text(
+                                                        profileModel
+                                                            .followerCount
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style.headline6),
+                                                    subtitle: Text("Followers",
+                                                        textAlign:
+                                                            TextAlign.center,
                                                         style:
-                                                            style.titleMedium,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child:
-                                                                MyElevatedButton(
-                                                              buttonText:
-                                                                  "Follow",
-                                                              onPressed: () {
-                                                                _controller
-                                                                    .toggleFollowing(
-                                                                        index);
-                                                              },
-                                                              height: 30,
+                                                            style.titleMedium),
+                                                  )),
+                                                  Expanded(
+                                                      child: ListTile(
+                                                    title: Text(
+                                                        profileModel
+                                                            .followingCount
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style.headline6),
+                                                    subtitle: Text("Followings",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style:
+                                                            style.titleMedium),
+                                                  )),
+                                                ],
+                                              ),
+                                            ),
+                                            FutureBuilder<bool>(
+                                                future:
+                                                    _profileRepo.isFollowing(
+                                                        profileModel.id,
+                                                        _controller.token!),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData) {
+                                                    return Container();
+                                                  }
+                                                  return snapshot.data!
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 8,
+                                                          ),
+                                                          child: OutlinedButton(
+                                                            onPressed: () {
+                                                              _controller
+                                                                  .toggleFollowing(
+                                                                      index);
+                                                            },
+                                                            style:
+                                                                OutlinedButton
+                                                                    .styleFrom(
+                                                              minimumSize:
+                                                                  const Size
+                                                                      .fromHeight(40),
+                                                            ),
+                                                            child: Text(
+                                                              "Following",
                                                               style: style
                                                                   .titleMedium,
                                                             ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                            child: Padding(
+                                                        )
+                                                      : Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(8.0),
-                                                          child: OutlinedButton(
-                                                            onPressed: () {},
-                                                            style: OutlinedButton
-                                                                .styleFrom(
-                                                                    minimumSize:
-                                                                        const Size.fromHeight(
-                                                                            50)),
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      MyElevatedButton(
+                                                                    buttonText:
+                                                                        "Follow",
+                                                                    onPressed:
+                                                                        () {
+                                                                      _controller
+                                                                          .toggleFollowing(
+                                                                              index);
+                                                                    },
+                                                                    height: 30,
+                                                                    style: style
+                                                                        .titleMedium,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                  child:
+                                                                      Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    OutlinedButton(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  style: OutlinedButton.styleFrom(
+                                                                      minimumSize:
+                                                                          const Size.fromHeight(
+                                                                              50)),
+                                                                  child: Text(
+                                                                    "Message",
+                                                                    style: style
+                                                                        .titleMedium,
+                                                                  ),
+                                                                ),
+                                                              ))
+                                                            ],
+                                                          ),
+                                                        );
+                                                }),
+                                            _controller.searchProfiles[index]
+                                                        .status ==
+                                                    'VERIFIED'
+                                                ? Container(
+                                                    width: Get.width * 0.9,
+                                                    decoration: BoxDecoration(
+                                                        color: const Color
+                                                                .fromRGBO(
+                                                            255, 240, 218, 1),
+                                                        border: Border.all(
+                                                          color: Colors
+                                                              .transparent,
+                                                        ),
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .all(
+                                                                Radius.circular(
+                                                                    20))),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16.0),
+                                                      child: Column(
+                                                        children: const [
+                                                          Center(
+                                                              child: Text(
+                                                            "Upcoming giveaway on 18th June.",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 18),
+                                                          )),
+                                                          Center(
+                                                              child: Text(
+                                                            "Stay Tuned",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontSize: 18),
+                                                          )),
+                                                          Center(
                                                             child: Text(
-                                                              "Message",
-                                                              style: style
-                                                                  .titleMedium,
+                                                              "Engineer who love dancing, modelling, photography. DM me for collaboration",
+                                                              style: TextStyle(
+                                                                  fontSize: 16),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
                                                             ),
                                                           ),
-                                                        ))
-                                                      ],
-                                                    ),
-                                                  );
-                                          }),
-                                      _controller.searchProfiles[index]
-                                                  .status ==
-                                              'VERIFIED'
-                                          ? Container(
-                                              width: Get.width * 0.9,
-                                              decoration: BoxDecoration(
-                                                  color: const Color.fromRGBO(
-                                                      255, 240, 218, 1),
-                                                  border: Border.all(
-                                                    color: Colors.transparent,
-                                                  ),
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(20))),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(16.0),
-                                                child: Column(
-                                                  children: const [
-                                                    Center(
-                                                        child: Text(
-                                                      "Upcoming giveaway on 18th June.",
-                                                      style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 18),
-                                                    )),
-                                                    Center(
-                                                        child: Text(
-                                                      "Stay Tuned",
-                                                      style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 18),
-                                                    )),
-                                                    Center(
-                                                      child: Text(
-                                                        "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                        style: TextStyle(
-                                                            fontSize: 16),
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                        ],
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
-                                    ],
+                                                  )
+                                                : Container(),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: Get.height * 0.08,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Material(
-                                    elevation: 3,
-                                    shape: CircleBorder(),
-                                    child: CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage:
-                                          AssetImage(Assets.profile),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      top: Get.height * 0.08,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Material(
+                                          elevation: 3,
+                                          shape: CircleBorder(),
+                                          child: CircleAvatar(
+                                            radius: 40,
+                                            backgroundImage:
+                                                AssetImage(Assets.profile),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    );
+                              )
+                            ],
+                          );
+                        });
                   })
                 ]),
               )
@@ -290,9 +328,9 @@ class ProfileDetail extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TabBar(tabs: [
-          Tab(text: "Rolls"),
-          Tab(text: "Photos"),
-          if (profileModel.status == 'VERIFIED') Tab(text: "Giveaway"),
+          const Tab(text: "Rolls"),
+          const Tab(text: "Photos"),
+          if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
         const SizedBox(
           height: 8,
@@ -337,14 +375,15 @@ class ProfileDetail extends StatelessWidget {
                               child: CachedNetworkImage(
                                 imageUrl: thumbnail,
                                 fit: BoxFit.cover,
-                                errorWidget: (c, s, e) => Icon(Icons.error),
+                                errorWidget: (c, s, e) =>
+                                    const Icon(Icons.error),
                               ),
                             );
                           },
                         );
                 }),
             if (profileModel.status == 'VERIFIED')
-              Center(child: Text("Giveaway")),
+              const Center(child: Text("Giveaway")),
           ]),
         ),
       ],
@@ -399,8 +438,11 @@ class ProfileReel extends StatelessWidget {
                   Get.to(SingleFeedScreen(reels[index], null));
                 },
                 child: CachedNetworkImage(
-                  imageUrl:
-                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                  imageUrl: reels[index].thumbnail,
+                  errorWidget: (context, a, b) => const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  ),
                   fit: BoxFit.cover,
                 ),
               );
