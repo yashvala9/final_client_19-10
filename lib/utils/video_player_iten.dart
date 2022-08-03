@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
@@ -20,17 +21,17 @@ class VideoPlayerItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _VideoPlayerItemState createState() => _VideoPlayerItemState();
+  VideoPlayerItemState createState() => VideoPlayerItemState();
 }
 
-class _VideoPlayerItemState extends State<VideoPlayerItem> {
+class VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController videoPlayerController;
 
   @override
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
-    // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
+      // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
         videoPlayerController.play();
         videoPlayerController.setVolume(1);
@@ -70,7 +71,16 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                       videoPlayerController.play();
                     }
                   },
-                  child: VideoPlayer(videoPlayerController),
+                  child: VisibilityDetector(
+                      key: Key(DateTime.now().toString()),
+                      onVisibilityChanged: (VisibilityInfo info) {
+                        if (info.visibleFraction == 0) {
+                          videoPlayerController.pause();
+                        } else {
+                          videoPlayerController.play();
+                        }
+                      },
+                      child: VideoPlayer(videoPlayerController)),
                 ),
                 widget.showLike
                     ? const Icon(

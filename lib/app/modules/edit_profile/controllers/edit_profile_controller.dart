@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../models/profile_model.dart';
 import '../../../../repositories/profile_repository.dart';
 import '../../../../services/auth_service.dart';
+import 'package:path/path.dart' as path;
 
 class EditProfileController extends GetxController {
   final _authService = Get.find<AuthService>();
@@ -31,15 +33,41 @@ class EditProfileController extends GetxController {
   int phone_number = 0;
   String bio = "";
 
+  Future<File> changeFileNameOnly(File file, String newFileName) {
+    var filepath = file.path;
+    var lastSeparator = filepath.lastIndexOf(Platform.pathSeparator);
+    var extension = path.extension(file.path).toString();
+    var newPath =
+        filepath.substring(0, lastSeparator + 1) + newFileName + extension;
+    return file.rename(newPath);
+  }
+
+  String genFileName(String userID, String fileName) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final date = DateFormat('yyyyMMdd').format(DateTime.now());
+    return 'reel_${userID}_${date}_${timestamp}_$fileName';
+  }
+
   Future<void> updateProfile() async {
     loading = true;
     printInfo(info: "Id: ${_authService.userId}");
     try {
+      String _fileName = '';
+      if (file != null) {
+        file = await changeFileNameOnly(file!, 'image');
+        _fileName = genFileName("Profile", path.basename(file!.path));
+
+        final s3File = await _profileRepo.uploadProfileToAwsS3(
+            userID: "Profile", file: file!, fileName: _fileName);
+      }
+
       var profileData = {
         "fullname":
             fullname == '' ? profileModel.user_profile!.fullname! : fullname,
         "bio": bio == '' ? profileModel.user_profile!.bio! : bio,
-        "profile_img": "",
+        "profile_img": _fileName == ''
+            ? profileModel.user_profile!.profile_img!
+            : _fileName,
         "phone_pin": phone_pin == 0
             ? profileModel.user_profile!.phone_pin!
             : phone_pin.toString(),
@@ -50,7 +78,9 @@ class EditProfileController extends GetxController {
       };
       print('2121 profileData $profileData');
       await _profileRepo.updateProfile(profileData, _authService.token!);
-      _authService.redirectUser();
+      _fileName = '';
+      await _authService.redirectUser();
+      update();
     } catch (e) {
       print("updateProfile: $e");
     }

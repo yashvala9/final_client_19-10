@@ -84,7 +84,6 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list212133 ' + body.toString());
 
     if (response.statusCode == 200) {
       return body['total'].toString();

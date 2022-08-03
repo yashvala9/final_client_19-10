@@ -16,6 +16,7 @@ class HomePageController extends GetxController {
   int? get profileId => _authService.profileModel?.id;
 
   bool _loading = false;
+  bool _loadMore = true;
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
@@ -63,6 +64,29 @@ class HomePageController extends GetxController {
       print("getFeeds: $e");
     }
     loading = false;
+    _loadMore = true;
+  }
+
+  void getMoreFeed() async {
+    print('2121 running getMoreFeed');
+    print('2121 _loadMore $_loadMore');
+    if (_loadMore) {
+      try {
+        var newList = await _reelRepo.getFeeds(profileId!, token!,
+            limit: 10, skip: reelList.length);
+        print('2121 newList.length ${newList.length}');
+        if (newList.isEmpty) {
+          _loadMore = false;
+        } else {
+          reelList.addAll(newList);
+          print('2121 reelList.length ${reelList.length}');
+        }
+        update();
+      } catch (e) {
+        showSnackBar(e.toString(), color: Colors.red);
+        print("getFeeds: $e");
+      }
+    }
   }
 
   void toggleLikeShow() async {
@@ -81,6 +105,10 @@ class HomePageController extends GetxController {
     } catch (e) {
       log("TogglelikeError: $e");
     }
+    update();
+  }
+
+  void updateManually() async {
     update();
   }
 

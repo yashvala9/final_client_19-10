@@ -157,7 +157,6 @@ class ProfileRepository {
     print(response.statusCode);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // AuthService().redirectUser();
       return;
     } else {
       return Future.error(body['detail']);
@@ -188,7 +187,8 @@ class ProfileRepository {
   Future<List<ReelModel>> getReelByProfileId(
       int profileId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getReelsByUserId}/$profileId"),
+      //TODO need to create this lazy loading and remove limit as 300
+      Uri.parse("${Base.getReelsByUserId}/$profileId?limit=300&skip=0"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -196,7 +196,6 @@ class ProfileRepository {
     );
 
     final body = jsonDecode(response.body);
-    print('listRolls $body');
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => ReelModel.fromMap(e)).toList();
@@ -215,7 +214,6 @@ class ProfileRepository {
     );
 
     final body = jsonDecode(response.body);
-    print('listRolls $body');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['is_following'];
     } else {

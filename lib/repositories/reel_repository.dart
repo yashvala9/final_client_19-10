@@ -15,10 +15,12 @@ import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 class ReelRepository {
-  Future<List<ReelModel>> getFeeds(int profileId, String token) async {
+  //TODO make limit 10
+  Future<List<ReelModel>> getFeeds(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
     print('343434');
     final response = await http.get(
-      Uri.parse(Base.reels),
+      Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -68,6 +70,24 @@ class ReelRepository {
     }
   }
 
+  Future<int> getCommentLikeCountByCommentId(
+      int commentId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getCommentLikeCount}/$commentId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['like_count'] as int;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
   Future<void> toggleLike(int reelId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.toggleLike}/$reelId"),
@@ -96,7 +116,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('2121 commentbody $body');
     if (response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => CommentModel.fromMap(e)).toList();
@@ -115,7 +134,6 @@ class ReelRepository {
     );
 
     final body = jsonDecode(response.body);
-    print('2121 commentbody $body');
     if (response.statusCode == 201) {
       return false;
     } else {

@@ -18,19 +18,29 @@ class VideoTrimmerView extends StatefulWidget {
   VideoTrimmerView(this.file);
 
   @override
-  _VideoTrimmerViewState createState() => _VideoTrimmerViewState();
+  VideoTrimmerViewState createState() => VideoTrimmerViewState();
 }
 
-class _VideoTrimmerViewState extends State<VideoTrimmerView> {
+class VideoTrimmerViewState extends State<VideoTrimmerView> {
   final Trimmer _trimmer = Trimmer();
 
   double _startValue = 0.0;
   double _endValue = 0.0;
 
-  RxBool _isPlaying = false.obs;
+  RxBool isPlaying = false.obs;
   RxBool _progressVisibility = false.obs;
 
   String finalVideoPath = '';
+  Future<void> pauseVideo() async {
+    print('running pause');
+    if (isPlaying.value) {
+      bool playbackState = await _trimmer.videPlaybackControl(
+        startValue: _startValue,
+        endValue: _endValue,
+      );
+      isPlaying.value = playbackState;
+    }
+  }
 
   Future<String?> _saveVideo() async {
     _progressVisibility.value = true;
@@ -44,12 +54,12 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
             onSave: (String? outputPath) async {
               finalVideoPath = outputPath!;
               print('finalVideoPath $finalVideoPath');
-              if (_isPlaying.value) {
+              if (isPlaying.value) {
                 bool playbackState = await _trimmer.videPlaybackControl(
                   startValue: _startValue,
                   endValue: _endValue,
                 );
-                _isPlaying.value = playbackState;
+                isPlaying.value = playbackState;
               }
               Get.to(
                 () => AddFeedScreen(
@@ -114,12 +124,12 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
                         _endValue = value;
                       },
                       onChangePlaybackState: (value) {
-                        _isPlaying.value = value;
+                        isPlaying.value = value;
                       },
                     ),
                   ),
                   TextButton(
-                    child: _isPlaying.value
+                    child: isPlaying.value
                         ? const Icon(
                             Icons.pause,
                             size: 80.0,
@@ -135,7 +145,7 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
                         startValue: _startValue,
                         endValue: _endValue,
                       );
-                      _isPlaying.value = playbackState;
+                      isPlaying.value = playbackState;
                     },
                   ),
                   Padding(
@@ -143,7 +153,7 @@ class _VideoTrimmerViewState extends State<VideoTrimmerView> {
                     child: MyElevatedButton(
                       onPressed: () async {
                         _progressVisibility.value ? '' : await _saveVideo();
-                        _isPlaying.value = false;
+                        isPlaying.value = false;
                       },
                       buttonText: 'Save',
                     ),

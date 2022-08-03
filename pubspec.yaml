@@ -34,7 +34,9 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   video_player: ^2.4.5
   video_trimmer: ^1.1.2
+  visibility_detector: ^0.3.3
 
+  
 dev_dependencies:
   flutter_lints: ^1.0.0
   flutter_test:
