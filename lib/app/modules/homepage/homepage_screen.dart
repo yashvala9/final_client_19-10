@@ -16,6 +16,7 @@ import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
+import '../../../utils/colors.dart';
 import '../../../utils/video_player_iten.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import 'comment_screen.dart';
@@ -23,8 +24,8 @@ import 'comment_screen.dart';
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
-  final _controller = Get.put(HomePageController());
   final _reelRepo = Get.put(ReelRepository());
+  final _controller = Get.put(HomePageController());
   final _commentRepo = Get.put(CommentRepository());
 
   @override

@@ -82,8 +82,6 @@ class CommentController extends GetxController {
       return;
     }
     var map = {
-      'userId': profileId,
-      'reelId': reelId,
       'comment': comment.trim(),
     };
     comment = "";

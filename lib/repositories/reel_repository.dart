@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:reel_ro/models/comment_model.dart';
 
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
@@ -85,19 +86,38 @@ class ReelRepository {
     }
   }
 
-  Future<List<ReelModel>> getCommentByReelId(
-      String reelId, String token) async {
+  Future<List<CommentModel>> getCommentByReelId(
+      int reelId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getCommentByReelId}?reelId==$reelId"),
+      Uri.parse("${Base.getCommentByReelId}$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
+    print('2121 commentbody $body');
+    if (response.statusCode == 201) {
       final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
+      return list.map((e) => CommentModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<bool> isReelLikedByCurrentUser(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    final body = jsonDecode(response.body);
+    print('2121 commentbody $body');
+    if (response.statusCode == 201) {
+      return false;
     } else {
       return Future.error(body['message']);
     }
