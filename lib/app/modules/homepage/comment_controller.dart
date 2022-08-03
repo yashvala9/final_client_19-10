@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/models/profile_model.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/comment_repository.dart';
@@ -14,6 +16,7 @@ class CommentController extends GetxController {
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
+  ProfileModel get profileModel => _authService.profileModel!;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -36,38 +39,44 @@ class CommentController extends GetxController {
     comment = "";
   }
 
-  void getCommentsByReelId(String reelId) async {
-    // loading = true;
-    // try {
-    //   commentList =
-    //       await _commentRepo.getCommentByReelId(reelId, profileId!, token!);
-    //   printInfo(info: "commentList: $commentList");
-    // } catch (e) {
-    //   print("getCommentsByReelId: $e");
-    // }
-    // loading = false;
-    // update();
-  }
-
-  void toggleLike(int index) {
-    // commentList[index].isLiked = !commentList[index].isLiked;
-    // if (commentList[index].isLiked) {
-    //   commentList[index].likeCount++;
-    // } else {
-    //   commentList[index].likeCount--;
-    // }
-    // _commentRepo.toggleCommentLike(commentList[index].id, profileId!, token!);
-    // update();
-  }
-
-  void addCommentLocally(Map<String, dynamic> data, String reelId) {
-    var comment = CommentModel(
-        id: 0, comment: data['comment'], user: _authService.profileModel!);
-    _commentList.add(comment);
+  void getCommentsByReelId(int reelId) async {
+    loading = true;
+    try {
+      commentList = await _commentRepo.getCommentByReelId(reelId, token!);
+      printInfo(info: "commentList: $commentList");
+    } catch (e) {
+      print("getCommentsByReelId: $e");
+    }
+    loading = false;
     update();
   }
 
-  void addComment(String reelId, VoidCallback onDone) async {
+  void toggleLike(int index) {
+    commentList[index].isLiked = !commentList[index].isLiked;
+    if (commentList[index].isLiked) {
+      commentList[index].likeCount++;
+    } else {
+      commentList[index].likeCount--;
+    }
+    _commentRepo.toggleCommentLike(commentList[index].id, token!);
+    update();
+  }
+
+  void deleteComment(int index) async {
+    try {
+      await _commentRepo.toggleCommentLike(commentList[index].id, token!);
+      update();
+    } catch (e) {
+      log('Delete Comment: $e');
+    }
+  }
+
+  void addCommentLocally(CommentModel commentModel) {
+    _commentList.add(commentModel);
+    update();
+  }
+
+  void addComment(int reelId, VoidCallback onDone) async {
     if (comment.isEmpty) {
       showSnackBar("Please add comment", color: Colors.red);
       return;
@@ -76,12 +85,11 @@ class CommentController extends GetxController {
       'comment': comment.trim(),
     };
     comment = "";
-    addCommentLocally(map, reelId);
     try {
-      final message =
-          await _commentRepo.addCommentToReelId(reelId, token!, map);
+      final commentModel =
+          await _commentRepo.addCommentToReelId(token!, map, reelId);
+      addCommentLocally(commentModel);
       onDone();
-      print("addCommentSuccess: $message");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("addComment: $e");

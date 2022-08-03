@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
+import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
@@ -67,12 +68,13 @@ class SingleFeedController extends GetxController {
 
 class CommentController extends GetxController {
   CommentController({required this.reelId});
-  final String reelId;
+  final int reelId;
   final _commentRepo = Get.put(CommentRepository());
   final _authService = Get.put(AuthService());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
+  ProfileModel get profileModel => _authService.profileModel!;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -109,8 +111,7 @@ class CommentController extends GetxController {
   void getCommentsByReelId() async {
     loading = true;
     try {
-      commentList =
-          await _commentRepo.getCommentByReelId(reelId, profileId!, token!);
+      commentList = await _commentRepo.getCommentByReelId(reelId, token!);
       print("commentList: $commentList");
     } catch (e) {
       print("getCommentsByReelId: $e");
@@ -119,15 +120,16 @@ class CommentController extends GetxController {
   }
 
   void addCommentLocally(Map<String, dynamic> data) {
-    // var comment = CommentModel(
-    //     id: 0,
-    //     comment: data['comment'],
-    //     likeCount: 0,
-    //     responseCount: 0,
-    //     profile: profileId!,
-    //     isLiked: false,
-    //     reelId: reelId);
-    // _commentList.add(comment);
+    var comment = CommentModel(
+        id: 0,
+        comment: data['comment'],
+        likeCount: 0,
+        responseCount: 0,
+        user: profileModel,
+        isLiked: false,
+        createdAt: DateTime.now(),
+        reelId: reelId.toString());
+    _commentList.add(comment);
     update();
   }
 
@@ -143,8 +145,9 @@ class CommentController extends GetxController {
     };
     addCommentLocally(map);
     try {
-      // // final message = await _commentRepo.addCommentToReelId(token!, map);
-      // print("addCommentSuccess: $message");
+      final message =
+          await _commentRepo.addCommentToReelId(token!, map, reelId);
+      print("addCommentSuccess: $message");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("addComment: $e");

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class AddFeedController extends GetxController {
 
   void addFeed(File file, int type) async {
     loading = true;
+    log("File: $file");
     file = await changeFileNameOnly(file, 'video-$profileId');
     final String _fileName =
         genFileName(profileId!.toString(), path.basename(file.path));
@@ -66,6 +68,7 @@ class AddFeedController extends GetxController {
       await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
       showSnackBar("Reel added successfully: $s3File");
       clean();
+      Get.back();
       Get.back();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);

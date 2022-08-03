@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/models/comment_model.dart';
-import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
+import '../../../models/comment_model.dart';
 import '../../../models/reel_model.dart';
 
 class HomePageController extends GetxController {
@@ -57,7 +58,6 @@ class HomePageController extends GetxController {
     loading = true;
     try {
       reelList = await _reelRepo.getFeeds(profileId!, token!);
-      print(reelList.length);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
@@ -72,16 +72,16 @@ class HomePageController extends GetxController {
   }
 
   void likeToggle(int index) async {
-    // print("Index: $index");
-    // if (reelList[index].isLiked) {
-    //   reelList[index].likeCount--;
-    // } else {
-    //   toggleLikeShow();
-    //   reelList[index].likeCount++;
-    // }
-    // reelList[index].isLiked = !reelList[index].isLiked;
-    // _reelRepo.toggleLike(reelList[index].reelId, profileId!, token!);
-    // update();
+    try {
+      await _reelRepo.toggleLike(reelList[index].id, token!);
+      final isLiked = await _reelRepo.getLikeFlag(reelList[index].id, token!);
+      if (isLiked) {
+        toggleLikeShow();
+      }
+    } catch (e) {
+      log("TogglelikeError: $e");
+    }
+    update();
   }
 
   void signOut() {

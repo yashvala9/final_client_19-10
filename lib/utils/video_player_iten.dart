@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
 
@@ -26,9 +30,11 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     super.initState();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
+    // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
         videoPlayerController.play();
         videoPlayerController.setVolume(1);
+        videoPlayerController.dataSource;
       });
   }
 
@@ -44,27 +50,28 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
 
     return videoPlayerController.value.isBuffering
         ? const Loading()
-        : Container(
-            width: size.width,
-            height: size.height,
-            decoration: const BoxDecoration(
-              color: Colors.black,
-            ),
+        : SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            // decoration: const BoxDecoration(
+            //   color: Colors.black,
+            // ),
             child: Stack(
               alignment: Alignment.center,
               children: [
                 InkWell(
-                    onDoubleTap: () {
-                      widget.doubleTap();
-                    },
-                    onTap: () {
-                      if (videoPlayerController.value.isPlaying) {
-                        videoPlayerController.pause();
-                      } else {
-                        videoPlayerController.play();
-                      }
-                    },
-                    child: VideoPlayer(videoPlayerController)),
+                  onDoubleTap: () {
+                    widget.doubleTap();
+                  },
+                  onTap: () {
+                    if (videoPlayerController.value.isPlaying) {
+                      videoPlayerController.pause();
+                    } else {
+                      videoPlayerController.play();
+                    }
+                  },
+                  child: VideoPlayer(videoPlayerController),
+                ),
                 widget.showLike
                     ? const Icon(
                         Icons.favorite,
@@ -97,12 +104,15 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     with AutomaticKeepAliveClientMixin {
   late BetterPlayerController _betterPlayerController;
 
+  final _authService = Get.find<AuthService>();
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+    log("URL: ${widget.url}");
     _betterPlayerController = BetterPlayerController(
       BetterPlayerConfiguration(
         aspectRatio: 5.3 / 10,
@@ -128,7 +138,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
           enableSkips: false,
           enableSubtitles: false,
           enableRetry: true,
-          enablePlayPause: true,
+          enablePlayPause: false,
           controlBarColor: Colors.black.withOpacity(0.2),
           playIcon: Icons.play_arrow_outlined,
           pauseIcon: Icons.pause_circle_outline,
@@ -139,6 +149,10 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
         BetterPlayerDataSourceType.network,
         widget.url,
         videoFormat: BetterPlayerVideoFormat.hls,
+        drmConfiguration: BetterPlayerDrmConfiguration(
+          drmType: BetterPlayerDrmType.token,
+          token: "Bearer=${_authService.token}",
+        ),
       ),
     );
   }

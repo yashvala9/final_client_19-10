@@ -8,65 +8,59 @@ import 'package:reel_ro/widgets/loading.dart';
 
 class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
-  CommentWidget({Key? key, required this.commentModel}) : super(key: key);
+  final ProfileModel profileModel;
+  CommentWidget(
+      {Key? key, required this.commentModel, required this.profileModel})
+      : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ProfileModel>(
-        future: _profileRepo.getProfileById(
-            commentModel.user.id, _authService.token!),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Loading();
-          }
-          var profile = snapshot.data!;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    '@${profile.username}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text(
-                    '1 day ago',
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    commentModel.comment,
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )),
-                      Text('commentModel.likeCount.toString()'),
-                    ],
-                  )
-                ],
-              ),
-              // InkWell(
-              //     onTap: () {},
-              //     child: const Text(
-              //       '2 Responses',
-              //       style: TextStyle(color: Colors.blue),
-              //     )),
-            ],
-          );
-        });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              '@${profileModel.username}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            const Text(
+              '1 day ago',
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              commentModel.comment,
+            ),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )),
+                Text(commentModel.likeCount.toString()),
+              ],
+            )
+          ],
+        ),
+        // InkWell(
+        //     onTap: () {},
+        //     child: const Text(
+        //       '2 Responses',
+        //       style: TextStyle(color: Colors.blue),
+        //     )),
+      ],
+    );
   }
 }

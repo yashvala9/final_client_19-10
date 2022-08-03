@@ -4,16 +4,16 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/comment_model.dart';
+import 'package:reel_ro/models/nessted_comment_model.dart';
 
 import '../utils/base.dart';
 
 class CommentRepository {
   Future<List<CommentModel>> getCommentByReelId(
-      String reelId, int profileId, String token) async {
+      int reelId, String token) async {
     printInfo(info: "getCommentByreelId: $reelId");
     final response = await http.get(
-      Uri.parse(
-          "${Base.getCommentByReelId}?reelId=$reelId&currentUserId=$profileId"),
+      Uri.parse("${Base.getCommentByReelId}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -21,18 +21,38 @@ class CommentRepository {
     );
     final body = jsonDecode(response.body);
     printInfo(info: "getCommentsByReelIdBody: $body");
-    if (response.statusCode == 200) {
-      final Iterable list = body['comments'];
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
       return list.map((e) => CommentModel.fromMap(e)).toList();
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 
-  Future<String> addCommentToReelId(
-      String reelId, String token, Map<String, dynamic> data) async {
+  Future<List<NestedCommentModel>> getNestedCommentByCommentId(
+      int commentId, String token) async {
+    printInfo(info: "getNestedCommentId: $commentId");
+    final response = await http.get(
+      Uri.parse("${Base.nestedComment}/$commentId/responses"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    printInfo(info: "getCommentsByReelIdBody: $body");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => NestedCommentModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<CommentModel> addCommentToReelId(
+      String token, Map<String, dynamic> data, int reelId) async {
     final response = await http.post(
-      Uri.parse('${Base.addCommentToReelId}/$reelId'),
+      Uri.parse("${Base.addCommentToReelId}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -40,29 +60,80 @@ class CommentRepository {
       body: jsonEncode(data),
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      return "";
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return CommentModel.fromMap(body);
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 
-  Future<void> toggleCommentLike(
-      int commentId, int userId, String token) async {
+  Future<NestedCommentModel> addNestedComment(
+      int commentId,  String comment, String token) async {
     final response = await http.post(
-      Uri.parse(
-          "${Base.toggleCommentLike}?commentId=$commentId&userId=$userId"),
+      Uri.parse("${Base.nestedComment}/$commentId/responses"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode({
+        'response': comment,
+      }),
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return NestedCommentModel.fromMap(body);
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<int> getCommentCountByReelId(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getCommentCount}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['comment_count'] as int;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<void> toggleCommentLike(int commentId, String token) async {
+    final response = await http.post(
+      Uri.parse("${Base.toggleCommentLike}/$commentId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> deleteComment(int commentId, String token) async {
+    final response = await http.delete(
+      Uri.parse("${Base.deleteComment}/$commentId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
       printInfo(info: body['message']);
       return;
     } else {
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 }

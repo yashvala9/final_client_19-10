@@ -4,19 +4,20 @@ import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/reel_repository.dart';
+import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import 'comment_controller.dart';
 
 class CommentSheet extends StatelessWidget {
-  final String reelId;
+  final int reelId;
   CommentSheet({Key? key, required this.reelId}) : super(key: key);
 
   buildProfile(String profilePhoto) {
-    return const CircleAvatar(
+    return CircleAvatar(
       radius: 20,
       backgroundImage: NetworkImage(
-        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+        profilePhoto,
       ),
     );
   }
@@ -29,14 +30,13 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.getCommentsByReelId(reelId);
     });
     // _controller.customeInit();
     return GetBuilder<CommentController>(
       builder: (_) => FutureBuilder<List<CommentModel>>(
-          future: _reelRepo.getCommentByReelId(
-              int.parse(reelId), _controller.token!),
+          future: _reelRepo.getCommentByReelId(reelId, _controller.token!),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Loading();
@@ -73,12 +73,36 @@ class CommentSheet extends StatelessWidget {
                           ...List.generate(
                             snapshot.data!.length,
                             (index) => ListTile(
-                              leading: buildProfile(""),
+                              leading: buildProfile(
+                                  "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
                               title: CommentWidget(
                                 commentModel: snapshot.data![index],
                                 likeToggle: () {
                                   _controller.toggleLike(index);
                                 },
+                                deleteCallBack: () {
+                                  Get.dialog(AlertDialog(
+                                    title: const Text(
+                                        "Are you sure you want to delete this comment?"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: const Text("NO")),
+                                      MaterialButton(
+                                        onPressed: () {
+                                          Get.back();
+                                          _controller.deleteComment(index);
+                                        },
+                                        child: const Text("YES"),
+                                        color: Colors.red,
+                                      ),
+                                    ],
+                                  ));
+                                },
+                                profileModel:
+                                    _controller.commentList[index].user,
                               ),
                             ),
                           ).toList(),
@@ -117,12 +141,12 @@ class CommentSheet extends StatelessWidget {
                             _controller.addComment(reelId, () {
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
-                                  duration: Duration(milliseconds: 500),
+                                  duration: const Duration(milliseconds: 500),
                                   curve: Curves.fastOutSlowIn);
                             });
                           }
                         },
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                       ),
                     ),
                   ],

@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
+import 'package:reel_ro/repositories/comment_repository.dart';
+import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
+import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
 
@@ -19,12 +22,18 @@ class SingleFeedScreen extends StatelessWidget {
   PhotoModel? photo;
 
   final _controller = Get.put(SingleFeedController());
+  final _reelRepo = Get.put(ReelRepository());
+  final _commentRepo = Get.put(CommentRepository());
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    final data = reel ?? photo;
+
+    var videoSplit = reel!.filename.split("_");
+    var videoUrl =
+        "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel!.filename}/MP4/${reel!.filename}";
     return GetBuilder<SingleFeedController>(
         builder: (_) => Scaffold(
               extendBodyBehindAppBar: true,
@@ -48,23 +57,20 @@ class SingleFeedScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return Stack(
                           children: [
-                            reel == null
-                                ? GestureDetector(
-                                    onDoubleTap: () {
-                                      _controller.likeToggle(reel!);
-                                    },
-                                    child: CachedNetworkImage(
-                                      imageUrl: photo!.videoId.url,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : VideoPlayerItem(
-                                    videoUrl: reel!.filename,
-                                    doubleTap: () {
-                                      _controller.likeToggle(reel!);
-                                    },
-                                    showLike: _controller.showLike,
-                                  ),
+                            VideoPlayerItem(
+                              videoUrl: videoUrl,
+                              doubleTap: () {
+                                // _controller.likeToggle(index);
+                              },
+                              showLike: _controller.showLike,
+                            ),
+                            //  VideoPlayerItem(
+                            //         videoUrl: reel!.filename,
+                            //         doubleTap: () {
+                            //           _controller.likeToggle(reel!);
+                            //         },
+                            //         showLike: _controller.showLike,
+                            //       ),
                             Column(
                               children: [
                                 const SizedBox(
@@ -87,9 +93,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                reel == null
-                                                    ? photo!.title
-                                                    : 'reel!.title',
+                                                reel!.video_title,
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.white,
@@ -97,34 +101,12 @@ class SingleFeedScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                reel == null
-                                                    ? photo!.description
-                                                    : reel!.description,
+                                                reel!.description,
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white,
                                                 ),
                                               ),
-                                              Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.music_note,
-                                                    size: 15,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(
-                                                    reel == null
-                                                        ? photo!.song
-                                                        : 'reel!.song',
-                                                    style: const TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
                                             ],
                                           ),
                                         ),
@@ -164,56 +146,46 @@ class SingleFeedScreen extends StatelessWidget {
                                                   onTap: () {},
                                                   // _controller.likeVideo(data.id),
                                                   child: Icon(
-                                                    reel == null
-                                                        ? photo!.isLiked
-                                                            ? Icons.favorite
-                                                            : Icons
-                                                                .favorite_border
-                                                        : true
-                                                            //reel!.isLiked
-                                                            ? Icons.favorite
-                                                            : Icons
-                                                                .favorite_border,
+                                                    Icons.favorite,
                                                     size: 30,
-                                                    color: reel == null
-                                                        ? photo!.isLiked
-                                                            ? Colors.red
-                                                            : Colors.white
-                                                        : true
-                                                            //reel!.isLiked
-                                                            ? Colors.red
-                                                            : Colors.white,
+                                                    color: Colors.red,
                                                   ),
                                                 ),
+
                                                 // const SizedBox(height: 7),
-                                                Text(
-                                                  reel == null
-                                                      ? photo!.likeCount
-                                                          .toString()
-                                                      : '20'
-                                                          // reel!.likeCount
-                                                          .toString(),
-                                                  style: style.headlineSmall!
-                                                      .copyWith(
-                                                    color: Colors.white,
-                                                  ),
-                                                )
+                                                FutureBuilder<int>(
+                                                    future: _reelRepo
+                                                        .getLikeCountByReelId(
+                                                            _controller
+                                                                .profileId!,
+                                                            _controller.token!),
+                                                    builder: (context, snap) {
+                                                      return Text(
+                                                        snap.hasData
+                                                            ? snap.data!
+                                                                .toString()
+                                                            : '0',
+                                                        // data.likeCount.toString(),
+                                                        style: style
+                                                            .headlineSmall!
+                                                            .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                      );
+                                                    }),
                                               ],
                                             ),
                                             Column(
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    showModalBottomSheet(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return CommentSheet(
-                                                            reelId: reel == null
-                                                                ? photo!.reelId
-                                                                : reel!.id
-                                                                    .toString(),
-                                                          );
-                                                        });
+                                                    Get.bottomSheet(
+                                                      CommentSheet(
+                                                        reelId: reel!.id,
+                                                      ),
+                                                      backgroundColor:
+                                                          Colors.white,
+                                                    );
                                                   },
                                                   child: const Icon(
                                                     Icons.comment,
@@ -221,20 +193,28 @@ class SingleFeedScreen extends StatelessWidget {
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                                Text(
-                                                  reel == null
-                                                      ? photo!
-                                                          .reelComments.length
-                                                          .toString()
-                                                      : '20',
-                                                  // reel!
-                                                  //     .reelComments.length
-                                                  //     .toString(),
-                                                  style: style.headlineSmall!
-                                                      .copyWith(
-                                                    color: Colors.white,
-                                                  ),
-                                                )
+                                                FutureBuilder<int>(
+                                                    future: _commentRepo
+                                                        .getCommentCountByReelId(
+                                                            _controller
+                                                                .profileId!,
+                                                            _controller.token!),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      print(
+                                                          "ReelId: ${reel!.id} CommentCount: ${snapshot.data}");
+                                                      return Text(
+                                                        snapshot.hasData
+                                                            ? snapshot.data!
+                                                                .toString()
+                                                            : "0",
+                                                        style: style
+                                                            .headlineSmall!
+                                                            .copyWith(
+                                                          color: Colors.white,
+                                                        ),
+                                                      );
+                                                    })
                                               ],
                                             ),
                                             Column(
@@ -257,12 +237,10 @@ class SingleFeedScreen extends StatelessWidget {
                                                 // )
                                               ],
                                             ),
-                                            reel == null
-                                                ? Container()
-                                                : CircleAnimation(
-                                                    child: buildMusicAlbum(
-                                                        "https://images.unsplash.com/photo-1656311877606-778f297e00d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"),
-                                                  ),
+                                            CircleAnimation(
+                                              child: buildMusicAlbum(
+                                                  "${Base.profileBucketUrl}/${reel!.user.user_profile!.profile_img}"),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -340,7 +318,7 @@ class SingleFeedScreen extends StatelessWidget {
 }
 
 class CommentSheet extends StatelessWidget {
-  final String reelId;
+  final int reelId;
   CommentSheet({Key? key, required this.reelId}) : super(key: key);
 
   buildProfile(String profilePhoto) {
@@ -438,6 +416,8 @@ class CommentSheet extends StatelessWidget {
                           title: CommentWidget(
                             commentModel: e,
                             likeToggle: () {},
+                            deleteCallBack: () {},
+                            profileModel: e.user,
                           ),
                         ),
                       )

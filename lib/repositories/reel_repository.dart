@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
@@ -33,33 +34,50 @@ class ReelRepository {
     }
   }
 
-  Future<bool> getLikeFlag(String reelId, int profileId, String token) async {
+  Future<bool> getLikeFlag(int reelId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getLikeFlag}?reelId=$reelId&userId=2"),
+      Uri.parse("${Base.getLikeFlag}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      return body['liked'] as bool;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['is_liked'] as bool;
     } else {
       print(body['meesage']);
       return Future.error(body['message']);
     }
   }
 
-  Future<void> toggleLike(String reelId, int profileId, String token) async {
-    final response = await http.post(
-      Uri.parse("${Base.toggleLike}?reelId=$reelId&userId=2"),
+  Future<int> getLikeCountByReelId(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getLikeCount}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['like_count'] as int;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<void> toggleLike(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.toggleLike}/$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
       // return body['liked'] as bool;
       return;
     } else {
@@ -71,7 +89,7 @@ class ReelRepository {
   Future<List<CommentModel>> getCommentByReelId(
       int reelId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getComment}$reelId"),
+      Uri.parse("${Base.getCommentByReelId}$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -89,7 +107,7 @@ class ReelRepository {
 
   Future<bool> isReelLikedByCurrentUser(int reelId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.isLiked}$reelId"),
+      Uri.parse("$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -122,7 +140,7 @@ class ReelRepository {
       return;
     } else {
       final body = jsonDecode(response.body);
-      return Future.error(body['message']);
+      return Future.error(body['detail']);
     }
   }
 
@@ -197,25 +215,21 @@ class ReelRepository {
   }) async {
     print('2121 s3 filename $fileName');
     try {
-      return await AwsS3.uploadFile(
+      final response = await AwsS3.uploadFile(
         accessKey: "AKIARYAXXOSN5XYB5M67",
         secretKey: "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",
         file: file,
-        bucket: "reelro-mediaconvert-source",
+        bucket: "reelro-vod-sourcebucket",
         region: "ap-south-1",
         filename: fileName,
         destDir: 'inputs',
-      ).then((String? _response) {
-        if (_response == null) {
-          print('2121 response null');
-          return null;
-        } else {
-          return "https://reelro-mediaconvert-source.s3.ap-south-1.amazonaws.com/inputs/$fileName";
-        }
-      });
+      );
+      log("UploadVideoToS3Bucket: $response");
+      return "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/$fileName";
     } catch (e) {
       showSnackBar("Error Uploading File");
       printInfo(info: "File Uploading error.......");
+
       return null;
     }
   }
@@ -234,6 +248,22 @@ class ReelRepository {
       return;
     } else {
       return Future.error(body['error']['message']);
+    }
+  }
+
+  Future<void> deleteReel(int reelId, String token) async {
+    final response = await http.delete(
+      Uri.parse("${Base.deleteReel}/$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body['detail']);
     }
   }
 }

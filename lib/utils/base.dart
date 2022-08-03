@@ -8,10 +8,10 @@ class Base {
   static const verifyOtp = '$_url/auth/register/verifyOTP';
   static const getProfileId = '$_url/users/me';
   static const getProfileByToken = '$_url/users/getcurrent_user';
-  static const getProfilebyId = '$_url/user-profiles';
+  // static const getProfilebyId = '$_url/user-profiles';
   static const getReelsbyId = '$_url/getReelsByUserId';
   // static const createProfile = '$_url/user-profiles';
-  static const searchUser = '$_url/searchByUserName';
+  static const searchUser = '$_url/search';
 
   //Forget password
   static const generateForgetPasswordToken =
@@ -22,18 +22,24 @@ class Base {
 
   //Profile
   static const currentUser = '$_url/users/getcurrent_user';
+  static const getUserProfile = '$_url/users/profile';
   static const createProfile = '$_url/users/profile';
   static const updateProfile = '$_url/users/profile/update';
+  static const getProfileById = '$_url/users/profile';
 
   //Reels
-  static const getReelsByUserId = '$_url/getReelsByUserId';
+  static const getReelsByUserId = '$_url/reels/user';
   static const getFeedsByUserId = '$_url/getFeed';
   static const getPhotosByUserId = '$_url/getPhotosByUserId';
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
   static const addReel = '$_url/reels';
-  static const getComment = '$_url/reels/comments/';
-  static const isLiked = '$_url/reels/isLiked/';
+  static const deleteReel = '$_url/reels/delete';
+
+  //Following Followers
+  static const getFollowing = '$_url/users';
+  static const isFollowing = '$_url/users/follow';
+  static const toggleFollow = '$_url/users/follow';
 
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';
@@ -43,16 +49,18 @@ class Base {
       'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
 
   //Like
-  static const toggleLike = '$_url/toggleLike';
-  static const getLikeFlag = '$_url/getLikeFlag';
+  static const toggleLike = '$_url/reels/likes';
+  static const getLikeFlag = '$_url/reels/isLiked';
+  static const getLikeCount = '$_url/count/likes/reels';
 
   //Comment
+
   static const getCommentByReelId = '$_url/getCommentsByReelId';
   static const addCommentToReelId = '$_url/reels/comments';
   static const toggleCommentLike = '$_url/toggleCommentLike';
-
-  //Follow UnFollow
-  static const toggleFollow = '${_url}/sendFollowRequest';
+  static const deleteComment = '$_url/reels/comments';
+  static const nestedComment = '$_url/reels/comments';
+  static const getCommentCount = '$_url/count/comments';
 
   //Giveaway
   static const giveaway = '$_url/contests/';
