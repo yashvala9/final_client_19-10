@@ -349,8 +349,10 @@ class HomePageScreen extends StatelessWidget {
                                                             print(
                                                                 "ReelId: ${data.id} CommentCount: ${snapshot.data}");
                                                             return Text(
-                                                              snapshot.data!
-                                                                  .toString(),
+                                                              snapshot.hasData
+                                                                  ? snapshot.data!
+                                                                      .toString()
+                                                                  : '0',
                                                               style: style
                                                                   .headlineSmall!
                                                                   .copyWith(

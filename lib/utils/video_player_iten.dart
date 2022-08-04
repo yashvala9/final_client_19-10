@@ -27,6 +27,7 @@ class VideoPlayerItem extends StatefulWidget {
 class VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController videoPlayerController;
 
+  bool isManualPause = false;
   @override
   void initState() {
     super.initState();
@@ -67,17 +68,25 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                   onTap: () {
                     if (videoPlayerController.value.isPlaying) {
                       videoPlayerController.pause();
+                      isManualPause = true;
+                      print('456456 1 $isManualPause');
                     } else {
                       videoPlayerController.play();
+                      isManualPause = false;
+                      print('456456 2 $isManualPause');
                     }
                   },
                   child: VisibilityDetector(
                       key: Key(DateTime.now().toString()),
                       onVisibilityChanged: (VisibilityInfo info) {
-                        if (info.visibleFraction == 0) {
+                        if (info.visibleFraction == 0 && !isManualPause) {
                           videoPlayerController.pause();
+                          print('456456 3 $isManualPause');
                         } else {
-                          videoPlayerController.play();
+                          if (!isManualPause) {
+                            print('456456 4 $isManualPause');
+                            videoPlayerController.play();
+                          }
                         }
                       },
                       child: VideoPlayer(videoPlayerController)),

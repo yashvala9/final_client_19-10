@@ -324,7 +324,6 @@ class EditProfileView extends GetView<EditProfileController> {
                                     // // }
                                     // _formKey.currentState!.save();
                                     await _controller.updateProfile();
-
                                     // Get.back(result: 'hello');
                                     // Get.toNamed(AppRoutes.home);
                                   },
