@@ -95,7 +95,8 @@ class HomePageScreen extends StatelessWidget {
                                 initialPage: 0, viewportFraction: 1),
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
-                              if (index == (_controller.reelList.length - 3)) {
+                              if (index == (_controller.reelList.length - 3) &&
+                                  !_controller.loadingMore) {
                                 _controller.getMoreFeed();
                               }
                               final data = _controller.reelList[index];
@@ -350,7 +351,8 @@ class HomePageScreen extends StatelessWidget {
                                                                 "ReelId: ${data.id} CommentCount: ${snapshot.data}");
                                                             return Text(
                                                               snapshot.hasData
-                                                                  ? snapshot.data!
+                                                                  ? snapshot
+                                                                      .data!
                                                                       .toString()
                                                                   : '0',
                                                               style: style

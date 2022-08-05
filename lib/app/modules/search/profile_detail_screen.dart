@@ -12,6 +12,7 @@ import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
+import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
@@ -29,7 +30,7 @@ class ProfileDetail extends StatelessWidget {
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return DefaultTabController(
-      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 3 : 2,
+      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 2 : 1,
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -152,24 +153,53 @@ class ProfileDetail extends StatelessWidget {
                                                             horizontal: 20,
                                                             vertical: 8,
                                                           ),
-                                                          child: OutlinedButton(
-                                                            onPressed: () {
-                                                              _controller
-                                                                  .toggleFollowing(
-                                                                      index);
-                                                            },
-                                                            style:
-                                                                OutlinedButton
-                                                                    .styleFrom(
-                                                              minimumSize:
-                                                                  const Size
-                                                                      .fromHeight(40),
-                                                            ),
-                                                            child: Text(
-                                                              "Following",
-                                                              style: style
-                                                                  .titleMedium,
-                                                            ),
+                                                          child: Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child:
+                                                                    OutlinedButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    _controller
+                                                                        .toggleFollowing(
+                                                                            index);
+                                                                  },
+                                                                  style: OutlinedButton
+                                                                      .styleFrom(
+                                                                    minimumSize:
+                                                                        const Size.fromHeight(
+                                                                            40),
+                                                                  ),
+                                                                  child: Text(
+                                                                    "Following",
+                                                                    style: style
+                                                                        .titleMedium,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                  child:
+                                                                      Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    OutlinedButton(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  style: OutlinedButton.styleFrom(
+                                                                      minimumSize:
+                                                                          const Size.fromHeight(
+                                                                              50)),
+                                                                  child: Text(
+                                                                    "Message",
+                                                                    style: style
+                                                                        .titleMedium,
+                                                                  ),
+                                                                ),
+                                                              ))
+                                                            ],
                                                           ),
                                                         )
                                                       : Padding(
@@ -293,14 +323,14 @@ class ProfileDetail extends StatelessWidget {
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: const [
+                                      children: [
                                         Material(
                                           elevation: 3,
                                           shape: CircleBorder(),
                                           child: CircleAvatar(
                                             radius: 40,
-                                            backgroundImage:
-                                                AssetImage(Assets.profile),
+                                            backgroundImage: NetworkImage(
+                                                "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
                                           ),
                                         ),
                                       ],
@@ -329,7 +359,7 @@ class ProfileDetail extends StatelessWidget {
       children: <Widget>[
         TabBar(tabs: [
           const Tab(text: "Rolls"),
-          const Tab(text: "Photos"),
+          // const Tab(text: "Photos"),
           if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
         const SizedBox(
@@ -338,50 +368,51 @@ class ProfileDetail extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(profileId: profileModel.id),
-            FutureBuilder<List<PhotoModel>>(
-                future: _profileRepo.getPhotosByProfileId(
-                    profileModel.id, _controller.token!),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Loading();
-                  }
-                  if (snapshot.hasError) {
-                    printInfo(
-                        info: "getCurrentUserPhoto: ${snapshot.hasError}");
-                    return Container();
-                  }
-                  var photos = snapshot.data!;
-                  return photos.isEmpty
-                      ? const EmptyWidget("No photos available")
-                      : GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: photos.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 5,
-                          ),
-                          itemBuilder: (context, index) {
-                            String thumbnail = photos[index].videoId.url;
-                            printInfo(
-                                info: "ProfileId: ${_controller.profileId}");
-                            printInfo(info: "tumbnail: $thumbnail");
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(SingleFeedScreen(null, photos[index]));
-                              },
-                              child: CachedNetworkImage(
-                                imageUrl: thumbnail,
-                                fit: BoxFit.cover,
-                                errorWidget: (c, s, e) =>
-                                    const Icon(Icons.error),
-                              ),
-                            );
-                          },
-                        );
-                }),
+            // FutureBuilder<List<PhotoModel>>(
+            //     future: _profileRepo.getPhotosByProfileId(
+            //         profileModel.id, _controller.token!),
+            //     builder: (context, snapshot) {
+            //       if (!snapshot.hasData) {
+            //         return const Loading();
+            //       }
+            //       if (snapshot.hasError) {
+            //         printInfo(
+            //             info: "getCurrentUserPhoto: ${snapshot.hasError}");
+            //         return Container();
+            //       }
+            //       var photos = snapshot.data!;
+            //       return photos.isEmpty
+            //           ? const EmptyWidget("No photos available")
+            //           : GridView.builder(
+            //               shrinkWrap: true,
+            //               physics: const NeverScrollableScrollPhysics(),
+            //               itemCount: photos.length,
+            //               gridDelegate:
+            //                   const SliverGridDelegateWithFixedCrossAxisCount(
+            //                 crossAxisCount: 3,
+            //                 childAspectRatio: 1,
+            //                 crossAxisSpacing: 5,
+            //               ),
+            //               itemBuilder: (context, index) {
+            //                 String thumbnail = photos[index].videoId.url;
+            //                 printInfo(
+            //                     info: "ProfileId: ${_controller.profileId}");
+            //                 printInfo(info: "tumbnail: $thumbnail");
+            //                 return GestureDetector(
+            //                   onTap: () {
+            //                     Get.to(SingleFeedScreen(null, photos[index]));
+            //                   },
+            //                   child: CachedNetworkImage(
+            //                     imageUrl: thumbnail,
+            //                     fit: BoxFit.cover,
+            //                     errorWidget: (c, s, e) =>
+            //                         const Icon(Icons.error),
+            //                   ),
+            //                 );
+            //               },
+            //             );
+            //     }),
+
             if (profileModel.status == 'VERIFIED')
               const Center(child: Text("Giveaway")),
           ]),

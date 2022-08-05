@@ -135,7 +135,7 @@ class GiveawayRepository {
 
   Future<ContestModel> getContestsByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse('${Base.giveaway}'),
+      Uri.parse('${Base.giveaway}/user/$profileId'),
       // user?user_id=$profileId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

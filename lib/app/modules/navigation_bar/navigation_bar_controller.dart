@@ -11,11 +11,6 @@ class NavigationBarController extends GetxController {
   var tabIndex = 0.obs;
 
   void changeTabIndex(int index) {
-    print('running pause $index');
     tabIndex.value = index;
-    if (index != 0) {
-      print('running pause');
-      VideoPlayerItemState().dispose();
-    }
   }
 }

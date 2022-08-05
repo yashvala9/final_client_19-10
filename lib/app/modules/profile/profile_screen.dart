@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     return GetBuilder<ProfileController>(
       builder: (_) => DefaultTabController(
-        length: _controller.profileModel.status == "VERIFIED" ? 3 : 2,
+        length: _controller.profileModel.status == "VERIFIED" ? 2 : 1,
         child: Scaffold(
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
@@ -312,7 +312,7 @@ class ProfileScreen extends StatelessWidget {
       children: <Widget>[
         TabBar(tabs: [
           Tab(text: "Rolls"),
-          Tab(text: "Photos"),
+          // Tab(text: "Photos"),
           if (_controller.profileModel.status == 'VERIFIED')
             Tab(text: "Giveaway"),
         ]),
@@ -322,7 +322,7 @@ class ProfileScreen extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(),
-            Container(),
+            // Container(),
             // FutureBuilder<List<PhotoModel>>(
             //     future: _profileRepo.getPhotosByProfileId(
             //         _controller.profileId!, _controller.token!),
@@ -418,6 +418,15 @@ class ProfileReel extends StatelessWidget {
               mainAxisSpacing: 5,
             ),
             itemBuilder: (context, index) {
+              if (index == (reels.length - 3) && !_controller.loadingMore) {
+                _controller.getMoreFeed(reels.length);
+                if (_controller.reelsLoaded.isNotEmpty) {
+                  reels.addAll(_controller.reelsLoaded);
+                  print('2121 reels.length ${reels.length}');
+                  _controller.reelsLoaded.clear();
+                  _controller.update();
+                }
+              }
               return GestureDetector(
                 onTap: () {
                   Get.to(SingleFeedScreen(reels[index], null));

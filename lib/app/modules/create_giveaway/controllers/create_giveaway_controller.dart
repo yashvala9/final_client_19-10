@@ -11,6 +11,13 @@ class CreateGiveawayController extends GetxController {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _authService = Get.put(AuthService());
 
+  File? _file;
+  File? get file => _file;
+  set file(File? image) {
+    _file = image;
+    update();
+  }
+
   String? get token => _authService.token;
   bool loading = false;
   late File? photo;

@@ -184,11 +184,10 @@ class ProfileRepository {
   //   }
   // }
 
-  Future<List<ReelModel>> getReelByProfileId(
-      int profileId, String token) async {
+  Future<List<ReelModel>> getReelByProfileId(int profileId, String token,
+      {int limit = 15, skip = 0}) async {
     final response = await http.get(
-      //TODO need to create this lazy loading and remove limit as 300
-      Uri.parse("${Base.getReelsByUserId}/$profileId?limit=300&skip=0"),
+      Uri.parse("${Base.getReelsByUserId}/$profileId?limit=$limit&skip=$skip"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",

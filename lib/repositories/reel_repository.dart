@@ -15,10 +15,8 @@ import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 class ReelRepository {
-  //TODO make limit 10
   Future<List<ReelModel>> getFeeds(int profileId, String token,
       {int limit = 10, int skip = 0}) async {
-    print('343434');
     final response = await http.get(
       Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
       headers: <String, String>{
@@ -26,7 +24,6 @@ class ReelRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body.toString() + '343434');
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;

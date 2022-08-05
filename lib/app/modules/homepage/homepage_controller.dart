@@ -15,8 +15,10 @@ class HomePageController extends GetxController {
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 
-  bool _loading = false;
+  bool loadingMore = false;
   bool _loadMore = true;
+
+  bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
@@ -70,6 +72,7 @@ class HomePageController extends GetxController {
   void getMoreFeed() async {
     print('2121 running getMoreFeed');
     print('2121 _loadMore $_loadMore');
+    loadingMore = true;
     if (_loadMore) {
       try {
         var newList = await _reelRepo.getFeeds(profileId!, token!,
@@ -87,6 +90,7 @@ class HomePageController extends GetxController {
         print("getFeeds: $e");
       }
     }
+    loadingMore = false;
   }
 
   void toggleLikeShow() async {

@@ -23,6 +23,10 @@ class ProfileController extends GetxController {
   int? get profileId => _authService.profileModel?.id;
   String? get token => _authService.token;
 
+  bool loadingMore = false;
+  bool _loadMore = true;
+  List<ReelModel> reelsLoaded = [];
+
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
@@ -32,10 +36,30 @@ class ProfileController extends GetxController {
 
   @override
   void onInit() {
-    print('2121 on init called');
     super.onInit();
   }
 
+  Future<void> getMoreFeed(int skip) async {
+    print('2121 running getMoreFeed');
+    print('2121 _loadMore $_loadMore');
+    loadingMore = true;
+    if (_loadMore) {
+      try {
+        var newList = await _profileRepo.getReelByProfileId(profileId!, token!,
+            limit: 9, skip: skip);
+        print('2121 newList.length ${newList.length}');
+        if (newList.isEmpty) {
+          _loadMore = false;
+        } else {
+          reelsLoaded.addAll(newList);
+        }
+      } catch (e) {
+        showSnackBar(e.toString(), color: Colors.red);
+        print("getFeeds: $e");
+      }
+    }
+    loadingMore = false;
+  }
   // void getProfile() async {
   //   loading = true;
   //   try {
