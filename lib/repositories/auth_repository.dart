@@ -57,8 +57,6 @@ class AuthRepository {
       body: jsonEncode(data),
     );
     final body = jsonDecode(response.body);
-    print("StatutsCode: ${response.statusCode}");
-    print('2121 body $body');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
     } else {
@@ -163,18 +161,16 @@ class AuthRepository {
     }
   }
 
-  Future<String> setForgetPassword(String email, String token,String newPassword) async {
+  Future<String> setForgetPassword(
+      String email, String token, String newPassword) async {
     final response = await http.post(
       Uri.parse(Base.setForgetPassword),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         // HttpHeaders.authorizationHeader: "Bearer $token",
       },
-      body: jsonEncode({
-        "email": email,
-        'token': token,
-        'new_password': newPassword
-      }),
+      body: jsonEncode(
+          {"email": email, 'token': token, 'new_password': newPassword}),
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {

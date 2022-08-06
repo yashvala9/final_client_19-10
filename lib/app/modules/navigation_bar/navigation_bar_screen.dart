@@ -36,7 +36,6 @@ class NavigationBarScreen extends StatelessWidget {
             showSelectedLabels: true,
             onTap: landingPageController.changeTabIndex,
             currentIndex: landingPageController.tabIndex.value,
-            // backgroundColor: const Color.fromRGBO(36, 54, 101, 1.0),
             unselectedItemColor: Colors.grey,
             selectedItemColor: Colors.pink,
             unselectedLabelStyle: unselectedLabelStyle,

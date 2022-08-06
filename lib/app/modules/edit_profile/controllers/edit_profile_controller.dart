@@ -76,7 +76,6 @@ class EditProfileController extends GetxController {
             : phone_number.toString(),
         "current_language": "en"
       };
-      print('2121 profileData $profileData');
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _fileName = '';
       await _authService.redirectUser();

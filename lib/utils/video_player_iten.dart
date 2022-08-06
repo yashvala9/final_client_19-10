@@ -12,11 +12,13 @@ import 'package:visibility_detector/visibility_detector.dart';
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final VoidCallback doubleTap;
+  final VoidCallback swipeRight;
   final bool showLike;
   const VideoPlayerItem({
     Key? key,
     required this.videoUrl,
     required this.doubleTap,
+    required this.swipeRight,
     this.showLike = false,
   }) : super(key: key);
 
@@ -61,19 +63,22 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                InkWell(
+                GestureDetector(
                   onDoubleTap: () {
                     widget.doubleTap();
+                  },
+                  onPanUpdate: (details) {
+                    if (details.delta.dx < 0) {
+                      widget.swipeRight();
+                    }
                   },
                   onTap: () {
                     if (videoPlayerController.value.isPlaying) {
                       videoPlayerController.pause();
                       isManualPause = true;
-                      print('456456 1 $isManualPause');
                     } else {
                       videoPlayerController.play();
                       isManualPause = false;
-                      print('456456 2 $isManualPause');
                     }
                   },
                   child: VisibilityDetector(
@@ -81,10 +86,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                       onVisibilityChanged: (VisibilityInfo info) {
                         if (info.visibleFraction == 0 && !isManualPause) {
                           videoPlayerController.pause();
-                          print('456456 3 $isManualPause');
                         } else {
                           if (!isManualPause) {
-                            print('456456 4 $isManualPause');
                             videoPlayerController.play();
                           }
                         }

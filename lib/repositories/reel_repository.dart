@@ -139,7 +139,6 @@ class ReelRepository {
   }
 
   Future<void> addReel(Map<String, dynamic> data, String token) async {
-    print('2121 ${jsonEncode(data)}');
     final response = await http.post(
       Uri.parse(Base.reels),
       headers: <String, String>{
@@ -148,9 +147,6 @@ class ReelRepository {
       },
       body: jsonEncode(data),
     );
-    print('2121 ${Base.reels}');
-    print('2121 ${response.statusCode}');
-    print('2121 ${response.body}');
     if (response.statusCode == 201) {
       return;
     } else {
@@ -168,7 +164,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print("running reels by id 323232");
     print(body);
     if (response.statusCode == 200) {
       final Iterable list = body;
@@ -187,7 +182,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print("running reels by id 323232");
     print(body);
     if (response.statusCode == 200) {
       return photoFromJson(response.body);
@@ -228,7 +222,6 @@ class ReelRepository {
     required File file,
     required String fileName,
   }) async {
-    print('2121 s3 filename $fileName');
     try {
       final response = await AwsS3.uploadFile(
         accessKey: "AKIARYAXXOSN5XYB5M67",

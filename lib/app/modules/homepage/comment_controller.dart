@@ -56,7 +56,6 @@ class CommentController extends GetxController {
   }
 
   void toggleLike(int index) {
-    print("running toggle like:$index");
     commentList[index].isLiked = !commentList[index].isLiked;
     if (commentList[index].isLiked) {
       commentList[index].likeCount++;

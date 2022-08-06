@@ -40,14 +40,11 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getMoreFeed(int skip) async {
-    print('2121 running getMoreFeed');
-    print('2121 _loadMore $_loadMore');
     loadingMore = true;
     if (_loadMore) {
       try {
         var newList = await _profileRepo.getReelByProfileId(profileId!, token!,
             limit: 9, skip: skip);
-        print('2121 newList.length ${newList.length}');
         if (newList.isEmpty) {
           _loadMore = false;
         } else {

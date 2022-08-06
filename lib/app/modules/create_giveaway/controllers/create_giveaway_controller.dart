@@ -30,8 +30,6 @@ class CreateGiveawayController extends GetxController {
 
   Future<void> createGiveaway() async {
     loading = true;
-    print('21212121 $campaignName');
-    print('21212121 ${endDate.toString()}');
     try {
       var map = {
         "contest_name": campaignName,
@@ -47,7 +45,6 @@ class CreateGiveawayController extends GetxController {
           "prize_description": ""
         }
       };
-      print('21212121 $map');
       await _giveawayRepo.createGiveaway(map, token!);
       Get.back();
 

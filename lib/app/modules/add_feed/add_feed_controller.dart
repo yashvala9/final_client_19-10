@@ -56,17 +56,15 @@ class AddFeedController extends GetxController {
       "media_ext": path.extension(file.path).replaceAll('.', ''),
       "media_size": 65
     };
-    print('2121 data $data');
     try {
       //step 1: make entry in DB
       await _reelRepo.addReel(data, token!);
       //step 2: upload file to s3
       final s3File = await _reelRepo.uploadFileToAwsS3(
           userID: profileId!.toString(), file: file, fileName: _fileName);
-      print('2121 s3File ${s3File ?? ''}');
       //step 3: make entry of upload status in db
       await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
-      showSnackBar("Reel added successfully: $s3File");
+      showSnackBar("Reel added successfully!");
       clean();
       Get.back();
       Get.back();

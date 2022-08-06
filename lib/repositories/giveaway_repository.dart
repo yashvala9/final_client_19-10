@@ -26,11 +26,7 @@ class GiveawayRepository {
       body: jsonEncode(giveawayData),
     );
 
-    print('21212121 ${Base.giveaway}');
-    print('21212121 ${response.statusCode}');
     final body = jsonDecode(response.body);
-
-    print('21212121 ${response.body}');
     if (response.statusCode == 201) {
       showSnackBar("Giveaway created successfully!");
     } else {
@@ -102,7 +98,6 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    // print('list2121 ' + body.toString());
 
     if (response.statusCode == 200) {
       list.add(body['profileUrl'].toString());

@@ -7,8 +7,10 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import '../../../models/comment_model.dart';
 import '../../../models/reel_model.dart';
+import '../../../repositories/profile_repository.dart';
 
 class HomePageController extends GetxController {
+  final _profileRepo = Get.put(ProfileRepository());
   final _reelRepo = Get.put(ReelRepository());
   final _authService = Get.put(AuthService());
 
@@ -70,19 +72,15 @@ class HomePageController extends GetxController {
   }
 
   void getMoreFeed() async {
-    print('2121 running getMoreFeed');
-    print('2121 _loadMore $_loadMore');
     loadingMore = true;
     if (_loadMore) {
       try {
         var newList = await _reelRepo.getFeeds(profileId!, token!,
             limit: 10, skip: reelList.length);
-        print('2121 newList.length ${newList.length}');
         if (newList.isEmpty) {
           _loadMore = false;
         } else {
           reelList.addAll(newList);
-          print('2121 reelList.length ${reelList.length}');
         }
         update();
       } catch (e) {
@@ -118,5 +116,14 @@ class HomePageController extends GetxController {
 
   void signOut() {
     _authService.signOut();
+  }
+
+  void toggleFollowing(int id) async {
+    try {
+      _profileRepo.toggleFollow(id, token!);
+      update();
+    } catch (e) {
+      log("toggleFollowingError: $e");
+    }
   }
 }

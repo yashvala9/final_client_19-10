@@ -55,7 +55,6 @@ class ProfileRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('2121 body $body');
     if (response.statusCode == 200 && body['id'] != null) {
       return ProfileModel.fromMap(body);
     } else {
@@ -104,7 +103,6 @@ class ProfileRepository {
     required File file,
     required String fileName,
   }) async {
-    print('2121 s3 filename $fileName');
     try {
       final response = await AwsS3.uploadFile(
         accessKey: "AKIARYAXXOSN6RLGJZRH",
@@ -211,8 +209,8 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-
     final body = jsonDecode(response.body);
+    print(body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['is_following'];
     } else {
@@ -278,6 +276,7 @@ class ProfileRepository {
         'user_id': followingProfileId,
       }),
     );
+    print("FolloingProfileId: $followingProfileId");
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       printInfo(info: "$body");
