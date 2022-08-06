@@ -17,10 +17,10 @@ import '../../../utils/video_player_iten.dart';
 import '../homepage/comment_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
-  SingleFeedScreen(this.reel, this.photo, {Key? key}) : super(key: key);
+  SingleFeedScreen(this.reels, this.currentIndex, {Key? key}) : super(key: key);
 
-  ReelModel? reel;
-  PhotoModel? photo;
+  List<ReelModel>? reels;
+  int currentIndex;
 
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
@@ -32,9 +32,6 @@ class SingleFeedScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
 
-    var videoSplit = reel!.filename.split("_");
-    var videoUrl =
-        "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel!.filename}/MP4/${reel!.filename}";
     return GetBuilder<SingleFeedController>(
         builder: (_) => Scaffold(
               extendBodyBehindAppBar: true,
@@ -51,17 +48,20 @@ class SingleFeedScreen extends StatelessWidget {
               body: _controller.loading
                   ? Loading()
                   : PageView.builder(
-                      itemCount: 1,
-                      controller:
-                          PageController(initialPage: 0, viewportFraction: 1),
+                      itemCount: reels!.length,
+                      controller: PageController(
+                          initialPage: currentIndex, viewportFraction: 1),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
+                        var videoSplit = reels![index].filename.split("_");
+                        var videoUrl =
+                            "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reels![index].filename}/MP4/${reels![index].filename}";
                         return Stack(
                           children: [
                             VideoPlayerItem(
                               videoUrl: videoUrl,
                               doubleTap: () {
-                                _controller.likeToggle(reel!.id);
+                                _controller.likeToggle(reels![index].id);
                               },
                               swipeRight: () {},
                               showLike: _controller.showLike,
@@ -95,7 +95,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                reel!.video_title,
+                                                reels![index].video_title,
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.white,
@@ -103,7 +103,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                reel!.description,
+                                                reels![index].description,
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white,
@@ -146,14 +146,15 @@ class SingleFeedScreen extends StatelessWidget {
                                               children: [
                                                 InkWell(
                                                     onTap: () {
-                                                      _controller
-                                                          .likeToggle(reel!.id);
+                                                      _controller.likeToggle(
+                                                          reels![index].id);
                                                     },
                                                     // _controller.likeVideo(data.id),
                                                     child: FutureBuilder<bool>(
                                                         future: _reelRepo
                                                             .getLikeFlag(
-                                                                reel!.id,
+                                                                reels![index]
+                                                                    .id,
                                                                 _controller
                                                                     .token!),
                                                         builder:
@@ -181,7 +182,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 FutureBuilder<int>(
                                                     future: _reelRepo
                                                         .getLikeCountByReelId(
-                                                            reel!.id,
+                                                            reels![index].id,
                                                             _controller.token!),
                                                     builder: (context, snap) {
                                                       return Text(
@@ -205,7 +206,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                   onTap: () {
                                                     Get.bottomSheet(
                                                       CommentSheet(
-                                                        reelId: reel!.id,
+                                                        reelId:
+                                                            reels![index].id,
                                                       ),
                                                       backgroundColor:
                                                           Colors.white,
@@ -220,7 +222,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 FutureBuilder<int>(
                                                     future: _commentRepo
                                                         .getCommentCountByReelId(
-                                                            reel!.id,
+                                                            reels![index].id,
                                                             _controller.token!),
                                                     builder:
                                                         (context, snapshot) {
@@ -258,10 +260,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                 // )
                                               ],
                                             ),
-                                            CircleAnimation(
-                                              child: buildMusicAlbum(
-                                                  "${Base.profileBucketUrl}/${reel!.user.user_profile!.profile_img}"),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -275,65 +273,5 @@ class SingleFeedScreen extends StatelessWidget {
                       },
                     ),
             ));
-  }
-
-  buildProfile(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Stack(children: [
-        Positioned(
-          left: 5,
-          child: Container(
-            width: 50,
-            height: 50,
-            padding: const EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: const Image(
-                image: AssetImage(
-                  "assets/Background.png",
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        )
-      ]),
-    );
-  }
-
-  buildMusicAlbum(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Column(
-        children: [
-          Container(
-              padding: EdgeInsets.all(11),
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Colors.grey,
-                      Colors.white,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(25)),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25),
-                child: Image(
-                  image: NetworkImage(profilePhoto),
-                  fit: BoxFit.cover,
-                ),
-              ))
-        ],
-      ),
-    );
   }
 }

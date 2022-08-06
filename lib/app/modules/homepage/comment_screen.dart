@@ -115,7 +115,8 @@ class CommentSheet extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8),
-                      child: buildProfile(""),
+                      child: buildProfile(
+                          _controller.profileModel.user_profile!.profile_img!),
                     ),
                     Expanded(
                       child: Form(

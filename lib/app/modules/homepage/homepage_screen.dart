@@ -39,14 +39,8 @@ class HomePageScreen extends StatelessWidget {
 
   void onSelect(item) {
     switch (item) {
-      case 'Home':
-        print('Home clicked');
-        break;
-      case 'Profile':
-        print('Profile clicked');
-        break;
-      case 'Setting':
-        print('Setting clicked');
+      case 'Report':
+        print('Report clicked');
         break;
     }
   }
@@ -88,7 +82,7 @@ class HomePageScreen extends StatelessWidget {
                               onTap: () {
                                 Navigator.pop(context, true);
                               },
-                              leading: Icon(Icons.video_call),
+                              leading: Icon(Icons.video_camera_back),
                               title: Text("Video"),
                             ),
                             ListTile(
@@ -348,7 +342,7 @@ class HomePageScreen extends StatelessWidget {
                                               ),
                                             ),
                                             Container(
-                                              width: 100,
+                                              width: 70,
                                               margin: EdgeInsets.only(
                                                   top: size.height / 5),
                                               child: Column(
@@ -526,65 +520,5 @@ class HomePageScreen extends StatelessWidget {
                           ),
                         ),
             ));
-  }
-
-  buildProfile(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Stack(children: [
-        Positioned(
-          left: 5,
-          child: Container(
-            width: 50,
-            height: 50,
-            padding: const EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: const Image(
-                image: AssetImage(
-                  "assets/Background.png",
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        )
-      ]),
-    );
-  }
-
-  buildMusicAlbum(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Column(
-        children: [
-          Container(
-              padding: EdgeInsets.all(11),
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Colors.grey,
-                      Colors.white,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(25)),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25),
-                child: Image(
-                  image: NetworkImage(profilePhoto),
-                  fit: BoxFit.cover,
-                ),
-              ))
-        ],
-      ),
-    );
   }
 }

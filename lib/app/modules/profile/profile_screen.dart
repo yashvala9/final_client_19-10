@@ -13,6 +13,7 @@ import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../edit_profile/views/edit_profile_view.dart';
 import '../single_feed/single_feed_screen.dart';
@@ -53,20 +54,63 @@ class ProfileScreen extends StatelessWidget {
                     Icons.add_box_outlined,
                   ),
                   onPressed: () async {
-                    var video = await ImagePicker()
-                        .pickVideo(source: ImageSource.gallery);
-                    if (video != null) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return VideoTrimmerView(File(video.path));
-                        }),
-                      );
-                      // Get.to(
-                      //   () => AddFeedScreen(
-                      //     file: File(video.path),
-                      //     type: 0,
-                      //   ),
-                      // );
+                    final val = await showDialog(
+                      context: context,
+                      builder: (_) => Dialog(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context, true);
+                            },
+                            leading: Icon(Icons.video_camera_back),
+                            title: Text("Video"),
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context, false);
+                            },
+                            leading: Icon(Icons.photo),
+                            title: Text("Photo"),
+                          ),
+                        ],
+                      )),
+                    );
+                    if (val != null) {
+                      if (val) {
+                        var video = await ImagePicker()
+                            .pickVideo(source: ImageSource.gallery);
+                        if (video != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return VideoTrimmerView(File(video.path));
+                            }),
+                          );
+                        }
+                        // var video = await ImagePicker()
+                        //     .pickVideo(source: ImageSource.gallery);
+                        // if (video != null) {
+                        //   Get.to(
+                        //     () => AddFeedScreen(
+                        //       file: File(video.path),
+                        //       type: 0,
+                        //     ),
+                        //   );
+                        // }
+                      } else {
+                        var photo = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
+                        if (photo != null) {
+                          Get.to(
+                            () => AddFeedScreen(
+                              file: File(photo.path),
+                              type: 1,
+                            ),
+                          );
+                        }
+                      }
+                      _controller.update();
                     }
                   },
                 ),
@@ -454,7 +498,7 @@ class ProfileReel extends StatelessWidget {
               }
               return GestureDetector(
                 onTap: () {
-                  Get.to(SingleFeedScreen(reels[index], null));
+                  Get.to(SingleFeedScreen(reels, index));
                 },
                 onLongPress: () {
                   Get.dialog(AlertDialog(
@@ -478,6 +522,7 @@ class ProfileReel extends StatelessWidget {
                   ));
                 },
                 child: CachedNetworkImage(
+                  placeholder: (context, url) => Loading(),
                   imageUrl: reels[index].thumbnail,
                   fit: BoxFit.cover,
                 ),
