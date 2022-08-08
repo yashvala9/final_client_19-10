@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:reel_ro/app/modules/search/search_screen.dart';
 import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
 import '../../inbox_screen.dart';
@@ -18,85 +20,145 @@ import 'navigation_bar_controller.dart';
 
 class NavigationBarScreen extends StatelessWidget {
   NavigationBarScreen({Key? key}) : super(key: key);
-  final TextStyle unselectedLabelStyle = TextStyle(
-      color: Colors.white.withOpacity(0.5),
-      fontWeight: FontWeight.w500,
-      fontSize: 12);
 
-  final TextStyle selectedLabelStyle = const TextStyle(
-      color: Colors.white, fontWeight: FontWeight.w500, fontSize: 12);
+  final NavigationBarController controller = Get.put(NavigationBarController());
 
-  buildBottomNavigationMenu(context, landingPageController) {
+  buildBottomNavigationMenu(context) {
     return Obx(() => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-        child: SizedBox(
-          height: 57,
-          child: BottomNavigationBar(
-            showUnselectedLabels: true,
-            showSelectedLabels: true,
-            onTap: landingPageController.changeTabIndex,
-            currentIndex: landingPageController.tabIndex.value,
-            // backgroundColor: const Color.fromRGBO(36, 54, 101, 1.0),
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: Colors.pink,
-            unselectedLabelStyle: unselectedLabelStyle,
-            selectedLabelStyle: selectedLabelStyle,
-            items: [
-              BottomNavigationBarItem(
-                icon: Container(
-                  // width: 5,
-                  margin: const EdgeInsets.only(bottom: 7),
-                  child: const Icon(
-                    Icons.home,
-                    size: 20.0,
+        child: Container(
+          height: 66,
+          decoration: BoxDecoration(
+            color: controller.tabIndex.value == 0 ? Colors.black : Colors.white,
+            borderRadius: const BorderRadius.only(),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      controller.changeTabIndex(0);
+                    },
+                    icon: controller.tabIndex.value == 0
+                        ? const Icon(
+                            Icons.home,
+                            color: Colors.pink,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.home_outlined,
+                            color: Colors.grey,
+                            size: 28,
+                          ),
                   ),
-                ),
-                label: 'Home',
-                // backgroundColor: Colors.grey,
+                  Text(
+                    'Home',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: const EdgeInsets.only(bottom: 7),
-                  child: const Icon(
-                    Icons.search,
-                    size: 20.0,
+              Column(
+                children: [
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      controller.changeTabIndex(1);
+                    },
+                    icon: controller.tabIndex.value == 1
+                        ? const Icon(
+                            Icons.search,
+                            color: Colors.pink,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.search_outlined,
+                            color: Colors.grey,
+                            size: 28,
+                          ),
                   ),
-                ),
-                label: 'Search',
-                // backgroundColor: Colors.grey,
+                  Text(
+                    'Search',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: const EdgeInsets.only(bottom: 7),
-                  child: const Icon(
-                    Icons.card_giftcard,
-                    size: 20.0,
+              Column(
+                children: [
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      controller.changeTabIndex(2);
+                    },
+                    icon: controller.tabIndex.value == 2
+                        ? const Icon(
+                            Icons.card_giftcard,
+                            color: Colors.pink,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.card_giftcard_outlined,
+                            color: Colors.grey,
+                            size: 28,
+                          ),
                   ),
-                ),
-                label: 'Giveaway',
-                // backgroundColor: Colors.grey,
+                  Text(
+                    'Giveaway',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: const EdgeInsets.only(bottom: 7),
-                  child: const Icon(
-                    Icons.message,
-                    size: 20.0,
+              Column(
+                children: [
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      controller.changeTabIndex(3);
+                    },
+                    icon: controller.tabIndex.value == 3
+                        ? const Icon(
+                            Icons.message,
+                            color: Colors.pink,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.message_outlined,
+                            color: Colors.grey,
+                            size: 28,
+                          ),
                   ),
-                ),
-                label: 'Inbox',
-                // backgroundColor: Colors.grey,
+                  Text(
+                    'Inbox',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  margin: const EdgeInsets.only(bottom: 7),
-                  child: const Icon(
-                    Icons.person,
-                    size: 20.0,
+              Column(
+                children: [
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      controller.changeTabIndex(4);
+                    },
+                    icon: controller.tabIndex.value == 4
+                        ? const Icon(
+                            Icons.person,
+                            color: Colors.pink,
+                            size: 30,
+                          )
+                        : const Icon(
+                            Icons.person_outline,
+                            color: Colors.grey,
+                            size: 28,
+                          ),
                   ),
-                ),
-                label: 'Profile',
-                // backgroundColor: Colors.grey,
+                  Text(
+                    'Profile',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
               ),
             ],
           ),
@@ -105,11 +167,9 @@ class NavigationBarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NavigationBarController controller =
-        Get.put(NavigationBarController());
     return SafeArea(
         child: Scaffold(
-      bottomNavigationBar: buildBottomNavigationMenu(context, controller),
+      bottomNavigationBar: buildBottomNavigationMenu(context),
       body: Obx(() => IndexedStack(
             index: controller.tabIndex.value,
             children: [

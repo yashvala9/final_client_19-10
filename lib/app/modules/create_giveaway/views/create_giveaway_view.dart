@@ -3,11 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:reel_ro/app/modules/my_contest/views/my_contest_view.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../../../../repositories/giveaway_repository.dart';
+import '../../../../utils/assets.dart';
+import '../../../../utils/colors.dart';
 import '../../../../widgets/loading.dart';
 import '../../account_settings/views/account_settings_view.dart';
 import '../../add_feed/add_feed_screen.dart';
@@ -18,6 +21,7 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(CreateGiveawayController());
   TextEditingController dateInput = TextEditingController();
+  final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -48,29 +52,85 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
               SizedBox(
                 height: Get.height * 0.02,
               ),
-              GestureDetector(
-                onTap: () async {
-                  var photo = await ImagePicker()
-                      .pickImage(source: ImageSource.gallery);
-                  if (photo != null) {
-                    _controller.photo = File(photo.path);
-                    _controller.uploadImage();
-                  }
-                },
-                child: Container(
-                  height: 150,
-                  color: const Color.fromRGBO(240, 242, 246, 1),
-                  alignment: Alignment.center,
-                  child: Obx(
-                    () => _controller.photoLoading.value
-                        ? const Loading()
-                        : _controller.photoUrl.value == ''
-                            ? const Icon(Icons.photo_outlined)
-                            : Image(
-                                image:
-                                    NetworkImage(_controller.photoUrl.value)),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final val = await showDialog(
+                        context: context,
+                        builder: (_) => Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  onTap: () => Navigator.pop(context, true),
+                                  leading: const Icon(Icons.camera),
+                                  title: const Text("Camera"),
+                                ),
+                                ListTile(
+                                  onTap: () => Navigator.pop(context, false),
+                                  leading: const Icon(Icons.photo),
+                                  title: const Text("Gallery"),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                      if (val != null) {
+                        var imageSource =
+                            val ? ImageSource.camera : ImageSource.gallery;
+                        try {
+                          XFile? file = await _picker.pickImage(
+                            source: imageSource,
+                          );
+                          if (file != null) {
+                            File? croppedFile = await ImageCropper().cropImage(
+                              sourcePath: file.path,
+                              aspectRatioPresets: [
+                                CropAspectRatioPreset.original,
+                                CropAspectRatioPreset.square,
+                                CropAspectRatioPreset.ratio4x3,
+                                CropAspectRatioPreset.ratio16x9
+                              ],
+                            );
+                            if (croppedFile != null) {
+                              _controller.file = croppedFile;
+                              print('ola ola');
+                            }
+                            _controller.update();
+                          }
+                        } catch (e) {
+                          print("selectSourcePage Gallery: $e");
+                        }
+                      }
+                    },
+                    child: Container(
+                      height: Get.height * 0.25,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AppColors.textFieldColor,
+                      ),
+                      alignment: Alignment.center,
+                      child: _controller.file != null
+                          ? Image.file(
+                              _controller.file!,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              Assets.cameraImage,
+                              width: Get.width * 0.1,
+                              height: Get.width * 0.1,
+                            ),
+                    ),
                   ),
-                ),
+                ],
               ),
               SizedBox(
                 height: Get.height * 0.02,

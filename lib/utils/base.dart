@@ -55,12 +55,14 @@ class Base {
 
   //Comment
 
-  static const getCommentByReelId = '$_url/getCommentsByReelId';
+  static const getCommentByReelId = '$_url/reels/comments/';
   static const addCommentToReelId = '$_url/reels/comments';
-  static const toggleCommentLike = '$_url/toggleCommentLike';
+  static const toggleCommentLike = '$_url/reels/likes/comments';
+
   static const deleteComment = '$_url/reels/comments';
   static const nestedComment = '$_url/reels/comments';
   static const getCommentCount = '$_url/count/comments';
+  static const getCommentLikeCount = '$_url/count/likes/comments/';
 
   //Giveaway
   static const giveaway = '$_url/contests/';

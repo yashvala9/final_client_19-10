@@ -68,7 +68,7 @@ class ContestRulesView extends GetView<ContestRulesController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "snapshot.data![index].contestName",
+                      snapshot.data![index].contest_name,
                       style: style.titleLarge!.copyWith(
                         color: AppColors.winnercardbrown,
                         fontWeight: FontWeight.w600,

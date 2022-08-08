@@ -7,40 +7,48 @@ import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+import 'package:wakelock/wakelock.dart';
 
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final VoidCallback doubleTap;
+  final VoidCallback swipeRight;
   final bool showLike;
   const VideoPlayerItem({
     Key? key,
     required this.videoUrl,
     required this.doubleTap,
+    required this.swipeRight,
     this.showLike = false,
   }) : super(key: key);
 
   @override
-  _VideoPlayerItemState createState() => _VideoPlayerItemState();
+  VideoPlayerItemState createState() => VideoPlayerItemState();
 }
 
-class _VideoPlayerItemState extends State<VideoPlayerItem> {
+class VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController videoPlayerController;
 
+  bool isManualPause = false;
   @override
   void initState() {
     super.initState();
+    Wakelock.enable();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
-    // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
+      // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
         videoPlayerController.play();
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
+        videoPlayerController.setLooping(true);
       });
   }
 
   @override
   void dispose() {
     super.dispose();
+    Wakelock.disable();
     videoPlayerController.dispose();
   }
 
@@ -52,25 +60,46 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
         ? const Loading()
         : SizedBox(
             width: double.infinity,
-            height: double.infinity,
             // decoration: const BoxDecoration(
             //   color: Colors.black,
             // ),
             child: Stack(
               alignment: Alignment.center,
               children: [
-                InkWell(
+                GestureDetector(
                   onDoubleTap: () {
                     widget.doubleTap();
+                  },
+                  onPanUpdate: (details) {
+                    if (details.delta.dx < 0) {
+                      widget.swipeRight();
+                    }
                   },
                   onTap: () {
                     if (videoPlayerController.value.isPlaying) {
                       videoPlayerController.pause();
+                      Wakelock.disable();
+                      isManualPause = true;
                     } else {
                       videoPlayerController.play();
+                      Wakelock.enable();
+                      isManualPause = false;
                     }
                   },
-                  child: VideoPlayer(videoPlayerController),
+                  child: VisibilityDetector(
+                      key: Key(DateTime.now().toString()),
+                      onVisibilityChanged: (VisibilityInfo info) {
+                        if (info.visibleFraction == 0 && !isManualPause) {
+                          videoPlayerController.pause();
+                          Wakelock.disable();
+                        } else {
+                          if (!isManualPause) {
+                            videoPlayerController.play();
+                            Wakelock.enable();
+                          }
+                        }
+                      },
+                      child: VideoPlayer(videoPlayerController)),
                 ),
                 widget.showLike
                     ? const Icon(

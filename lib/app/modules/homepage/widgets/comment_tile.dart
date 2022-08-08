@@ -10,6 +10,7 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/datetime_extension.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 
 class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
@@ -27,6 +28,7 @@ class CommentWidget extends StatelessWidget {
   final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
   final _commentRepo = Get.find<CommentRepository>();
+  var parser = EmojiParser();
 
   bool showNestedComment = false;
 
@@ -64,7 +66,7 @@ class CommentWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    commentModel.comment,
+                    parser.emojify(commentModel.comment),
                   ),
                   Row(
                     children: [
@@ -134,7 +136,7 @@ class CommentWidget extends StatelessWidget {
                                     try {
                                       await _commentRepo.addNestedComment(
                                         commentModel.id,
-                                        replyController.text,
+                                        parser.unemojify(replyController.text),
                                         _authService.token!,
                                       );
                                       replyController.text = "";

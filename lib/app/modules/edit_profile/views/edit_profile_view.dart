@@ -7,8 +7,10 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/utils/assets.dart';
+import '../../../../utils/base.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/snackbar.dart';
 import '../../../../widgets/loading.dart';
@@ -139,11 +141,16 @@ class EditProfileView extends GetView<EditProfileController> {
                                           _controller.file!,
                                           fit: BoxFit.cover,
                                         )
-                                      : Image.asset(
-                                          Assets.cameraImage,
-                                          width: Get.width * 0.1,
-                                          height: Get.width * 0.1,
-                                        ),
+                                      : _controller.profileModel.user_profile!
+                                                  .profile_img !=
+                                              ''
+                                          ? Image.network(
+                                              "${Base.profileBucketUrl}/${_controller.profileModel.user_profile!.profile_img}")
+                                          : Image.asset(
+                                              Assets.cameraImage,
+                                              width: Get.width * 0.1,
+                                              height: Get.width * 0.1,
+                                            ),
                                 ),
                               ),
                               // Positioned(
@@ -317,7 +324,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                     // // }
                                     // _formKey.currentState!.save();
                                     await _controller.updateProfile();
-                                    Get.back(result: 'hello');
+                                    // Get.back(result: 'hello');
                                     // Get.toNamed(AppRoutes.home);
                                   },
                                 ),

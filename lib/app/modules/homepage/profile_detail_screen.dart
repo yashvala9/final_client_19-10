@@ -18,11 +18,12 @@ import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../profile/profile_screen.dart';
 import '../single_feed/single_feed_screen.dart';
+import 'homepage_controller.dart';
 
 class ProfileDetail extends StatelessWidget {
-  final int index;
-  ProfileDetail({Key? key, required this.index}) : super(key: key);
-  final _controller = Get.find<SearchController>();
+  final ProfileModel profileModel;
+  ProfileDetail({Key? key, required this.profileModel}) : super(key: key);
+  final _controller = Get.find<HomePageController>();
   final _profileRepo = Get.put(ProfileRepository());
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class ProfileDetail extends StatelessWidget {
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return DefaultTabController(
-      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 2 : 1,
+      length: profileModel.status == 'VERIFIED' ? 2 : 1,
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -39,11 +40,10 @@ class ProfileDetail extends StatelessWidget {
             return [
               SliverList(
                 delegate: SliverChildListDelegate([
-                  GetBuilder<SearchController>(builder: (_) {
+                  GetBuilder<HomePageController>(builder: (_) {
                     return FutureBuilder<ProfileModel>(
                         future: _profileRepo.getProfileById(
-                            _controller.searchProfiles[index].id,
-                            _controller.token!),
+                            profileModel.id, _controller.token!),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return const Loading();
@@ -160,9 +160,9 @@ class ProfileDetail extends StatelessWidget {
                                                                     OutlinedButton(
                                                                   onPressed:
                                                                       () {
-                                                                    _controller
-                                                                        .toggleFollowing(
-                                                                            index);
+                                                                    _controller.toggleFollowing(
+                                                                        profileModel
+                                                                            .id);
                                                                   },
                                                                   style: OutlinedButton
                                                                       .styleFrom(
@@ -222,7 +222,7 @@ class ProfileDetail extends StatelessWidget {
                                                                         () {
                                                                       _controller
                                                                           .toggleFollowing(
-                                                                              index);
+                                                                              profileModel.id);
                                                                     },
                                                                     height: 30,
                                                                     style: style
@@ -256,9 +256,7 @@ class ProfileDetail extends StatelessWidget {
                                                           ),
                                                         );
                                                 }),
-                                            _controller.searchProfiles[index]
-                                                        .status ==
-                                                    'VERIFIED'
+                                            profileModel.status == 'VERIFIED'
                                                 ? Container(
                                                     width: Get.width * 0.9,
                                                     decoration: BoxDecoration(
@@ -346,7 +344,7 @@ class ProfileDetail extends StatelessWidget {
               )
             ];
           },
-          body: _tabSection(context, _controller.searchProfiles[index]),
+          body: _tabSection(context, profileModel),
         ),
       ),
     );
@@ -430,7 +428,7 @@ class ProfileReel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = Get.find<SearchController>();
+    final _controller = Get.find<HomePageController>();
     printInfo(info: "ProfileId: ${_controller.profileId}");
     return FutureBuilder<List<ReelModel>>(
         future: profileId != null

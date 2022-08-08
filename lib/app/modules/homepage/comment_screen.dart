@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 
@@ -26,6 +27,7 @@ class CommentSheet extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _commentTextController = TextEditingController();
   final _scrollController = ScrollController();
+  var parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +40,21 @@ class CommentSheet extends StatelessWidget {
       builder: (_) => FutureBuilder<List<CommentModel>>(
           future: _reelRepo.getCommentByReelId(reelId, _controller.token!),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+            if (_controller.loading) {
               return const Loading();
             }
-            if (snapshot.hasError) {
-              printInfo(info: "getCommentByReelId: ${snapshot.hasError}");
-              return Container();
-            }
-            if (_controller.commentList.isNotEmpty) {
-              snapshot.data!.addAll(_controller.commentList);
-              _controller.commentList.clear();
-            }
+            // if (snapshot.hasError) {
+            //   printInfo(info: "getCommentByReelId: ${snapshot.hasError}");
+            //   return Container();
+            // }
+            // if (_controller.commentList.isNotEmpty) {
+            //   snapshot.data!.addAll(_controller.commentList);
+            //   _controller.commentList.clear();
+            // }
             return Column(
               children: [
                 ListTile(
-                  leading: Text('${snapshot.data!.length} Comments',
+                  leading: Text('${_controller.commentList.length} Comments',
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   trailing: IconButton(
                       icon: const Icon(Icons.close),
@@ -67,16 +69,16 @@ class CommentSheet extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (snapshot.data!.isEmpty)
+                        if (_controller.commentList.isEmpty)
                           const EmptyWidget("No comments available!")
                         else
                           ...List.generate(
-                            snapshot.data!.length,
+                            _controller.commentList.length,
                             (index) => ListTile(
                               leading: buildProfile(
                                   "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
                               title: CommentWidget(
-                                commentModel: snapshot.data![index],
+                                commentModel: _controller.commentList[index],
                                 likeToggle: () {
                                   _controller.toggleLike(index);
                                 },
@@ -92,8 +94,8 @@ class CommentSheet extends StatelessWidget {
                                           child: const Text("NO")),
                                       MaterialButton(
                                         onPressed: () {
-                                          Get.back();
                                           _controller.deleteComment(index);
+                                          Get.back();
                                         },
                                         child: const Text("YES"),
                                         color: Colors.red,
@@ -115,7 +117,8 @@ class CommentSheet extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8),
-                      child: buildProfile(""),
+                      child: buildProfile(
+                          "${Base.profileBucketUrl}/${_controller.profileModel.user_profile!.profile_img!}"),
                     ),
                     Expanded(
                       child: Form(
@@ -126,7 +129,7 @@ class CommentSheet extends StatelessWidget {
                             hintText: ' Add a comment',
                           ),
                           onSaved: (v) {
-                            _controller.comment = v!;
+                            _controller.comment = parser.unemojify(v!);
                           },
                         ),
                       ),

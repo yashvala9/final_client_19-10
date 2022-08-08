@@ -11,27 +11,32 @@ class CreateGiveawayController extends GetxController {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _authService = Get.put(AuthService());
 
+  File? _file;
+  File? get file => _file;
+  set file(File? image) {
+    _file = image;
+    update();
+  }
+
   String? get token => _authService.token;
   bool loading = false;
   late File? photo;
   String campaignName = '';
   String prizeName = '';
-  DateTime endDate = DateTime.parse("2022-08-11");
+  DateTime endDate = DateTime.parse("2022-08-11").toUtc();
   int photoId = 0;
   RxString photoUrl = ''.obs;
   RxBool photoLoading = false.obs;
 
   Future<void> createGiveaway() async {
     loading = true;
-    print('21212121 $campaignName');
-    print('21212121 ${endDate.toString()}');
     try {
       var map = {
         "contest_name": campaignName,
         "creator_type": "INFLUENCER",
         "creator_id": _authService.profileModel!.id,
-        "start_date": DateTime.now().toString(),
-        "end_date": endDate.toString(),
+        "start_date": DateTime.now().toUtc().toString(),
+        "end_date": endDate.toUtc().toString(),
         "rules": "My life My rules",
         "prize_count": 1,
         "prize": {
@@ -40,7 +45,6 @@ class CreateGiveawayController extends GetxController {
           "prize_description": ""
         }
       };
-      print('21212121 $map');
       await _giveawayRepo.createGiveaway(map, token!);
       Get.back();
 

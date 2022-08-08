@@ -43,7 +43,6 @@ class AuthService extends GetxService {
     if (isLoggedIn != null) {
       final profile = await _profileRepo.getCurrentUsesr(token!);
       if (profile.user_profile != null) {
-        print('2121 $profile');
         profileModel = profile;
 
         Get.off(() => NavigationBarScreen());

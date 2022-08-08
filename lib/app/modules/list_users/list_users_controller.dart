@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
@@ -11,7 +13,7 @@ import '../../../repositories/reel_repository.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/snackbar.dart';
 
-class ProfileController extends GetxController {
+class ListUsersController extends GetxController {
   final _authService = Get.find<AuthService>();
   final _profileRepo = Get.put(ProfileRepository());
   final _reelRepo = Get.put(ReelRepository());
@@ -39,52 +41,16 @@ class ProfileController extends GetxController {
     super.onInit();
   }
 
-  Future<void> getMoreFeed(int skip) async {
-    loadingMore = true;
-    if (_loadMore) {
-      try {
-        var newList = await _profileRepo.getReelByProfileId(profileId!, token!,
-            limit: 9, skip: skip);
-        if (newList.isEmpty) {
-          _loadMore = false;
-        } else {
-          reelsLoaded.addAll(newList);
-        }
-      } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
-      }
-    }
-    loadingMore = false;
-  }
-  // void getProfile() async {
-  //   loading = true;
-  //   try {
-  //     profileModel = await _profileRepo.getProfileById(profileId!, token!);
-  //   } catch (e) {
-  //     showSnackBar(e.toString(), color: Colors.red);
-  //     print("getProfile: $e");
-  //   }
-  //   loading = false;
-  // }
-
-  // void getReelsById() async{
-  //   try {
-
-  //   } catch (e) {
-  //     print("getReelsById: $e");
-  //   }
-  // }
   void signOut() async {
     await _authRepo.signOut();
   }
 
-  void deleteReel(int reelId) async {
+  void toggleFollowing(int id) async {
     try {
-      await _reelRepo.deleteReel(reelId, token!);
+      _profileRepo.toggleFollow(id, token!);
       update();
     } catch (e) {
-      print('delteReel: $e');
+      log("toggleFollowingError: $e");
     }
   }
 }

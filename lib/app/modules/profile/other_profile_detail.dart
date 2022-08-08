@@ -367,7 +367,7 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(SingleFeedScreen(reels[index], null));
+                  Get.to(SingleFeedScreen(reels, index));
                 },
                 child: CachedNetworkImage(
                   imageUrl:

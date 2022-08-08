@@ -68,7 +68,7 @@ class CommentRepository {
   }
 
   Future<NestedCommentModel> addNestedComment(
-      int commentId,  String comment, String token) async {
+      int commentId, String comment, String token) async {
     final response = await http.post(
       Uri.parse("${Base.nestedComment}/$commentId/responses"),
       headers: <String, String>{
@@ -129,8 +129,9 @@ class CommentRepository {
       },
     );
     final body = jsonDecode(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      printInfo(info: body['message']);
+      printInfo(info: body);
       return;
     } else {
       return Future.error(body['detail']);

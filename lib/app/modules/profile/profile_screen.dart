@@ -1,16 +1,25 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
+import 'package:reel_ro/app/modules/list_users/list_users_view.dart';
+import 'package:reel_ro/app/modules/profile/profile_photo_view.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../utils/snackbar.dart';
+import '../add_feed/add_feed_screen.dart';
+import '../add_feed/widgets/video_trimmer_view.dart';
 import '../edit_profile/views/edit_profile_view.dart';
+import '../list_users/list_users_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
@@ -28,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     return GetBuilder<ProfileController>(
       builder: (_) => DefaultTabController(
-        length: _controller.profileModel.status == "VERIFIED" ? 3 : 2,
+        length: _controller.profileModel.status == "VERIFIED" ? 2 : 1,
         child: Scaffold(
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
@@ -42,6 +51,71 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   onPressed: () async {
                     Get.to(AccountSettingsView());
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.add_box_outlined,
+                  ),
+                  onPressed: () async {
+                    final val = await showDialog(
+                      context: context,
+                      builder: (_) => Dialog(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context, true);
+                            },
+                            leading: Icon(Icons.video_camera_back),
+                            title: Text("Video"),
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context, false);
+                            },
+                            leading: Icon(Icons.photo),
+                            title: Text("Photo"),
+                          ),
+                        ],
+                      )),
+                    );
+                    if (val != null) {
+                      if (val) {
+                        var video = await ImagePicker()
+                            .pickVideo(source: ImageSource.gallery);
+                        if (video != null) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return VideoTrimmerView(File(video.path));
+                            }),
+                          );
+                        }
+                        // var video = await ImagePicker()
+                        //     .pickVideo(source: ImageSource.gallery);
+                        // if (video != null) {
+                        //   Get.to(
+                        //     () => AddFeedScreen(
+                        //       file: File(video.path),
+                        //       type: 0,
+                        //     ),
+                        //   );
+                        // }
+                      } else {
+                        var photo = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
+                        if (photo != null) {
+                          Get.to(
+                            () => AddFeedScreen(
+                              file: File(photo.path),
+                              type: 1,
+                            ),
+                          );
+                        }
+                      }
+                      _controller.update();
+                    }
                   },
                 ),
               ],
@@ -116,6 +190,10 @@ class ProfileScreen extends StatelessWidget {
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
+                                                      onTap: () {
+                                                        Get.to(
+                                                            ListUsersView(0));
+                                                      },
                                                       title: Text(
                                                           profileModel
                                                               .followerCount
@@ -133,7 +211,10 @@ class ProfileScreen extends StatelessWidget {
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
-                                                      onTap: () {},
+                                                      onTap: () {
+                                                        Get.to(
+                                                            ListUsersView(1));
+                                                      },
                                                       title: Text(
                                                           profileModel
                                                               .followingCount
@@ -275,20 +356,23 @@ class ProfileScreen extends StatelessWidget {
                                       padding: EdgeInsets.only(
                                         top: Get.height * 0.08,
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Material(
-                                            elevation: 3,
-                                            shape: CircleBorder(),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.to(ProfilePhotoView(
+                                              "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"));
+                                        },
+                                        child: Material(
+                                          elevation: 3,
+                                          shape: CircleBorder(),
+                                          child: Hero(
+                                            tag: "hero",
                                             child: CircleAvatar(
                                               radius: 40,
                                               backgroundImage: NetworkImage(
                                                   "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -312,7 +396,7 @@ class ProfileScreen extends StatelessWidget {
       children: <Widget>[
         TabBar(tabs: [
           Tab(text: "Rolls"),
-          Tab(text: "Photos"),
+          // Tab(text: "Photos"),
           if (_controller.profileModel.status == 'VERIFIED')
             Tab(text: "Giveaway"),
         ]),
@@ -322,7 +406,7 @@ class ProfileScreen extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(),
-            Container(),
+            // Container(),
             // FutureBuilder<List<PhotoModel>>(
             //     future: _profileRepo.getPhotosByProfileId(
             //         _controller.profileId!, _controller.token!),
@@ -418,9 +502,17 @@ class ProfileReel extends StatelessWidget {
               mainAxisSpacing: 5,
             ),
             itemBuilder: (context, index) {
+              if (index == (reels.length - 3) && !_controller.loadingMore) {
+                _controller.getMoreFeed(reels.length);
+                if (_controller.reelsLoaded.isNotEmpty) {
+                  reels.addAll(_controller.reelsLoaded);
+                  _controller.reelsLoaded.clear();
+                  _controller.update();
+                }
+              }
               return GestureDetector(
                 onTap: () {
-                  Get.to(SingleFeedScreen(reels[index], null));
+                  Get.to(SingleFeedScreen(reels, index));
                 },
                 onLongPress: () {
                   Get.dialog(AlertDialog(
@@ -444,6 +536,7 @@ class ProfileReel extends StatelessWidget {
                   ));
                 },
                 child: CachedNetworkImage(
+                  placeholder: (context, url) => Loading(),
                   imageUrl: reels[index].thumbnail,
                   fit: BoxFit.cover,
                 ),

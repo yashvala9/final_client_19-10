@@ -55,7 +55,6 @@ class ProfileRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('2121 body $body');
     if (response.statusCode == 200 && body['id'] != null) {
       return ProfileModel.fromMap(body);
     } else {
@@ -104,7 +103,6 @@ class ProfileRepository {
     required File file,
     required String fileName,
   }) async {
-    print('2121 s3 filename $fileName');
     try {
       final response = await AwsS3.uploadFile(
         accessKey: "AKIARYAXXOSN6RLGJZRH",
@@ -157,7 +155,6 @@ class ProfileRepository {
     print(response.statusCode);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // AuthService().redirectUser();
       return;
     } else {
       return Future.error(body['detail']);
@@ -185,10 +182,10 @@ class ProfileRepository {
   //   }
   // }
 
-  Future<List<ReelModel>> getReelByProfileId(
-      int profileId, String token) async {
+  Future<List<ReelModel>> getReelByProfileId(int profileId, String token,
+      {int limit = 15, skip = 0}) async {
     final response = await http.get(
-      Uri.parse("${Base.getReelsByUserId}/$profileId"),
+      Uri.parse("${Base.getReelsByUserId}/$profileId?limit=$limit&skip=$skip"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -196,7 +193,6 @@ class ProfileRepository {
     );
 
     final body = jsonDecode(response.body);
-    print('listRolls $body');
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => ReelModel.fromMap(e)).toList();
@@ -213,9 +209,8 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-
     final body = jsonDecode(response.body);
-    print('listRolls $body');
+    print(body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['is_following'];
     } else {
@@ -281,12 +276,52 @@ class ProfileRepository {
         'user_id': followingProfileId,
       }),
     );
+    print("FolloingProfileId: $followingProfileId");
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       printInfo(info: "$body");
       return;
     } else {
       printInfo(info: "toggleFollowError: ${body['detail']}");
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<ProfileModel>> getFollowersByUserId(
+      int userId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.register}$userId/followers/?limit=1000&skip=0"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    print('running 2121');
+    print(response.body);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<ProfileModel>> getFollowingsByUserId(
+      int userId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.register}$userId/following/?limit=1000&skip=0"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    print(response.body);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
       return Future.error(body['detail']);
     }
   }

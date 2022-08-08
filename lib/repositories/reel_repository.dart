@@ -15,16 +15,15 @@ import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 class ReelRepository {
-  Future<List<ReelModel>> getFeeds(int profileId, String token) async {
-    print('343434');
+  Future<List<ReelModel>> getFeeds(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
     final response = await http.get(
-      Uri.parse(Base.reels),
+      Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body.toString() + '343434');
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
@@ -68,6 +67,24 @@ class ReelRepository {
     }
   }
 
+  Future<int> getCommentLikeCountByCommentId(
+      int commentId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getCommentLikeCount}/$commentId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['like_count'] as int;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
   Future<void> toggleLike(int reelId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.toggleLike}/$reelId"),
@@ -96,7 +113,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('2121 commentbody $body');
     if (response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => CommentModel.fromMap(e)).toList();
@@ -115,7 +131,6 @@ class ReelRepository {
     );
 
     final body = jsonDecode(response.body);
-    print('2121 commentbody $body');
     if (response.statusCode == 201) {
       return false;
     } else {
@@ -124,7 +139,6 @@ class ReelRepository {
   }
 
   Future<void> addReel(Map<String, dynamic> data, String token) async {
-    print('2121 ${jsonEncode(data)}');
     final response = await http.post(
       Uri.parse(Base.reels),
       headers: <String, String>{
@@ -133,9 +147,6 @@ class ReelRepository {
       },
       body: jsonEncode(data),
     );
-    print('2121 ${Base.reels}');
-    print('2121 ${response.statusCode}');
-    print('2121 ${response.body}');
     if (response.statusCode == 201) {
       return;
     } else {
@@ -153,7 +164,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print("running reels by id 323232");
     print(body);
     if (response.statusCode == 200) {
       final Iterable list = body;
@@ -172,7 +182,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print("running reels by id 323232");
     print(body);
     if (response.statusCode == 200) {
       return photoFromJson(response.body);
@@ -213,7 +222,6 @@ class ReelRepository {
     required File file,
     required String fileName,
   }) async {
-    print('2121 s3 filename $fileName');
     try {
       final response = await AwsS3.uploadFile(
         accessKey: "AKIARYAXXOSN5XYB5M67",

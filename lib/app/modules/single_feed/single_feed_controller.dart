@@ -53,16 +53,17 @@ class SingleFeedController extends GetxController {
         const Duration(milliseconds: 1000), () => showLike = false);
   }
 
-  void likeToggle(ReelModel reel) async {
-    // if (reel.isLiked) {
-    //   reel.likeCount--;
-    // } else {
-    //   toggleLikeShow();
-    //   reel.likeCount++;
-    // }
-    // reel.isLiked = !reel.isLiked;
-    // _reelRepo.toggleLike(reel.reelId, profileId!, token!);
-    // update();
+  void likeToggle(int id) async {
+    try {
+      await _reelRepo.toggleLike(id, token!);
+      final isLiked = await _reelRepo.getLikeFlag(id, token!);
+      if (isLiked) {
+        toggleLikeShow();
+      }
+    } catch (e) {
+      print("TogglelikeError: $e");
+    }
+    update();
   }
 }
 
@@ -127,7 +128,7 @@ class CommentController extends GetxController {
         responseCount: 0,
         user: profileModel,
         isLiked: false,
-        createdAt: DateTime.now(),
+        createdAt: DateTime.now().toUtc(),
         reelId: reelId.toString());
     _commentList.add(comment);
     update();

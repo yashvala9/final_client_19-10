@@ -238,7 +238,7 @@ class CreateProfileView extends StatelessWidget {
                                 child: TextFormField(
                                     enabled: !_controller.loading,
                                     decoration: const InputDecoration(
-                                      hintText: '+44',
+                                      hintText: '44',
                                       counterText: '',
                                     ),
                                     keyboardType: TextInputType.number,

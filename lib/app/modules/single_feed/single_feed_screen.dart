@@ -14,12 +14,13 @@ import '../../../models/reel_model.dart';
 import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_iten.dart';
+import '../homepage/comment_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
-  SingleFeedScreen(this.reel, this.photo, {Key? key}) : super(key: key);
+  SingleFeedScreen(this.reels, this.currentIndex, {Key? key}) : super(key: key);
 
-  ReelModel? reel;
-  PhotoModel? photo;
+  List<ReelModel>? reels;
+  int currentIndex;
 
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
@@ -31,9 +32,6 @@ class SingleFeedScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
 
-    var videoSplit = reel!.filename.split("_");
-    var videoUrl =
-        "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel!.filename}/MP4/${reel!.filename}";
     return GetBuilder<SingleFeedController>(
         builder: (_) => Scaffold(
               extendBodyBehindAppBar: true,
@@ -50,18 +48,22 @@ class SingleFeedScreen extends StatelessWidget {
               body: _controller.loading
                   ? Loading()
                   : PageView.builder(
-                      itemCount: 1,
-                      controller:
-                          PageController(initialPage: 0, viewportFraction: 1),
+                      itemCount: reels!.length,
+                      controller: PageController(
+                          initialPage: currentIndex, viewportFraction: 1),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
+                        var videoSplit = reels![index].filename.split("_");
+                        var videoUrl =
+                            "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reels![index].filename}/MP4/${reels![index].filename}";
                         return Stack(
                           children: [
                             VideoPlayerItem(
                               videoUrl: videoUrl,
                               doubleTap: () {
-                                // _controller.likeToggle(index);
+                                _controller.likeToggle(reels![index].id);
                               },
+                              swipeRight: () {},
                               showLike: _controller.showLike,
                             ),
                             //  VideoPlayerItem(
@@ -93,7 +95,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                reel!.video_title,
+                                                reels![index].video_title,
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.white,
@@ -101,7 +103,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Text(
-                                                reel!.description,
+                                                reels![index].description,
                                                 style: const TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white,
@@ -143,21 +145,44 @@ class SingleFeedScreen extends StatelessWidget {
                                             Column(
                                               children: [
                                                 InkWell(
-                                                  onTap: () {},
-                                                  // _controller.likeVideo(data.id),
-                                                  child: Icon(
-                                                    Icons.favorite,
-                                                    size: 30,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
+                                                    onTap: () {
+                                                      _controller.likeToggle(
+                                                          reels![index].id);
+                                                    },
+                                                    // _controller.likeVideo(data.id),
+                                                    child: FutureBuilder<bool>(
+                                                        future: _reelRepo
+                                                            .getLikeFlag(
+                                                                reels![index]
+                                                                    .id,
+                                                                _controller
+                                                                    .token!),
+                                                        builder:
+                                                            (context, snap) {
+                                                          return Icon(
+                                                            snap.hasData
+                                                                ? snap.data!
+                                                                    ? Icons
+                                                                        .favorite
+                                                                    : Icons
+                                                                        .favorite_border
+                                                                : Icons
+                                                                    .favorite_border,
+                                                            size: 30,
+                                                            color: snap.hasData
+                                                                ? snap.data!
+                                                                    ? Colors.red
+                                                                    : Colors
+                                                                        .white
+                                                                : Colors.white,
+                                                          );
+                                                        })),
 
                                                 // const SizedBox(height: 7),
                                                 FutureBuilder<int>(
                                                     future: _reelRepo
                                                         .getLikeCountByReelId(
-                                                            _controller
-                                                                .profileId!,
+                                                            reels![index].id,
                                                             _controller.token!),
                                                     builder: (context, snap) {
                                                       return Text(
@@ -181,7 +206,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                   onTap: () {
                                                     Get.bottomSheet(
                                                       CommentSheet(
-                                                        reelId: reel!.id,
+                                                        reelId:
+                                                            reels![index].id,
                                                       ),
                                                       backgroundColor:
                                                           Colors.white,
@@ -196,18 +222,15 @@ class SingleFeedScreen extends StatelessWidget {
                                                 FutureBuilder<int>(
                                                     future: _commentRepo
                                                         .getCommentCountByReelId(
-                                                            _controller
-                                                                .profileId!,
+                                                            reels![index].id,
                                                             _controller.token!),
                                                     builder:
                                                         (context, snapshot) {
-                                                      print(
-                                                          "ReelId: ${reel!.id} CommentCount: ${snapshot.data}");
                                                       return Text(
                                                         snapshot.hasData
                                                             ? snapshot.data!
                                                                 .toString()
-                                                            : "0",
+                                                            : '0',
                                                         style: style
                                                             .headlineSmall!
                                                             .copyWith(
@@ -237,10 +260,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                 // )
                                               ],
                                             ),
-                                            CircleAnimation(
-                                              child: buildMusicAlbum(
-                                                  "${Base.profileBucketUrl}/${reel!.user.user_profile!.profile_img}"),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -254,210 +273,5 @@ class SingleFeedScreen extends StatelessWidget {
                       },
                     ),
             ));
-  }
-
-  buildProfile(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Stack(children: [
-        Positioned(
-          left: 5,
-          child: Container(
-            width: 50,
-            height: 50,
-            padding: const EdgeInsets.all(1),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: const Image(
-                image: AssetImage(
-                  "assets/Background.png",
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        )
-      ]),
-    );
-  }
-
-  buildMusicAlbum(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Column(
-        children: [
-          Container(
-              padding: EdgeInsets.all(11),
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Colors.grey,
-                      Colors.white,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(25)),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(25),
-                child: Image(
-                  image: NetworkImage(profilePhoto),
-                  fit: BoxFit.cover,
-                ),
-              ))
-        ],
-      ),
-    );
-  }
-}
-
-class CommentSheet extends StatelessWidget {
-  final int reelId;
-  CommentSheet({Key? key, required this.reelId}) : super(key: key);
-
-  buildProfile(String profilePhoto) {
-    return CircleAvatar(
-      radius: 20,
-      backgroundImage: const NetworkImage(
-        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-      ),
-    );
-  }
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    final _controller = Get.put(CommentController(reelId: reelId));
-    // _controller.customeInit();
-    return GetBuilder<CommentController>(
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: _controller.loading
-            ? [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Loading(),
-                )
-              ]
-            : [
-                ListTile(
-                  leading: Text('${_controller.commentList.length} Comments',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ),
-                Divider(),
-                // ListTile(
-                //   leading: buildProfile(""),
-                //   title: Container(
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Row(
-                //           children: [
-                //             Text(
-                //               '@yashvala9',
-                //               style: TextStyle(fontWeight: FontWeight.bold),
-                //             ),
-                //             SizedBox(
-                //               width: 10,
-                //             ),
-                //             Text(
-                //               '1 day ago',
-                //             ),
-                //           ],
-                //         ),
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               'Hey! check this out.',
-                //             ),
-                //             Row(
-                //               children: [
-                //                 IconButton(
-                //                     onPressed: () {},
-                //                     icon: Icon(
-                //                       Icons.favorite,
-                //                       color: Colors.red,
-                //                     )),
-                //                 Text('2'),
-                //               ],
-                //             )
-                //           ],
-                //         ),
-                //         InkWell(
-                //             onTap: () {},
-                //             child: Text(
-                //               '2 Responses',
-                //               style: TextStyle(color: Colors.blue),
-                //             )),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                if (_controller.commentList.isEmpty)
-                  EmptyWidget("No comments available!")
-                else
-                  ..._controller.commentList
-                      .map(
-                        (e) => ListTile(
-                          leading: buildProfile(""),
-                          title: CommentWidget(
-                            commentModel: e,
-                            likeToggle: () {},
-                            deleteCallBack: () {},
-                            profileModel: e.user,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                Divider(),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: buildProfile(""),
-                    ),
-                    Expanded(
-                      child: Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: ' Add a comment',
-                          ),
-                          onSaved: (v) {
-                            _controller.comment = v!;
-                          },
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: IconButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            _controller.addComment();
-                          }
-                        },
-                        icon: Icon(Icons.send),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-      ),
-    );
   }
 }

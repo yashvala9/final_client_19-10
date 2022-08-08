@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
 import 'package:reel_ro/models/nessted_comment_model.dart';
@@ -23,6 +24,7 @@ class NestedCommentWidget extends StatelessWidget {
 
   final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
+  var parser = EmojiParser();
 
   bool showNestedComment = false;
 
@@ -62,7 +64,7 @@ class NestedCommentWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  nestedCommentModel.response,
+                  parser.emojify(nestedCommentModel.response),
                 ),
                 Container(),
                 // Row(
