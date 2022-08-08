@@ -79,7 +79,7 @@ class AddFeedController extends GetxController {
   /// reels_nsharma_20220715_unique(uuid)_filename.mp4
   String genFileName(String userID, String fileName) {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final date = DateFormat('yyyyMMdd').format(DateTime.now());
+    final date = DateFormat('yyyyMMdd').format(DateTime.now().toUtc());
     return 'reel_${userID}_${date}_${timestamp}_$fileName';
   }
 

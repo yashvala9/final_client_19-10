@@ -34,13 +34,13 @@ class NestedCommentModel {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'id': id});
     result.addAll({'commentId': commentId});
     result.addAll({'response': response});
     result.addAll({'created_at': createdAt.millisecondsSinceEpoch});
     result.addAll({'owner': owner.toMap()});
-  
+
     return result;
   }
 
@@ -49,14 +49,15 @@ class NestedCommentModel {
       id: map['id']?.toInt() ?? 0,
       commentId: map['comment_id']?.toInt() ?? 0,
       response: map['response'] ?? '',
-      createdAt: DateTime.parse(map['created_at']),
+      createdAt: DateTime.parse(map['created_at']).toLocal(),
       owner: ProfileModel.fromMap(map['owner']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory NestedCommentModel.fromJson(String source) => NestedCommentModel.fromMap(json.decode(source));
+  factory NestedCommentModel.fromJson(String source) =>
+      NestedCommentModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -66,21 +67,21 @@ class NestedCommentModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is NestedCommentModel &&
-      other.id == id &&
-      other.commentId == commentId &&
-      other.response == response &&
-      other.createdAt == createdAt &&
-      other.owner == owner;
+        other.id == id &&
+        other.commentId == commentId &&
+        other.response == response &&
+        other.createdAt == createdAt &&
+        other.owner == owner;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      commentId.hashCode ^
-      response.hashCode ^
-      createdAt.hashCode ^
-      owner.hashCode;
+        commentId.hashCode ^
+        response.hashCode ^
+        createdAt.hashCode ^
+        owner.hashCode;
   }
 }

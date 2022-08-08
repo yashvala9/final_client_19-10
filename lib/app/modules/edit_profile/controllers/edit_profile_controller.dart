@@ -43,7 +43,7 @@ class EditProfileController extends GetxController {
   }
 
   String genFileName(String userID, String fileName) {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
     final date = DateFormat('yyyyMMdd').format(DateTime.now());
     return 'reel_${userID}_${date}_${timestamp}_$fileName';
   }

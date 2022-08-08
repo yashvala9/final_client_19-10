@@ -42,8 +42,8 @@ class CreateProfileController extends GetxController {
   }
 
   String genFileName(String userID, String fileName) {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final date = DateFormat('yyyyMMdd').format(DateTime.now());
+    final timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
+    final date = DateFormat('yyyyMMdd').format(DateTime.now().toUtc());
     return 'reel_${userID}_${date}_${timestamp}_$fileName';
   }
 

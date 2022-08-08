@@ -128,7 +128,7 @@ class CommentController extends GetxController {
         responseCount: 0,
         user: profileModel,
         isLiked: false,
-        createdAt: DateTime.now(),
+        createdAt: DateTime.now().toUtc(),
         reelId: reelId.toString());
     _commentList.add(comment);
     update();

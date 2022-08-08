@@ -60,8 +60,8 @@ class ContestModel {
     return ContestModel(
       contest_name: map['contest_name'] as String,
       creator_type: map['creator_type'] as String,
-      start_date: DateTime.parse(map['start_date']),
-      end_date: DateTime.parse(map['end_date']),
+      start_date: DateTime.parse(map['start_date']).toLocal(),
+      end_date: DateTime.parse(map['end_date']).toLocal(),
       rules: map['rules'] as String,
       prizes: List<PrizeModel>.from(
         (map['prizes'] as List<dynamic>).map<PrizeModel>(

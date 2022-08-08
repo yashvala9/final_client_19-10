@@ -23,7 +23,7 @@ class CreateGiveawayController extends GetxController {
   late File? photo;
   String campaignName = '';
   String prizeName = '';
-  DateTime endDate = DateTime.parse("2022-08-11");
+  DateTime endDate = DateTime.parse("2022-08-11").toUtc();
   int photoId = 0;
   RxString photoUrl = ''.obs;
   RxBool photoLoading = false.obs;
@@ -35,8 +35,8 @@ class CreateGiveawayController extends GetxController {
         "contest_name": campaignName,
         "creator_type": "INFLUENCER",
         "creator_id": _authService.profileModel!.id,
-        "start_date": DateTime.now().toString(),
-        "end_date": endDate.toString(),
+        "start_date": DateTime.now().toUtc().toString(),
+        "end_date": endDate.toUtc().toString(),
         "rules": "My life My rules",
         "prize_count": 1,
         "prize": {
