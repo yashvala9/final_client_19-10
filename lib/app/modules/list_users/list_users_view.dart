@@ -1,0 +1,221 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
+import 'package:reel_ro/app/modules/profile/profile_photo_view.dart';
+import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/models/reel_model.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
+import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/base.dart';
+import 'package:reel_ro/widgets/loading.dart';
+import '../add_feed/add_feed_screen.dart';
+import '../add_feed/widgets/video_trimmer_view.dart';
+import '../edit_profile/views/edit_profile_view.dart';
+import '../homepage/profile_detail_screen.dart';
+import '../single_feed/single_feed_screen.dart';
+import 'list_users_controller.dart';
+
+class ListUsersView extends StatelessWidget {
+  ListUsersView(this.initialIndex, {Key? key}) : super(key: key);
+
+  int initialIndex;
+
+  final _controller = Get.put(ListUsersController());
+  final authService = Get.put(AuthService());
+  final _profileRepo = Get.put(ProfileRepository());
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+    return GetBuilder<ListUsersController>(
+        builder: (_) => DefaultTabController(
+              initialIndex: initialIndex,
+              length: 2,
+              child: Scaffold(
+                backgroundColor: Colors.white,
+                appBar: AppBar(
+                  title: Text('@' + authService.profileModel!.username!),
+                  elevation: 0,
+                ),
+                body: _tabSection(context),
+              ),
+            ));
+  }
+
+  Widget _tabSection(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        TabBar(tabs: [
+          Tab(text: "Followers"),
+          Tab(text: "Following"),
+        ]),
+        const SizedBox(
+          height: 8,
+        ),
+        Expanded(
+          child: TabBarView(children: [
+            FutureBuilder<List<ProfileModel>>(
+              future: _profileRepo.getFollowersByUserId(
+                  _controller.profileId!, _controller.token!),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Loading();
+                }
+                if (snapshot.hasError) {
+                  printInfo(info: "getFollowersByUserId: ${snapshot.hasError}");
+                  return Container();
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      onTap: () {
+                        // Get.to(
+                        //    ProfileDetail(
+                        //     index: index,
+                        //   ),
+                        // );
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
+                      leading: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: theme.colorScheme.primary,
+                        backgroundImage: NetworkImage(
+                          snapshot.data![index].user_profile != null
+                              ? "${Base.profileBucketUrl}/${snapshot.data![index].user_profile!.profile_img}"
+                              : "",
+                        ),
+                      ),
+                      title: Text(
+                        snapshot.data![index].user_profile!.fullname!,
+                        style: style.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        snapshot.data![index].username!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            _controller
+                                .toggleFollowing(snapshot.data![index].id);
+                          },
+                          child: FutureBuilder<bool>(
+                            future: _profileRepo.isFollowing(
+                                snapshot.data![index].id, _controller.token!),
+                            builder: (context, snap) {
+                              return Text(
+                                snap.hasData
+                                    ? snap.data!
+                                        ? "Following"
+                                        : "Follow"
+                                    : "",
+                                style: style.caption,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            FutureBuilder<List<ProfileModel>>(
+              future: _profileRepo.getFollowingsByUserId(
+                  _controller.profileId!, _controller.token!),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Loading();
+                }
+                if (snapshot.hasError) {
+                  printInfo(
+                      info: "getFollowingsByUserId: ${snapshot.hasError}");
+                  return Container();
+                }
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      onTap: () {
+                        Get.to(
+                          ProfileDetail(profileModel: snapshot.data![index]),
+                        );
+                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
+                      leading: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: theme.colorScheme.primary,
+                        backgroundImage: NetworkImage(
+                          snapshot.data![index].user_profile != null
+                              ? "${Base.profileBucketUrl}/${snapshot.data![index].user_profile!.profile_img}"
+                              : "",
+                        ),
+                      ),
+                      title: Text(
+                        snapshot.data![index].user_profile!.fullname!,
+                        style: style.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      subtitle: Text(
+                        snapshot.data![index].username!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            _controller
+                                .toggleFollowing(snapshot.data![index].id);
+                          },
+                          child: FutureBuilder<bool>(
+                            future: _profileRepo.isFollowing(
+                                snapshot.data![index].id, _controller.token!),
+                            builder: (context, snap) {
+                              return Text(
+                                snap.hasData
+                                    ? snap.data!
+                                        ? "Following"
+                                        : "Follow"
+                                    : "",
+                                style: style.caption,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          ]),
+        ),
+      ],
+    );
+  }
+}

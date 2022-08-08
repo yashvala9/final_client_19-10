@@ -7,15 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
+import 'package:reel_ro/app/modules/list_users/list_users_view.dart';
+import 'package:reel_ro/app/modules/profile/profile_photo_view.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../utils/snackbar.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../edit_profile/views/edit_profile_view.dart';
+import '../list_users/list_users_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
@@ -186,6 +190,10 @@ class ProfileScreen extends StatelessWidget {
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
+                                                      onTap: () {
+                                                        Get.to(
+                                                            ListUsersView(0));
+                                                      },
                                                       title: Text(
                                                           profileModel
                                                               .followerCount
@@ -203,7 +211,10 @@ class ProfileScreen extends StatelessWidget {
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
-                                                      onTap: () {},
+                                                      onTap: () {
+                                                        Get.to(
+                                                            ListUsersView(1));
+                                                      },
                                                       title: Text(
                                                           profileModel
                                                               .followingCount
@@ -345,20 +356,23 @@ class ProfileScreen extends StatelessWidget {
                                       padding: EdgeInsets.only(
                                         top: Get.height * 0.08,
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Material(
-                                            elevation: 3,
-                                            shape: CircleBorder(),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Get.to(ProfilePhotoView(
+                                              "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"));
+                                        },
+                                        child: Material(
+                                          elevation: 3,
+                                          shape: CircleBorder(),
+                                          child: Hero(
+                                            tag: "hero",
                                             child: CircleAvatar(
                                               radius: 40,
                                               backgroundImage: NetworkImage(
                                                   "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ],

@@ -286,4 +286,43 @@ class ProfileRepository {
       return Future.error(body['detail']);
     }
   }
+
+  Future<List<ProfileModel>> getFollowersByUserId(
+      int userId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.register}$userId/followers/?limit=1000&skip=0"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    print('running 2121');
+    print(response.body);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<ProfileModel>> getFollowingsByUserId(
+      int userId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.register}$userId/following/?limit=1000&skip=0"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    print(response.body);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
 }

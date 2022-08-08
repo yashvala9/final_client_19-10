@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 
@@ -26,6 +27,7 @@ class CommentSheet extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _commentTextController = TextEditingController();
   final _scrollController = ScrollController();
+  var parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +118,7 @@ class CommentSheet extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: buildProfile(
-                          _controller.profileModel.user_profile!.profile_img!),
+                          "${Base.profileBucketUrl}/${_controller.profileModel.user_profile!.profile_img!}"),
                     ),
                     Expanded(
                       child: Form(
@@ -127,7 +129,7 @@ class CommentSheet extends StatelessWidget {
                             hintText: ' Add a comment',
                           ),
                           onSaved: (v) {
-                            _controller.comment = v!;
+                            _controller.comment = parser.unemojify(v!);
                           },
                         ),
                       ),
