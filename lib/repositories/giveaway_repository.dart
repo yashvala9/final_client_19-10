@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/contest_model.dart';
@@ -43,7 +44,6 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list21213 ' + body.toString());
 
     if (response.statusCode == 200) {
       return body['ad_count'].toString();
@@ -62,7 +62,6 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list212131 ' + body.toString());
 
     if (response.statusCode == 200) {
       return body['referral_count'].toString();
@@ -130,7 +129,7 @@ class GiveawayRepository {
 
   Future<ContestModel> getContestsByUserId(int profileId, String token) async {
     final response = await http.get(
-      Uri.parse('${Base.giveaway}/user/$profileId'),
+      Uri.parse('${Base.giveaway}user/$profileId'),
       // user?user_id=$profileId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -197,20 +196,29 @@ class GiveawayRepository {
   }
 
   Future<List<ProfileModel>> getReferrals(int profileId, String token) async {
-    final response = await http.get(
-      Uri.parse(Base.referrals),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-    final body = jsonDecode(response.body);
-    print('list212121winnerbody $body');
-    if (response.statusCode == 200) {
-      final Iterable list = body;
-      return list.map((e) => ProfileModel.fromMap(e)).toList();
-    } else {
-      return Future.error(body);
+    try {
+      final response = await http.get(
+        Uri.parse(Base.referrals),
+        headers: <String, String>{
+          'accept': '*/*',
+          // 'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+      );
+      print('1212121212');
+      final body = jsonDecode(response.body);
+
+      print('121212 ${response.body.toString()}');
+      if (response.statusCode == 200) {
+        final Iterable list = body;
+        return list.map((e) => ProfileModel.fromMap(e)).toList();
+      } else {
+        return Future.error(body);
+      }
+    } catch (e) {
+      // showSnackBar(e.toString(), color: Colors.red);
+      print("getReferrals: $e");
+      return Future.error(e);
     }
   }
 }

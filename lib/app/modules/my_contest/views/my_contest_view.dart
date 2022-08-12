@@ -19,8 +19,8 @@ class MyContestView extends GetView<MyContestController> {
     final style = theme.textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'My Contest',
+        title: Text(
+          contestModel.contest_name,
           style: TextStyle(fontSize: 14),
         ),
         leading: IconButton(

@@ -10,6 +10,8 @@ import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../repositories/reel_repository.dart';
+
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final VoidCallback doubleTap;
@@ -29,6 +31,10 @@ class VideoPlayerItem extends StatefulWidget {
 
 class VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController videoPlayerController;
+  final _authService = Get.find<AuthService>();
+  final _reelRepo = Get.find<ReelRepository>();
+
+  String? get token => _authService.token;
 
   bool isManualPause = false;
   @override
@@ -36,12 +42,26 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     super.initState();
     Wakelock.enable();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
+
       // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
         videoPlayerController.play();
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);
+        videoPlayerController.addListener(() {
+          if (videoPlayerController.value.duration ==
+              videoPlayerController.value.position) {
+            //checking the duration and position every time
+            //Video Completed//
+            print('video ended 2121');
+            setState(() async {
+              print('video ended 2121');
+              await _reelRepo.updateAdsHistory(
+                  videoPlayerController.value.position.inSeconds, "1", token!);
+            });
+          }
+        });
       });
   }
 
@@ -55,6 +75,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    RxInt v = videoPlayerController.value.position.inSeconds.obs;
 
     return videoPlayerController.value.isBuffering
         ? const Loading()
@@ -77,7 +99,13 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                   },
                   onTap: () {
                     if (videoPlayerController.value.isPlaying) {
-                      videoPlayerController.pause();
+                      videoPlayerController.pause().then((_) async {
+                        await _reelRepo.updateAdsHistory(
+                            videoPlayerController.value.position.inSeconds,
+                            "1",
+                            token!);
+                      });
+
                       Wakelock.disable();
                       isManualPause = true;
                     } else {
@@ -87,19 +115,25 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                     }
                   },
                   child: VisibilityDetector(
-                      key: Key(DateTime.now().toString()),
-                      onVisibilityChanged: (VisibilityInfo info) {
-                        if (info.visibleFraction == 0 && !isManualPause) {
-                          videoPlayerController.pause();
-                          Wakelock.disable();
-                        } else {
-                          if (!isManualPause) {
-                            videoPlayerController.play();
-                            Wakelock.enable();
-                          }
+                    key: Key(DateTime.now().toString()),
+                    onVisibilityChanged: (VisibilityInfo info) {
+                      if (info.visibleFraction == 0 && !isManualPause) {
+                        videoPlayerController.pause().then((_) async {
+                          await _reelRepo.updateAdsHistory(
+                              videoPlayerController.value.position.inSeconds,
+                              "1",
+                              token!);
+                        });
+                        Wakelock.disable();
+                      } else {
+                        if (!isManualPause) {
+                          videoPlayerController.play();
+                          Wakelock.enable();
                         }
-                      },
-                      child: VideoPlayer(videoPlayerController)),
+                      }
+                    },
+                    child: VideoPlayer(videoPlayerController),
+                  ),
                 ),
                 widget.showLike
                     ? const Icon(
@@ -108,6 +142,12 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                         size: 100,
                       )
                     : const SizedBox(),
+                Obx(
+                  () => Text(
+                    v.toString(),
+                    style: TextStyle(fontSize: 100, color: Colors.white),
+                  ),
+                ),
               ],
             ),
           );
@@ -167,7 +207,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
           enableSkips: false,
           enableSubtitles: false,
           enableRetry: true,
-          enablePlayPause: false,
+          enablePlayPause: true,
           controlBarColor: Colors.black.withOpacity(0.2),
           playIcon: Icons.play_arrow_outlined,
           pauseIcon: Icons.pause_circle_outline,

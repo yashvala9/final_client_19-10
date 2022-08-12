@@ -20,6 +20,7 @@ class AddFeedController extends GetxController {
 
   String title = "";
   String description = "";
+  List<String?> tags = [];
 
   bool _loading = false;
   bool get loading => _loading;
@@ -45,6 +46,12 @@ class AddFeedController extends GetxController {
   // }
 
   void addFeed(File file, int type) async {
+    List<String> splitted = description.split(" ");
+    for (var item in splitted) {
+      if (item.startsWith("#")) {
+        tags.add(item);
+      }
+    }
     loading = true;
     log("File: $file");
     file = await changeFileNameOnly(file, 'video-$profileId');
@@ -54,7 +61,8 @@ class AddFeedController extends GetxController {
       "description": description,
       "filename": _fileName,
       "media_ext": path.extension(file.path).replaceAll('.', ''),
-      "media_size": 65
+      "media_size": 65,
+      "hashtags": tags
     };
     try {
       //step 1: make entry in DB

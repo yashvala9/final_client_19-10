@@ -210,7 +210,6 @@ class ProfileRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print(body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['is_following'];
     } else {

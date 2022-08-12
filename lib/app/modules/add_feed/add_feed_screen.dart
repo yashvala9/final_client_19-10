@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:hashtager/widgets/hashtag_text.dart';
+import 'package:hashtager/widgets/hashtag_text_field.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_controller.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
@@ -34,7 +36,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
     super.initState();
   }
 
-  final _controller = Get.put(AddFeedController());
+  final controller = Get.put(AddFeedController());
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -82,7 +84,6 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       borderRadius: BorderRadius.circular(16),
                       child: Container(
                         height: 200,
-                        
                         margin: const EdgeInsets.only(left: 8, bottom: 8),
                         child: widget.type == 1
                             ? Image.file(widget.file)
@@ -93,7 +94,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         decoration: const InputDecoration(hintText: "Title"),
-                        onSaved: (v) => _controller.title = v!,
+                        onSaved: (v) => controller.title = v!,
                       ),
                     ),
                     Padding(
@@ -101,20 +102,20 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       child: TextFormField(
                         decoration:
                             const InputDecoration(hintText: "Description"),
-                        onSaved: (v) => _controller.description = v!,
+                        onSaved: (v) => controller.description = v!,
                       ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    _controller.loading
+                    controller.loading
                         ? const Loading()
                         : MyElevatedButton(
                             buttonText: "Add",
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                _controller.addFeed(widget.file, widget.type);
+                                controller.addFeed(widget.file, widget.type);
                               }
                             },
                           ),

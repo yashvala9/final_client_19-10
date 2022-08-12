@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/add_feed/add_feed_screen.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
@@ -14,13 +15,15 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/video_player_iten.dart';
+import '../../../utils/video_player_item.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
+import '../entry_count/views/entry_count_view.dart';
 import 'comment_screen.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -33,6 +36,7 @@ class HomePageScreen extends StatelessWidget {
   final _profileRepo = Get.put(ProfileRepository());
   final _controller = Get.put(HomePageController());
   final _commentRepo = Get.put(CommentRepository());
+  final _giveawayRepo = Get.put(GiveawayRepository());
   var myMenuItems = <String>[
     'Report',
   ];
@@ -330,13 +334,25 @@ class HomePageScreen extends StatelessWidget {
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-                                                    Text(
-                                                      data.description,
-                                                      style: const TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
+                                                    HashTagText(
+                                                        text: data.description,
+                                                        basicStyle:
+                                                            const TextStyle(
+                                                          fontSize: 15,
+                                                          color: Colors.white,
+                                                        ),
+                                                        decoratedStyle:
+                                                            const TextStyle(
+                                                          fontSize: 15,
+                                                          color: Colors.blue,
+                                                        )),
+                                                    // Text(
+                                                    //   data.description,
+                                                    //   style: const TextStyle(
+                                                    //     fontSize: 15,
+                                                    //     color: Colors.white,
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
@@ -353,23 +369,47 @@ class HomePageScreen extends StatelessWidget {
                                                   Column(
                                                     children: [
                                                       InkWell(
-                                                        onTap: () {},
-                                                        // _controller.likeVideo(data.id),
+                                                        onTap: () {
+                                                          Get.to(
+                                                              EntryCountView());
+                                                        },
                                                         child: const Icon(
                                                           Icons.card_giftcard,
                                                           size: 30,
                                                           color: Colors.white,
                                                         ),
                                                       ),
-                                                      // const SizedBox(height: 7),
-                                                      Text(
-                                                        '0',
-                                                        style: style
-                                                            .headlineSmall!
-                                                            .copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                      )
+                                                      FutureBuilder<String>(
+                                                          future: _giveawayRepo
+                                                              .getTotalEntryCountByUserId(
+                                                                  _controller
+                                                                      .profileId!,
+                                                                  _controller
+                                                                      .token!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return const Loading();
+                                                            }
+                                                            if (snapshot
+                                                                .hasError) {
+                                                              printInfo(
+                                                                  info:
+                                                                      "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                              return Container();
+                                                            }
+                                                            return Text(
+                                                              snapshot.data
+                                                                  .toString(),
+                                                              style: style
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            );
+                                                          })
                                                     ],
                                                   ),
                                                   Column(

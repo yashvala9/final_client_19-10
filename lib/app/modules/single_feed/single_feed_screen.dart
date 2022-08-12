@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
@@ -13,8 +14,9 @@ import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
-import '../../../utils/video_player_iten.dart';
+import '../../../utils/video_player_item.dart';
 import '../homepage/comment_screen.dart';
+import '../search/search_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
   SingleFeedScreen(this.reels, this.currentIndex, {Key? key}) : super(key: key);
@@ -102,13 +104,30 @@ class SingleFeedScreen extends StatelessWidget {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              Text(
-                                                reels![index].description,
-                                                style: const TextStyle(
+                                              HashTagText(
+                                                onTap: (tag) {
+                                                  print('5151' + tag);
+                                                  Get.to(SearchHashTags(
+                                                    hashTag: tag,
+                                                  ));
+                                                },
+                                                text: reels![index].description,
+                                                basicStyle: const TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white,
                                                 ),
+                                                decoratedStyle: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.blue,
+                                                ),
                                               ),
+                                              // Text(
+                                              //   reels![index].description,
+                                              //   style: const TextStyle(
+                                              //     fontSize: 15,
+                                              //     color: Colors.white,
+                                              //   ),
+                                              // ),
                                             ],
                                           ),
                                         ),

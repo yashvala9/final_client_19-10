@@ -13,6 +13,7 @@ class ReferralsView extends GetView<ReferralsController> {
   final _controller = Get.put(ReferralsController());
   @override
   Widget build(BuildContext context) {
+    _controller.getReferralList();
     final theme = Theme.of(context);
     final style = theme.textTheme;
     return Scaffold(

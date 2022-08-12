@@ -10,17 +10,21 @@ import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
 
+import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
+import '../../../repositories/reel_repository.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/snackbar.dart';
 
 class SearchController extends GetxController {
+  final String hashTag;
   final String username;
-  SearchController(this.username);
+  SearchController(this.username, {this.hashTag = ''});
 
   final _profileRepo = Get.put(ProfileRepository());
   final _authService = Get.put(AuthService());
   final _profileControllere = Get.find<ProfileController>();
+  final _reelRepo = Get.put(ReelRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -39,9 +43,17 @@ class SearchController extends GetxController {
     update();
   }
 
+  List<ReelModel> _searchReels = [];
+  List<ReelModel> get searchReels => _searchReels;
+  set searchReels(List<ReelModel> searchReels) {
+    _searchReels = searchReels;
+    update();
+  }
+
   @override
   void onInit() {
     searchUser(username);
+    getFeeds(hashTag);
     super.onInit();
   }
 
@@ -52,8 +64,20 @@ class SearchController extends GetxController {
       searchProfiles = await _profileRepo.searchByUserName(username, token!);
       log("searchResult: $searchProfiles");
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
       print("searchUser: $e");
+    }
+    loading = false;
+  }
+
+  void getFeeds(String hashTag) async {
+    loading = true;
+    try {
+      searchReels =
+          await _reelRepo.getFeeds(profileId!, token!, limit: 500, skip: 0);
+    } catch (e) {
+      // showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
     }
     loading = false;
   }
