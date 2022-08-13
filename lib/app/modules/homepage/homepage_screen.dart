@@ -24,6 +24,7 @@ import '../../../utils/video_player_item.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
+import '../search/search_screen.dart';
 import 'comment_screen.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -182,6 +183,7 @@ class HomePageScreen extends StatelessWidget {
                                 initialPage: 0, viewportFraction: 1),
                             scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
+                              var isReel = true;
                               if (index == (_controller.reelList.length - 3) &&
                                   !_controller.loadingMore) {
                                 _controller.getMoreFeed();
@@ -192,7 +194,9 @@ class HomePageScreen extends StatelessWidget {
                               var videoSplit = data.filename.split("_");
                               var videoUrl =
                                   "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}";
-
+                              if (videoSplit[0].contains('ads')) {
+                                isReel = false;
+                              }
                               // var url = data.filepath + data.filename;
                               // log("URL: $url");
                               // log("VideoURl: ${"https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}"}");
@@ -200,15 +204,19 @@ class HomePageScreen extends StatelessWidget {
                                 children: [
                                   VideoPlayerItem(
                                     videoUrl: videoUrl,
+                                    videoId: data.id,
+                                    isReel: isReel,
                                     // "https://d2qwvdd0y3hlmq.cloudfront.net/reel/10/20220801/reel_10_20220801_1659347680729_video-10.mp4/HLS/reel_10_20220801_1659347680729_video-10_720.m3u8",
                                     doubleTap: () {
-                                      _controller.likeToggle(index);
+                                      if (isReel) _controller.likeToggle(index);
                                     },
                                     swipeRight: () {
-                                      Get.to(
-                                        () => ProfileDetail(
-                                            profileModel: data.user),
-                                      );
+                                      if (isReel) {
+                                        Get.to(
+                                          () => ProfileDetail(
+                                              profileModel: data.user),
+                                        );
+                                      }
                                     },
                                     showLike: _controller.showLike,
                                   ),
@@ -269,62 +277,79 @@ class HomePageScreen extends StatelessWidget {
                                                                   data.user),
                                                         );
                                                       },
-                                                      child: Text(
-                                                        "@${data.user.username}",
-                                                        style: style.titleLarge!
-                                                            .copyWith(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    FutureBuilder<bool>(
-                                                        future: _profileRepo
-                                                            .isFollowing(
-                                                                data.user.id,
-                                                                _controller
-                                                                    .token!),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (!snapshot
-                                                              .hasData) {
-                                                            return Container();
-                                                          }
-                                                          return TextButton(
-                                                            child: snapshot.data!
-                                                                ? Text(
-                                                                    "Following",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            15))
-                                                                : Text("Follow",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
-                                                            onPressed: () {
-                                                              _controller
-                                                                  .toggleFollowing(
-                                                                      data.user
-                                                                          .id);
-                                                            },
-                                                            style: ButtonStyle(
-                                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                                                  side: BorderSide(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      width: 1,
-                                                                      style: BorderStyle
-                                                                          .solid),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10.0))),
+                                                      child: isReel
+                                                          ? Text(
+                                                              "@${data.user.username}",
+                                                              style: style
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            )
+                                                          : Text(
+                                                              "@sponsored",
+                                                              style: style
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
                                                             ),
-                                                          );
-                                                        }),
+                                                    ),
+                                                    isReel
+                                                        ? FutureBuilder<bool>(
+                                                            future: _profileRepo
+                                                                .isFollowing(
+                                                                    data.user
+                                                                        .id,
+                                                                    _controller
+                                                                        .token!),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Container();
+                                                              }
+                                                              return TextButton(
+                                                                child: snapshot
+                                                                        .data!
+                                                                    ? Text(
+                                                                        "Following",
+                                                                        style: TextStyle(
+                                                                            color: Colors
+                                                                                .white,
+                                                                            fontSize:
+                                                                                15))
+                                                                    : Text(
+                                                                        "Follow",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontWeight: FontWeight.bold)),
+                                                                onPressed: () {
+                                                                  _controller
+                                                                      .toggleFollowing(data
+                                                                          .user
+                                                                          .id);
+                                                                },
+                                                                style:
+                                                                    ButtonStyle(
+                                                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                                      side: BorderSide(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          width:
+                                                                              1,
+                                                                          style: BorderStyle
+                                                                              .solid),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10.0))),
+                                                                ),
+                                                              );
+                                                            })
+                                                        : SizedBox(),
                                                     Text(
                                                       data.video_title,
                                                       style: const TextStyle(
@@ -334,7 +359,13 @@ class HomePageScreen extends StatelessWidget {
                                                             FontWeight.bold,
                                                       ),
                                                     ),
+
                                                     HashTagText(
+                                                        onTap: (tag) {
+                                                          Get.to(SearchHashTags(
+                                                            hashTag: tag,
+                                                          ));
+                                                        },
                                                         text: data.description,
                                                         basicStyle:
                                                             const TextStyle(
@@ -405,6 +436,7 @@ class HomePageScreen extends StatelessWidget {
                                                               style: style
                                                                   .headlineSmall!
                                                                   .copyWith(
+                                                                fontSize: 18,
                                                                 color: Colors
                                                                     .white,
                                                               ),
@@ -416,9 +448,11 @@ class HomePageScreen extends StatelessWidget {
                                                     children: [
                                                       InkWell(
                                                           onTap: () {
-                                                            _controller
-                                                                .likeToggle(
-                                                                    index);
+                                                            if (isReel) {
+                                                              _controller
+                                                                  .likeToggle(
+                                                                      index);
+                                                            }
                                                           },
                                                           // _controller.likeVideo(data.id),
                                                           child: FutureBuilder<
@@ -471,6 +505,7 @@ class HomePageScreen extends StatelessWidget {
                                                               style: style
                                                                   .headlineSmall!
                                                                   .copyWith(
+                                                                fontSize: 18,
                                                                 color: Colors
                                                                     .white,
                                                               ),
@@ -482,13 +517,15 @@ class HomePageScreen extends StatelessWidget {
                                                     children: [
                                                       InkWell(
                                                         onTap: () {
-                                                          Get.bottomSheet(
-                                                            CommentSheet(
-                                                              reelId: data.id,
-                                                            ),
-                                                            backgroundColor:
-                                                                Colors.white,
-                                                          );
+                                                          if (isReel) {
+                                                            Get.bottomSheet(
+                                                              CommentSheet(
+                                                                reelId: data.id,
+                                                              ),
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                            );
+                                                          }
                                                         },
                                                         child: const Icon(
                                                           Icons.comment,
@@ -513,6 +550,7 @@ class HomePageScreen extends StatelessWidget {
                                                               style: style
                                                                   .headlineSmall!
                                                                   .copyWith(
+                                                                fontSize: 18,
                                                                 color: Colors
                                                                     .white,
                                                               ),

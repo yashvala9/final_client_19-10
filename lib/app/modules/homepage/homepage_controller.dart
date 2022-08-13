@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/models/ads_model.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
@@ -50,13 +49,6 @@ class HomePageController extends GetxController {
     update();
   }
 
-  List<AdsModel> _adsList = [];
-  List<AdsModel> get adsList => _adsList;
-  set adsList(List<AdsModel> adsList) {
-    _adsList = adsList;
-    update();
-  }
-
   final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
     // CommentModel(
     //     username: "yashvala9",
@@ -71,7 +63,6 @@ class HomePageController extends GetxController {
 
   @override
   void onInit() {
-    getAds();
     getFeeds();
     super.onInit();
   }
@@ -79,7 +70,7 @@ class HomePageController extends GetxController {
   void getFeeds() async {
     loading = true;
     try {
-      reelList = await _reelRepo.getFeeds(profileId!, token!);
+      reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
@@ -88,29 +79,11 @@ class HomePageController extends GetxController {
     _loadMore = true;
   }
 
-  void getAds() async {
-    loadingAds = true;
-    try {
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-      adsList.addAll(await _reelRepo.getAds(profileId!, token!));
-    } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
-    }
-    loadingAds = false;
-    _loadMoreAds = true;
-  }
-
   void getMoreFeed() async {
     loadingMore = true;
     if (_loadMore) {
       try {
-        var newList = await _reelRepo.getFeeds(profileId!, token!,
+        var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
             limit: 10, skip: reelList.length);
         if (newList.isEmpty) {
           _loadMore = false;

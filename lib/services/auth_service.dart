@@ -45,13 +45,13 @@ class AuthService extends GetxService {
       if (profile.user_profile != null) {
         profileModel = profile;
 
-        Get.off(() => NavigationBarScreen());
+        Get.offAll(() => NavigationBarScreen());
       } else {
-        Get.off(() => CreateProfileView());
+        Get.offAll(() => CreateProfileView());
       }
     } else {
       // Get.toNamed(AppRoutes.login_then("afterSuccessfulLogin"));
-      Get.off(() => LoginScreen());
+      Get.offAll(() => LoginScreen());
     }
   }
 

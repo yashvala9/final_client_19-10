@@ -24,6 +24,7 @@ class NavigationBarScreen extends StatelessWidget {
   final NavigationBarController controller = Get.put(NavigationBarController());
 
   buildBottomNavigationMenu(context) {
+    controller.changeTabIndex(0);
     return Obx(() => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Container(

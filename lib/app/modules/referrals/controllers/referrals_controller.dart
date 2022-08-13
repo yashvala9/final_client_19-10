@@ -30,7 +30,6 @@ class ReferralsController extends GetxController {
   void increment() => count.value++;
 
   void getReferralList() async {
-    print('running 121212');
     referrals = await _giveawayRepo.getReferrals(profileId!, token!);
   }
 }

@@ -12,9 +12,11 @@ import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
+import '../../../repositories/giveaway_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/circle_animation.dart';
 import '../../../utils/video_player_item.dart';
+import '../entry_count/views/entry_count_view.dart';
 import '../homepage/comment_screen.dart';
 import '../search/search_screen.dart';
 
@@ -27,6 +29,7 @@ class SingleFeedScreen extends StatelessWidget {
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
   final _commentRepo = Get.put(CommentRepository());
+  final _giveawayRepo = Get.put(GiveawayRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +65,8 @@ class SingleFeedScreen extends StatelessWidget {
                           children: [
                             VideoPlayerItem(
                               videoUrl: videoUrl,
+                              videoId: reels![index].id,
+                              isReel: true,
                               doubleTap: () {
                                 _controller.likeToggle(reels![index].id);
                               },
@@ -143,22 +148,43 @@ class SingleFeedScreen extends StatelessWidget {
                                             Column(
                                               children: [
                                                 InkWell(
-                                                  onTap: () {},
-                                                  // _controller.likeVideo(data.id),
+                                                  onTap: () {
+                                                    Get.to(EntryCountView());
+                                                  },
                                                   child: const Icon(
                                                     Icons.card_giftcard,
                                                     size: 30,
                                                     color: Colors.white,
                                                   ),
                                                 ),
-                                                // const SizedBox(height: 7),
-                                                Text(
-                                                  '0',
-                                                  style: style.headlineSmall!
-                                                      .copyWith(
-                                                    color: Colors.white,
-                                                  ),
-                                                )
+                                                FutureBuilder<String>(
+                                                    future: _giveawayRepo
+                                                        .getTotalEntryCountByUserId(
+                                                            _controller
+                                                                .profileId!,
+                                                            _controller.token!),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return const Loading();
+                                                      }
+                                                      if (snapshot.hasError) {
+                                                        printInfo(
+                                                            info:
+                                                                "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                        return Container();
+                                                      }
+                                                      return Text(
+                                                        snapshot.data
+                                                            .toString(),
+                                                        style: style
+                                                            .headlineSmall!
+                                                            .copyWith(
+                                                          fontSize: 18,
+                                                          color: Colors.white,
+                                                        ),
+                                                      );
+                                                    })
                                               ],
                                             ),
                                             Column(
@@ -213,6 +239,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                         style: style
                                                             .headlineSmall!
                                                             .copyWith(
+                                                          fontSize: 18,
                                                           color: Colors.white,
                                                         ),
                                                       );
@@ -253,6 +280,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                         style: style
                                                             .headlineSmall!
                                                             .copyWith(
+                                                          fontSize: 18,
                                                           color: Colors.white,
                                                         ),
                                                       );

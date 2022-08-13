@@ -137,7 +137,7 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list212121body2');
+    print('list212121body2 $profileId');
     print('list212121body2 $body');
     if (response.statusCode == 200) {
       return ContestModel.fromMap(json.decode(response.body)[0]);
@@ -205,10 +205,8 @@ class GiveawayRepository {
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
       );
-      print('1212121212');
       final body = jsonDecode(response.body);
 
-      print('121212 ${response.body.toString()}');
       if (response.statusCode == 200) {
         final Iterable list = body;
         return list.map((e) => ProfileModel.fromMap(e)).toList();

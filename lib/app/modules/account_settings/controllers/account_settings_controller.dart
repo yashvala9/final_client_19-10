@@ -13,7 +13,7 @@ class AccountSettingsController extends GetxController {
   ContestModel? contestModel;
   @override
   void onInit() {
-    // TODO: implement onInit
+    contestModel = null;
     getContestByUser();
     super.onInit();
   }

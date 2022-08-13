@@ -14,6 +14,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
 
   @override
   Widget build(BuildContext context) {
+    _controller.getContestByUser();
     final theme = Theme.of(context);
     final style = theme.textTheme;
     return Scaffold(

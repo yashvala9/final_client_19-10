@@ -53,7 +53,7 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     searchUser(username);
-    getFeeds(hashTag);
+    getReelsByHashTag(hashTag);
     super.onInit();
   }
 
@@ -70,11 +70,11 @@ class SearchController extends GetxController {
     loading = false;
   }
 
-  void getFeeds(String hashTag) async {
+  void getReelsByHashTag(String hashTag) async {
     loading = true;
     try {
-      searchReels =
-          await _reelRepo.getFeeds(profileId!, token!, limit: 500, skip: 0);
+      searchReels = await _reelRepo
+          .getReelsByHashTag(hashTag, profileId!, token!, limit: 500, skip: 0);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
