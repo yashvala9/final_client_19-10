@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
@@ -18,6 +19,7 @@ class SearchTagTile extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     final colorSchem = theme.colorScheme;
+    var parser = EmojiParser();
     return GetBuilder<SearchController>(builder: (_) {
       var reelModel = _controller.searchReels[index];
       return ListTile(
@@ -33,13 +35,13 @@ class SearchTagTile extends StatelessWidget {
           ),
         ),
         title: Text(
-          reelModel.video_title,
+          parser.emojify(reelModel.video_title),
           style: style.titleMedium!.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: Text(
-          reelModel.description,
+          parser.emojify(reelModel.description),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

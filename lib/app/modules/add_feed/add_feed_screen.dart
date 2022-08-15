@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:hashtager/widgets/hashtag_text_field.dart';
@@ -43,6 +44,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
+    var parser = EmojiParser();
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -94,7 +96,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         decoration: const InputDecoration(hintText: "Title"),
-                        onSaved: (v) => controller.title = v!,
+                        onSaved: (v) => controller.title = parser.unemojify(v!),
                       ),
                     ),
                     Padding(
@@ -102,7 +104,8 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       child: TextFormField(
                         decoration:
                             const InputDecoration(hintText: "Description"),
-                        onSaved: (v) => controller.description = v!,
+                        onSaved: (v) =>
+                            controller.description = parser.unemojify(v!),
                       ),
                     ),
                     const SizedBox(

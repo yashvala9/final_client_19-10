@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:image_picker/image_picker.dart';
@@ -55,6 +56,7 @@ class HomePageScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
+    var parser = EmojiParser();
     return GetBuilder<HomePageController>(
         builder: (_) => Scaffold(
               backgroundColor: Colors.black,
@@ -351,7 +353,8 @@ class HomePageScreen extends StatelessWidget {
                                                             })
                                                         : SizedBox(),
                                                     Text(
-                                                      data.video_title,
+                                                      parser.emojify(
+                                                          data.video_title),
                                                       style: const TextStyle(
                                                         fontSize: 20,
                                                         color: Colors.white,
@@ -359,14 +362,14 @@ class HomePageScreen extends StatelessWidget {
                                                             FontWeight.bold,
                                                       ),
                                                     ),
-
                                                     HashTagText(
                                                         onTap: (tag) {
                                                           Get.to(SearchHashTags(
                                                             hashTag: tag,
                                                           ));
                                                         },
-                                                        text: data.description,
+                                                        text: parser.emojify(
+                                                            data.description),
                                                         basicStyle:
                                                             const TextStyle(
                                                           fontSize: 15,
@@ -377,13 +380,6 @@ class HomePageScreen extends StatelessWidget {
                                                           fontSize: 15,
                                                           color: Colors.blue,
                                                         )),
-                                                    // Text(
-                                                    //   data.description,
-                                                    //   style: const TextStyle(
-                                                    //     fontSize: 15,
-                                                    //     color: Colors.white,
-                                                    //   ),
-                                                    // ),
                                                   ],
                                                 ),
                                               ),

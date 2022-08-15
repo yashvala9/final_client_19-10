@@ -54,6 +54,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);
+        Wakelock.enable();
       });
   }
 

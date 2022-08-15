@@ -2,6 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
@@ -36,6 +37,7 @@ class SingleFeedScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
+    var parser = EmojiParser();
 
     return GetBuilder<SingleFeedController>(
         builder: (_) => Scaffold(
@@ -102,7 +104,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               Text(
-                                                reels![index].video_title,
+                                                parser.emojify(
+                                                    reels![index].video_title),
                                                 style: const TextStyle(
                                                   fontSize: 20,
                                                   color: Colors.white,
@@ -116,7 +119,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                     hashTag: tag,
                                                   ));
                                                 },
-                                                text: reels![index].description,
+                                                text: parser.emojify(
+                                                    reels![index].description),
                                                 basicStyle: const TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white,
@@ -126,13 +130,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                   color: Colors.blue,
                                                 ),
                                               ),
-                                              // Text(
-                                              //   reels![index].description,
-                                              //   style: const TextStyle(
-                                              //     fontSize: 15,
-                                              //     color: Colors.white,
-                                              //   ),
-                                              // ),
                                             ],
                                           ),
                                         ),
