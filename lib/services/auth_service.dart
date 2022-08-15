@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:reel_ro/app/modules/add_referral/add_referral_screen.dart';
 import 'package:reel_ro/app/modules/auth/create_profile/create_profile_view.dart';
 import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_screen.dart';
@@ -38,16 +42,22 @@ class AuthService extends GetxService {
     //   Get.toNamed(AppRoutes.home);
     // }
     final isLoggedIn = await _storage.read(Constants.token);
-
     print('2121 isLoggedIn != null ${isLoggedIn != null}');
     if (isLoggedIn != null) {
       final profile = await _profileRepo.getCurrentUsesr(token!);
       if (profile.user_profile != null) {
         profileModel = profile;
 
-        Get.offAll(() => NavigationBarScreen());
+        if (!await _authRepo.getRefferalStatus(profile.id, token!)) {
+          Get.offAll(() => AddReferralScreen());
+        } else {
+          var fcmToken = await FirebaseMessaging.instance.getToken();
+          log("fcmToken: $fcmToken");
+          await _authRepo.addToken(fcmToken!, token!);
+          Get.offAll(() => NavigationBarScreen());
+        }
       } else {
-        Get.offAll(() => CreateProfileView());
+        Get.off(() => CreateProfileView());
       }
     } else {
       // Get.toNamed(AppRoutes.login_then("afterSuccessfulLogin"));

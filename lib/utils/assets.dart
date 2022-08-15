@@ -31,4 +31,5 @@ class Assets {
   static const badge = 'assets/badge.png';
   static const trophy = 'assets/trophy.png';
   static const referral = 'assets/referral.png';
+  static const addReferral = 'assets/Frame2.png';
 }

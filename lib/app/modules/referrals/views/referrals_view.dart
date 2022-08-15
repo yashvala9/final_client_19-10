@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/send_invite/views/send_invite_view.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
@@ -152,7 +153,9 @@ class ReferralsView extends GetView<ReferralsController> {
                                   height: 50,
                                   child: MyElevatedButton(
                                     buttonText: "Send Invite",
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.to(() => SendInviteView());
+                                    },
                                   ),
                                 ),
                               ),
