@@ -56,6 +56,8 @@ class AuthController extends GetxController {
   String newPassword = '';
   String confirmPassword = '';
 
+  String referrerId = '';
+
   void login() async {
     loading = true;
     var data = {
@@ -192,5 +194,27 @@ class AuthController extends GetxController {
       print("forgetPassword: $e");
     }
     loading = false;
+  }
+
+  void addReferral(
+      String referrerUserId, String currentUserId, String token) async {
+    try {
+      await _authRepo.addReferrer(referrerUserId, token);
+      await _authRepo.setRefferalStatus(currentUserId, token);
+      await _authService.redirectUser();
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("addReferral: $e");
+    }
+  }
+
+  void setReferralStatus(String currentUserId, String token) async {
+    try {
+      await _authRepo.setRefferalStatus(currentUserId, token);
+      _authService.redirectUser();
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("setReferralstatus: $e");
+    }
   }
 }

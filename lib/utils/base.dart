@@ -20,12 +20,19 @@ class Base {
       '$_url/forgot_password/validate_token';
   static const setForgetPassword = '$_url/forgot_password';
 
+  //FCM
+  static const fcmRegister = '$_url/notify/register';
+
   //Profile
   static const currentUser = '$_url/users/getcurrent_user';
   static const getUserProfile = '$_url/users/profile';
   static const createProfile = '$_url/users/profile';
   static const updateProfile = '$_url/users/profile/update';
   static const getProfileById = '$_url/users/profile';
+
+  //Referral
+  static const getsetReferralStatus = '$_url/users';
+  static const addReferral = '$_url/users/referrer';
 
   //Reels
   static const getReelsByUserId = '$_url/reels/user';
