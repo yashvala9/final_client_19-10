@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:reel_ro/app/routes/app_page.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/services/fcm_services.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'firebase_options.dart';
 
@@ -16,6 +17,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FCMService.instance.notificationConfig();
   kPackageInfo = await PackageInfo.fromPlatform();
   runApp(const MyApp());
 }

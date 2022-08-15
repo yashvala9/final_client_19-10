@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../controllers/send_invite_controller.dart';
 
 class SendInviteView extends GetView<SendInviteController> {
+
+  final profile = Get.find<AuthService>().profileModel;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -68,7 +71,7 @@ class SendInviteView extends GetView<SendInviteController> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "reelro#wruhgjhybhf6286427878",
+                        "${profile!.username}@${profile!.id}",
                         style: style.titleMedium?.copyWith(
                           fontSize: 14,
                         ),

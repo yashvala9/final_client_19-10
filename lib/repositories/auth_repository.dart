@@ -161,6 +161,58 @@ class AuthRepository {
     }
   }
 
+  Future<void> addToken(String fcmToken, String token) async {
+    final response = await http.post(
+      Uri.parse(Base.fcmRegister),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode({
+        'token': fcmToken,
+        "device_info": {},
+      }),
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body;
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<bool> getRefferalStatus(int userId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getsetReferralStatus}/$userId/referral/"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['skip_referrer_check'];
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> setRefferalStatus(String userId, String token) async {
+    final response = await http.put(
+      Uri.parse("${Base.getsetReferralStatus}/$userId/referral/"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<String> setForgetPassword(
       String email, String token, String newPassword) async {
     final response = await http.post(
@@ -177,6 +229,27 @@ class AuthRepository {
       return body;
     } else {
       return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> addReferrer(String userId, String token) async {
+    final response = await http.put(
+      Uri.parse(Base.addReferral),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode({
+        'referrer_id': userId,
+      }),
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 ||
+        response.statusCode == 201 ||
+        response.statusCode == 202) {
+      return body;
+    } else {
+      return Future.error(body);
     }
   }
 
