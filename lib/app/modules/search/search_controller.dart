@@ -17,22 +17,30 @@ import '../../../utils/constants.dart';
 import '../../../utils/snackbar.dart';
 
 class SearchController extends GetxController {
-  final String hashTag;
-  final String username;
-  SearchController(this.username, {this.hashTag = ''});
+  SearchController();
 
   final _profileRepo = Get.put(ProfileRepository());
   final _authService = Get.put(AuthService());
-  final _profileControllere = Get.find<ProfileController>();
+
   final _reelRepo = Get.put(ReelRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 
+  bool loadingMore = false;
+  bool _loadMore = true;
+
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
+    update();
+  }
+
+  List<ReelModel> _reelList = [];
+  List<ReelModel> get reelList => _reelList;
+  set reelList(List<ReelModel> reelList) {
+    _reelList = reelList;
     update();
   }
 
@@ -52,8 +60,6 @@ class SearchController extends GetxController {
 
   @override
   void onInit() {
-    searchUser(username);
-    getReelsByHashTag(hashTag);
     super.onInit();
   }
 
@@ -97,5 +103,25 @@ class SearchController extends GetxController {
     } catch (e) {
       log("toggleFollowingError: $e");
     }
+  }
+
+  void getMoreFeed(int currentLength) async {
+    loadingMore = true;
+    if (_loadMore) {
+      try {
+        var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
+            limit: 10, skip: currentLength);
+        if (newList.isEmpty) {
+          _loadMore = false;
+        } else {
+          reelList.addAll(newList);
+        }
+        update();
+      } catch (e) {
+        showSnackBar(e.toString(), color: Colors.red);
+        print("getFeeds: $e");
+      }
+    }
+    loadingMore = false;
   }
 }

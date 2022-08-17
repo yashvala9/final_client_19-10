@@ -12,16 +12,24 @@ class ContestModel {
   final DateTime start_date;
   final DateTime end_date;
   final String rules;
-  final List<PrizeModel> prizes;
-  final List<WinnerModel>? winners;
+  final String prize_name;
+  final String prize_image;
+  final String winnerName;
+  final int winnerId;
+  final int id;
+
+  // final List<WinnerModel>? winners;
   ContestModel({
     required this.contest_name,
     required this.creator_type,
     required this.start_date,
     required this.end_date,
     required this.rules,
-    required this.prizes,
-    required this.winners,
+    this.prize_name = '',
+    this.prize_image = '',
+    this.winnerName = '',
+    this.winnerId = 0,
+    this.id = 0,
   });
 
   ContestModel copyWith({
@@ -30,8 +38,11 @@ class ContestModel {
     DateTime? start_date,
     DateTime? end_date,
     String? rules,
-    List<PrizeModel>? prizes,
-    List<WinnerModel>? winners,
+    String? prize_name,
+    String? prize_image,
+    String? winnerName,
+    int? winnerId,
+    int? id,
   }) {
     return ContestModel(
       contest_name: contest_name ?? this.contest_name,
@@ -39,8 +50,11 @@ class ContestModel {
       start_date: start_date ?? this.start_date,
       end_date: end_date ?? this.end_date,
       rules: rules ?? this.rules,
-      prizes: prizes ?? this.prizes,
-      winners: winners ?? this.winners,
+      prize_name: prize_name ?? this.prize_name,
+      prize_image: prize_image ?? this.prize_image,
+      winnerName: winnerName ?? this.winnerName,
+      winnerId: winnerId ?? this.winnerId,
+      id: id ?? this.id,
     );
   }
 
@@ -48,34 +62,41 @@ class ContestModel {
     return <String, dynamic>{
       'contest_name': contest_name,
       'creator_type': creator_type,
-      'start_date': start_date.toString(),
-      'end_date': end_date.toString(),
+      'start_date': start_date.millisecondsSinceEpoch,
+      'end_date': end_date.millisecondsSinceEpoch,
       'rules': rules,
-      'prizes': prizes.map((x) => x.toMap()).toList(),
-      'winners': winners?.map((x) => x.toMap()).toList(),
+      'prize_name': prize_name,
+      'prize_image': prize_image,
+      'winnerName': winnerName,
+      'winnerId': winnerId,
+      'id': id,
     };
   }
 
   factory ContestModel.fromMap(Map<String, dynamic> map) {
-    return ContestModel(
+    print('212145 map $map');
+    var v = ContestModel(
       contest_name: map['contest_name'] as String,
       creator_type: map['creator_type'] as String,
-      start_date: DateTime.parse(map['start_date']).toLocal(),
-      end_date: DateTime.parse(map['end_date']).toLocal(),
+      start_date: DateTime.parse(map['start_date']),
+      end_date: DateTime.parse(map['end_date']),
       rules: map['rules'] as String,
-      prizes: List<PrizeModel>.from(
-        (map['prizes'] as List<dynamic>).map<PrizeModel>(
-          (x) => PrizeModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      winners: map['winners'] != null
-          ? List<WinnerModel>.from(
-              (map['winners'] as List<dynamic>).map<WinnerModel?>(
-                (x) => WinnerModel.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
+      prize_name: map['prizes'].isNotEmpty
+          ? map['prizes'][0]['prize_name'] as String
+          : '',
+      prize_image: map['prizes'].isNotEmpty
+          ? map['prizes'][0]['prize_image'] as String
+          : '',
+      winnerName: map['winners'].isNotEmpty
+          ? map['winners'][0]['user']['user_profile']['fullname'] as String
+          : '',
+      winnerId: map['winners'].isNotEmpty
+          ? map['winners'][0]['user']['id'] as int
+          : 0,
+      id: map['id'] as int,
     );
+    print('212145 v $v');
+    return v;
   }
 
   String toJson() => json.encode(toMap());
@@ -85,7 +106,7 @@ class ContestModel {
 
   @override
   String toString() {
-    return 'ContestModel(contest_name: $contest_name, creator_type: $creator_type, start_date: $start_date, end_date: $end_date, rules: $rules, prizes: $prizes, winners: $winners)';
+    return 'ContestModel(contest_name: $contest_name, creator_type: $creator_type, start_date: $start_date, end_date: $end_date, rules: $rules, prize_name: $prize_name, prize_image: $prize_image, winnerName: $winnerName, winnerId: $winnerId, id: $id)';
   }
 
   @override
@@ -97,8 +118,11 @@ class ContestModel {
         other.start_date == start_date &&
         other.end_date == end_date &&
         other.rules == rules &&
-        listEquals(other.prizes, prizes) &&
-        listEquals(other.winners, winners);
+        other.prize_name == prize_name &&
+        other.prize_image == prize_image &&
+        other.winnerName == winnerName &&
+        other.winnerId == winnerId &&
+        other.id == id;
   }
 
   @override
@@ -108,7 +132,10 @@ class ContestModel {
         start_date.hashCode ^
         end_date.hashCode ^
         rules.hashCode ^
-        prizes.hashCode ^
-        winners.hashCode;
+        prize_name.hashCode ^
+        prize_image.hashCode ^
+        winnerName.hashCode ^
+        winnerId.hashCode ^
+        id.hashCode;
   }
 }

@@ -167,7 +167,93 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             asset: Assets.accountStoke,
             title: "Random Follower Picker",
             onPressed: () {
-              Get.to(() => const FollowerPickerView());
+              if (_controller.contestModel == null) {
+                Get.dialog(
+                  AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: const Text(
+                      "Enable Giveaway Campaigns",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Color.fromRGBO(22, 22, 22, 1),
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    content: const Text(
+                      "You haven’t enabled giveaway campaign."
+                      "\nDo you want to enable now and"
+                      "\nstart a new campaign right away?",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color.fromRGBO(68, 67, 65, 1),
+                      ),
+                    ),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 42,
+                            width: 100,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: const Color.fromRGBO(253, 196, 64, 1),
+                                elevation: 9,
+                              ),
+                              onPressed: () {
+                                Get.back();
+                                Get.to(CreateGiveawayView());
+                              },
+                              child: const Text(
+                                "Yes",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Color.fromRGBO(68, 67, 65, 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.04,
+                          ),
+                          SizedBox(
+                            height: 42,
+                            width: 100,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: const Color.fromRGBO(217, 217, 217, 1),
+                                elevation: 8,
+                              ),
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text(
+                                "No",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Color.fromRGBO(68, 67, 65, 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              } else if (_controller.contestModel!.winnerName != '') {
+                Get.to(() => FollowerPickerWinnerView(
+                    _controller.contestModel!.winnerName));
+              } else {
+                Get.to(() => FollowerPickerView(_controller.contestModel!));
+              }
             },
           ),
           const Divider(
@@ -184,7 +270,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             asset: Assets.pen,
             title: "Report a problem",
             onPressed: () {
-              Get.to(() => const FollowerPickerView());
+              // Get.to(() => FollowerPickerView());
             },
           ),
           AccountTile(

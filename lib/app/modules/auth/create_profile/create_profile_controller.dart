@@ -49,7 +49,6 @@ class CreateProfileController extends GetxController {
 
   void addProfileData() async {
     loading = true;
-    printInfo(info: "Id: ${_authService.userId}");
     try {
       file = await changeFileNameOnly(file!, 'image');
       final String _fileName =

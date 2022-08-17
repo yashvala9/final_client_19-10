@@ -468,8 +468,6 @@ class ProfileReel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    printInfo(info: "ProfileId: ${_controller.profileId}");
-
     return FutureBuilder<List<ReelModel>>(
         future: profileId != null
             ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
@@ -485,7 +483,6 @@ class ProfileReel extends StatelessWidget {
             printInfo(info: "profileReels: ${snapshot.error}");
           }
           var reels = snapshot.data!;
-          printInfo(info: "Reels: $reels");
           if (reels.isEmpty) {
             return Center(
               child: Text("No reels available"),

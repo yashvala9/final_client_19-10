@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:reel_ro/models/ads_history_model.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
@@ -201,6 +202,26 @@ class ProfileRepository {
     }
   }
 
+  Future<List<AdsHistoryModel>> getAdsHistoryByProfileId(
+      int profileId, String token,
+      {int limit = 15, skip = 0}) async {
+    final response = await http.get(
+      Uri.parse("${Base.adsHistoryByProfileId}?limit=$limit&skip=$skip"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => AdsHistoryModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<bool> isFollowing(int profileId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.isFollowing}/$profileId"),
@@ -263,8 +284,6 @@ class ProfileRepository {
   }
 
   Future<void> toggleFollow(int followingProfileId, String token) async {
-    printInfo(info: "FolloingProfileId: $followingProfileId");
-
     final response = await http.post(
       Uri.parse(Base.toggleFollow),
       headers: <String, String>{
@@ -278,7 +297,6 @@ class ProfileRepository {
     print("FolloingProfileId: $followingProfileId");
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      printInfo(info: "$body");
       return;
     } else {
       printInfo(info: "toggleFollowError: ${body['detail']}");

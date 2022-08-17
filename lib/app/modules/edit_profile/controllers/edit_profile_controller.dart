@@ -50,7 +50,6 @@ class EditProfileController extends GetxController {
 
   Future<void> updateProfile() async {
     loading = true;
-    printInfo(info: "Id: ${_authService.userId}");
     try {
       String _fileName = '';
       if (file != null) {

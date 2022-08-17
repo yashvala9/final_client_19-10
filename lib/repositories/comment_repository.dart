@@ -11,7 +11,6 @@ import '../utils/base.dart';
 class CommentRepository {
   Future<List<CommentModel>> getCommentByReelId(
       int reelId, String token) async {
-    printInfo(info: "getCommentByreelId: $reelId");
     final response = await http.get(
       Uri.parse("${Base.getCommentByReelId}/$reelId"),
       headers: <String, String>{
@@ -20,7 +19,6 @@ class CommentRepository {
       },
     );
     final body = jsonDecode(response.body);
-    printInfo(info: "getCommentsByReelIdBody: $body");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => CommentModel.fromMap(e)).toList();
@@ -31,7 +29,6 @@ class CommentRepository {
 
   Future<List<NestedCommentModel>> getNestedCommentByCommentId(
       int commentId, String token) async {
-    printInfo(info: "getNestedCommentId: $commentId");
     final response = await http.get(
       Uri.parse("${Base.nestedComment}/$commentId/responses"),
       headers: <String, String>{
@@ -40,7 +37,6 @@ class CommentRepository {
       },
     );
     final body = jsonDecode(response.body);
-    printInfo(info: "getCommentsByReelIdBody: $body");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => NestedCommentModel.fromMap(e)).toList();
@@ -131,7 +127,6 @@ class CommentRepository {
     final body = jsonDecode(response.body);
     print(response.statusCode);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      printInfo(info: body);
       return;
     } else {
       return Future.error(body['detail']);

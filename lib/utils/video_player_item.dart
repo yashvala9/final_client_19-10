@@ -70,7 +70,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     final size = MediaQuery.of(context).size;
 
     videoPlayerController.addListener(() async {
-      if (videoPlayerController.value.duration.inSeconds <=
+      if (videoPlayerController.value.duration.inSeconds - 1 <=
           videoPlayerController.value.position.inSeconds) {
         //checking the duration and position every time
         //Video Completed//

@@ -19,19 +19,11 @@ class HomePageController extends GetxController {
 
   bool loadingMore = false;
   bool _loadMore = true;
-  bool _loadMoreAds = true;
 
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
-    update();
-  }
-
-  bool _loadingAds = false;
-  bool get loadingAds => _loadingAds;
-  set loadingAds(bool loadingAds) {
-    _loadingAds = loadingAds;
     update();
   }
 

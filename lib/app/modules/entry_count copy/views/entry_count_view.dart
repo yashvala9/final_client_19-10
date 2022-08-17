@@ -19,7 +19,7 @@ class GiveawayView extends GetView<GiveawayController> {
             style: style.titleMedium,
           ),
         ),
-        backgroundColor: AppColors.white,
+        // backgroundColor: AppColors.white,
       ),
       body: CustomScrollView(
         slivers: [

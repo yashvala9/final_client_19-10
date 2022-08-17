@@ -191,7 +191,6 @@ class HomePageScreen extends StatelessWidget {
                                 _controller.getMoreFeed();
                               }
                               final data = _controller.reelList[index];
-                              printInfo(info: "Data: ${data.toJson()}");
 
                               var videoSplit = data.filename.split("_");
                               var videoUrl =

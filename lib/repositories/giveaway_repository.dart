@@ -99,7 +99,7 @@ class GiveawayRepository {
     final body = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      list.add(body['profileUrl'].toString());
+      list.add(body['profile_img'].toString());
       list.add(body['fullname'].toString());
       return list;
     } else {
@@ -110,20 +110,28 @@ class GiveawayRepository {
   }
 
   Future<List<ContestModel>> getContests(int profileId, String token) async {
-    final response = await http.get(
-      Uri.parse(Base.giveaway),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-    final body = jsonDecode(response.body);
-    print('list212121body $body');
-    if (response.statusCode == 200) {
-      Iterable list = body;
-      return list.map((e) => ContestModel.fromMap(e)).toList();
-    } else {
-      return Future.error(body);
+    try {
+      final response = await http.get(
+        Uri.parse(Base.giveaway),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+      );
+      final body = jsonDecode(response.body);
+      print('list21212145body $body');
+      if (response.statusCode == 200) {
+        Iterable list = body;
+        var v = list.map((e) => ContestModel.fromMap(e)).toList();
+        print('212145 $v');
+        return v;
+      } else {
+        return Future.error(body);
+      }
+    } catch (e) {
+      // showSnackBar(e.toString(), color: Colors.red);
+      print("getContests: $e");
+      return Future.error(e);
     }
   }
 
@@ -166,7 +174,6 @@ class GiveawayRepository {
   }
 
   Future<Map<String, dynamic>> addPhoto(File file, String token) async {
-    printInfo(info: "File path: ${file.path}");
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(Base.imageUpload),
@@ -200,8 +207,8 @@ class GiveawayRepository {
       final response = await http.get(
         Uri.parse(Base.referrals),
         headers: <String, String>{
-          'accept': '*/*',
-          // 'Content-Type': 'application/json; charset=UTF-8',
+          // 'accept': '*/*',
+          'Content-Type': 'application/json; charset=UTF-8',
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
       );

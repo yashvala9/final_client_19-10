@@ -90,7 +90,6 @@ class CreateGiveawayController extends GetxController {
     var v = await _giveawayRepo.addPhoto(photo!, token!);
     photoId = v['id'];
     photoUrl.value = v['url'];
-    printInfo(info: photoUrl.value);
     photoLoading(false);
   }
 }

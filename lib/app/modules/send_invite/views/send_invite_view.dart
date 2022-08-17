@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/colors.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../controllers/send_invite_controller.dart';
+import 'package:flutter/services.dart';
 
 class SendInviteView extends GetView<SendInviteController> {
-
   final profile = Get.find<AuthService>().profileModel;
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class SendInviteView extends GetView<SendInviteController> {
               style: style.titleMedium,
             ),
           ),
-          backgroundColor: AppColors.white,
+          // backgroundColor: AppColors.white,
         ),
         body: Center(
           child: Column(
@@ -81,12 +82,17 @@ class SendInviteView extends GetView<SendInviteController> {
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
                         height: Get.height * 0.05,
-                        width: Get.width * 0.3,
+                        width: Get.width * 0.4,
                         child: ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     AppColors.primary)),
-                            onPressed: () {},
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(
+                                  text: "${profile!.username}@${profile!.id}"));
+                              showSnackBar(
+                                  "Your referral code has been copied to your clipboard!");
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -123,7 +129,7 @@ class SendInviteView extends GetView<SendInviteController> {
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
                         height: Get.height * 0.05,
-                        width: Get.width * 0.5,
+                        width: Get.width * 0.6,
                         child: ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
