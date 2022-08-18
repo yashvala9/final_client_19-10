@@ -70,7 +70,7 @@ class WinnersView extends GetView<WinnersController> {
                   return const Loading();
                 }
                 if (snapshot.hasError) {
-                  printInfo(info: "getContests: ${snapshot.hasError}");
+                  printInfo(info: "getWinners: ${snapshot.hasError}");
                   return Container();
                 }
                 return Expanded(

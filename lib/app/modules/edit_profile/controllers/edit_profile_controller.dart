@@ -50,9 +50,9 @@ class EditProfileController extends GetxController {
 
   Future<void> updateProfile() async {
     loading = true;
-    printInfo(info: "Id: ${_authService.userId}");
     try {
       String _fileName = '';
+
       if (file != null) {
         file = await changeFileNameOnly(file!, 'image');
         _fileName = genFileName("Profile", path.basename(file!.path));
@@ -78,8 +78,13 @@ class EditProfileController extends GetxController {
       };
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _fileName = '';
-      await _authService.redirectUser();
+      // await _authService.redirectUser();
+      final profile = await _profileRepo.getCurrentUsesr(_authService.token!);
+      if (profile.user_profile != null) {
+        _authService.profileModel = profile;
+      }
       update();
+      Get.back();
     } catch (e) {
       print("updateProfile: $e");
     }

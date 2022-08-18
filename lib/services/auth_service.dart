@@ -47,20 +47,21 @@ class AuthService extends GetxService {
       final profile = await _profileRepo.getCurrentUsesr(token!);
       if (profile.user_profile != null) {
         profileModel = profile;
+
         if (!await _authRepo.getRefferalStatus(profile.id, token!)) {
-          Get.offAll(() =>  AddReferralScreen());
+          Get.offAll(() => AddReferralScreen());
         } else {
           var fcmToken = await FirebaseMessaging.instance.getToken();
           log("fcmToken: $fcmToken");
           await _authRepo.addToken(fcmToken!, token!);
-          Get.off(() => NavigationBarScreen());
+          Get.offAll(() => NavigationBarScreen());
         }
       } else {
         Get.off(() => CreateProfileView());
       }
     } else {
       // Get.toNamed(AppRoutes.login_then("afterSuccessfulLogin"));
-      Get.off(() => LoginScreen());
+      Get.offAll(() => LoginScreen());
     }
   }
 

@@ -33,11 +33,15 @@ class ContestCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("contest.contestName",
+          Text(contest.contest_name,
               style:
                   style.titleLarge!.copyWith(color: AppColors.winnercardbrown)),
-          Image.network("contest.prizeImageUrl",
-              fit: BoxFit.cover, width: 150, height: 90),
+          Image.network(
+              "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/" +
+                  contest.prize_image,
+              fit: BoxFit.cover,
+              width: 150,
+              height: 90),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -45,7 +49,7 @@ class ContestCard extends StatelessWidget {
               Text('Prize', style: style.titleLarge),
               const SizedBox(width: 10),
               Text(
-                "contest.prizeName",
+                contest.prize_name,
                 style: style.headline5!.copyWith(
                   color: AppColors.winnercardpink,
                 ),

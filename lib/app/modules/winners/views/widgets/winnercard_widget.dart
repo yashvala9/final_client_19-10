@@ -4,6 +4,8 @@ import 'package:reel_ro/app/data/demo_data.dart';
 import 'package:reel_ro/models/winner_model.dart';
 import 'package:reel_ro/utils/colors.dart';
 
+import '../../../../../utils/base.dart';
+
 class WinnerCardWidget extends StatelessWidget {
   final WinnerModel winner;
   const WinnerCardWidget({
@@ -36,15 +38,15 @@ class WinnerCardWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              winner.contest.contest_name,
+              winner.contestName,
               style: style.subtitle1,
             ),
-            Text(
-              winner.prize.prize_name,
-              style: style.titleLarge!.copyWith(
-                color: AppColors.winnercardpink,
-              ),
-            ),
+            // Text(
+            //   winner.prize_name,
+            //   style: style.titleLarge!.copyWith(
+            //     color: AppColors.winnercardpink,
+            //   ),
+            // ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               height: 105,
@@ -59,12 +61,11 @@ class WinnerCardWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(winner.user.user_profile!.profile_img!),
+                    backgroundImage: NetworkImage(
+                        "${Base.profileBucketUrl}/${winner.userImage}"),
                     radius: 25,
                   ),
-                  Text(winner.user.user_profile!.fullname!,
-                      style: style.subtitle1),
+                  Text(winner.userName, style: style.subtitle1),
                 ],
               ),
             ),

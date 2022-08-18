@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/ads_history/ads_history_view.dart';
 import 'package:reel_ro/utils/colors.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
@@ -24,7 +25,7 @@ class EntryCountView extends GetView<EntryCountController> {
             style: style.titleMedium,
           ),
         ),
-        backgroundColor: AppColors.white,
+        // backgroundColor: AppColors.white,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -176,7 +177,7 @@ class EntryCountView extends GetView<EntryCountController> {
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14)),
-                child: SizedBox(
+                child: Container(
                   height: Get.height * 0.15,
                   child: Row(
                     children: [
@@ -193,9 +194,14 @@ class EntryCountView extends GetView<EntryCountController> {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                         ),
-                        child: Text(
-                          "Ad History",
-                          style: style.titleMedium,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(AdsHistoryView());
+                          },
+                          child: Text(
+                            "Ad History",
+                            style: style.titleMedium,
+                          ),
                         ),
                       ),
                     ],

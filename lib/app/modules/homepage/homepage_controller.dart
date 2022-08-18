@@ -62,7 +62,7 @@ class HomePageController extends GetxController {
   void getFeeds() async {
     loading = true;
     try {
-      reelList = await _reelRepo.getFeeds(profileId!, token!);
+      reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
@@ -75,7 +75,7 @@ class HomePageController extends GetxController {
     loadingMore = true;
     if (_loadMore) {
       try {
-        var newList = await _reelRepo.getFeeds(profileId!, token!,
+        var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
             limit: 10, skip: reelList.length);
         if (newList.isEmpty) {
           _loadMore = false;

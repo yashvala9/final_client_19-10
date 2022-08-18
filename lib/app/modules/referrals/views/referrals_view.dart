@@ -6,6 +6,7 @@ import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
+import '../../../../utils/base.dart';
 import '../../../../widgets/loading.dart';
 import '../controllers/referrals_controller.dart';
 
@@ -14,6 +15,7 @@ class ReferralsView extends GetView<ReferralsController> {
   final _controller = Get.put(ReferralsController());
   @override
   Widget build(BuildContext context) {
+    _controller.getReferralList();
     final theme = Theme.of(context);
     final style = theme.textTheme;
     return Scaffold(
@@ -25,7 +27,7 @@ class ReferralsView extends GetView<ReferralsController> {
             style: style.titleMedium,
           ),
         ),
-        backgroundColor: AppColors.white,
+        // backgroundColor: AppColors.white,
       ),
       body: CustomScrollView(
         slivers: [
@@ -56,10 +58,11 @@ class ReferralsView extends GetView<ReferralsController> {
                                   horizontal: 30, vertical: 10),
                               child: CircleAvatar(
                                 radius: 30,
-                                child: (!snapshot.hasData)
-                                    ? const Loading()
-                                    : Image.network(
-                                        'https://s3.amazonaws.com/babelcube/users/61f7c584d9efd_fault-avatar-profile-icon-vector-social-media-user-image-182145777.jpg',
+                                backgroundImage: (!snapshot.hasData)
+                                    ? const NetworkImage(
+                                        'https://s3.amazonaws.com/babelcube/users/61f7c584d9efd_fault-avatar-profile-icon-vector-social-media-user-image-182145777.jpg')
+                                    : NetworkImage(
+                                        "${Base.profileBucketUrl}/${snapshot.data![0].toString()}",
                                       ),
                               ),
                             ),
@@ -68,7 +71,7 @@ class ReferralsView extends GetView<ReferralsController> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Buddy Pair",
+                                  "Buddy Pair:",
                                   style:
                                       style.titleMedium?.copyWith(fontSize: 14),
                                 ),
@@ -160,87 +163,124 @@ class ReferralsView extends GetView<ReferralsController> {
                               ),
                             ],
                           ),
-                          DataTable(
-                            headingRowColor:
-                                MaterialStateProperty.all(Color(0xffF6DC9D)),
-                            dataRowColor:
-                                MaterialStateProperty.all(Color(0xffFFF3D2)),
-                            columnSpacing: 10,
-                            dataRowHeight: 80,
-                            columns: const [
-                              DataColumn(
-                                label: Text("Name"),
-                              ),
-                              DataColumn(
-                                label: Text("Entries"),
-                              ),
-                              DataColumn(
-                                label: Text("Activity"),
-                              ),
-                              DataColumn(
-                                label: Text("Poke"),
-                              )
-                            ],
-                            rows: _controller
-                                .referrals // Loops through dataColumnText, each iteration assigning the value to element
-                                .map(
-                                  ((element) => DataRow(
-                                        cells: <DataCell>[
-                                          DataCell(
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                CircleAvatar(
-                                                  radius: 12,
-                                                  child: Image.asset(
-                                                    'assets/Ellipse_1.png',
+                          _controller.referrals.isNotEmpty
+                              ? DataTable(
+                                  headingRowColor: MaterialStateProperty.all(
+                                      Color(0xffF6DC9D)),
+                                  dataRowColor: MaterialStateProperty.all(
+                                      Color(0xffFFF3D2)),
+                                  columnSpacing: 10,
+                                  dataRowHeight: 80,
+                                  columns: const [
+                                    DataColumn(
+                                      label: Text("Name"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Entries"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Activity"),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Poke"),
+                                    )
+                                  ],
+                                  rows: _controller
+                                      .referrals // Loops through dataColumnText, each iteration assigning the value to element
+                                      .map(
+                                        ((element) => DataRow(
+                                              cells: <DataCell>[
+                                                DataCell(
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      CircleAvatar(
+                                                        radius: 12,
+                                                        child: CircleAvatar(
+                                                          backgroundImage: element
+                                                                      .user_profile ==
+                                                                  null
+                                                              ? NetworkImage(
+                                                                  'assets/Ellipse_1.png')
+                                                              : NetworkImage(
+                                                                  "${Base.profileBucketUrl}/${element.user_profile!.profile_img}",
+                                                                ),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        element.user_profile ==
+                                                                null
+                                                            ? ' No data'
+                                                            : ' ${element.user_profile!.fullname!}',
+                                                        style: const TextStyle(
+                                                            fontSize: 12,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                const Text(
-                                                  "Mike Torello",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      overflow: TextOverflow
-                                                          .ellipsis),
+                                                DataCell(
+                                                  Center(
+                                                      child:
+                                                          FutureBuilder<String>(
+                                                    future: _giveawayRepo
+                                                        .getTotalEntryCountByUserId(
+                                                            element.id,
+                                                            _controller.token!),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return const Loading();
+                                                      }
+                                                      if (snapshot.hasError) {
+                                                        printInfo(
+                                                            info:
+                                                                "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                        return Container();
+                                                      }
+                                                      return Text(
+                                                        snapshot.data
+                                                            .toString(),
+                                                        style: style
+                                                            .headlineSmall
+                                                            ?.copyWith(
+                                                                fontSize: 14),
+                                                      );
+                                                    },
+                                                  )),
+                                                ),
+                                                DataCell(
+                                                  Center(
+                                                    child: activitygreen(),
+                                                  ),
+                                                ),
+                                                DataCell(
+                                                  pokebtn(),
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Center(
-                                                child: Text(
-                                              "2345",
-                                              style: style.headlineSmall
-                                                  ?.copyWith(fontSize: 14),
                                             )),
-                                          ),
-                                          DataCell(
-                                            Center(
-                                              child: activitygreen(),
-                                            ),
-                                          ),
-                                          DataCell(
-                                            pokebtn(),
-                                          ),
-                                        ],
-                                      )),
+                                      )
+                                      .toList(),
                                 )
-                                .toList(),
-                          ),
+                              : SizedBox()
                         ],
                       )),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: Get.width * 1,
-                    child: MyElevatedButton(
-                      buttonText: "Poke Inactive Users",
-                      onPressed: () {},
-                    ),
-                  ),
-                ),
+                _controller.referrals.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: Get.width * 1,
+                          child: MyElevatedButton(
+                            buttonText: "Poke Inactive Users",
+                            onPressed: () {},
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),

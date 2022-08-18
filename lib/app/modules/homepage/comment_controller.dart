@@ -47,7 +47,6 @@ class CommentController extends GetxController {
     loading = true;
     try {
       commentList = await _reelRepo.getCommentByReelId(reelId, token!);
-      printInfo(info: "commentList: $commentList");
     } catch (e) {
       print("getCommentsByReelId: $e");
     }

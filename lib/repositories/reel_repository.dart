@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -19,6 +20,44 @@ class ReelRepository {
       {int limit = 10, int skip = 0}) async {
     final response = await http.get(
       Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<ReelModel>> getFeedsWithAds(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
+    final response = await http.get(
+      Uri.parse('${Base.reelsWithAds}?limit=$limit&skip=$skip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<ReelModel>> getReelsByHashTag(
+      String hashTag, int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
+    hashTag = hashTag.replaceAll(RegExp('[#]'), '');
+    final response = await http.get(
+      Uri.parse('${Base.reelsByHashTag}%23$hashTag?limit=$limit&skip=$skip'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -191,7 +230,6 @@ class ReelRepository {
   }
 
   Future<int> addPhotoOrVideo(File file, String token) async {
-    printInfo(info: "File path: ${file.path}");
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(Base.uploadVideo),
@@ -208,7 +246,6 @@ class ReelRepository {
     var res = await request.send();
     var responsed = await http.Response.fromStream(res);
     var resData = json.decode(responsed.body);
-    printInfo(info: resData.toString());
     if (res.statusCode == 200) {
       return resData[0]['id'];
     } else {
@@ -271,6 +308,77 @@ class ReelRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
     } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<String>> setRandomWinner(String contestId, String token) async {
+    final response = await http.post(
+      Uri.parse('${Base.setRandomWinner}/$contestId/setRandom'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    print('2121 ${response.statusCode}');
+    print('2121 ${response.body}');
+    List<String> a = [];
+    final body = json.decode(response.body);
+
+    if (response.statusCode == 201) {
+      print('2121 ${response.body}');
+      a.add(body['user_id']);
+      a.add(body['user']['user_profile']['fullname']);
+      return a;
+    } else if (response.statusCode == 400) {
+      a.add(body);
+      a.add(body);
+      return a;
+    } else {
+      final body = jsonDecode(response.body);
+      showSnackBar(body['detail'], color: Colors.red);
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> updateAdsHistory(
+      int secondsWatched, int adId, String token) async {
+    // http://13.234.159.127/ads/history/1
+
+    var map = {"time_duration": secondsWatched};
+    final response = await http.post(
+      Uri.parse('${Base.adsHistory}$adId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode(map),
+    );
+    if (response.statusCode == 201) {
+      return;
+    } else {
+      final body = jsonDecode(response.body);
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> updateReelHistory(
+      int secondsWatched, int reelId, String token) async {
+    // /reels/history/51
+
+    var map = {"time_duration": secondsWatched};
+    final response = await http.post(
+      Uri.parse('${Base.reelHistory}$reelId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode(map),
+    );
+    if (response.statusCode == 201) {
+      return;
+    } else {
+      final body = jsonDecode(response.body);
       return Future.error(body['detail']);
     }
   }

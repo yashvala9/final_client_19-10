@@ -13,12 +13,16 @@ class AccountSettingsController extends GetxController {
   ContestModel? contestModel;
   @override
   void onInit() {
-    // TODO: implement onInit
+    contestModel = null;
     getContestByUser();
     super.onInit();
   }
 
   void getContestByUser() async {
-    contestModel = await _giveawayRepo.getContestsByUserId(profileId!, token!);
+    printInfo(info: 'running getcontestbyuser 2121');
+    var v = await _giveawayRepo.getContestsByUserId(profileId!, token!);
+    printInfo(info: v.toString());
+
+    contestModel = v;
   }
 }

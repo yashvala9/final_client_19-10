@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/utils/snackbar.dart';
+import '../../../../models/contest_model.dart';
 import '../../account_settings/views/account_settings_view.dart';
 import '../controllers/follower_picker_controller.dart';
 
 class FollowerPickerView extends GetView<FollowerPickerController> {
-  const FollowerPickerView({Key? key}) : super(key: key);
+  FollowerPickerView(this.contestModel, {Key? key}) : super(key: key);
+
+  ContestModel contestModel;
+
+  final _controller = Get.put(FollowerPickerController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,8 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
         ),
         title: Text(
           "Random Follower Picker",
-          style: style.titleMedium, /*TextStyle(
+          style: style
+              .titleMedium, /*TextStyle(
             color: Color.fromRGBO(22, 23, 34, 1),
             fontWeight: FontWeight.w400,
             fontSize: 16,
@@ -68,7 +75,8 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                   ),
                   Text(
                     "Pick a random follower",
-                    style: style.headline6, /*TextStyle(
+                    style: style
+                        .headline6, /*TextStyle(
                         color: Color.fromRGBO(119, 79, 0, 1),
                         fontSize: 20,
                         fontWeight: FontWeight.w600),*/
@@ -78,7 +86,8 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                   ),
                   Text(
                     "You can randomly choose the contest winner",
-                    style: style.titleMedium, /*TextStyle(
+                    style: style
+                        .titleMedium, /*TextStyle(
                         color: Color.fromRGBO(22, 23, 34, 1),
                         fontSize: 14,
                         fontWeight: FontWeight.w400),*/
@@ -92,15 +101,20 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                     height: 40,
                     width: 160,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Get.to(const FollowerPickerWinnerView());
+                      onPressed: () async {
+                        print(
+                            '2121 contestModel.id.toString() ${contestModel.id.toString()}');
+                        var v = await _controller
+                            .setRandomWinner(contestModel.id.toString());
+                        Get.to(FollowerPickerWinnerView(v));
                       },
                       style: ElevatedButton.styleFrom(
                         primary: const Color.fromRGBO(234, 67, 89, 1),
                       ),
                       child: Text(
                         "Start",
-                        style: style.titleMedium, /*TextStyle(
+                        style: style
+                            .titleMedium, /*TextStyle(
                           color: Color.fromRGBO(255, 255, 255, 1),
                           fontWeight: FontWeight.w500,
                           fontSize: 18,
@@ -122,7 +136,9 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
 }
 
 class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
-  const FollowerPickerWinnerView({Key? key}) : super(key: key);
+  FollowerPickerWinnerView(this.winnerName, {Key? key}) : super(key: key);
+
+  String winnerName;
 
   @override
   Widget build(BuildContext context) {
@@ -184,25 +200,24 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                       SizedBox(
                         height: Get.height * 0.03,
                       ),
-                      const Text(
-                        "Here is your contest winner!",
+                      Text(
+                        "Winner Name: $winnerName",
                         style: TextStyle(
                             color: Color.fromRGBO(119, 79, 0, 1),
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
                       ),
-                      Image.asset(
-                        "assets/Winner 2.png",
-                        height: 250,
-                        width: 250,
-                      ),
+                      // Image.asset(
+                      //   "assets/Winner 2.png",
+                      //   height: 250,
+                      //   width: 250,
+                      // ),
                       SizedBox(
                         height: 40,
                         width: 160,
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.snackbar(
-                                "Operation Failed", "Backend Required");
+                            showSnackBar('Winner has been Informed!');
                             Get.to(AccountSettingsView());
                           },
                           style: ElevatedButton.styleFrom(
@@ -213,7 +228,7 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                             style: TextStyle(
                               color: Color.fromRGBO(255, 255, 255, 1),
                               fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                              fontSize: 15,
                             ),
                           ),
                         ),

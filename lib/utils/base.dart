@@ -40,6 +40,16 @@ class Base {
   static const getPhotosByUserId = '$_url/getPhotosByUserId';
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
+  static const reelsWithAds = '$_url/reels/with_ads';
+  static const reelsByHashTag = '$_url/hashtags/reels/';
+
+  //Ads
+
+  static const adsHistoryByProfileId = '$_url/ads/history';
+  static const ads = '$_url/ads/display';
+  static const adsHistory = '$_url/ads/history/';
+  static const setRandomWinner = '$_url/winners';
+  static const reelHistory = '$_url/reels/history/';
   static const addReel = '$_url/reels';
   static const deleteReel = '$_url/reels/delete';
 

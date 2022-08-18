@@ -233,6 +233,7 @@ class AuthRepository {
   }
 
   Future<void> addReferrer(String userId, String token) async {
+    print('2121');
     final response = await http.put(
       Uri.parse(Base.addReferral),
       headers: <String, String>{
@@ -243,7 +244,9 @@ class AuthRepository {
         'referrer_id': userId,
       }),
     );
+    print('2121 ${response.body}');
     final body = jsonDecode(response.body);
+    print('2121 ${response.statusCode}');
     if (response.statusCode == 200 ||
         response.statusCode == 201 ||
         response.statusCode == 202) {

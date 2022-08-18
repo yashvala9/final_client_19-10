@@ -191,8 +191,8 @@ class ProfileScreen extends StatelessWidget {
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(
-                                                            ListUsersView(0));
+                                                        Get.to(ListUsersView(
+                                                            0, profileModel));
                                                       },
                                                       title: Text(
                                                           profileModel
@@ -212,8 +212,8 @@ class ProfileScreen extends StatelessWidget {
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(
-                                                            ListUsersView(1));
+                                                        Get.to(ListUsersView(
+                                                            1, profileModel));
                                                       },
                                                       title: Text(
                                                           profileModel
@@ -468,8 +468,6 @@ class ProfileReel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    printInfo(info: "ProfileId: ${_controller.profileId}");
-
     return FutureBuilder<List<ReelModel>>(
         future: profileId != null
             ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
@@ -485,7 +483,6 @@ class ProfileReel extends StatelessWidget {
             printInfo(info: "profileReels: ${snapshot.error}");
           }
           var reels = snapshot.data!;
-          printInfo(info: "Reels: $reels");
           if (reels.isEmpty) {
             return Center(
               child: Text("No reels available"),
