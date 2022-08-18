@@ -191,8 +191,8 @@ class ProfileScreen extends StatelessWidget {
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(
-                                                            ListUsersView(0));
+                                                        Get.to(ListUsersView(
+                                                            0, profileModel));
                                                       },
                                                       title: Text(
                                                           profileModel
@@ -212,8 +212,8 @@ class ProfileScreen extends StatelessWidget {
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(
-                                                            ListUsersView(1));
+                                                        Get.to(ListUsersView(
+                                                            1, profileModel));
                                                       },
                                                       title: Text(
                                                           profileModel

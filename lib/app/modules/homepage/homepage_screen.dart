@@ -386,201 +386,296 @@ class HomePageScreen extends StatelessWidget {
                                             Container(
                                               width: 70,
                                               margin: EdgeInsets.only(
-                                                  top: size.height / 5),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          Get.to(
-                                                              EntryCountView());
-                                                        },
-                                                        child: const Icon(
-                                                          Icons.card_giftcard,
-                                                          size: 30,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      FutureBuilder<String>(
-                                                          future: _giveawayRepo
-                                                              .getTotalEntryCountByUserId(
-                                                                  _controller
-                                                                      .profileId!,
-                                                                  _controller
-                                                                      .token!),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (!snapshot
-                                                                .hasData) {
-                                                              return const Loading();
-                                                            }
-                                                            if (snapshot
-                                                                .hasError) {
-                                                              printInfo(
-                                                                  info:
-                                                                      "getTotalEntryCountByUserId: ${snapshot.hasError}");
-                                                              return Container();
-                                                            }
-                                                            return Text(
-                                                              snapshot.data
-                                                                  .toString(),
-                                                              style: style
-                                                                  .headlineSmall!
-                                                                  .copyWith(
-                                                                fontSize: 18,
+                                                  top: size.height /
+                                                      (isReel ? 5 : 3)),
+                                              child: isReel
+                                                  ? Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        Column(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                Get.to(
+                                                                    EntryCountView());
+                                                              },
+                                                              child: const Icon(
+                                                                Icons
+                                                                    .card_giftcard,
+                                                                size: 30,
                                                                 color: Colors
                                                                     .white,
                                                               ),
-                                                            );
-                                                          })
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      InkWell(
-                                                          onTap: () {
-                                                            if (isReel) {
-                                                              _controller
-                                                                  .likeToggle(
-                                                                      index);
-                                                            }
-                                                          },
-                                                          // _controller.likeVideo(data.id),
-                                                          child: FutureBuilder<
-                                                                  bool>(
-                                                              future: _reelRepo
-                                                                  .getLikeFlag(
-                                                                      data.id,
-                                                                      _controller
-                                                                          .token!),
-                                                              builder: (context,
-                                                                  snap) {
-                                                                return Icon(
-                                                                  snap.hasData
-                                                                      ? snap
-                                                                              .data!
-                                                                          ? Icons
-                                                                              .favorite
-                                                                          : Icons
-                                                                              .favorite_border
-                                                                      : Icons
-                                                                          .favorite_border,
-                                                                  size: 30,
-                                                                  color: snap
-                                                                          .hasData
-                                                                      ? snap
-                                                                              .data!
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Colors
-                                                                              .white
-                                                                      : Colors
+                                                            ),
+                                                            FutureBuilder<
+                                                                    String>(
+                                                                future: _giveawayRepo.getTotalEntryCountByUserId(
+                                                                    _controller
+                                                                        .profileId!,
+                                                                    _controller
+                                                                        .token!),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  if (!snapshot
+                                                                      .hasData) {
+                                                                    return const Loading();
+                                                                  }
+                                                                  if (snapshot
+                                                                      .hasError) {
+                                                                    printInfo(
+                                                                        info:
+                                                                            "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                                    return Container();
+                                                                  }
+                                                                  return Text(
+                                                                    snapshot
+                                                                        .data
+                                                                        .toString(),
+                                                                    style: style
+                                                                        .headlineSmall!
+                                                                        .copyWith(
+                                                                      fontSize:
+                                                                          18,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  );
+                                                                })
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            InkWell(
+                                                                onTap: () {
+                                                                  _controller
+                                                                      .likeToggle(
+                                                                          index);
+                                                                },
+                                                                // _controller.likeVideo(data.id),
+                                                                child: FutureBuilder<
+                                                                        bool>(
+                                                                    future: _reelRepo.getLikeFlag(
+                                                                        data.id,
+                                                                        _controller
+                                                                            .token!),
+                                                                    builder:
+                                                                        (context,
+                                                                            snap) {
+                                                                      return Icon(
+                                                                        snap.hasData
+                                                                            ? snap.data!
+                                                                                ? Icons.favorite
+                                                                                : Icons.favorite_border
+                                                                            : Icons.favorite_border,
+                                                                        size:
+                                                                            30,
+                                                                        color: snap.hasData
+                                                                            ? snap.data!
+                                                                                ? Colors.red
+                                                                                : Colors.white
+                                                                            : Colors.white,
+                                                                      );
+                                                                    })),
+                                                            // const SizedBox(height: 7),
+                                                            FutureBuilder<int>(
+                                                                future: _reelRepo
+                                                                    .getLikeCountByReelId(
+                                                                        data.id,
+                                                                        _controller
+                                                                            .token!),
+                                                                builder:
+                                                                    (context,
+                                                                        snap) {
+                                                                  return Text(
+                                                                    snap.hasData
+                                                                        ? snap
+                                                                            .data!
+                                                                            .toString()
+                                                                        : '0',
+                                                                    // data.likeCount.toString(),
+                                                                    style: style
+                                                                        .headlineSmall!
+                                                                        .copyWith(
+                                                                      fontSize:
+                                                                          18,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  );
+                                                                }),
+                                                          ],
+                                                        ),
+                                                        Column(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                Get.bottomSheet(
+                                                                  CommentSheet(
+                                                                    reelId:
+                                                                        data.id,
+                                                                  ),
+                                                                  backgroundColor:
+                                                                      Colors
                                                                           .white,
                                                                 );
-                                                              })),
-                                                      // const SizedBox(height: 7),
-                                                      FutureBuilder<int>(
-                                                          future: _reelRepo
-                                                              .getLikeCountByReelId(
-                                                                  data.id,
-                                                                  _controller
-                                                                      .token!),
-                                                          builder:
-                                                              (context, snap) {
-                                                            return Text(
-                                                              snap.hasData
-                                                                  ? snap.data!
-                                                                      .toString()
-                                                                  : '0',
-                                                              // data.likeCount.toString(),
-                                                              style: style
-                                                                  .headlineSmall!
-                                                                  .copyWith(
-                                                                fontSize: 18,
+                                                              },
+                                                              child: const Icon(
+                                                                Icons.comment,
+                                                                size: 30,
                                                                 color: Colors
                                                                     .white,
                                                               ),
-                                                            );
-                                                          }),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          if (isReel) {
-                                                            Get.bottomSheet(
-                                                              CommentSheet(
-                                                                reelId: data.id,
-                                                              ),
-                                                              backgroundColor:
-                                                                  Colors.white,
-                                                            );
-                                                          }
-                                                        },
-                                                        child: const Icon(
-                                                          Icons.comment,
-                                                          size: 30,
-                                                          color: Colors.white,
+                                                            ),
+                                                            FutureBuilder<int>(
+                                                                future: _commentRepo
+                                                                    .getCommentCountByReelId(
+                                                                        data.id,
+                                                                        _controller
+                                                                            .token!),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  return Text(
+                                                                    snapshot.hasData
+                                                                        ? snapshot
+                                                                            .data!
+                                                                            .toString()
+                                                                        : '0',
+                                                                    style: style
+                                                                        .headlineSmall!
+                                                                        .copyWith(
+                                                                      fontSize:
+                                                                          18,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  );
+                                                                })
+                                                          ],
                                                         ),
-                                                      ),
-                                                      FutureBuilder<int>(
-                                                          future: _commentRepo
-                                                              .getCommentCountByReelId(
-                                                                  data.id,
-                                                                  _controller
-                                                                      .token!),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            return Text(
-                                                              snapshot.hasData
-                                                                  ? snapshot
-                                                                      .data!
-                                                                      .toString()
-                                                                  : '0',
-                                                              style: style
-                                                                  .headlineSmall!
-                                                                  .copyWith(
-                                                                fontSize: 18,
+                                                        InkWell(
+                                                          onTap: () {},
+                                                          child: const Icon(
+                                                            Icons.reply,
+                                                            size: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        PopupMenuButton<String>(
+                                                            child: const Icon(
+                                                              Icons.more_vert,
+                                                              size: 30,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            onSelected:
+                                                                onSelect,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return myMenuItems
+                                                                  .map((String
+                                                                      choice) {
+                                                                return PopupMenuItem<
+                                                                    String>(
+                                                                  child: Text(
+                                                                      choice),
+                                                                  value: choice,
+                                                                );
+                                                              }).toList();
+                                                            })
+                                                      ],
+                                                    )
+                                                  : Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        Column(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                Get.to(
+                                                                    EntryCountView());
+                                                              },
+                                                              child: const Icon(
+                                                                Icons
+                                                                    .card_giftcard,
+                                                                size: 30,
                                                                 color: Colors
                                                                     .white,
                                                               ),
-                                                            );
-                                                          })
-                                                    ],
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {},
-                                                    child: const Icon(
-                                                      Icons.reply,
-                                                      size: 30,
-                                                      color: Colors.white,
+                                                            ),
+                                                            FutureBuilder<
+                                                                    String>(
+                                                                future: _giveawayRepo.getTotalEntryCountByUserId(
+                                                                    _controller
+                                                                        .profileId!,
+                                                                    _controller
+                                                                        .token!),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  if (!snapshot
+                                                                      .hasData) {
+                                                                    return const Loading();
+                                                                  }
+                                                                  if (snapshot
+                                                                      .hasError) {
+                                                                    printInfo(
+                                                                        info:
+                                                                            "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                                    return Container();
+                                                                  }
+                                                                  return Text(
+                                                                    snapshot
+                                                                        .data
+                                                                        .toString(),
+                                                                    style: style
+                                                                        .headlineSmall!
+                                                                        .copyWith(
+                                                                      fontSize:
+                                                                          18,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  );
+                                                                })
+                                                          ],
+                                                        ),
+                                                        InkWell(
+                                                          onTap: () {},
+                                                          child: const Icon(
+                                                            Icons.reply,
+                                                            size: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        PopupMenuButton<String>(
+                                                            child: const Icon(
+                                                              Icons.more_vert,
+                                                              size: 30,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                            onSelected:
+                                                                onSelect,
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return myMenuItems
+                                                                  .map((String
+                                                                      choice) {
+                                                                return PopupMenuItem<
+                                                                    String>(
+                                                                  child: Text(
+                                                                      choice),
+                                                                  value: choice,
+                                                                );
+                                                              }).toList();
+                                                            })
+                                                      ],
                                                     ),
-                                                  ),
-                                                  PopupMenuButton<String>(
-                                                      child: const Icon(
-                                                        Icons.more_vert,
-                                                        size: 30,
-                                                        color: Colors.white,
-                                                      ),
-                                                      onSelected: onSelect,
-                                                      itemBuilder: (BuildContext
-                                                          context) {
-                                                        return myMenuItems.map(
-                                                            (String choice) {
-                                                          return PopupMenuItem<
-                                                              String>(
-                                                            child: Text(choice),
-                                                            value: choice,
-                                                          );
-                                                        }).toList();
-                                                      })
-                                                ],
-                                              ),
                                             ),
                                           ],
                                         ),

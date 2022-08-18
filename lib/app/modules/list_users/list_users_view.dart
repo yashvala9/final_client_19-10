@@ -22,12 +22,13 @@ import '../single_feed/single_feed_screen.dart';
 import 'list_users_controller.dart';
 
 class ListUsersView extends StatelessWidget {
-  ListUsersView(this.initialIndex, {Key? key}) : super(key: key);
+  ListUsersView(this.initialIndex, this.profileModel, {Key? key})
+      : super(key: key);
 
   int initialIndex;
+  ProfileModel profileModel;
 
   final _controller = Get.put(ListUsersController());
-  final authService = Get.put(AuthService());
   final _profileRepo = Get.put(ProfileRepository());
 
   @override
@@ -42,7 +43,7 @@ class ListUsersView extends StatelessWidget {
               child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
-                  title: Text('@' + authService.profileModel!.username!),
+                  title: Text('@' + profileModel.username!),
                   elevation: 0,
                 ),
                 body: _tabSection(context),
@@ -68,7 +69,7 @@ class ListUsersView extends StatelessWidget {
           child: TabBarView(children: [
             FutureBuilder<List<ProfileModel>>(
               future: _profileRepo.getFollowersByUserId(
-                  _controller.profileId!, _controller.token!),
+                  profileModel.id, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Loading();
@@ -142,7 +143,7 @@ class ListUsersView extends StatelessWidget {
             ),
             FutureBuilder<List<ProfileModel>>(
               future: _profileRepo.getFollowingsByUserId(
-                  _controller.profileId!, _controller.token!),
+                  profileModel.id, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Loading();

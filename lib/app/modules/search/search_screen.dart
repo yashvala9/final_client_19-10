@@ -115,8 +115,8 @@ class SearchScreen extends StatelessWidget {
                     if (snapshot.hasError) {
                       printInfo(info: "profileReels: ${snapshot.error}");
                     }
-                    var reels = snapshot.data!;
-                    if (reels.isEmpty) {
+                    var reels = snapshot.data;
+                    if (reels!.isEmpty) {
                       return const Center(
                         child: Text("No reels available"),
                       );
