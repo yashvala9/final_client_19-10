@@ -43,6 +43,9 @@ class Base {
   static const reelsWithAds = '$_url/reels/with_ads';
   static const reelsByHashTag = '$_url/hashtags/reels/';
 
+  //Report
+  static const report = '$_url/reels/report';
+
   //Ads
 
   static const adsHistoryByProfileId = '$_url/ads/history';

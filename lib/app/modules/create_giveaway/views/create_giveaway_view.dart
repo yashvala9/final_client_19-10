@@ -34,8 +34,12 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
           title: Text(
-            " Create Giveaway",
+            "Create Giveaway",
             style: style.titleMedium,
+          ),
+          centerTitle: true,
+          iconTheme: const IconThemeData(
+            color: Colors.black,
           ),
         ),
         body: Padding(
@@ -152,10 +156,10 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                 TextFormField(
                   enabled: !_controller.loading,
                   decoration: const InputDecoration(
-                    hintText: 'July Campaign',
+                    hintText: 'Please enter Campaign Name',
                   ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9, ]')),
                   ],
                   keyboardType: TextInputType.name,
                   validator: (value) {
@@ -184,7 +188,7 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
                   ],
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     return value!.isEmpty ? 'Prize Name is required' : null;
                   },
@@ -208,7 +212,7 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                   //editing controller of this TextField
                   decoration: const InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
-                      labelText: "End Date" //label text of field
+                      hintText: "End Date" //label text of field
                       ),
                   readOnly: true,
                   //set it true, so that user will not able to edit text

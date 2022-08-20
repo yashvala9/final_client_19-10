@@ -168,7 +168,16 @@ class SingleFeedScreen extends StatelessWidget {
                                                       builder:
                                                           (context, snapshot) {
                                                         if (!snapshot.hasData) {
-                                                          return const Loading();
+                                                          return Text(
+                                                            "0",
+                                                            style: style
+                                                                .headlineSmall!
+                                                                .copyWith(
+                                                              fontSize: 18,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          );
                                                         }
                                                         if (snapshot.hasError) {
                                                           printInfo(

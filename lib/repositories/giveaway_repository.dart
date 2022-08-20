@@ -154,6 +154,24 @@ class GiveawayRepository {
     }
   }
 
+  Future<void> deleteContest(int contestId, String token) async {
+    final response = await http.delete(
+      Uri.parse('${Base.giveaway}delete/$contestId'),
+      // user?user_id=$profileId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body);
+    }
+  }
+
   Future<List<WinnerModel>> getWinners(int profileId, String token) async {
     List<WinnerModel> winners = [];
     final response = await http.get(

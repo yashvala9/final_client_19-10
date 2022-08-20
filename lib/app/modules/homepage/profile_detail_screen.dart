@@ -1,22 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/search/profile_detail_controller.dart';
-import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 
-import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
-import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
-import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
-import '../profile/profile_screen.dart';
+import '../list_users/list_users_view.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'homepage_controller.dart';
 
@@ -105,6 +97,11 @@ class ProfileDetail extends StatelessWidget {
                                                   )),
                                                   Expanded(
                                                       child: ListTile(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          ListUsersView(
+                                                              0, profileModel));
+                                                    },
                                                     title: Text(
                                                         profileModel
                                                             .followerCount
@@ -120,6 +117,11 @@ class ProfileDetail extends StatelessWidget {
                                                   )),
                                                   Expanded(
                                                       child: ListTile(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          ListUsersView(
+                                                              1, profileModel));
+                                                    },
                                                     title: Text(
                                                         profileModel
                                                             .followingCount

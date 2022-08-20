@@ -37,45 +37,59 @@ class GiveawayView extends GetView<GiveawayController> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Stack(
+                Container(
+                  height: Get.height * 0.2,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 20,
+                  ),
+                  padding: const EdgeInsets.only(
+                    bottom: 20,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffEA4359),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/entrycount.png',
+                      const Center(
+                        child: Text(
+                          '\nEarned Entries',
+                          style: TextStyle(color: Colors.white, fontSize: 25),
+                        ),
                       ),
-                      Column(
-                        children: [
-                          const Center(
-                            child: Text(
-                              '\nEarned Entries',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 25),
-                            ),
-                          ),
-                          FutureBuilder<String>(
-                            future: _giveawayRepo.getTotalEntryCountByUserId(
-                                _controller.profileId!, _controller.token!),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Loading();
-                              }
-                              if (snapshot.hasError) {
-                                printInfo(
-                                    info:
-                                        "getTotalEntryCountByUserId: ${snapshot.hasError}");
-                                return Container();
-                              }
-                              return Text(
-                                snapshot.data.toString(),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            },
-                          ),
-                        ],
+                      FutureBuilder<String>(
+                        future: _giveawayRepo.getTotalEntryCountByUserId(
+                            _controller.profileId!, _controller.token!),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const Text(
+                              "0",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            printInfo(
+                                info:
+                                    "getTotalEntryCountByUserIdError: ${snapshot.hasError}");
+                            return Container();
+                          }
+                          return Text(
+                            snapshot.data.toString(),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -94,9 +108,9 @@ class GiveawayView extends GetView<GiveawayController> {
   }
 }
 
-Widget listTileWidget(String filename, String text, var pageName) {
+Widget listTileWidget(String filename, String text, Widget pageName) {
   return Padding(
-    padding: const EdgeInsets.all(8.0),
+    padding: const EdgeInsets.all(12.0),
     child: ListTile(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -110,7 +124,7 @@ Widget listTileWidget(String filename, String text, var pageName) {
       title: Text(text),
       tileColor: Colors.grey[200],
       onTap: () {
-        Get.to(pageName);
+        Get.to(() => pageName);
       },
     ),
   );

@@ -16,6 +16,7 @@ import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
+import '../list_users/list_users_view.dart';
 import '../profile/profile_screen.dart';
 import '../single_feed/single_feed_screen.dart';
 
@@ -105,6 +106,11 @@ class ProfileDetail extends StatelessWidget {
                                                   )),
                                                   Expanded(
                                                       child: ListTile(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          ListUsersView(
+                                                              0, profileModel));
+                                                    },
                                                     title: Text(
                                                         profileModel
                                                             .followerCount
@@ -120,6 +126,11 @@ class ProfileDetail extends StatelessWidget {
                                                   )),
                                                   Expanded(
                                                       child: ListTile(
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          ListUsersView(
+                                                              1, profileModel));
+                                                    },
                                                     title: Text(
                                                         profileModel
                                                             .followingCount

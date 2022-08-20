@@ -33,6 +33,10 @@ class CreateGiveawayController extends GetxController {
   RxBool photoLoading = false.obs;
 
   Future<void> createGiveaway() async {
+    if (file == null) {
+      showSnackBar("Please add giveaway image", color: Colors.red);
+      return;
+    }
     loading = true;
     try {
       String _fileName = '';
