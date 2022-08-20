@@ -18,7 +18,9 @@ import '../../../../widgets/my_elevated_button.dart';
 import '../controllers/edit_profile_controller.dart';
 
 class EditProfileView extends GetView<EditProfileController> {
-  EditProfileView({Key? key}) : super(key: key);
+  EditProfileView({Key? key, required this.profileEditCalBack})
+      : super(key: key);
+  final VoidCallback profileEditCalBack;
 
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(EditProfileController());
@@ -317,15 +319,8 @@ class EditProfileView extends GetView<EditProfileController> {
                                     if (!_formKey.currentState!.validate()) {
                                       return;
                                     }
-                                    // // if (_controller.file == null) {
-                                    // //   showSnackBar("Please select image",
-                                    // //       color: Colors.red);
-                                    // //   return;
-                                    // // }
-                                    // _formKey.currentState!.save();
                                     await _controller.updateProfile();
-                                    // Get.back(result: 'hello');
-                                    // Get.toNamed(AppRoutes.home);
+                                    profileEditCalBack();
                                   },
                                 ),
                         ],

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,11 +24,18 @@ import '../list_users/list_users_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   final _controller = Get.put(ProfileController());
+
   final authService = Get.put(AuthService());
+
   final _profileRepo = Get.put(ProfileRepository());
 
   @override
@@ -58,69 +66,82 @@ class ProfileScreen extends StatelessWidget {
                     Icons.add_box_outlined,
                   ),
                   onPressed: () async {
-                    final val = await showDialog(
-                      context: context,
-                      builder: (_) => Dialog(
-                          child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            onTap: () {
-                              Navigator.pop(context, true);
-                            },
-                            leading: Icon(Icons.video_camera_back),
-                            title: Text("Video"),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.pop(context, false);
-                            },
-                            leading: Icon(Icons.photo),
-                            title: Text("Photo"),
-                          ),
-                        ],
-                      )),
-                    );
-                    if (val != null) {
-                      if (val) {
-                        var video = await ImagePicker()
-                            .pickVideo(source: ImageSource.gallery);
-                        if (video != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return VideoTrimmerView(File(video.path));
-                            }),
-                          );
-                        }
-                        // var video = await ImagePicker()
-                        //     .pickVideo(source: ImageSource.gallery);
-                        // if (video != null) {
-                        //   Get.to(
-                        //     () => AddFeedScreen(
-                        //       file: File(video.path),
-                        //       type: 0,
-                        //     ),
-                        //   );
-                        // }
-                      } else {
-                        var photo = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
-                        if (photo != null) {
-                          Get.to(
-                            () => AddFeedScreen(
-                              file: File(photo.path),
-                              type: 1,
-                            ),
-                          );
-                        }
+                    // final val = await showDialog(
+                    //   context: context,
+                    //   builder: (_) => Dialog(
+                    //       child: Column(
+                    //     mainAxisSize: MainAxisSize.min,
+                    //     children: [
+                    //       ListTile(
+                    //         onTap: () {
+                    //           Navigator.pop(context, true);
+                    //         },
+                    //         leading: Icon(Icons.video_camera_back),
+                    //         title: Text("Video"),
+                    //       ),
+                    //       ListTile(
+                    //         onTap: () {
+                    //           Navigator.pop(context, false);
+                    //         },
+                    //         leading: Icon(Icons.photo),
+                    //         title: Text("Photo"),
+                    //       ),
+                    //     ],
+                    //   )),
+                    // );
+                    // if (val != null) {
+                    //   if (val) {
+                    //     var video = await ImagePicker()
+                    //         .pickVideo(source: ImageSource.gallery);
+                    //     if (video != null) {
+                    //       Navigator.of(context).push(
+                    //         MaterialPageRoute(builder: (context) {
+                    //           return VideoTrimmerView(File(video.path));
+                    //         }),
+                    //       );
+                    //     }
+                    //     // var video = await ImagePicker()
+                    //     //     .pickVideo(source: ImageSource.gallery);
+                    //     // if (video != null) {
+                    //     //   Get.to(
+                    //     //     () => AddFeedScreen(
+                    //     //       file: File(video.path),
+                    //     //       type: 0,
+                    //     //     ),
+                    //     //   );
+                    //     // }
+                    //   } else {
+                    //     var photo = await ImagePicker()
+                    //         .pickImage(source: ImageSource.gallery);
+                    //     if (photo != null) {
+                    //       Get.to(
+                    //         () => AddFeedScreen(
+                    //           file: File(photo.path),
+                    //           type: 1,
+                    //         ),
+                    //       );
+                    //     }
+                    //   }
+                    //   _controller.update();
+                    // }
+                    var video = await ImagePicker()
+                        .pickVideo(source: ImageSource.gallery);
+                    if (video != null) {
+                      final val = await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) {
+                          return VideoTrimmerView(File(video.path));
+                        }),
+                      );
+                      if (val != null) {
+                        setState(() {});
                       }
-                      _controller.update();
                     }
                   },
                 ),
               ],
             ),
-            body: FutureBuilder<ProfileModel>(
+            body: StatefulBuilder(builder: (context, setState) {
+              return FutureBuilder<ProfileModel>(
                 future: _profileRepo.getUserProfile(_controller.token!),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -164,6 +185,10 @@ class ProfileScreen extends StatelessWidget {
                                                 profileModel
                                                     .user_profile!.fullname!,
                                                 style: style.headline5,
+                                              ),
+                                              Text(
+                                                "@${profileModel.username!}",
+                                                style: style.titleMedium,
                                               ),
                                               SizedBox(
                                                 height: 80,
@@ -241,7 +266,11 @@ class ProfileScreen extends StatelessWidget {
                                                 ),
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    Get.to(EditProfileView());
+                                                    Get.to(EditProfileView(
+                                                      profileEditCalBack: () {
+                                                        setState(() {});
+                                                      },
+                                                    ));
                                                   },
                                                   style:
                                                       OutlinedButton.styleFrom(
@@ -254,51 +283,6 @@ class ProfileScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              // Padding(
-                                              //   padding:
-                                              //       const EdgeInsets.all(8.0),
-                                              //   child: Row(
-                                              //     children: [
-                                              //       Expanded(
-                                              //         child: Padding(
-                                              //           padding:
-                                              //               const EdgeInsets.all(
-                                              //                   8.0),
-                                              //           child: MyElevatedButton(
-                                              //             buttonText: "Follow",
-                                              //             onPressed: () {
-                                              //               _controller.signOut();
-                                              //               authService
-                                              //                   .redirectUser();
-                                              //             },
-                                              //             height: 30,
-                                              //             style:
-                                              //                 style.titleMedium,
-                                              //           ),
-                                              //         ),
-                                              //       ),
-                                              //       Expanded(
-                                              //           child: Padding(
-                                              //         padding:
-                                              //             const EdgeInsets.all(
-                                              //                 8.0),
-                                              //         child: OutlinedButton(
-                                              //           onPressed: () {},
-                                              //           style: OutlinedButton
-                                              //               .styleFrom(
-                                              //                   minimumSize: Size
-                                              //                       .fromHeight(
-                                              //                           50)),
-                                              //           child: Text(
-                                              //             "Message",
-                                              //             style:
-                                              //                 style.titleMedium,
-                                              //           ),
-                                              //         ),
-                                              //       ))
-                                              //     ],
-                                              //   ),
-                                              // ),
                                               if (profileModel.status ==
                                                   "VERIFIED")
                                                 Container(
@@ -385,7 +369,9 @@ class ProfileScreen extends StatelessWidget {
                     },
                     body: _tabSection(context),
                   );
-                })),
+                },
+              );
+            })),
       ),
     );
   }
@@ -405,9 +391,11 @@ class ProfileScreen extends StatelessWidget {
         ),
         Expanded(
           child: TabBarView(children: [
-            ProfileReel(),
+            ProfileReel(
+              key: UniqueKey(),
+            ),
             // Container(),
-            // FutureBuilder<List<PhotoModel>>(
+            // FutureBuilder<List<P hotoModel>>(
             //     future: _profileRepo.getPhotosByProfileId(
             //         _controller.profileId!, _controller.token!),
             //     builder: (context, snapshot) {
@@ -464,6 +452,7 @@ class ProfileReel extends StatelessWidget {
   ProfileReel({Key? key, this.profileId}) : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
+
   final _controller = Get.find<ProfileController>();
 
   @override
@@ -483,6 +472,7 @@ class ProfileReel extends StatelessWidget {
             printInfo(info: "profileReels: ${snapshot.error}");
           }
           var reels = snapshot.data!;
+
           if (reels.isEmpty) {
             return Center(
               child: Text("No reels available"),
@@ -507,6 +497,9 @@ class ProfileReel extends StatelessWidget {
                   _controller.update();
                 }
               }
+              log("Index $index:  ${reels[index].thumbnail}");
+              var tumb = reels[index].thumbnail;
+
               return GestureDetector(
                 onTap: () {
                   Get.to(SingleFeedScreen(reels, index));
@@ -533,7 +526,20 @@ class ProfileReel extends StatelessWidget {
                   ));
                 },
                 child: CachedNetworkImage(
-                  placeholder: (context, url) => Loading(),
+                  key: UniqueKey(),
+                  placeholder: (context, url) {
+                    return IconButton(
+                        onPressed: () {}, icon: Icon(Icons.refresh_rounded));
+                  },
+                  errorWidget: (_, a, b) {
+                    return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                    ),
+                    alignment: Alignment.center,
+                      child: Text("Processing..."),
+                    );
+                  },
                   imageUrl: reels[index].thumbnail,
                   fit: BoxFit.cover,
                 ),

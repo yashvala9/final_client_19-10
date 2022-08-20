@@ -194,6 +194,28 @@ class ReelRepository {
     }
   }
 
+  Future<void> reportReelOrComment(String type, int id, String token) async {
+    final response = await http.post(
+      Uri.parse("${Base.report}/$type/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode(
+        {
+          "reason": "Report",
+          "info": {},
+        },
+      ),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      final body = jsonDecode(response.body);
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<List<ReelModel>> getReelsById(int profileId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getReelsByUserId}?currentUserId=14"),

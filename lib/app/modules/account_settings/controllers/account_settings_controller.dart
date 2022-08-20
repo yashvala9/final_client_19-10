@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/utils/snackbar.dart';
@@ -8,9 +10,17 @@ import '../../../../services/auth_service.dart';
 class AccountSettingsController extends GetxController {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _authService = Get.put(AuthService());
+  
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
-  ContestModel? contestModel;
+
+  ContestModel? _contestModel;
+  ContestModel? get contestModel => _contestModel;
+  set contestModel(ContestModel? contestModel) {
+    _contestModel = contestModel;
+    update();
+  }
+
   @override
   void onInit() {
     contestModel = null;
@@ -19,10 +29,13 @@ class AccountSettingsController extends GetxController {
   }
 
   void getContestByUser() async {
-    printInfo(info: 'running getcontestbyuser 2121');
-    var v = await _giveawayRepo.getContestsByUserId(profileId!, token!);
-    printInfo(info: v.toString());
+    try {
+      var v = await _giveawayRepo.getContestsByUserId(profileId!, token!);
+      printInfo(info: v.toString());
 
-    contestModel = v;
+      contestModel = v;
+    } catch (e) {
+      log("getContestByUserIdError: $e");
+    }
   }
 }

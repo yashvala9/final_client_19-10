@@ -74,8 +74,8 @@ class AddFeedController extends GetxController {
       await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
       showSnackBar("Reel added successfully!");
       clean();
-      Get.back();
-      Get.back();
+      Get.back(result: true);
+      Get.back(result: true);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       print("addFeed: $e");

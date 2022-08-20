@@ -35,23 +35,17 @@ class HomePageController extends GetxController {
   }
 
   List<ReelModel> _reelList = [];
-  List<ReelModel> get reelList => _reelList;
+  List<ReelModel> get reelList =>
+      _reelList.where((element) => !reportList.contains(element.id)).toList();
   set reelList(List<ReelModel> reelList) {
     _reelList = reelList;
     update();
   }
 
-  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
-    // CommentModel(
-    //     username: "yashvala9",
-    //     comment: "comment",
-    //     datePublished: "datePublished",
-    //     likes: [],
-    //     profilePhoto: "profilePhoto",
-    //     uid: "1",
-    //     id: "1")
-  ]);
+  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
+
+  List<int> reportList = [];
 
   @override
   void onInit() {
@@ -124,6 +118,22 @@ class HomePageController extends GetxController {
       update();
     } catch (e) {
       log("toggleFollowingError: $e");
+    }
+  }
+
+  void removeReel(int index) {
+    reelList.removeAt(index);
+    update();
+  }
+
+  void reportReelOrComment(String type, int id, int index) async {
+    try {
+      await _reelRepo.reportReelOrComment(type, id, token!);
+      reportList.add(id);
+      removeReel(index);
+      update();
+    } catch (e) {
+      log("reportReelOrComment: $e");
     }
   }
 }

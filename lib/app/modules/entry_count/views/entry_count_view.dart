@@ -20,9 +20,12 @@ class EntryCountView extends GetView<EntryCountController> {
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Entry Count',
-            style: style.titleMedium,
+          child: Material(
+            color: Colors.transparent,
+            child: Text(
+              'Entry Count',
+              style: style.titleMedium,
+            ),
           ),
         ),
         // backgroundColor: AppColors.white,
@@ -46,7 +49,7 @@ class EntryCountView extends GetView<EntryCountController> {
                     child: Column(
                       children: [
                         Text(
-                          "Total Entries",
+                          "Earned Entries",
                           style: style.titleMedium,
                         ),
                         FutureBuilder<String>(
@@ -54,7 +57,11 @@ class EntryCountView extends GetView<EntryCountController> {
                                 _controller.profileId!, _controller.token!),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
-                                return const Loading();
+                                return Text(
+                                  "0",
+                                  style: style.titleLarge
+                                      ?.copyWith(color: AppColors.red),
+                                );
                               }
                               if (snapshot.hasError) {
                                 printInfo(
@@ -82,6 +89,9 @@ class EntryCountView extends GetView<EntryCountController> {
                   SizedBox(
                     width: Get.width * 0.43,
                     child: Card(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14)),
                       child: Column(
@@ -97,9 +107,6 @@ class EntryCountView extends GetView<EntryCountController> {
                               future: _giveawayRepo.getAdsEntryCountByUserId(
                                   _controller.profileId!, _controller.token!),
                               builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Loading();
-                                }
                                 if (snapshot.hasError) {
                                   printInfo(
                                       info:
@@ -109,7 +116,9 @@ class EntryCountView extends GetView<EntryCountController> {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    snapshot.data.toString(),
+                                    snapshot.hasData
+                                        ? snapshot.data.toString()
+                                        : "0",
                                     style: style.titleLarge
                                         ?.copyWith(color: AppColors.red),
                                   ),
@@ -143,9 +152,6 @@ class EntryCountView extends GetView<EntryCountController> {
                                       _controller.profileId!,
                                       _controller.token!),
                               builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const Loading();
-                                }
                                 if (snapshot.hasError) {
                                   printInfo(
                                       info:
@@ -155,7 +161,9 @@ class EntryCountView extends GetView<EntryCountController> {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    snapshot.data.toString(),
+                                    snapshot.hasData
+                                        ? snapshot.data.toString()
+                                        : "0",
                                     style: style.titleLarge
                                         ?.copyWith(color: AppColors.red),
                                   ),
@@ -174,37 +182,37 @@ class EntryCountView extends GetView<EntryCountController> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
-                child: Container(
-                  height: Get.height * 0.15,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 5),
-                        child: Image.asset(
-                          'assets/youtube.png',
-                          height: 80,
-                          width: 80,
+              child: InkWell(
+                onTap: () {
+                  Get.to(() => AdsHistoryView());
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
+                  child: SizedBox(
+                    height: Get.height * 0.15,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          child: Image.asset(
+                            'assets/youtube.png',
+                            height: 80,
+                            width: 80,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(AdsHistoryView());
-                          },
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
                           child: Text(
                             "Ad History",
                             style: style.titleMedium,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

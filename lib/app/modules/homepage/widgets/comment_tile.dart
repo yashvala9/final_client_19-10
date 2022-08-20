@@ -16,12 +16,14 @@ class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
   final VoidCallback likeToggle;
   final VoidCallback deleteCallBack;
+  final VoidCallback increaseNestedCountCallBack;
   final ProfileModel profileModel;
   CommentWidget(
       {Key? key,
       required this.commentModel,
       required this.likeToggle,
       required this.deleteCallBack,
+      required this.increaseNestedCountCallBack,
       required this.profileModel})
       : super(key: key);
 
@@ -141,6 +143,8 @@ class CommentWidget extends StatelessWidget {
                                       );
                                       replyController.text = "";
                                       Get.back(result: true);
+
+                                      increaseNestedCountCallBack();
                                     } catch (e) {
                                       print("nestedComment: $e");
                                     }

@@ -29,6 +29,23 @@ class CreateProfileView extends StatelessWidget {
     return GetBuilder<CreateProfileController>(
       init: CreateProfileController(),
       builder: (_) => Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                _controller.signOut();
+              },
+              icon: const Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+              )),
+          title: Text(
+            "Set Your Profile",
+            textScaleFactor: Get.textScaleFactor,
+            style: style.headlineSmall,
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         body: KeyboardVisibilityBuilder(
           builder: (context, isKeyboardVisible) {
             return CustomScrollView(
@@ -41,24 +58,19 @@ class CreateProfileView extends StatelessWidget {
                         horizontal: Get.width * 0.05,
                         vertical: isKeyboardVisible
                             ? Get.height * 0.02
-                            : Get.height * 0.08,
+                            : Get.height * 0.03,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    _controller.signOut();
-                                  },
-                                  icon: const Icon(Icons.chevron_left)),
-                              Text('Set your Profile',
-                                  textScaleFactor: Get.textScaleFactor,
-                                  style: style.headlineSmall),
-                            ],
-                          ),
-                          SizedBox(height: Get.height * 0.02),
+                          // Row(
+                          //   children: [
+                          //     Text('Set your Profile',
+                          //         textScaleFactor: Get.textScaleFactor,
+                          //         style: style.headlineSmall),
+                          //   ],
+                          // ),
+                          // SizedBox(height: Get.height * 0.02),
                           Text(
                             'Please fill following details',
                             textScaleFactor: Get.textScaleFactor,

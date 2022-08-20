@@ -79,6 +79,10 @@ class ProfileController extends GetxController {
     await _authRepo.signOut();
   }
 
+  void updateManually() {
+    update();
+  }
+
   void deleteReel(int reelId) async {
     try {
       await _reelRepo.deleteReel(reelId, token!);

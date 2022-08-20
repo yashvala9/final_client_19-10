@@ -10,6 +10,7 @@ import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
 import '../../../widgets/my_elevated_button.dart';
+import '../list_users/list_users_view.dart';
 import '../single_feed/single_feed_screen.dart';
 
 class OtherProfileDetail extends StatefulWidget {
@@ -105,6 +106,10 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                             )),
                                             Expanded(
                                                 child: ListTile(
+                                              onTap: () {
+                                                Get.to(ListUsersView(
+                                                    0, widget.profileModel));
+                                              },
                                               title: Text(
                                                   widget.profileModel
                                                       .followerCount
@@ -117,6 +122,10 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                             )),
                                             Expanded(
                                                 child: ListTile(
+                                              onTap: () {
+                                                Get.to(ListUsersView(
+                                                    1, widget.profileModel));
+                                              },
                                               title: Text(
                                                   widget.profileModel
                                                       .followingCount

@@ -1,18 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
-import 'package:reel_ro/app/modules/auth/sign_up/signup_screen.dart';
-import 'package:reel_ro/app/modules/edit_profile/views/edit_profile_view.dart';
 import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
-import 'package:reel_ro/app/modules/splash/splash_screen.dart';
-import 'package:reel_ro/app/routes/app_routes.dart';
-import 'package:reel_ro/services/auth_service.dart';
-import 'package:reel_ro/utils/snackbar.dart';
-import 'package:reel_ro/widgets/loading.dart';
 
 import '../../inbox_screen.dart';
 import '../homepage/homepage_screen.dart';
@@ -55,7 +45,7 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  Text(
+                  const Text(
                     'Home',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
@@ -80,7 +70,7 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  Text(
+                  const Text(
                     'Search',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
@@ -105,7 +95,7 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  Text(
+                  const Text(
                     'Giveaway',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
@@ -130,7 +120,7 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  Text(
+                  const Text(
                     'Inbox',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
@@ -155,7 +145,7 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  Text(
+                  const Text(
                     'Profile',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
@@ -171,16 +161,15 @@ class NavigationBarScreen extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
       bottomNavigationBar: buildBottomNavigationMenu(context),
-      body: Obx(() => IndexedStack(
-            index: controller.tabIndex.value,
-            children: [
-              HomePageScreen(),
-              SearchScreen(),
-              GiveawayView(),
-              const InboxScreen(),
-              ProfileScreen(),
-            ],
-          )),
+      body: Obx(
+        () => [
+          HomePageScreen(),
+          SearchScreen(),
+          GiveawayView(),
+          const InboxScreen(),
+          ProfileScreen(),
+        ][controller.tabIndex.value],
+      ),
     ));
   }
 }
