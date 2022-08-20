@@ -347,14 +347,14 @@ class ReelRepository {
     List<String> a = [];
     final body = json.decode(response.body);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       print('2121 ${response.body}');
-      a.add(body['user_id']);
+      a.add(body['user_id'].toString());
       a.add(body['user']['user_profile']['fullname']);
       return a;
     } else if (response.statusCode == 400) {
-      a.add(body);
-      a.add(body);
+      a.add(body['detail']);
+      a.add(body['detail']);
       return a;
     } else {
       final body = jsonDecode(response.body);
