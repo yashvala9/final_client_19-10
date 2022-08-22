@@ -20,10 +20,10 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        title: Text(
+        // backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+        title: const Text(
           "Account Settings",
-          style: style.titleMedium,
+          style: TextStyle(fontSize: 17),
         ),
       ),
       body: Column(
@@ -78,6 +78,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                     asset: Assets.gift,
                     title: "Giveaway",
                     onPressed: () async {
+                      await _controller.getContestByUser();
                       if (_controller.contestModel == null) {
                         Get.dialog(
                           AlertDialog(

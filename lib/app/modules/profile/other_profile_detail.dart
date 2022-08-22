@@ -165,7 +165,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                       style: OutlinedButton
                                                           .styleFrom(
                                                         minimumSize: const Size
-                                                            .fromHeight(40),
+                                                            .fromHeight(50),
                                                       ),
                                                       child: Text(
                                                         "Following",

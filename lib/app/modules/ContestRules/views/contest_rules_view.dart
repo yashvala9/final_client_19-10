@@ -23,15 +23,8 @@ class ContestRulesView extends GetView<ContestRulesController> {
       appBar: AppBar(
         title: const Text(
           'Contest Rules',
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(fontSize: 17),
         ),
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-            )),
       ),
       body: Container(
         margin: const EdgeInsets.all(16),

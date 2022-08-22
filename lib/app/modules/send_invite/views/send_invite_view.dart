@@ -4,11 +4,15 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
+import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
 import '../controllers/send_invite_controller.dart';
 import 'package:flutter/services.dart';
 
 class SendInviteView extends GetView<SendInviteController> {
   final profile = Get.find<AuthService>().profileModel;
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _controller = Get.put(SendInviteController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -117,10 +121,29 @@ class SendInviteView extends GetView<SendInviteController> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(
-                            "210",
-                            style: style.titleLarge
-                                ?.copyWith(color: AppColors.red),
+                          FutureBuilder<String>(
+                            future:
+                                _giveawayRepo.getReferralsEntryCountByUserId(
+                                    _controller.profileId!, _controller.token!),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const Loading();
+                              }
+                              if (snapshot.hasError) {
+                                printInfo(
+                                    info:
+                                        "getReferralsEntryCountByUserId: ${snapshot.hasError}");
+                                return Container();
+                              }
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  snapshot.data.toString(),
+                                  style: style.titleLarge
+                                      ?.copyWith(color: AppColors.red),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),

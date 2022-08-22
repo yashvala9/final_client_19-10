@@ -14,10 +14,12 @@ import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/video_player_item.dart';
+import '../../notification_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
 import '../search/search_screen.dart';
@@ -40,11 +42,9 @@ class HomePageScreen extends StatelessWidget {
     'Report',
   ];
 
-  void onSelect(item, int id, int index) {
-    if (item == 'Report') {
-      _controller.reportReelOrComment('reel', id, index);
-      moveNextReel(index + 1);
-    }
+  void onSelect(int id, int index) {
+    _controller.reportReelOrComment('reel', id, index);
+    moveNextReel(index + 1);
   }
 
   PageController pageController = PageController(
@@ -81,7 +81,9 @@ class HomePageScreen extends StatelessWidget {
                         icon: const Icon(
                           Icons.notifications_none,
                         ),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Get.to(NotificationScreen());
+                        }),
                     IconButton(
                       icon: const Icon(
                         Icons.add_box_outlined,
@@ -536,11 +538,39 @@ class HomePageScreen extends StatelessWidget {
                                                                 color: Colors
                                                                     .white,
                                                               ),
-                                                              onSelected: (v) =>
-                                                                  onSelect(
-                                                                      v,
-                                                                      data.id,
-                                                                      index),
+                                                              onSelected: (v) {
+                                                                Get.dialog(
+                                                                    AlertDialog(
+                                                                  title: const Text(
+                                                                      "Please provide the reason:"),
+                                                                  content:
+                                                                      TextFormField(),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.back();
+                                                                        },
+                                                                        child: const Text(
+                                                                            "Cancel")),
+                                                                    MaterialButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back();
+                                                                        onSelect(
+                                                                            data.id,
+                                                                            index);
+                                                                        showSnackBar(
+                                                                            'This reel has been reported to the Admin!');
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Report"),
+                                                                      color: Colors
+                                                                          .red,
+                                                                    ),
+                                                                  ],
+                                                                ));
+                                                              },
                                                               itemBuilder:
                                                                   (BuildContext
                                                                       context) {
@@ -632,11 +662,39 @@ class HomePageScreen extends StatelessWidget {
                                                                 color: Colors
                                                                     .white,
                                                               ),
-                                                              onSelected: (v) =>
-                                                                  onSelect(
-                                                                      v,
-                                                                      data.id,
-                                                                      index),
+                                                              onSelected: (v) {
+                                                                Get.dialog(
+                                                                    AlertDialog(
+                                                                  title: const Text(
+                                                                      "Please provide the reason:"),
+                                                                  content:
+                                                                      TextFormField(),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.back();
+                                                                        },
+                                                                        child: const Text(
+                                                                            "Cancel")),
+                                                                    MaterialButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back();
+                                                                        onSelect(
+                                                                            data.id,
+                                                                            index);
+                                                                        showSnackBar(
+                                                                            'This reel has been reported to the Admin!');
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Report"),
+                                                                      color: Colors
+                                                                          .red,
+                                                                    ),
+                                                                  ],
+                                                                ));
+                                                              },
                                                               itemBuilder:
                                                                   (BuildContext
                                                                       context) {

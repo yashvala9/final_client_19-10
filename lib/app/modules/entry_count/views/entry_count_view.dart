@@ -18,14 +18,11 @@ class EntryCountView extends GetView<EntryCountController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Material(
-            color: Colors.transparent,
-            child: Text(
-              'Entry Count',
-              style: style.titleMedium,
-            ),
+        title: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            'Entry Count',
+            style: TextStyle(fontSize: 17),
           ),
         ),
         // backgroundColor: AppColors.white,

@@ -25,18 +25,9 @@ class WinnersView extends GetView<WinnersController> {
       appBar: AppBar(
         title: const Text(
           'Winners',
-          style: TextStyle(fontSize: 14, color: Colors.black),
+          style: TextStyle(fontSize: 17),
         ),
-        backgroundColor: Colors.white,
         elevation: 2,
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.black,
-            )),
       ),
       backgroundColor: theme.colorScheme.primary,
       body: Container(

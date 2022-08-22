@@ -20,11 +20,11 @@ class ReferralsView extends GetView<ReferralsController> {
     final style = theme.textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
+        title: const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Text(
             'Referrals',
-            style: style.titleMedium,
+            style: TextStyle(fontSize: 17),
           ),
         ),
         // backgroundColor: AppColors.white,

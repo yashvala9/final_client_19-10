@@ -158,7 +158,19 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                         }
                       }
                     },
-                    child: VideoPlayer(videoPlayerController),
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: <Widget>[
+                        VideoPlayer(videoPlayerController),
+                        if (!widget.isReel)
+                          VideoProgressIndicator(
+                            videoPlayerController,
+                            allowScrubbing: false,
+                          ),
+                      ],
+                    ),
+
+                    // VideoPlayer(videoPlayerController),
                   ),
                 ),
                 widget.showLike
@@ -174,112 +186,113 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   }
 }
 
-class VideoPlayerWidget extends StatefulWidget {
-  final String url;
-  final VoidCallback doubleTap;
-  final bool showLike;
-  const VideoPlayerWidget({
-    Key? key,
-    required this.url,
-    required this.doubleTap,
-    this.showLike = false,
-  }) : super(key: key);
+// class VideoPlayerWidget extends StatefulWidget {
+//   final String url;
+//   final VoidCallback doubleTap;
+//   final bool showLike;
+//   const VideoPlayerWidget({
+//     Key? key,
+//     required this.url,
+//     required this.doubleTap,
+//     this.showLike = false,
+//   }) : super(key: key);
 
-  @override
-  State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
-}
+//   @override
+//   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
+// }
 
-class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
-    with AutomaticKeepAliveClientMixin {
-  late BetterPlayerController _betterPlayerController;
+// class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
+//     with AutomaticKeepAliveClientMixin {
+//   late BetterPlayerController _betterPlayerController;
 
-  final _authService = Get.find<AuthService>();
+//   final _authService = Get.find<AuthService>();
 
-  @override
-  bool get wantKeepAlive => true;
+//   @override
+//   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-    log("URL: ${widget.url}");
-    _betterPlayerController = BetterPlayerController(
-      BetterPlayerConfiguration(
-        aspectRatio: 5.3 / 10,
-        looping: true,
-        autoPlay: true,
-        deviceOrientationsOnFullScreen: [
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ],
-        allowedScreenSleep: false,
-        fullScreenAspectRatio: 5.3 / 10,
-        controlsConfiguration: BetterPlayerControlsConfiguration(
-          enableAudioTracks: false,
-          enableMute: false,
-          enableOverflowMenu: false,
-          enableFullscreen: false,
-          enablePip: false,
-          enablePlaybackSpeed: false,
-          enableProgressBar: false,
-          enableProgressBarDrag: false,
-          enableProgressText: false,
-          enableQualities: false,
-          enableSkips: false,
-          enableSubtitles: false,
-          enableRetry: true,
-          enablePlayPause: true,
-          controlBarColor: Colors.black.withOpacity(0.2),
-          playIcon: Icons.play_arrow_outlined,
-          pauseIcon: Icons.pause_circle_outline,
-        ),
-        autoDispose: false,
-      ),
-      betterPlayerDataSource: BetterPlayerDataSource(
-        BetterPlayerDataSourceType.network,
-        widget.url,
-        videoFormat: BetterPlayerVideoFormat.hls,
-        drmConfiguration: BetterPlayerDrmConfiguration(
-          drmType: BetterPlayerDrmType.token,
-          token: "Bearer=${_authService.token}",
-        ),
-      ),
-    );
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     log("URL: ${widget.url}");
+//     _betterPlayerController = BetterPlayerController(
+//       BetterPlayerConfiguration(
+//         aspectRatio: 5.3 / 10,
+//         looping: true,
+//         autoPlay: true,
+//         deviceOrientationsOnFullScreen: [
+//           DeviceOrientation.portraitUp,
+//           DeviceOrientation.portraitDown,
+//         ],
+//         allowedScreenSleep: false,
+//         fullScreenAspectRatio: 5.3 / 10,
+//         controlsConfiguration: BetterPlayerControlsConfiguration(
+//           enableAudioTracks: false,
+//           enableMute: false,
+//           enableOverflowMenu: false,
+//           enableFullscreen: false,
+//           enablePip: false,
+//           enablePlaybackSpeed: false,
+//           enableProgressBar: false,
+//           enableProgressBarDrag: false,
+//           enableProgressText: false,
+//           enableQualities: false,
+//           enableSkips: false,
+//           enableSubtitles: false,
+//           enableRetry: true,
+//           enablePlayPause: true,
+//           controlBarColor: Colors.black.withOpacity(0.2),
+//           playIcon: Icons.play_arrow_outlined,
+//           pauseIcon: Icons.pause_circle_outline,
+//         ),
+//         autoDispose: false,
+//       ),
+//       betterPlayerDataSource: BetterPlayerDataSource(
+//         BetterPlayerDataSourceType.network,
+//         widget.url,
+//         videoFormat: BetterPlayerVideoFormat.hls,
+//         drmConfiguration: BetterPlayerDrmConfiguration(
+//           drmType: BetterPlayerDrmType.token,
+//           token: "Bearer=${_authService.token}",
+//         ),
+//       ),
+//     );
+//   }
 
-  @override
-  void dispose() {
-    _betterPlayerController.dispose(forceDispose: true);
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _betterPlayerController.dispose(forceDispose: true);
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        InkWell(
-          onDoubleTap: () {
-            widget.doubleTap();
-          },
-          onTap: () {
-            // if (videoPlayerController.value.isPlaying) {
-            //   videoPlayerController.pause();
-            // } else {
-            //   videoPlayerController.play();
-            // }
-          },
-          child: BetterPlayer(
-            controller: _betterPlayerController,
-          ),
-        ),
-        widget.showLike
-            ? const Icon(
-                Icons.favorite,
-                color: Colors.red,
-                size: 100,
-              )
-            : const SizedBox(),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       alignment: Alignment.center,
+//       children: [
+//         InkWell(
+//           onDoubleTap: () {
+//             widget.doubleTap();
+//           },
+//           onTap: () {
+//             // if (videoPlayerController.value.isPlaying) {
+//             //   videoPlayerController.pause();
+//             // } else {
+//             //   videoPlayerController.play();
+//             // }
+//           },
+//           child: BetterPlayer(
+//             controller: _betterPlayerController,
+
+//           ),
+//         ),
+//         widget.showLike
+//             ? const Icon(
+//                 Icons.favorite,
+//                 color: Colors.red,
+//                 size: 100,
+//               )
+//             : const SizedBox(),
+//       ],
+//     );
+//   }
+// }
