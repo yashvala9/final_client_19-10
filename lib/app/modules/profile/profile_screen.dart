@@ -56,6 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 IconButton(
                   icon: const Icon(
                     Icons.settings,
+                    color: Colors.black54,
                   ),
                   onPressed: () async {
                     Get.to(AccountSettingsView());
@@ -64,6 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 IconButton(
                   icon: const Icon(
                     Icons.add_box_outlined,
+                    color: Colors.black54,
                   ),
                   onPressed: () async {
                     // final val = await showDialog(
@@ -533,10 +535,10 @@ class ProfileReel extends StatelessWidget {
                   },
                   errorWidget: (_, a, b) {
                     return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                    ),
-                    alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                      ),
+                      alignment: Alignment.center,
                       child: Text("Processing..."),
                     );
                   },

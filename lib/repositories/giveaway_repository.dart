@@ -28,7 +28,7 @@ class GiveawayRepository {
     );
 
     final body = jsonDecode(response.body);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       showSnackBar("Giveaway created successfully!");
     } else {
       showSnackBar("Giveaway creation failed! please try again.");

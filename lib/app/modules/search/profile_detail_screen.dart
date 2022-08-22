@@ -179,7 +179,7 @@ class ProfileDetail extends StatelessWidget {
                                                                       .styleFrom(
                                                                     minimumSize:
                                                                         const Size.fromHeight(
-                                                                            40),
+                                                                            50),
                                                                   ),
                                                                   child: Text(
                                                                     "Following",

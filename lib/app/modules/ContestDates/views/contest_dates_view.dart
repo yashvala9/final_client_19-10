@@ -20,15 +20,8 @@ class ContestDatesView extends GetView<ContestDatesController> {
       appBar: AppBar(
         title: const Text(
           'Contest Dates',
-          style: TextStyle(fontSize: 14),
+          style: TextStyle(fontSize: 17),
         ),
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-            )),
       ),
       body: Center(
         child: Text('No contests are live!'),

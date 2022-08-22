@@ -176,7 +176,7 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                     horizontal: 4,
                   ),
                   child: Text(
-                    "Prize",
+                    "Prize name",
                     style: style.titleMedium,
                   ),
                 ),
@@ -186,9 +186,9 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                     hintText: 'Tata Altroz',
                   ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9, ]')),
                   ],
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.name,
                   validator: (value) {
                     return value!.isEmpty ? 'Prize Name is required' : null;
                   },

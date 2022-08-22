@@ -10,7 +10,7 @@ import '../../../../services/auth_service.dart';
 class AccountSettingsController extends GetxController {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _authService = Get.put(AuthService());
-  
+
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 
@@ -28,7 +28,7 @@ class AccountSettingsController extends GetxController {
     super.onInit();
   }
 
-  void getContestByUser() async {
+  Future<void> getContestByUser() async {
     try {
       var v = await _giveawayRepo.getContestsByUserId(profileId!, token!);
       printInfo(info: v.toString());
