@@ -31,28 +31,28 @@ class ContestDatesView extends GetView<ContestDatesController> {
             )),
       ),
       body: Center(
-        child: FutureBuilder<List<ContestModel>>(
-          future: _giveawayRepo.getContests(
-              _controller.profileId!, _controller.token!),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Loading();
-            }
-            if (snapshot.hasError) {
-              printInfo(info: "getContests: ${snapshot.hasError}");
-              return Container();
-            }
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ContestCard(
-                  contest: snapshot.data![index],
-                );
-              },
-            );
-          },
-        )
-            ,
+        child: Text('No contests are live!'),
+        // FutureBuilder<List<ContestModel>>(
+        //   future: _giveawayRepo.getContests(
+        //       _controller.profileId!, _controller.token!),
+        //   builder: (context, snapshot) {
+        //     if (!snapshot.hasData) {
+        //       return const Loading();
+        //     }
+        //     if (snapshot.hasError) {
+        //       printInfo(info: "getContests: ${snapshot.hasError}");
+        //       return Container();
+        //     }
+        //     return ListView.builder(
+        //       itemCount: snapshot.data!.length,
+        //       itemBuilder: (BuildContext context, int index) {
+        //         return ContestCard(
+        //           contest: snapshot.data![index],
+        //         );
+        //       },
+        //     );
+        //   },
+        // )
       ),
     );
   }
