@@ -20,6 +20,9 @@ class Base {
       '$_url/forgot_password/validate_token';
   static const setForgetPassword = '$_url/forgot_password';
 
+  //logout
+  static const logout = '$_url/logout';
+
   //FCM
   static const fcmRegister = '$_url/notify/register';
 
@@ -29,6 +32,12 @@ class Base {
   static const createProfile = '$_url/users/profile';
   static const updateProfile = '$_url/users/profile/update';
   static const getProfileById = '$_url/users/profile';
+
+  //notification
+  static const notificaitonList = '$_url/notify/list';
+
+  //Get Entity
+  static const getEntity = '$_url/reels/get';
 
   //Referral
   static const getsetReferralStatus = '$_url/users';
@@ -42,6 +51,7 @@ class Base {
   static const reels = '$_url/reels/';
   static const reelsWithAds = '$_url/reels/with_ads';
   static const reelsByHashTag = '$_url/hashtags/reels/';
+  static const getSingleReel = '$_url/reels/single';
 
   //Report
   static const report = '$_url/reels/report';

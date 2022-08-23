@@ -25,8 +25,6 @@ class AuthRepository {
 
     http.StreamedResponse response = await request.send();
     var body = jsonDecode(await response.stream.bytesToString());
-    print("signInBody: $body");
-    print("StautsCode: ${response.statusCode}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       if (body['status'] == Constants.unverified) {
         return Constants.unverified;
@@ -256,8 +254,29 @@ class AuthRepository {
     }
   }
 
-  Future<void> signOut() async {
+  Future<void> removeToken(
+    String deviceToken,
+    String token,
+  ) async {
+    final response = await http.post(
+      Uri.parse("${Base.logout}/"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return;
+      // return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> signOut(String deviceToken, String token) async {
     // await _auth.signOut();
+     removeToken(deviceToken, token);
     _storage.remove(Constants.token);
   }
 }

@@ -32,7 +32,7 @@ class InboxScreen extends StatelessWidget {
                     ),
                     IconButton(
                         onPressed: () => Get.to(
-                              () => const NotificationScreen(),
+                              () =>  NotificationScreen(),
                             ),
                         icon: const Icon(Icons.edit)),
                   ],

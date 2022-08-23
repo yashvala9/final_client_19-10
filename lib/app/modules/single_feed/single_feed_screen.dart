@@ -76,13 +76,6 @@ class SingleFeedScreen extends StatelessWidget {
                                 swipeRight: () {},
                                 showLike: _controller.showLike,
                               ),
-                              //  VideoPlayerItem(
-                              //         videoUrl: reel!.filename,
-                              //         doubleTap: () {
-                              //           _controller.likeToggle(reel!);
-                              //         },
-                              //         showLike: _controller.showLike,
-                              //       ),
                               Column(
                                 children: [
                                   const SizedBox(
@@ -141,7 +134,7 @@ class SingleFeedScreen extends StatelessWidget {
                                         Container(
                                           width: 100,
                                           margin: EdgeInsets.only(
-                                              top: size.height / 5),
+                                              top: size.height / 3),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,

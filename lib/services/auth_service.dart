@@ -67,7 +67,8 @@ class AuthService extends GetxService {
 
   Future<void> signOut() async {
     try {
-      await _authRepo.signOut();
+      var fcmToken = await FirebaseMessaging.instance.getToken();
+      await _authRepo.signOut(fcmToken!, token!);
       redirectUser();
     } catch (e) {
       print("signOut: $e");
