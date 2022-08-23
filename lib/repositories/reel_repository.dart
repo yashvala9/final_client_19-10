@@ -34,6 +34,25 @@ class ReelRepository {
     }
   }
 
+  Future<ReelModel> getSingleReel(
+    String reelId,
+    String token,
+  ) async {
+    final response = await http.get(
+      Uri.parse('${Base.getSingleReel}/$reelId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return ReelModel.fromMap(body);
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<List<ReelModel>> getFeedsWithAds(int profileId, String token,
       {int limit = 10, int skip = 0}) async {
     final response = await http.get(

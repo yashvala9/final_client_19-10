@@ -1,7 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
+import 'package:reel_ro/app/modules/single_feed/single_feed_screen.dart';
+import 'package:reel_ro/models/notification_model.dart';
+import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/models/reel_model.dart';
+import 'package:reel_ro/repositories/notification_repository.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
+import 'package:reel_ro/repositories/reel_repository.dart';
+import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/constants.dart';
+import 'package:reel_ro/utils/empty_widget.dart';
+import 'package:reel_ro/widgets/loading.dart';
+
+import '../utils/base.dart';
 
 class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  NotificationScreen({Key? key}) : super(key: key);
+
+  final _notificationRepo = Get.put(NotificationRepository());
+  final _controller = Get.put(NotificationController());
+  final _profileRepo = Get.find<ProfileRepository>();
+  final _reelRepo = Get.find<ReelRepository>();
+  final token = Get.find<AuthService>().token;
 
   @override
   Widget build(BuildContext context) {
@@ -10,123 +33,251 @@ class NotificationScreen extends StatelessWidget {
     final colorSchema = theme.colorScheme;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          title: Text(
-            "Notification",
-            style: style.titleMedium,
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Today",
-                  style:
-                      style.titleLarge!.copyWith(fontWeight: FontWeight.w600),
-                ),
-                NotificationTile(
-                  title: "Sabrina Wah",
-                  subTile: "Started following you.",
-                  traiing: MaterialButton(
-                    onPressed: () {},
-                    color: colorSchema.primary,
-                    shape: const StadiumBorder(),
-                    child: const Text("Folow"),
-                  ),
-                ),
-                NotificationTile(
-                    title: "Nenek Gahol",
-                    subTile:
-                        "Commented, nenek masakin lepeut buat cucu tersayang uhuyy",
-                    traiing: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-                      ),
-                    )),
-                NotificationTile(
-                  title: "Suami Orangs",
-                  subTile: "Skuy atuh rada nonton ayena ka moviplek wkwk :)",
-                  traiing: MaterialButton(
-                    onPressed: () {},
-                    color: colorSchema.primary,
-                    shape: const StadiumBorder(),
-                    child: const Text("Folow"),
-                  ),
-                ),
-                NotificationTile(
-                  title: "Komandan Asep",
-                  subTile: "Kumaha cenah eh di read hungkul hm ah slek we",
-                  traiing: OutlinedButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Folowing",
-                      style: style.titleSmall,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Text(
-                    "Yesterday",
-                    style:
-                        style.titleLarge!.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                NotificationTile(
-                  title: "Sabrina Wah",
-                  subTile: "Started following you.",
-                  traiing: MaterialButton(
-                    onPressed: () {},
-                    color: colorSchema.primary,
-                    shape: const StadiumBorder(),
-                    child: const Text("Folow"),
-                  ),
-                ),
-                NotificationTile(
-                    title: "Nenek Gahol",
-                    subTile:
-                        "Commented, nenek masakin lepeut buat cucu tersayang uhuyy",
-                    traiing: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-                      ),
-                    )),
-                NotificationTile(
-                  title: "Suami Orangs",
-                  subTile: "Skuy atuh rada nonton ayena ka moviplek wkwk :)",
-                  traiing: MaterialButton(
-                    onPressed: () {},
-                    color: colorSchema.primary,
-                    shape: const StadiumBorder(),
-                    child: const Text("Folow"),
-                  ),
-                ),
-                NotificationTile(
-                  title: "Komandan Asep",
-                  subTile: "Kumaha cenah eh di read hungkul hm ah slek we",
-                  traiing: OutlinedButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Folowing",
-                      style: style.titleSmall,
-                    ),
-                  ),
-                ),
-              ],
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            iconTheme: const IconThemeData(
+              color: Colors.black,
+            ),
+            title: Text(
+              "Notification",
+              style: style.titleMedium,
             ),
           ),
-        ),
-      ),
+          body: FutureBuilder<List<NotificationModel>>(
+              future: _notificationRepo.getNotificationList(token!),
+              builder: (context, snap) {
+                if (!snap.hasData) {
+                  return const Loading();
+                }
+                var notifications = snap.data!;
+                log("Notification: $notifications");
+                return notifications.isEmpty
+                    ? const EmptyWidget("No notifications available!")
+                    : ListView(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(16.0),
+                        children: notifications.map(
+                          (e) {
+                            if (e.data.notificationType ==
+                                NotificationType.follow) {
+                              return GetBuilder<NotificationController>(
+                                  builder: (_) => NotificationTile(
+                                        userId: e.data.userId,
+                                        title: e.title,
+                                        subTile: e.body,
+                                        traiing: FutureBuilder<bool>(
+                                          future: _profileRepo.isFollowing(
+                                              e.data.userId, token!),
+                                          builder: (context, snap) {
+                                            return snap.hasData
+                                                ? snap.data!
+                                                    ? OutlinedButton(
+                                                        onPressed: () {
+                                                          _controller
+                                                              .toggleFollowing(e
+                                                                  .data.userId);
+                                                        },
+                                                        child: Text(
+                                                          "Following",
+                                                          style: style.caption,
+                                                        ),
+                                                      )
+                                                    : MaterialButton(
+                                                        onPressed: () {
+                                                          _controller
+                                                              .toggleFollowing(e
+                                                                  .data.userId);
+                                                        },
+                                                        color:
+                                                            colorSchema.primary,
+                                                        shape:
+                                                            const StadiumBorder(),
+                                                        child:
+                                                            const Text("Folow"),
+                                                      )
+                                                : const SizedBox();
+                                          },
+                                        ),
+                                      ));
+                            } else if (e.data.notificationType ==
+                                NotificationType.response) {
+                              return NotificationTile(
+                                title: e.title,
+                                subTile: e.body,
+                                userId: e.data.userId,
+                                traiing: const SizedBox(),
+                              );
+                            } else if (e.data.notificationType ==
+                                NotificationType.like) {
+                              return NotificationTile(
+                                  title: e.title,
+                                  subTile: e.body,
+                                  userId: e.data.userId,
+                                  traiing: FutureBuilder<ReelModel>(
+                                    future: _reelRepo.getSingleReel(
+                                        e.data.entityId, token!),
+                                    builder: (context, s) {
+                                      if (!s.hasData) {
+                                        log("single feed error: ${s.error}");
+                                        return const SizedBox();
+                                      }
+
+                                      var reel = s.data!;
+                                      log("tumbnail: ${reel.thumbnail}");
+                                      return InkWell(
+                                        onTap: () {
+                                          Get.to(() =>
+                                              SingleFeedScreen([reel], 0));
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: Image.network(
+                                            reel.thumbnail,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ));
+                            } else if (e.data.notificationType ==
+                                NotificationType.comment) {
+                              return NotificationTile(
+                                  title: e.title,
+                                  subTile: e.body,
+                                  userId: e.data.userId,
+                                  traiing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Image.network(
+                                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                                    ),
+                                  ));
+                            } else {
+                              return NotificationTile(
+                                  userId: e.data.userId,
+                                  title: e.title,
+                                  subTile: e.body,
+                                  traiing: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Image.network(
+                                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                                    ),
+                                  ));
+                            }
+                          },
+                        ).toList(),
+                      );
+                // :  Padding(
+                //     padding: const EdgeInsets.all(16.0),
+                //     child: SingleChildScrollView(
+                //       child: Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           Text(
+                //             "Today",
+                //             style: style.titleLarge!
+                //                 .copyWith(fontWeight: FontWeight.w600),
+                //           ),
+                //           NotificationTile(
+                //             title: "Sabrina Wah",
+                //             subTile: "Started following you.",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //               title: "Nenek Gahol",
+                //               subTile:
+                //                   "Commented, nenek masakin lepeut buat cucu tersayang uhuyy",
+                //               traiing: ClipRRect(
+                //                 borderRadius: BorderRadius.circular(5),
+                //                 child: Image.network(
+                //                   "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                //                 ),
+                //               )),
+                //           NotificationTile(
+                //             title: "Suami Orangs",
+                //             subTile:
+                //                 "Skuy atuh rada nonton ayena ka moviplek wkwk :)",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //             title: "Komandan Asep",
+                //             subTile:
+                //                 "Kumaha cenah eh di read hungkul hm ah slek we",
+                //             traiing: OutlinedButton(
+                //               onPressed: () {},
+                //               child: Text(
+                //                 "Folowing",
+                //                 style: style.titleSmall,
+                //               ),
+                //             ),
+                //           ),
+                //           Padding(
+                //             padding:
+                //                 const EdgeInsets.symmetric(vertical: 12),
+                //             child: Text(
+                //               "Yesterday",
+                //               style: style.titleLarge!
+                //                   .copyWith(fontWeight: FontWeight.w600),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //             title: "Sabrina Wah",
+                //             subTile: "Started following you.",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //               title: "Nenek Gahol",
+                //               subTile:
+                //                   "Commented, nenek masakin lepeut buat cucu tersayang uhuyy",
+                //               traiing: ClipRRect(
+                //                 borderRadius: BorderRadius.circular(5),
+                //                 child: Image.network(
+                //                   "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                //                 ),
+                //               )),
+                //           NotificationTile(
+                //             title: "Suami Orangs",
+                //             subTile:
+                //                 "Skuy atuh rada nonton ayena ka moviplek wkwk :)",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //             title: "Komandan Asep",
+                //             subTile:
+                //                 "Kumaha cenah eh di read hungkul hm ah slek we",
+                //             traiing: OutlinedButton(
+                //               onPressed: () {},
+                //               child: Text(
+                //                 "Folowing",
+                //                 style: style.titleSmall,
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   );
+              })),
     );
   }
 }
@@ -135,12 +286,17 @@ class NotificationTile extends StatelessWidget {
   final Widget traiing;
   final String title;
   final String subTile;
-  const NotificationTile(
+  final int userId;
+  NotificationTile(
       {Key? key,
       required this.traiing,
       required this.title,
+      required this.userId,
       required this.subTile})
       : super(key: key);
+
+  final _profileRepo = Get.find<ProfileRepository>();
+  final token = Get.find<AuthService>().token!;
 
   @override
   Widget build(BuildContext context) {
@@ -149,13 +305,35 @@ class NotificationTile extends StatelessWidget {
     final colorSchema = theme.colorScheme;
     return ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        leading: CircleAvatar(
-          radius: 25,
-          backgroundColor: colorSchema.primary,
-          backgroundImage: const NetworkImage(
-            "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-          ),
-        ),
+        // leading: CircleAvatar(
+        //   radius: 25,
+        //   backgroundColor: colorSchema.primary,
+        //   backgroundImage: const NetworkImage(
+        //     "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+        //   ),
+        // ),
+        leading: FutureBuilder<ProfileModel>(
+            future: _profileRepo.getProfileById(userId, token),
+            builder: (context, s) {
+              if (!s.hasData) {
+                return const SizedBox();
+              }
+              var profile = s.data!;
+              return InkWell(
+                onTap: () {
+                  Get.to(
+                    () => ProfileDetail(profileModel: profile),
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: colorSchema.primary,
+                  backgroundImage: NetworkImage(
+                    "${Base.profileBucketUrl}/${profile.user_profile!.profile_img}",
+                  ),
+                ),
+              );
+            }),
         title: Text(
           title,
           style: style.titleMedium!.copyWith(
@@ -168,5 +346,23 @@ class NotificationTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         trailing: traiing);
+  }
+}
+
+class NotificationController extends GetxController {
+  final _profileRepo = Get.find<ProfileRepository>();
+  final token = Get.find<AuthService>().token;
+
+  void toggleFollowing(int userId) async {
+    try {
+      _profileRepo.toggleFollow(userId, token!);
+      update();
+    } catch (e) {
+      log("toggleFollowingError: $e");
+    }
+  }
+
+  void updateMannual() {
+    update();
   }
 }

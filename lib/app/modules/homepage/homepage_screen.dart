@@ -89,53 +89,6 @@ class HomePageScreen extends StatelessWidget {
                         Icons.add_box_outlined,
                       ),
                       onPressed: () async {
-                        // final val = await showDialog(
-                        //   context: context,
-                        //   builder: (_) => Dialog(
-                        //       child: Column(
-                        //     mainAxisSize: MainAxisSize.min,
-                        //     children: [
-                        //       ListTile(
-                        //         onTap: () {
-                        //           Navigator.pop(context, true);
-                        //         },
-                        //         leading: Icon(Icons.video_camera_back),
-                        //         title: Text("Video"),
-                        //       ),
-                        //       ListTile(
-                        //         onTap: () {
-                        //           Navigator.pop(context, false);
-                        //         },
-                        //         leading: Icon(Icons.photo),
-                        //         title: Text("Photo"),
-                        //       ),
-                        //     ],
-                        //   )),
-                        // );
-                        // if (val != null) {
-                        //   if (val) {
-                        //     var video = await ImagePicker()
-                        //         .pickVideo(source: ImageSource.gallery);
-                        //     if (video != null) {
-                        //       Navigator.of(context).push(
-                        //         MaterialPageRoute(builder: (context) {
-                        //           return VideoTrimmerView(File(video.path));
-                        //         }),
-                        //       );
-                        //     }
-                        //   } else {
-                        //     var photo = await ImagePicker()
-                        //         .pickImage(source: ImageSource.gallery);
-                        //     if (photo != null) {
-                        //       Get.to(
-                        //         () => AddFeedScreen(
-                        //           file: File(photo.path),
-                        //           type: 1,
-                        //         ),
-                        //       );
-                        //     }
-                        //   }
-                        // }
                         var video = await ImagePicker()
                             .pickVideo(source: ImageSource.gallery);
                         if (video != null) {

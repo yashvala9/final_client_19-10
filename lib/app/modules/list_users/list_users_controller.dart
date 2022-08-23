@@ -41,9 +41,7 @@ class ListUsersController extends GetxController {
     super.onInit();
   }
 
-  void signOut() async {
-    await _authRepo.signOut();
-  }
+
 
   void toggleFollowing(int id) async {
     try {

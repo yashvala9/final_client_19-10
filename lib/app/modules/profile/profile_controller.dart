@@ -75,10 +75,7 @@ class ProfileController extends GetxController {
   //     print("getReelsById: $e");
   //   }
   // }
-  void signOut() async {
-    await _authRepo.signOut();
-  }
-
+ 
   void updateManually() {
     update();
   }
