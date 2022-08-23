@@ -460,94 +460,106 @@ class ProfileReel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ReelModel>>(
-        future: profileId != null
-            ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
-            : _profileRepo.getReelByProfileId(
-                _controller.profileId!, _controller.token!),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            printInfo(info: "profileReels: ${snapshot.error}");
-          }
-          var reels = snapshot.data!;
+      future: profileId != null
+          ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
+          : _profileRepo.getReelByProfileId(
+              _controller.profileId!, _controller.token!),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (snapshot.hasError) {
+          printInfo(info: "profileReels: ${snapshot.error}");
+        }
+        var reels = snapshot.data!;
 
-          if (reels.isEmpty) {
-            return Center(
-              child: Text("No reels available"),
-            );
-          }
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: reels.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-            ),
-            itemBuilder: (context, index) {
-              if (index == (reels.length - 3) && !_controller.loadingMore) {
-                _controller.getMoreFeed(reels.length);
-                if (_controller.reelsLoaded.isNotEmpty) {
-                  reels.addAll(_controller.reelsLoaded);
-                  _controller.reelsLoaded.clear();
-                  _controller.update();
-                }
+        if (reels.isEmpty) {
+          return Center(
+            child: Text("No reels available"),
+          );
+        }
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: reels.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 1,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+          ),
+          itemBuilder: (context, index) {
+            if (index == (reels.length - 3) && !_controller.loadingMore) {
+              _controller.getMoreFeed(reels.length);
+              if (_controller.reelsLoaded.isNotEmpty) {
+                reels.addAll(_controller.reelsLoaded);
+                _controller.reelsLoaded.clear();
+                _controller.update();
               }
-              log("Index $index:  ${reels[index].thumbnail}");
-              var tumb = reels[index].thumbnail;
+            }
+            log("Index $index:  ${reels[index].thumbnail}");
+            var tumb = reels[index].thumbnail;
 
-              return GestureDetector(
-                onTap: () {
-                  Get.to(SingleFeedScreen(reels, index));
-                },
-                onLongPress: () {
-                  Get.dialog(AlertDialog(
-                    title: const Text(
-                        "Are you sure you want to delete this roll?"),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: const Text("NO")),
-                      MaterialButton(
+            return GestureDetector(
+              onTap: () {
+                Get.to(SingleFeedScreen(reels, index));
+              },
+              onLongPress: () {
+                Get.dialog(AlertDialog(
+                  title:
+                      const Text("Are you sure you want to delete this roll?"),
+                  actions: [
+                    TextButton(
                         onPressed: () {
                           Get.back();
-                          _controller.deleteReel(reels[index].id);
                         },
-                        child: const Text("YES"),
-                        color: Colors.red,
-                      ),
-                    ],
-                  ));
-                },
-                child: CachedNetworkImage(
-                  key: UniqueKey(),
-                  placeholder: (context, url) {
-                    return IconButton(
-                        onPressed: () {}, icon: Icon(Icons.refresh_rounded));
-                  },
-                  errorWidget: (_, a, b) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text("Processing..."),
+                        child: const Text("NO")),
+                    MaterialButton(
+                      onPressed: () {
+                        Get.back();
+                        _controller.deleteReel(reels[index].id);
+                      },
+                      child: const Text("YES"),
+                      color: Colors.red,
+                    ),
+                  ],
+                ));
+              },
+              child: FutureBuilder<String>(
+                future: _profileRepo.getThumbnail(reels[index].thumbnail),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                  imageUrl: reels[index].thumbnail,
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
-          );
-        });
+                  }
+
+                  return CachedNetworkImage(
+                    key: UniqueKey(),
+                    placeholder: (context, url) {
+                      return IconButton(
+                          onPressed: () {}, icon: Icon(Icons.refresh_rounded));
+                    },
+                    errorWidget: (_, a, b) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text("Processing..."),
+                      );
+                    },
+                    imageUrl: snapshot.data!,
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

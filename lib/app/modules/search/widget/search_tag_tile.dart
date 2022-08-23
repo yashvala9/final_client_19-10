@@ -27,12 +27,24 @@ class SearchTagTile extends StatelessWidget {
           () => SingleFeedScreen(_controller.searchReels, index),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        leading: CircleAvatar(
-          radius: 25,
-          backgroundColor: colorSchem.primary,
-          backgroundImage: NetworkImage(
-            reelModel.thumbnail,
-          ),
+        leading: FutureBuilder<String>(
+          future: _profileRepo
+              .getThumbnail(_controller.searchReels[index].thumbnail),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return CircleAvatar(
+              radius: 25,
+              backgroundColor: colorSchem.primary,
+              backgroundImage: NetworkImage(
+                snapshot.data!,
+              ),
+            );
+          },
         ),
         title: Text(
           parser.emojify(reelModel.video_title),

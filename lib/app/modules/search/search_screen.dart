@@ -39,6 +39,7 @@ final _controller = Get.put(SearchController());
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
   final _reelRepo = Get.put(ReelRepository());
+  final _profileRepo = Get.find<ProfileRepository>();
 
   // final searchTextController = TextEditingController();
   final _debounce = Debouncer(milliseconds: 500);
@@ -143,15 +144,40 @@ class SearchScreen extends StatelessWidget {
                           }
                         }
                         return GestureDetector(
-                          onTap: () {
-                            Get.to(SingleFeedScreen(reels, index));
-                          },
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => Loading(),
-                            imageUrl: reels[index].thumbnail,
-                            fit: BoxFit.cover,
-                          ),
-                        );
+                            onTap: () {
+                              Get.to(SingleFeedScreen(reels, index));
+                            },
+                            child: FutureBuilder<String>(
+                              future: _profileRepo
+                                  .getThumbnail(reels[index].thumbnail),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                return CachedNetworkImage(
+                                  key: UniqueKey(),
+                                  placeholder: (context, url) {
+                                    return IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(Icons.refresh_rounded));
+                                  },
+                                  errorWidget: (_, a, b) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text("Processing..."),
+                                    );
+                                  },
+                                  imageUrl: snapshot.data!,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ));
                       },
                     );
                   })
