@@ -85,11 +85,9 @@ class ListUsersView extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       onTap: () {
-                        // Get.to(
-                        //    ProfileDetail(
-                        //     index: index,
-                        //   ),
-                        // );
+                        Get.to(
+                          ProfileDetail(profileModel: snapshot.data![index]),
+                        );
                       },
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 8),
