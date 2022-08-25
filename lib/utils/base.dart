@@ -35,6 +35,8 @@ class Base {
 
   //notification
   static const notificaitonList = '$_url/notify/list';
+  static const pokeSingleUser = '$_url/notify/poke/';
+  static const pokeAllInactiveUser = '$_url/notify/pokeInactive';
 
   //Get Entity
   static const getEntity = '$_url/reels/get';
@@ -65,6 +67,7 @@ class Base {
   static const reelHistory = '$_url/reels/history/';
   static const addReel = '$_url/reels';
   static const deleteReel = '$_url/reels/delete';
+  static const isActive = '$_url/ads/status/';
 
   //Following Followers
   static const getFollowing = '$_url/users';

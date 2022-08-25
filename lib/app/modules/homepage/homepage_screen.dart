@@ -140,6 +140,9 @@ class HomePageScreen extends StatelessWidget {
                                       videoUrl: videoUrl,
                                       videoId: data.id,
                                       isReel: isReel,
+                                      updatePoints: () {
+                                        _controller.updateManually();
+                                      },
                                       doubleTap: () {
                                         if (isReel) {
                                           _controller.likeToggle(index);
@@ -317,6 +320,18 @@ class HomePageScreen extends StatelessWidget {
                                                                       .white,
                                                                 ),
                                                               ),
+                                                              // Text(
+                                                              //   _controller
+                                                              //       .totalEntryPoints
+                                                              //       .value,
+                                                              //   style: style
+                                                              //       .headlineSmall!
+                                                              //       .copyWith(
+                                                              //     fontSize: 18,
+                                                              //     color: Colors
+                                                              //         .white,
+                                                              //   ),
+                                                              // ),
                                                               FutureBuilder<
                                                                       String>(
                                                                   future: _giveawayRepo.getTotalEntryCountByUserId(
@@ -562,6 +577,18 @@ class HomePageScreen extends StatelessWidget {
                                                                       .white,
                                                                 ),
                                                               ),
+                                                              // Text(
+                                                              //   _controller
+                                                              //       .totalEntryPoints
+                                                              //       .value,
+                                                              //   style: style
+                                                              //       .headlineSmall!
+                                                              //       .copyWith(
+                                                              //     fontSize: 18,
+                                                              //     color: Colors
+                                                              //         .white,
+                                                              //   ),
+                                                              // ),
                                                               FutureBuilder<
                                                                       String>(
                                                                   future: _giveawayRepo.getTotalEntryCountByUserId(

@@ -33,6 +33,19 @@ class ProfileDetail extends StatelessWidget {
     return DefaultTabController(
       length: _controller.searchProfiles[index].status == 'VERIFIED' ? 2 : 1,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black54,
+            ),
+            onPressed: () async {
+              Get.back();
+            },
+          ),
+        ),
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
         body: NestedScrollView(

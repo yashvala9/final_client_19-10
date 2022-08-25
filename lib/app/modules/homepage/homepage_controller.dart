@@ -7,12 +7,14 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import '../../../models/comment_model.dart';
 import '../../../models/reel_model.dart';
+import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 
 class HomePageController extends GetxController {
   final _profileRepo = Get.put(ProfileRepository());
   final _reelRepo = Get.put(ReelRepository());
   final _authService = Get.put(AuthService());
+  final _giveawayRepo = Get.put(GiveawayRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -24,6 +26,13 @@ class HomePageController extends GetxController {
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
+    update();
+  }
+
+  bool _loadingPoints = false;
+  bool get loadingPoints => _loading;
+  set loadingPoints(bool loadingPoints) {
+    _loadingPoints = loadingPoints;
     update();
   }
 
@@ -47,9 +56,12 @@ class HomePageController extends GetxController {
 
   List<int> reportList = [];
 
+  RxString totalEntryPoints = "0".obs;
+
   @override
   void onInit() {
     getFeeds();
+    getTotalEntryPoints();
     super.onInit();
   }
 
@@ -63,6 +75,19 @@ class HomePageController extends GetxController {
     }
     loading = false;
     _loadMore = true;
+  }
+
+  void getTotalEntryPoints() async {
+    loadingPoints = true;
+    try {
+      totalEntryPoints.value =
+          await _giveawayRepo.getTotalEntryCountByUserId(profileId!, token!);
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
+    }
+    update();
+    loadingPoints = false;
   }
 
   void getMoreFeed() async {

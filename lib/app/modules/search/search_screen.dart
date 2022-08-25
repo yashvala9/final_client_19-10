@@ -22,17 +22,17 @@ import '../profile/profile_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'widget/search_tag_tile.dart';
 
-class Debouncer {
-  final int milliseconds;
-  Timer? _timer;
+// class Debouncer {
+//   final int milliseconds;
+//   Timer? _timer;
 
-  Debouncer({required this.milliseconds});
+//   Debouncer({required this.milliseconds});
 
-  run(VoidCallback action) {
-    _timer?.cancel();
-    _timer = Timer(Duration(milliseconds: milliseconds), action);
-  }
-}
+//   run(VoidCallback action) {
+//     _timer?.cancel();
+//     _timer = Timer(Duration(milliseconds: milliseconds), action);
+//   }
+// }
 
 final _controller = Get.put(SearchController());
 
@@ -42,7 +42,7 @@ class SearchScreen extends StatelessWidget {
   final _profileRepo = Get.find<ProfileRepository>();
 
   // final searchTextController = TextEditingController();
-  final _debounce = Debouncer(milliseconds: 500);
+  // final _debounce = Debouncer(milliseconds: 500);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -80,24 +80,24 @@ class SearchScreen extends StatelessWidget {
                     prefixIcon: Icon(Icons.search), hintText: "Search here..."),
                 // controller: searchTextController,
                 onFieldSubmitted: (value) {
-                  _debounce.run(() {
-                    if (value.trim().isEmpty) {
-                      showSnackBar("Search is empty", color: Colors.red);
-                      return;
-                    }
-                    if (value.startsWith('#')) {
-                      value.replaceAll('#', '');
-                      Get.to(SearchHashTags(
-                        hashTag: value.trim(),
-                      ));
-                    } else {
-                      Get.to(
-                        () => SearchUsers(
-                          username: value.trim(),
-                        ),
-                      );
-                    }
-                  });
+                  // _debounce.run(() {
+                  if (value.trim().isEmpty) {
+                    showSnackBar("Search is empty", color: Colors.red);
+                    return;
+                  }
+                  if (value.startsWith('#')) {
+                    value.replaceAll('#', '');
+                    Get.to(SearchHashTags(
+                      hashTag: value.trim(),
+                    ));
+                  } else {
+                    Get.to(
+                      () => SearchUsers(
+                        username: value.trim(),
+                      ),
+                    );
+                  }
+                  // });
                 },
               ),
               const SizedBox(

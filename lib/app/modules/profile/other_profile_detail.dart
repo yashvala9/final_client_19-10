@@ -44,6 +44,9 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
     return DefaultTabController(
       length: widget.profileModel.status == 'VERIFIED' ? 3 : 2,
       child: Scaffold(
+        appBar: AppBar(
+          backwardsCompatibility: true,
+        ),
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
         body: NestedScrollView(

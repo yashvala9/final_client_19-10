@@ -32,7 +32,9 @@ class SearchTagTile extends StatelessWidget {
               .getThumbnail(_controller.searchReels[index].thumbnail),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(
+              return const SizedBox(
+                height: 50,
+                width: 50,
                 child: CircularProgressIndicator(),
               );
             }

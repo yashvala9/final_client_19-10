@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/send_invite/views/send_invite_view.dart';
+import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
+import '../../../../repositories/notification_repository.dart';
 import '../../../../utils/base.dart';
 import '../../../../widgets/loading.dart';
 import '../controllers/referrals_controller.dart';
@@ -13,6 +15,9 @@ import '../controllers/referrals_controller.dart';
 class ReferralsView extends GetView<ReferralsController> {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(ReferralsController());
+  final _notificationRepo = Get.put(NotificationRepository());
+  final _reelRepo = Get.put(ReelRepository());
+
   @override
   Widget build(BuildContext context) {
     _controller.getReferralList();
@@ -173,16 +178,24 @@ class ReferralsView extends GetView<ReferralsController> {
                                   dataRowHeight: 80,
                                   columns: const [
                                     DataColumn(
-                                      label: Text("Name"),
+                                      label: Text("Name",
+                                          textAlign: TextAlign.center),
                                     ),
                                     DataColumn(
-                                      label: Text("Entries"),
+                                      label: Text("Total\nEntries",
+                                          textAlign: TextAlign.center),
                                     ),
                                     DataColumn(
-                                      label: Text("Activity"),
+                                      label: Text("Referral\nEntries",
+                                          textAlign: TextAlign.center),
                                     ),
                                     DataColumn(
-                                      label: Text("Poke"),
+                                      label: Text("Activity",
+                                          textAlign: TextAlign.center),
+                                    ),
+                                    DataColumn(
+                                      label: Text("Poke",
+                                          textAlign: TextAlign.center),
                                     )
                                   ],
                                   rows: _controller
@@ -254,11 +267,100 @@ class ReferralsView extends GetView<ReferralsController> {
                                                 ),
                                                 DataCell(
                                                   Center(
-                                                    child: activitygreen(),
+                                                      child:
+                                                          FutureBuilder<String>(
+                                                    future: _giveawayRepo
+                                                        .getReferralsEntryCountByUserId(
+                                                            element.id,
+                                                            _controller.token!),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return const Loading();
+                                                      }
+                                                      if (snapshot.hasError) {
+                                                        printInfo(
+                                                            info:
+                                                                "getReferralsEntryCountByUserId: ${snapshot.hasError}");
+                                                        return Container();
+                                                      }
+                                                      return Text(
+                                                        //TODO
+                                                        '1',
+                                                        // snapshot.data
+                                                        //     .toString(),
+                                                        style: style
+                                                            .headlineSmall
+                                                            ?.copyWith(
+                                                                fontSize: 14),
+                                                      );
+                                                    },
+                                                  )),
+                                                ),
+                                                DataCell(
+                                                  Center(
+                                                    child: FutureBuilder<bool>(
+                                                      future:
+                                                          _reelRepo.isActive(
+                                                              element.id,
+                                                              _controller
+                                                                  .token!),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (!snapshot.hasData) {
+                                                          return const Loading();
+                                                        }
+                                                        if (snapshot.hasError) {
+                                                          printInfo(
+                                                              info:
+                                                                  "isActive: ${snapshot.hasError}");
+                                                          return Container();
+                                                        }
+                                                        return CircleAvatar(
+                                                          backgroundColor:
+                                                              snapshot.data!
+                                                                  ? Colors.green
+                                                                  : Colors.red,
+                                                          radius: (8.0),
+                                                        );
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
                                                 DataCell(
-                                                  pokebtn(),
+                                                  FutureBuilder<bool>(
+                                                    future: _reelRepo.isActive(
+                                                        element.id,
+                                                        _controller.token!),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      if (!snapshot.hasData) {
+                                                        return const Loading();
+                                                      }
+                                                      if (snapshot.hasError) {
+                                                        printInfo(
+                                                            info:
+                                                                "isActive: ${snapshot.hasError}");
+                                                        return Container();
+                                                      }
+                                                      return snapshot.data!
+                                                          ? Container(
+                                                              child:
+                                                                  disabledPokeButton(),
+                                                            )
+                                                          : InkWell(
+                                                              child: pokebtn(),
+                                                              onTap: () {
+                                                                _notificationRepo
+                                                                    .pokeSingleUser(
+                                                                        _controller
+                                                                            .token!,
+                                                                        element
+                                                                            .id);
+                                                              },
+                                                            );
+                                                    },
+                                                  ),
                                                 ),
                                               ],
                                             )),
@@ -276,7 +378,10 @@ class ReferralsView extends GetView<ReferralsController> {
                           width: Get.width * 1,
                           child: MyElevatedButton(
                             buttonText: "Poke Inactive Users",
-                            onPressed: () {},
+                            onPressed: () {
+                              _notificationRepo
+                                  .pokeAllInactiveUser(_controller.token!);
+                            },
                           ),
                         ),
                       )
@@ -290,20 +395,6 @@ class ReferralsView extends GetView<ReferralsController> {
   }
 }
 
-Widget activitygreen() {
-  return const CircleAvatar(
-    backgroundColor: Colors.green,
-    radius: (8.0),
-  );
-}
-
-Widget activityred() {
-  return const CircleAvatar(
-    backgroundColor: Colors.red,
-    radius: (8.0),
-  );
-}
-
 Widget pokebtn() {
   return Container(
     decoration: BoxDecoration(
@@ -313,8 +404,30 @@ Widget pokebtn() {
           begin: FractionalOffset.topCenter,
           end: FractionalOffset.bottomCenter,
         )),
-    child: const Center(child: Text("Poke")),
-    width: Get.width * 0.2,
+    child: Icon(Icons.arrow_right),
+    // const Center(child: Text("Poke")),
+    width: Get.width * 0.15,
+    height: Get.height * 0.04,
+  );
+}
+
+Widget disabledPokeButton() {
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          colors: AppColors.pokeDisabledGradiantColor,
+          begin: FractionalOffset.topCenter,
+          end: FractionalOffset.bottomCenter,
+        )),
+    child: const Center(
+      child: Icon(
+        Icons.arrow_right,
+        color: Colors.grey,
+      ),
+      // child: Text("Poke", style: TextStyle(color: Colors.grey)),
+    ),
+    width: Get.width * 0.15,
     height: Get.height * 0.04,
   );
 }
