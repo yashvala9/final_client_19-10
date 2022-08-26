@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
+import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -166,10 +167,12 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                       children: <Widget>[
                         VideoPlayer(videoPlayerController),
                         if (!widget.isReel)
-                          VideoProgressIndicator(
-                            videoPlayerController,
-                            allowScrubbing: false,
-                          ),
+                          CustomVideoProgressIndicator(videoPlayerController,
+                              allowScrubbing: false),
+                        // VideoProgressIndicator(
+                        //   videoPlayerController,
+                        //   allowScrubbing: false,
+                        // ),
                       ],
                     ),
 

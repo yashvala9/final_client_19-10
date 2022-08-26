@@ -74,7 +74,9 @@ class SignupScreen extends StatelessWidget {
                                 validator: (value) {
                                   return value!.isEmpty
                                       ? 'Username is required'
-                                      : null;
+                                      : value.length > 12
+                                          ? "Username cannot be more than 12 characters"
+                                          : null;
                                 },
                                 onSaved: (v) => _controller.userName = v!,
                               ),
@@ -129,7 +131,7 @@ class SignupScreen extends StatelessWidget {
                                   validator: (value) => value!.isEmpty
                                       ? 'Password is required'
                                       : value.length < 8
-                                          ? "Password should be greater than 8 words"
+                                          ? "Password should be greater than 8 characters"
                                           : null),
                               SizedBox(height: Get.height * 0.02),
                               Text(
@@ -162,7 +164,7 @@ class SignupScreen extends StatelessWidget {
                                   validator: (value) => value!.isEmpty
                                       ? 'Password is required'
                                       : value.length < 8
-                                          ? "Password should be greater than 8 words"
+                                          ? "Password should be greater than 8 characters"
                                           : null),
                               SizedBox(height: Get.height * 0.03),
                               _controller.loading

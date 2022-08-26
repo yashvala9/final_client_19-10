@@ -107,7 +107,8 @@ class AdsHistoryView extends StatelessWidget {
                                     border: Border.all(),
                                   ),
                                   alignment: Alignment.center,
-                                  child: Text("Processing..."),
+                                  child: Loading(),
+                                  // Text("Processing..."),
                                 );
                               },
                               imageUrl: snapshot.data!,

@@ -5,6 +5,7 @@ import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 
 import '../../../../utils/base.dart';
+import '../../../../utils/colors.dart';
 
 class SearchTile extends StatelessWidget {
   final int index;
@@ -48,25 +49,44 @@ class SearchTile extends StatelessWidget {
         ),
         trailing: Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
-          child: OutlinedButton(
-            onPressed: () {
-              _controller.toggleFollowing(index);
-            },
-            child: FutureBuilder<bool>(
+          child: FutureBuilder<bool>(
               future:
                   _profileRepo.isFollowing(profileModel.id, _controller.token!),
               builder: (context, snap) {
-                return Text(
-                  snap.hasData
-                      ? snap.data!
-                          ? "Following"
-                          : "Follow"
-                      : "",
-                  style: style.caption,
+                return OutlinedButton(
+                  onPressed: () {
+                    Get.dialog(AlertDialog(
+                      title: snap.data!
+                          ? const Text("Do you wish to unfollow?")
+                          : const Text("Do you wish to follow?"),
+                      actionsAlignment: MainAxisAlignment.spaceAround,
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: const Text("Cancel")),
+                        MaterialButton(
+                          onPressed: () {
+                            Get.back();
+                            _controller.toggleFollowing(index);
+                          },
+                          child: const Text("Confirm"),
+                          color: AppColors.buttonColor,
+                        ),
+                      ],
+                    ));
+                  },
+                  child: Text(
+                    snap.hasData
+                        ? snap.data!
+                            ? "Following"
+                            : "Follow"
+                        : "",
+                    style: style.caption,
+                  ),
                 );
-              },
-            ),
-          ),
+              }),
         ),
       );
     });

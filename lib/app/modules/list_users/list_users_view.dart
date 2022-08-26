@@ -14,6 +14,7 @@ import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import '../../../utils/colors.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../edit_profile/views/edit_profile_view.dart';
@@ -113,25 +114,46 @@ class ListUsersView extends StatelessWidget {
                       ),
                       trailing: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: OutlinedButton(
-                          onPressed: () {
-                            _controller
-                                .toggleFollowing(snapshot.data![index].id);
-                          },
-                          child: FutureBuilder<bool>(
-                            future: _profileRepo.isFollowing(
-                                snapshot.data![index].id, _controller.token!),
-                            builder: (context, snap) {
-                              return Text(
+                        child: FutureBuilder<bool>(
+                          future: _profileRepo.isFollowing(
+                              snapshot.data![index].id, _controller.token!),
+                          builder: (context, snap) {
+                            return OutlinedButton(
+                              onPressed: () {
+                                Get.dialog(AlertDialog(
+                                  title: snap.data!
+                                      ? const Text("Do you wish to unfollow?")
+                                      : const Text("Do you wish to follow?"),
+                                  actionsAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: const Text("Cancel")),
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        _controller.toggleFollowing(
+                                            snapshot.data![index].id);
+                                      },
+                                      child: const Text("Confirm"),
+                                      color: AppColors.buttonColor,
+                                    ),
+                                  ],
+                                ));
+                              },
+                              child: Text(
                                 snap.hasData
                                     ? snap.data!
                                         ? "Following"
                                         : "Follow"
                                     : "",
                                 style: style.caption,
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );
@@ -186,25 +208,46 @@ class ListUsersView extends StatelessWidget {
                       ),
                       trailing: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: OutlinedButton(
-                          onPressed: () {
-                            _controller
-                                .toggleFollowing(snapshot.data![index].id);
-                          },
-                          child: FutureBuilder<bool>(
-                            future: _profileRepo.isFollowing(
-                                snapshot.data![index].id, _controller.token!),
-                            builder: (context, snap) {
-                              return Text(
+                        child: FutureBuilder<bool>(
+                          future: _profileRepo.isFollowing(
+                              snapshot.data![index].id, _controller.token!),
+                          builder: (context, snap) {
+                            return OutlinedButton(
+                              onPressed: () {
+                                Get.dialog(AlertDialog(
+                                  title: snap.data!
+                                      ? const Text("Do you wish to unfollow?")
+                                      : const Text("Do you wish to follow?"),
+                                  actionsAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: const Text("Cancel")),
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        _controller.toggleFollowing(
+                                            snapshot.data![index].id);
+                                      },
+                                      child: const Text("Confirm"),
+                                      color: AppColors.buttonColor,
+                                    ),
+                                  ],
+                                ));
+                              },
+                              child: Text(
                                 snap.hasData
                                     ? snap.data!
                                         ? "Following"
                                         : "Follow"
                                     : "",
                                 style: style.caption,
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );

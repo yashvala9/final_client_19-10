@@ -13,6 +13,7 @@ import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
+import '../../../utils/colors.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
@@ -184,9 +185,38 @@ class ProfileDetail extends StatelessWidget {
                                                                     OutlinedButton(
                                                                   onPressed:
                                                                       () {
-                                                                    _controller
-                                                                        .toggleFollowing(
-                                                                            index);
+                                                                    Get.dialog(
+                                                                        AlertDialog(
+                                                                      title: snapshot
+                                                                              .data!
+                                                                          ? const Text(
+                                                                              "Do you wish to unfollow?")
+                                                                          : const Text(
+                                                                              "Do you wish to follow?"),
+                                                                      actionsAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceAround,
+                                                                      actions: [
+                                                                        TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                            },
+                                                                            child:
+                                                                                const Text("Cancel")),
+                                                                        MaterialButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Get.back();
+                                                                            _controller.toggleFollowing(index);
+                                                                          },
+                                                                          child:
+                                                                              const Text("Confirm"),
+                                                                          color:
+                                                                              AppColors.buttonColor,
+                                                                        ),
+                                                                      ],
+                                                                    ));
                                                                   },
                                                                   style: OutlinedButton
                                                                       .styleFrom(
@@ -244,9 +274,32 @@ class ProfileDetail extends StatelessWidget {
                                                                         "Follow",
                                                                     onPressed:
                                                                         () {
-                                                                      _controller
-                                                                          .toggleFollowing(
-                                                                              index);
+                                                                      Get.dialog(
+                                                                          AlertDialog(
+                                                                        title: snapshot.data!
+                                                                            ? const Text("Do you wish to unfollow?")
+                                                                            : const Text("Do you wish to follow?"),
+                                                                        actionsAlignment:
+                                                                            MainAxisAlignment.spaceAround,
+                                                                        actions: [
+                                                                          TextButton(
+                                                                              onPressed: () {
+                                                                                Get.back();
+                                                                              },
+                                                                              child: const Text("Cancel")),
+                                                                          MaterialButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                              _controller.toggleFollowing(index);
+                                                                            },
+                                                                            child:
+                                                                                const Text("Confirm"),
+                                                                            color:
+                                                                                AppColors.buttonColor,
+                                                                          ),
+                                                                        ],
+                                                                      ));
                                                                     },
                                                                     height: 30,
                                                                     style: style
