@@ -16,6 +16,7 @@ import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
 import '../utils/base.dart';
+import '../utils/colors.dart';
 
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({Key? key}) : super(key: key);
@@ -74,9 +75,39 @@ class NotificationScreen extends StatelessWidget {
                                                 ? snap.data!
                                                     ? OutlinedButton(
                                                         onPressed: () {
-                                                          _controller
-                                                              .toggleFollowing(e
-                                                                  .data.userId);
+                                                          Get.dialog(
+                                                              AlertDialog(
+                                                            title: snap.data!
+                                                                ? const Text(
+                                                                    "Do you wish to unfollow?")
+                                                                : const Text(
+                                                                    "Do you wish to follow?"),
+                                                            actionsAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Get.back();
+                                                                  },
+                                                                  child: const Text(
+                                                                      "Cancel")),
+                                                              MaterialButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                  _controller
+                                                                      .toggleFollowing(e
+                                                                          .data
+                                                                          .userId);
+                                                                },
+                                                                child: const Text(
+                                                                    "Confirm"),
+                                                                color: AppColors
+                                                                    .buttonColor,
+                                                              ),
+                                                            ],
+                                                          ));
                                                         },
                                                         child: Text(
                                                           "Following",
@@ -85,9 +116,39 @@ class NotificationScreen extends StatelessWidget {
                                                       )
                                                     : MaterialButton(
                                                         onPressed: () {
-                                                          _controller
-                                                              .toggleFollowing(e
-                                                                  .data.userId);
+                                                          Get.dialog(
+                                                              AlertDialog(
+                                                            title: snap.data!
+                                                                ? const Text(
+                                                                    "Do you wish to unfollow?")
+                                                                : const Text(
+                                                                    "Do you wish to follow?"),
+                                                            actionsAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Get.back();
+                                                                  },
+                                                                  child: const Text(
+                                                                      "Cancel")),
+                                                              MaterialButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                  _controller
+                                                                      .toggleFollowing(e
+                                                                          .data
+                                                                          .userId);
+                                                                },
+                                                                child: const Text(
+                                                                    "Confirm"),
+                                                                color: AppColors
+                                                                    .buttonColor,
+                                                              ),
+                                                            ],
+                                                          ));
                                                         },
                                                         color:
                                                             colorSchema.primary,

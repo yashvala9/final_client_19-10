@@ -202,6 +202,23 @@ class ProfileRepository {
     }
   }
 
+  Future<String> getThumbnail(String url) async {
+    final response = await http.get(
+      Uri.parse(url.replaceAll("0000000", "0000001")),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        // HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+
+    print('2121 ${response.statusCode}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return url.replaceAll("0000000", "0000001");
+    } else {
+      return url;
+    }
+  }
+
   Future<List<AdsHistoryModel>> getAdsHistoryByProfileId(
       int profileId, String token,
       {int limit = 15, skip = 0}) async {
