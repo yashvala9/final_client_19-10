@@ -45,7 +45,8 @@ class SearchController extends GetxController {
   }
 
   List<ProfileModel> _searchProfiles = [];
-  List<ProfileModel> get searchProfiles => _searchProfiles.where((element) => element.id != profileId).toList();
+  List<ProfileModel> get searchProfiles =>
+      _searchProfiles.where((element) => element.id != profileId).toList();
   set searchProfiles(List<ProfileModel> searchProfiles) {
     _searchProfiles = searchProfiles;
     update();
@@ -55,6 +56,10 @@ class SearchController extends GetxController {
   List<ReelModel> get searchReels => _searchReels;
   set searchReels(List<ReelModel> searchReels) {
     _searchReels = searchReels;
+    update();
+  }
+
+  void updateMannual() {
     update();
   }
 

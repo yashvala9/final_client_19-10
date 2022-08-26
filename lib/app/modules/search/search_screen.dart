@@ -22,33 +22,33 @@ import '../profile/profile_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'widget/search_tag_tile.dart';
 
-// class Debouncer {
-//   final int milliseconds;
-//   Timer? _timer;
+class Debouncer {
+  final int milliseconds;
+  Timer? _timer;
 
-//   Debouncer({required this.milliseconds});
+  Debouncer({required this.milliseconds});
 
-//   run(VoidCallback action) {
-//     _timer?.cancel();
-//     _timer = Timer(Duration(milliseconds: milliseconds), action);
-//   }
-// }
+  run(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
 
 final _controller = Get.put(SearchController());
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
   final _reelRepo = Get.put(ReelRepository());
-  final _profileRepo = Get.find<ProfileRepository>();
 
   // final searchTextController = TextEditingController();
-  // final _debounce = Debouncer(milliseconds: 500);
+  final _debounce = Debouncer(milliseconds: 500);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     final colorSchema = theme.colorScheme;
     return Scaffold(
+      backgroundColor: Colors.black87,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -63,6 +63,7 @@ class SearchScreen extends StatelessWidget {
                   "Search",
                   style: style.titleMedium!.copyWith(
                     fontWeight: FontWeight.w500,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -71,34 +72,53 @@ class SearchScreen extends StatelessWidget {
               ),
               const Divider(
                 thickness: 1,
+                color: Colors.white,
               ),
               const SizedBox(
                 height: 8,
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search), hintText: "Search here..."),
-                // controller: searchTextController,
-                onFieldSubmitted: (value) {
-                  // _debounce.run(() {
-                  if (value.trim().isEmpty) {
-                    showSnackBar("Search is empty", color: Colors.red);
-                    return;
-                  }
-                  if (value.startsWith('#')) {
-                    value.replaceAll('#', '');
-                    Get.to(SearchHashTags(
-                      hashTag: value.trim(),
-                    ));
-                  } else {
-                    Get.to(
-                      () => SearchUsers(
-                        username: value.trim(),
-                      ),
-                    );
-                  }
-                  // });
-                },
+              Hero(
+                tag: 'search',
+                child: Material(
+                  color: Colors.transparent,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.grey.shade600,
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.white),
+                        hintText: "Search here...",
+                        hintStyle: const TextStyle(
+                          color: Colors.white,
+                        )),
+                    onTap: () {
+                      Get.to(
+                        () => SearchUsers(username: ""),
+                      );
+                    },
+                    // controller: searchTextController,
+                    onFieldSubmitted: (value) {
+                      // _debounce.run(() {
+                      //   if (value.trim().isEmpty) {
+                      //     showSnackBar("Search is empty", color: Colors.red);
+                      //     return;
+                      //   }
+                      //   if (value.startsWith('#')) {
+                      //     value.replaceAll('#', '');
+                      //     Get.to(SearchHashTags(
+                      //       hashTag: value.trim(),
+                      //     ));
+                      //   } else {
+                      //     Get.to(
+                      //       () => SearchUsers(
+                      //         username: value.trim(),
+                      //       ),
+                      //     );
+                      //   }
+                      // });
+                    },
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 8,
@@ -144,41 +164,15 @@ class SearchScreen extends StatelessWidget {
                           }
                         }
                         return GestureDetector(
-                            onTap: () {
-                              Get.to(SingleFeedScreen(reels, index));
-                            },
-                            child: FutureBuilder<String>(
-                              future: _profileRepo
-                                  .getThumbnail(reels[index].thumbnail),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                }
-
-                                return CachedNetworkImage(
-                                  key: UniqueKey(),
-                                  placeholder: (context, url) {
-                                    return IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(Icons.refresh_rounded));
-                                  },
-                                  errorWidget: (_, a, b) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Loading(),
-                                      // Text("Processing..."),
-                                    );
-                                  },
-                                  imageUrl: snapshot.data!,
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ));
+                          onTap: () {
+                            Get.to(SingleFeedScreen(reels, index));
+                          },
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => Loading(),
+                            imageUrl: reels[index].thumbnail,
+                            fit: BoxFit.cover,
+                          ),
+                        );
                       },
                     );
                   })
@@ -192,57 +186,94 @@ class SearchScreen extends StatelessWidget {
 
 class SearchUsers extends StatelessWidget {
   final String username;
-  const SearchUsers({Key? key, required this.username}) : super(key: key);
-
+  SearchUsers({Key? key, required this.username}) : super(key: key);
+  final _debounce = Debouncer(milliseconds: 500);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    _controller.searchUser(username);
-    return GetBuilder<SearchController>(
-      builder: (_) => SafeArea(
-        child: Scaffold(
-            body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                ),
-                child: Text(
-                  "Search",
-                  style: style.titleMedium!.copyWith(
-                    fontWeight: FontWeight.w500,
+    return WillPopScope(
+      onWillPop: () async {
+        _controller.searchProfiles.clear();
+        return true;
+      },
+      child: GetBuilder<SearchController>(
+        builder: (_) => SafeArea(
+          child: Scaffold(
+              body: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                  ),
+                  child: Text(
+                    "Search",
+                    style: style.titleMedium!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Divider(
-                thickness: 1,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Expanded(
-                child: _controller.loading
-                    ? const Loading()
-                    : _controller.searchProfiles.isEmpty
-                        ? const EmptyWidget("No details found")
-                        : ListView(
-                            shrinkWrap: true,
-                            children: List.generate(
-                              _controller.searchProfiles.length,
-                              (index) => SearchTile(index: index),
-                            ).toList(),
-                          ),
-              )
-            ],
-          ),
-        )),
+                const SizedBox(
+                  height: 8,
+                ),
+                Hero(
+                  tag: 'search',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: TextFormField(
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: "Search here...",
+                      ),
+
+                      // controller: searchTextController,
+                      onChanged: (value) {
+                        _debounce.run(() {
+                          if (value.startsWith('#')) {
+                            value.replaceAll('#', '');
+                            // Get.to(SearchHashTags(
+                            //   hashTag: value.trim(),
+                            // ));
+
+                            _controller.getReelsByHashTag(value);
+                          } else {
+                            _controller.searchUser(value);
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Divider(
+                  thickness: 1,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Expanded(
+                  child: _controller.loading
+                      ? const Loading()
+                      : _controller.searchProfiles.isEmpty
+                          ? const EmptyWidget("No details found")
+                          : ListView(
+                              shrinkWrap: true,
+                              children: List.generate(
+                                _controller.searchProfiles.length,
+                                (index) => SearchTile(index: index),
+                              ).toList(),
+                            ),
+                )
+              ],
+            ),
+          )),
+        ),
       ),
     );
   }
