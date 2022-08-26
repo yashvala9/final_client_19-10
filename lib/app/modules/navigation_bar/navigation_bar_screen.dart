@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
+import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
 import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
 
@@ -12,6 +13,7 @@ class NavigationBarScreen extends StatelessWidget {
   NavigationBarScreen({Key? key}) : super(key: key);
 
   final NavigationBarController controller = Get.put(NavigationBarController());
+  var homepage = HomePageScreen();
 
   buildBottomNavigationMenu(context) {
     // controller.changeTabIndex(0);
@@ -31,7 +33,16 @@ class NavigationBarScreen extends StatelessWidget {
                   IconButton(
                     enableFeedback: false,
                     onPressed: () {
-                      controller.changeTabIndex(0);
+                      if (controller.tabIndex.value != 0) {
+                        controller.changeTabIndex(0);
+                      } else {
+                        if (homepage.pageController.page != 0) {
+                          homepage.moveNextReel(0);
+                        } else {
+                          homepage.controller.getFeeds();
+                          homepage.controller.update();
+                        }
+                      }
                     },
                     icon: controller.tabIndex.value == 0
                         ? const Icon(
@@ -160,16 +171,18 @@ class NavigationBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      bottomNavigationBar: buildBottomNavigationMenu(context),
-      body: Obx(
-        () => [
-          HomePageScreen(),
-          SearchScreen(),
-          GiveawayView(),
-          const InboxScreen(),
-          ProfileScreen(),
-        ][controller.tabIndex.value],
-      ),
-    ));
+            bottomNavigationBar: buildBottomNavigationMenu(context),
+            body: Obx(
+              () => IndexedStack(
+                children: <Widget>[
+                  homepage,
+                  SearchScreen(),
+                  GiveawayView(),
+                  const InboxScreen(),
+                  ProfileScreen(),
+                ],
+                index: controller.tabIndex.value,
+              ),
+            )));
   }
 }

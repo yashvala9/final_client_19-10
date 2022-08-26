@@ -9,6 +9,7 @@ import 'package:reel_ro/services/auth_service.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
+import '../../../utils/colors.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../list_users/list_users_view.dart';
 import '../single_feed/single_feed_screen.dart';
@@ -156,11 +157,39 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                     ),
                                                     child: OutlinedButton(
                                                       onPressed: () {
-                                                        toggleFollowing(
-                                                            widget.profileModel
-                                                                .id,
-                                                            _authService
-                                                                .token!);
+                                                        Get.dialog(AlertDialog(
+                                                          title: snapshot.data!
+                                                              ? const Text(
+                                                                  "Do you wish to unfollow?")
+                                                              : const Text(
+                                                                  "Do you wish to follow?"),
+                                                          actionsAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Get.back();
+                                                                },
+                                                                child: const Text(
+                                                                    "Cancel")),
+                                                            MaterialButton(
+                                                              onPressed: () {
+                                                                Get.back();
+                                                                toggleFollowing(
+                                                                    widget
+                                                                        .profileModel
+                                                                        .id,
+                                                                    _authService
+                                                                        .token!);
+                                                              },
+                                                              child: const Text(
+                                                                  "Confirm"),
+                                                              color: AppColors
+                                                                  .buttonColor,
+                                                            ),
+                                                          ],
+                                                        ));
                                                       },
                                                       style: OutlinedButton
                                                           .styleFrom(
@@ -190,12 +219,36 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                               buttonText:
                                                                   "Follow",
                                                               onPressed: () {
-                                                                toggleFollowing(
-                                                                    widget
-                                                                        .profileModel
-                                                                        .id,
-                                                                    _authService
-                                                                        .token!);
+                                                                Get.dialog(
+                                                                    AlertDialog(
+                                                                  title: const Text(
+                                                                      "Do you wish to follow?"),
+                                                                  actionsAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceAround,
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.back();
+                                                                        },
+                                                                        child: const Text(
+                                                                            "Cancel")),
+                                                                    MaterialButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back();
+                                                                        toggleFollowing(
+                                                                            widget.profileModel.id,
+                                                                            _authService.token!);
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Confirm"),
+                                                                      color: AppColors
+                                                                          .buttonColor,
+                                                                    ),
+                                                                  ],
+                                                                ));
                                                               },
                                                               height: 30,
                                                               style: style

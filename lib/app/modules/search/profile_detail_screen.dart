@@ -13,6 +13,7 @@ import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
+import '../../../utils/colors.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
@@ -33,6 +34,19 @@ class ProfileDetail extends StatelessWidget {
     return DefaultTabController(
       length: _controller.searchProfiles[index].status == 'VERIFIED' ? 2 : 1,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black54,
+            ),
+            onPressed: () async {
+              Get.back();
+            },
+          ),
+        ),
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
         body: NestedScrollView(
@@ -171,9 +185,38 @@ class ProfileDetail extends StatelessWidget {
                                                                     OutlinedButton(
                                                                   onPressed:
                                                                       () {
-                                                                    _controller
-                                                                        .toggleFollowing(
-                                                                            index);
+                                                                    Get.dialog(
+                                                                        AlertDialog(
+                                                                      title: snapshot
+                                                                              .data!
+                                                                          ? const Text(
+                                                                              "Do you wish to unfollow?")
+                                                                          : const Text(
+                                                                              "Do you wish to follow?"),
+                                                                      actionsAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceAround,
+                                                                      actions: [
+                                                                        TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                            },
+                                                                            child:
+                                                                                const Text("Cancel")),
+                                                                        MaterialButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Get.back();
+                                                                            _controller.toggleFollowing(index);
+                                                                          },
+                                                                          child:
+                                                                              const Text("Confirm"),
+                                                                          color:
+                                                                              AppColors.buttonColor,
+                                                                        ),
+                                                                      ],
+                                                                    ));
                                                                   },
                                                                   style: OutlinedButton
                                                                       .styleFrom(
@@ -231,9 +274,32 @@ class ProfileDetail extends StatelessWidget {
                                                                         "Follow",
                                                                     onPressed:
                                                                         () {
-                                                                      _controller
-                                                                          .toggleFollowing(
-                                                                              index);
+                                                                      Get.dialog(
+                                                                          AlertDialog(
+                                                                        title: snapshot.data!
+                                                                            ? const Text("Do you wish to unfollow?")
+                                                                            : const Text("Do you wish to follow?"),
+                                                                        actionsAlignment:
+                                                                            MainAxisAlignment.spaceAround,
+                                                                        actions: [
+                                                                          TextButton(
+                                                                              onPressed: () {
+                                                                                Get.back();
+                                                                              },
+                                                                              child: const Text("Cancel")),
+                                                                          MaterialButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                              _controller.toggleFollowing(index);
+                                                                            },
+                                                                            child:
+                                                                                const Text("Confirm"),
+                                                                            color:
+                                                                                AppColors.buttonColor,
+                                                                          ),
+                                                                        ],
+                                                                      ));
                                                                     },
                                                                     height: 30,
                                                                     style: style
@@ -474,18 +540,48 @@ class ProfileReel extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () {
-                  Get.to(SingleFeedScreen(reels, index));
-                },
-                child: CachedNetworkImage(
-                  imageUrl: reels[index].thumbnail,
-                  errorWidget: (context, a, b) => const Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              );
+                  onTap: () {
+                    Get.to(SingleFeedScreen(reels, index));
+                  },
+                  child: FutureBuilder<String>(
+                    future: _profileRepo.getThumbnail(reels[index].thumbnail),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      return CachedNetworkImage(
+                        key: UniqueKey(),
+                        placeholder: (context, url) {
+                          return IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.refresh_rounded));
+                        },
+                        errorWidget: (_, a, b) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text("Processing..."),
+                          );
+                        },
+                        imageUrl: snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )
+                  // CachedNetworkImage(
+                  //     imageUrl: reels[index].thumbnail,
+                  //     errorWidget: (context, a, b) => const Icon(
+                  //       Icons.error,
+                  //       color: Colors.red,
+                  //     ),
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  );
             },
           );
         });

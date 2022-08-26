@@ -69,28 +69,60 @@ class AdsHistoryView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     log("Add Tumb: ${ads[index].ads.thumbnail}");
                     return GestureDetector(
-                      onTap: () {
-                        Get.to(SingleFeedScreen(
-                            ads
-                                .map((e) => ReelModel(
-                                    id: e.ads.id,
-                                    video_title: e.ads.video_title,
-                                    description: e.ads.description,
-                                    filename: e.ads.filename,
-                                    media_ext: e.ads.media_ext,
-                                    thumbnail:
-                                        'https://reelro-vod-destinationbucket.s3.ap-south-1.amazonaws.com/reel/21/20220804/reel_21_20220804_1659621685252_video-21.mp4/Thumbnails/reel_21_20220804_1659621685252_video-21.0000000.jpg',
-                                    filepath: e.ads.filepath,
-                                    user: e.ads.user))
-                                .toList(),
-                            0));
-                      },
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => Loading(),
-                        imageUrl: ads[index].ads.thumbnail,
-                        fit: BoxFit.cover,
-                      ),
-                    );
+                        onTap: () {
+                          Get.to(SingleFeedScreen(
+                              ads
+                                  .map((e) => ReelModel(
+                                      id: e.ads.id,
+                                      video_title: e.ads.video_title,
+                                      description: e.ads.description,
+                                      filename: e.ads.filename,
+                                      media_ext: e.ads.media_ext,
+                                      thumbnail: e.ads.thumbnail,
+                                      filepath: e.ads.filepath,
+                                      user: e.ads.user))
+                                  .toList(),
+                              0));
+                        },
+                        child: FutureBuilder<String>(
+                          future: _profileRepo
+                              .getThumbnail(ads[index].ads.thumbnail),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
+                            return CachedNetworkImage(
+                              key: UniqueKey(),
+                              placeholder: (context, url) {
+                                return IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.refresh_rounded));
+                              },
+                              errorWidget: (_, a, b) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Loading(),
+                                  // Text("Processing..."),
+                                );
+                              },
+                              imageUrl: snapshot.data!,
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
+
+                        // CachedNetworkImage(
+                        //   placeholder: (context, url) => Loading(),
+                        //   imageUrl: ads[index].ads.thumbnail,
+                        //   fit: BoxFit.cover,
+                        // ),
+                        );
                   },
                 );
               })),

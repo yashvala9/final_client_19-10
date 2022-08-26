@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
+import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -18,6 +19,7 @@ class VideoPlayerItem extends StatefulWidget {
   final int videoId;
   final VoidCallback doubleTap;
   final VoidCallback swipeRight;
+  final VoidCallback updatePoints;
   final bool showLike;
   final bool isReel;
   const VideoPlayerItem({
@@ -26,6 +28,7 @@ class VideoPlayerItem extends StatefulWidget {
     required this.videoId,
     required this.doubleTap,
     required this.swipeRight,
+    required this.updatePoints,
     required this.isReel,
     this.showLike = false,
   }) : super(key: key);
@@ -38,6 +41,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   late VideoPlayerController videoPlayerController;
   final _authService = Get.find<AuthService>();
   final _reelRepo = Get.find<ReelRepository>();
+  int updated = 0;
 
   String? get token => _authService.token;
 
@@ -46,7 +50,10 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     super.initState();
     Wakelock.enable();
-    videoPlayerController = VideoPlayerController.network(widget.videoUrl)
+    videoPlayerController = VideoPlayerController.network(
+      widget.videoUrl,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    )
 
       // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
@@ -54,6 +61,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);
+
         Wakelock.enable();
       });
   }
@@ -65,26 +73,30 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     videoPlayerController.dispose();
   }
 
+  void updateEntryPoints(int seconds) {
+    if (widget.isReel) {
+      _reelRepo.updateReelHistory(seconds, widget.videoId, token!);
+    } else {
+      _reelRepo.updateAdsHistory(seconds, widget.videoId, token!);
+      widget.updatePoints();
+    }
+    updated = seconds;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     videoPlayerController.addListener(() async {
-      if (videoPlayerController.value.duration.inSeconds - 1 <=
-          videoPlayerController.value.position.inSeconds) {
-        //checking the duration and position every time
-        //Video Completed//
+      if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0 ||
+              videoPlayerController.value.duration.inSeconds - 1 <=
+                  videoPlayerController.value.position.inSeconds) &&
+          videoPlayerController.value.position.inSeconds != 0 &&
+          updated != videoPlayerController.value.position.inSeconds) {
+        //checking the duration and position every time Video Completed
         print(
-            'video ended 121212 ${videoPlayerController.value.position.inSeconds}');
-        widget.isReel
-            ? await _reelRepo.updateReelHistory(
-                videoPlayerController.value.position.inSeconds,
-                widget.videoId,
-                token!)
-            : await _reelRepo.updateAdsHistory(
-                videoPlayerController.value.position.inSeconds,
-                widget.videoId,
-                token!);
+            'history updated 1212121 $updated ${videoPlayerController.value.position.inSeconds}');
+        updateEntryPoints(videoPlayerController.value.position.inSeconds);
       }
     });
 
@@ -109,19 +121,16 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                   },
                   onTap: () {
                     if (videoPlayerController.value.isPlaying) {
-                      videoPlayerController.pause().then((_) async {
-                        print(
-                            'video paused 1 121212 ${videoPlayerController.value.position.inSeconds}');
-                        widget.isReel
-                            ? await _reelRepo.updateReelHistory(
-                                videoPlayerController.value.position.inSeconds,
-                                widget.videoId,
-                                token!)
-                            : await _reelRepo.updateAdsHistory(
-                                videoPlayerController.value.position.inSeconds,
-                                widget.videoId,
-                                token!);
-                      });
+                      videoPlayerController.pause();
+                      // .then((_) async {
+                      //   if (updated !=
+                      //       videoPlayerController.value.position.inSeconds) {
+                      //     print(
+                      //         'video paused 1 1212121 ${videoPlayerController.value.position.inSeconds}');
+                      //     await updateEntryPoints(
+                      //         videoPlayerController.value.position.inSeconds);
+                      //   }
+                      // });
 
                       Wakelock.disable();
                       isManualPause = true;
@@ -135,21 +144,16 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                     key: Key(DateTime.now().toString()),
                     onVisibilityChanged: (VisibilityInfo info) {
                       if (info.visibleFraction == 0 && !isManualPause) {
-                        videoPlayerController.pause().then((_) async {
-                          print(
-                              'video paused 2 121212 ${videoPlayerController.value.position.inSeconds}');
-                          widget.isReel
-                              ? await _reelRepo.updateReelHistory(
-                                  videoPlayerController
-                                      .value.position.inSeconds,
-                                  widget.videoId,
-                                  token!)
-                              : await _reelRepo.updateAdsHistory(
-                                  videoPlayerController
-                                      .value.position.inSeconds,
-                                  widget.videoId,
-                                  token!);
-                        });
+                        videoPlayerController.pause();
+                        // .then((_) async {
+                        //   if (updated !=
+                        //       videoPlayerController.value.position.inSeconds) {
+                        //     print(
+                        //         'video paused 2 1212121 ${videoPlayerController.value.position.inSeconds}');
+                        //     await updateEntryPoints(
+                        //         videoPlayerController.value.position.inSeconds);
+                        //   }
+                        // });
                         Wakelock.disable();
                       } else {
                         if (!isManualPause) {
@@ -163,10 +167,12 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                       children: <Widget>[
                         VideoPlayer(videoPlayerController),
                         if (!widget.isReel)
-                          VideoProgressIndicator(
-                            videoPlayerController,
-                            allowScrubbing: false,
-                          ),
+                          CustomVideoProgressIndicator(videoPlayerController,
+                              allowScrubbing: false),
+                        // VideoProgressIndicator(
+                        //   videoPlayerController,
+                        //   allowScrubbing: false,
+                        // ),
                       ],
                     ),
 

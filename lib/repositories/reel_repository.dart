@@ -384,43 +384,73 @@ class ReelRepository {
 
   Future<void> updateAdsHistory(
       int secondsWatched, int adId, String token) async {
-    // http://13.234.159.127/ads/history/1
+    try {
+      // http://13.234.159.127/ads/history/1
 
-    var map = {"time_duration": secondsWatched};
-    final response = await http.post(
-      Uri.parse('${Base.adsHistory}$adId'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-      body: jsonEncode(map),
-    );
-    if (response.statusCode == 201) {
-      return;
-    } else {
-      final body = jsonDecode(response.body);
-      return Future.error(body['detail']);
+      var map = {"time_duration": secondsWatched};
+      final response = await http.post(
+        Uri.parse('${Base.adsHistory}$adId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+        body: jsonEncode(map),
+      );
+      // print('212121 ${response.body}');
+      if (response.statusCode == 201) {
+        return;
+      } else {
+        final body = jsonDecode(response.body);
+        return Future.error(body['detail']);
+      }
+    } catch (e) {
+      // showSnackBar("Error updateAdsHistory $e");
+      printInfo(info: "updateAdsHistory.......");
+
+      return null;
     }
   }
 
   Future<void> updateReelHistory(
       int secondsWatched, int reelId, String token) async {
-    // /reels/history/51
+    try {
+      var map = {"time_duration": secondsWatched};
+      final response = await http.post(
+        Uri.parse('${Base.reelHistory}$reelId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+        body: jsonEncode(map),
+      );
+      print('212121 ${response.body}');
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return;
+      } else {
+        final body = jsonDecode(response.body);
+        return Future.error(body['detail']);
+      }
+    } catch (e) {
+      showSnackBar("Error updateReelHistory $e");
+      printInfo(info: "updateReelHistory.......");
 
-    var map = {"time_duration": secondsWatched};
-    final response = await http.post(
-      Uri.parse('${Base.reelHistory}$reelId'),
+      return null;
+    }
+  }
+
+  Future<bool> isActive(int userId, String token) async {
+    final response = await http.get(
+      Uri.parse('${Base.isActive}$userId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
-      body: jsonEncode(map),
     );
-    if (response.statusCode == 201) {
-      return;
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return (body == 'active');
     } else {
-      final body = jsonDecode(response.body);
-      return Future.error(body['detail']);
+      return false;
     }
   }
 }
