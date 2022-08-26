@@ -48,6 +48,7 @@ class SearchScreen extends StatelessWidget {
     final style = theme.textTheme;
     final colorSchema = theme.colorScheme;
     return Scaffold(
+      backgroundColor: Colors.black87,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -62,6 +63,7 @@ class SearchScreen extends StatelessWidget {
                   "Search",
                   style: style.titleMedium!.copyWith(
                     fontWeight: FontWeight.w500,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -70,34 +72,53 @@ class SearchScreen extends StatelessWidget {
               ),
               const Divider(
                 thickness: 1,
+                color: Colors.white,
               ),
               const SizedBox(
                 height: 8,
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search), hintText: "Search here..."),
-                // controller: searchTextController,
-                onFieldSubmitted: (value) {
-                  _debounce.run(() {
-                    if (value.trim().isEmpty) {
-                      showSnackBar("Search is empty", color: Colors.red);
-                      return;
-                    }
-                    if (value.startsWith('#')) {
-                      value.replaceAll('#', '');
-                      Get.to(SearchHashTags(
-                        hashTag: value.trim(),
-                      ));
-                    } else {
+              Hero(
+                tag: 'search',
+                child: Material(
+                  color: Colors.transparent,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.grey.shade600,
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.white),
+                        hintText: "Search here...",
+                        hintStyle: const TextStyle(
+                          color: Colors.white,
+                        )),
+                    onTap: () {
                       Get.to(
-                        () => SearchUsers(
-                          username: value.trim(),
-                        ),
+                        () => SearchUsers(username: ""),
                       );
-                    }
-                  });
-                },
+                    },
+                    // controller: searchTextController,
+                    onFieldSubmitted: (value) {
+                      // _debounce.run(() {
+                      //   if (value.trim().isEmpty) {
+                      //     showSnackBar("Search is empty", color: Colors.red);
+                      //     return;
+                      //   }
+                      //   if (value.startsWith('#')) {
+                      //     value.replaceAll('#', '');
+                      //     Get.to(SearchHashTags(
+                      //       hashTag: value.trim(),
+                      //     ));
+                      //   } else {
+                      //     Get.to(
+                      //       () => SearchUsers(
+                      //         username: value.trim(),
+                      //       ),
+                      //     );
+                      //   }
+                      // });
+                    },
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 8,
@@ -165,57 +186,94 @@ class SearchScreen extends StatelessWidget {
 
 class SearchUsers extends StatelessWidget {
   final String username;
-  const SearchUsers({Key? key, required this.username}) : super(key: key);
-
+  SearchUsers({Key? key, required this.username}) : super(key: key);
+  final _debounce = Debouncer(milliseconds: 500);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    _controller.searchUser(username);
-    return GetBuilder<SearchController>(
-      builder: (_) => SafeArea(
-        child: Scaffold(
-            body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
-                ),
-                child: Text(
-                  "Search",
-                  style: style.titleMedium!.copyWith(
-                    fontWeight: FontWeight.w500,
+    return WillPopScope(
+      onWillPop: () async {
+        _controller.searchProfiles.clear();
+        return true;
+      },
+      child: GetBuilder<SearchController>(
+        builder: (_) => SafeArea(
+          child: Scaffold(
+              body: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                  ),
+                  child: Text(
+                    "Search",
+                    style: style.titleMedium!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Divider(
-                thickness: 1,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Expanded(
-                child: _controller.loading
-                    ? const Loading()
-                    : _controller.searchProfiles.isEmpty
-                        ? const EmptyWidget("No details found")
-                        : ListView(
-                            shrinkWrap: true,
-                            children: List.generate(
-                              _controller.searchProfiles.length,
-                              (index) => SearchTile(index: index),
-                            ).toList(),
-                          ),
-              )
-            ],
-          ),
-        )),
+                const SizedBox(
+                  height: 8,
+                ),
+                Hero(
+                  tag: 'search',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: TextFormField(
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: "Search here...",
+                      ),
+
+                      // controller: searchTextController,
+                      onChanged: (value) {
+                        _debounce.run(() {
+                          if (value.startsWith('#')) {
+                            value.replaceAll('#', '');
+                            // Get.to(SearchHashTags(
+                            //   hashTag: value.trim(),
+                            // ));
+
+                            _controller.getReelsByHashTag(value);
+                          } else {
+                            _controller.searchUser(value);
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Divider(
+                  thickness: 1,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Expanded(
+                  child: _controller.loading
+                      ? const Loading()
+                      : _controller.searchProfiles.isEmpty
+                          ? const EmptyWidget("No details found")
+                          : ListView(
+                              shrinkWrap: true,
+                              children: List.generate(
+                                _controller.searchProfiles.length,
+                                (index) => SearchTile(index: index),
+                              ).toList(),
+                            ),
+                )
+              ],
+            ),
+          )),
+        ),
       ),
     );
   }
