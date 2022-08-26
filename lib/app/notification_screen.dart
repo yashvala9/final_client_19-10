@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
@@ -34,15 +35,27 @@ class NotificationScreen extends StatelessWidget {
     final colorSchema = theme.colorScheme;
     return SafeArea(
       child: Scaffold(
+          backgroundColor: Colors.black87,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Colors.white,
+            leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: const Icon(
+                  Icons.chevron_left,
+                  color: Colors.white,
+                )),
+            backgroundColor: Colors.black,
             iconTheme: const IconThemeData(
               color: Colors.black,
             ),
             title: Text(
               "Notification",
-              style: style.titleMedium,
+              style: style.titleMedium!.copyWith(
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
             ),
           ),
           body: FutureBuilder<List<NotificationModel>>(
@@ -74,6 +87,11 @@ class NotificationScreen extends StatelessWidget {
                                             return snap.hasData
                                                 ? snap.data!
                                                     ? OutlinedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Colors.white54,
+                                                        ),
                                                         onPressed: () {
                                                           Get.dialog(
                                                               AlertDialog(
@@ -111,7 +129,10 @@ class NotificationScreen extends StatelessWidget {
                                                         },
                                                         child: Text(
                                                           "Following",
-                                                          style: style.caption,
+                                                          style: style.caption!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white),
                                                         ),
                                                       )
                                                     : MaterialButton(
@@ -194,9 +215,42 @@ class NotificationScreen extends StatelessWidget {
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(5),
-                                          child: Image.network(
-                                            reel.thumbnail,
-                                          ),
+                                          child: FutureBuilder<String>(
+                                            future: _profileRepo
+                                                .getThumbnail(reel.thumbnail),
+                                            builder: (context, snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return CircularProgressIndicator();
+                                              }
+
+                                              return CachedNetworkImage(
+                                                key: UniqueKey(),
+                                                placeholder: (context, url) {
+                                                  return IconButton(
+                                                      onPressed: () {},
+                                                      icon: Icon(Icons
+                                                          .refresh_rounded));
+                                                },
+                                                errorWidget: (_, a, b) {
+                                                  return Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(),
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    child: Loading(),
+                                                    // Text("Processing..."),
+                                                  );
+                                                },
+                                                imageUrl: snapshot.data!,
+                                                fit: BoxFit.cover,
+                                              );
+                                            },
+                                          )
+
+                                          //  Image.network(
+                                          //   reel.thumbnail,
+                                          // )
+                                          ,
                                         ),
                                       );
                                     },
@@ -207,12 +261,76 @@ class NotificationScreen extends StatelessWidget {
                                   title: e.title,
                                   subTile: e.body,
                                   userId: e.data.userId,
-                                  traiing: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: Image.network(
-                                      "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
-                                    ),
-                                  ));
+                                  traiing: FutureBuilder<ReelModel>(
+                                    future: _reelRepo.getSingleReel(
+                                        e.data.entityId, token!),
+                                    builder: (context, s) {
+                                      if (!s.hasData) {
+                                        log("single feed error: ${s.error}");
+                                        return const SizedBox();
+                                      }
+
+                                      var reel = s.data!;
+                                      log("tumbnail: ${reel.thumbnail}");
+                                      return InkWell(
+                                        onTap: () {
+                                          Get.to(() => SingleFeedScreen(
+                                                [reel],
+                                                0,
+                                                openComment: true,
+                                              ));
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: FutureBuilder<String>(
+                                            future: _profileRepo
+                                                .getThumbnail(reel.thumbnail),
+                                            builder: (context, snapshot) {
+                                              if (!snapshot.hasData) {
+                                                return CircularProgressIndicator();
+                                              }
+
+                                              return CachedNetworkImage(
+                                                key: UniqueKey(),
+                                                placeholder: (context, url) {
+                                                  return IconButton(
+                                                      onPressed: () {},
+                                                      icon: Icon(Icons
+                                                          .refresh_rounded));
+                                                },
+                                                errorWidget: (_, a, b) {
+                                                  return Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(),
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    child: Loading(),
+                                                    // Text("Processing..."),
+                                                  );
+                                                },
+                                                imageUrl: snapshot.data!,
+                                                fit: BoxFit.cover,
+                                              );
+                                            },
+                                          )
+
+                                          //  Image.network(
+                                          //   reel.thumbnail,
+                                          // )
+                                          ,
+                                        ),
+                                      );
+                                    },
+                                  )
+
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.circular(5),
+                                  //   child: Image.network(
+                                  //     "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                                  //   ),
+                                  // )
+                                  );
                             } else {
                               return NotificationTile(
                                   userId: e.data.userId,
@@ -398,6 +516,7 @@ class NotificationTile extends StatelessWidget {
         title: Text(
           title,
           style: style.titleMedium!.copyWith(
+            color: Colors.white,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -405,6 +524,9 @@ class NotificationTile extends StatelessWidget {
           subTile,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.white54,
+          ),
         ),
         trailing: traiing);
   }

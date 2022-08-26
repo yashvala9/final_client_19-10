@@ -77,4 +77,21 @@ class NotificationRepository {
       return Future.error(body['detail']);
     }
   }
+
+  Future<CommentModel> getReelByCommentId(int id, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getEntity}/comment/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    print('212121 ${response.body}');
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return CommentModel.fromMap(body);
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
 }

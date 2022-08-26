@@ -39,6 +39,7 @@ final _controller = Get.put(SearchController());
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
   final _reelRepo = Get.put(ReelRepository());
+  final _profileRepo = Get.find<ProfileRepository>();
 
   // final searchTextController = TextEditingController();
   final _debounce = Debouncer(milliseconds: 500);
@@ -50,35 +51,37 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black87,
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 16,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 16,
+                left: 8,
+                right: 8,
+              ),
+              child: Text(
+                "Search",
+                style: style.titleMedium!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
-                child: Text(
-                  "Search",
-                  style: style.titleMedium!.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Divider(
-                thickness: 1,
-                color: Colors.white,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Hero(
-                tag: 'search',
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Divider(
+              thickness: 1,
+              color: Colors.white,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Hero(
+              tag: 'search',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Material(
                   color: Colors.transparent,
                   child: TextFormField(
@@ -120,64 +123,102 @@ class SearchScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
-              FutureBuilder<List<ReelModel>>(
-                  future: _reelRepo.getFeedsWithAds(
-                      _controller.profileId!, _controller.token!,
-                      limit: 24, skip: 0),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      printInfo(info: "profileReels: ${snapshot.error}");
-                    }
-                    var reels = snapshot.data;
-                    if (reels!.isEmpty) {
-                      return const Center(
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            // FutureBuilder<List<ReelModel>>(
+            //     future: _reelRepo.getFeedsWithAds(
+            //         _controller.profileId!, _controller.token!,
+            //         limit: 10, skip: 0),
+            //     builder: (context, snapshot) {
+            //       if (!snapshot.hasData) {
+            //         return const Center(
+            //           child: CircularProgressIndicator(),
+            //         );
+            //       }
+            //       if (snapshot.hasError) {
+            //         printInfo(info: "profileReels: ${snapshot.error}");
+            //       }
+            //       var reels = snapshot.data;
+            //       if (reels!.isEmpty) {
+            //         return const Center(
+            //           child: Text("No reels available"),
+            //         );
+            //       }
+            // return
+
+            _controller.loading
+                ? const Center(child: CircularProgressIndicator())
+                : _controller.reelList.isEmpty
+                    ? const Center(
                         child: Text("No reels available"),
-                      );
-                    }
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: reels.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 1,
-                        crossAxisSpacing: 5,
-                        mainAxisSpacing: 5,
-                      ),
-                      itemBuilder: (context, index) {
-                        if (index == (reels.length - 3) &&
-                            !_controller.loadingMore) {
-                          _controller.getMoreFeed(reels.length);
-                          if (_controller.reelList.isNotEmpty) {
-                            reels.addAll(_controller.reelList);
-                            _controller.reelList.clear();
-                            _controller.update();
+                      )
+                    : GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _controller.reelList.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 5,
+                          mainAxisSpacing: 5,
+                        ),
+                        itemBuilder: (context, index) {
+                          if (index == (_controller.reelList.length - 1) &&
+                              !_controller.loadingMore) {
+                            _controller
+                                .getMoreFeed(_controller.reelList.length);
+                            // if (_controller.reelList.isNotEmpty) {
+                            //   reels.addAll(_controller.reelList);
+                            //   _controller.reelList.clear();
+                            //   _controller.update();
+                            // }
                           }
-                        }
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(SingleFeedScreen(reels, index));
-                          },
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => Loading(),
-                            imageUrl: reels[index].thumbnail,
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
-                    );
-                  })
-            ],
-          ),
+                          return GestureDetector(
+                              onTap: () {
+                                Get.to(SingleFeedScreen(
+                                    _controller.reelList, index));
+                              },
+                              child: FutureBuilder<String>(
+                                future: _profileRepo.getThumbnail(
+                                    _controller.reelList[index].thumbnail),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
+                                  return CachedNetworkImage(
+                                    key: UniqueKey(),
+                                    placeholder: (context, url) {
+                                      return IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(Icons.refresh_rounded));
+                                    },
+                                    errorWidget: (_, a, b) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(),
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Loading(),
+                                        // Text("Processing..."),
+                                      );
+                                    },
+                                    imageUrl: snapshot.data!,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ));
+                        },
+                      ),
+            _controller.loadingMore
+                ? const Center(child: CircularProgressIndicator())
+                : const SizedBox(),
+          ],
         ),
       ),
     );
