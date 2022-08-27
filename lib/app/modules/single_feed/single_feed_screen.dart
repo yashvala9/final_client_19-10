@@ -10,6 +10,7 @@ import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
@@ -22,15 +23,29 @@ import '../homepage/comment_screen.dart';
 import '../search/search_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
-  SingleFeedScreen(this.reels, this.currentIndex, {Key? key}) : super(key: key);
+  SingleFeedScreen(this.reels, this.currentIndex,
+      {this.openComment = false, Key? key})
+      : super(key: key);
 
   List<ReelModel>? reels;
   int currentIndex;
-
+  bool openComment;
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
   final _commentRepo = Get.put(CommentRepository());
   final _giveawayRepo = Get.put(GiveawayRepository());
+  void openCommentSheet() {
+    Get.bottomSheet(
+      CommentSheet(
+        reelId: reels![currentIndex].id,
+      ),
+      backgroundColor: Colors.white,
+    );
+  }
+
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +53,6 @@ class SingleFeedScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
-
     return GetBuilder<SingleFeedController>(
         builder: (_) => SafeArea(
               child: Scaffold(

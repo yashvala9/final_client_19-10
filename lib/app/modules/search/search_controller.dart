@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
@@ -27,7 +28,13 @@ class SearchController extends GetxController {
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 
-  bool loadingMore = false;
+  bool _loadingMore = false;
+  bool get loadingMore => _loadingMore;
+  set loadingMore(bool loadingMore) {
+    _loadingMore = loadingMore;
+    update();
+  }
+
   bool _loadMore = true;
 
   bool _loading = false;
@@ -65,7 +72,41 @@ class SearchController extends GetxController {
 
   @override
   void onInit() {
+    getFeeds();
     super.onInit();
+  }
+
+  void getFeeds() async {
+    loading = true;
+    try {
+      reelList = await _reelRepo.getFeedsWithAds(profileId!, token!,
+          limit: 10, skip: 0);
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
+    }
+    loading = false;
+    _loadMore = true;
+  }
+
+  void getMoreFeed(int currentLength) async {
+    loadingMore = true;
+    if (_loadMore) {
+      try {
+        var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
+            limit: 10, skip: currentLength);
+        if (newList.isEmpty) {
+          _loadMore = false;
+        } else {
+          reelList.addAll(newList);
+        }
+        update();
+      } catch (e) {
+        showSnackBar(e.toString(), color: Colors.red);
+        print("getFeeds: $e");
+      }
+    }
+    loadingMore = false;
   }
 
   void searchUser(String username) async {
@@ -108,25 +149,5 @@ class SearchController extends GetxController {
     } catch (e) {
       log("toggleFollowingError: $e");
     }
-  }
-
-  void getMoreFeed(int currentLength) async {
-    loadingMore = true;
-    if (_loadMore) {
-      try {
-        var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
-            limit: 10, skip: currentLength);
-        if (newList.isEmpty) {
-          _loadMore = false;
-        } else {
-          reelList.addAll(newList);
-        }
-        update();
-      } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
-      }
-    }
-    loadingMore = false;
   }
 }
