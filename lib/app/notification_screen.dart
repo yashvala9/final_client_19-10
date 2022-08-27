@@ -501,7 +501,12 @@ class NotificationTile extends StatelessWidget {
               return InkWell(
                 onTap: () {
                   Get.to(
-                    () => ProfileDetail(profileModel: profile),
+                    () => ProfileDetail(
+                      profileModel: profile,
+                      onBack: () {
+                        Get.back();
+                      },
+                    ),
                   );
                 },
                 child: CircleAvatar(

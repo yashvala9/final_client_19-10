@@ -87,7 +87,12 @@ class ListUsersView extends StatelessWidget {
                     return ListTile(
                       onTap: () {
                         Get.to(
-                          ProfileDetail(profileModel: snapshot.data![index]),
+                          ProfileDetail(
+                            profileModel: snapshot.data![index],
+                            onBack: () {
+                              Get.back();
+                            },
+                          ),
                         );
                       },
                       contentPadding: const EdgeInsets.symmetric(
@@ -181,7 +186,12 @@ class ListUsersView extends StatelessWidget {
                     return ListTile(
                       onTap: () {
                         Get.to(
-                          ProfileDetail(profileModel: snapshot.data![index]),
+                          ProfileDetail(
+                            profileModel: snapshot.data![index],
+                            onBack: () {
+                              Get.back();
+                            },
+                          ),
                         );
                       },
                       contentPadding: const EdgeInsets.symmetric(

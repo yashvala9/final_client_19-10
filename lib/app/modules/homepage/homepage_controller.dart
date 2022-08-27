@@ -22,6 +22,13 @@ class HomePageController extends GetxController {
   bool loadingMore = false;
   bool _loadMore = true;
 
+  int _secondPageIndex = 0;
+  int get secondPageIndex => _secondPageIndex;
+  set secondPageIndex(int secondPageIndex) {
+    _secondPageIndex = secondPageIndex;
+    update();
+  }
+
   bool _loading = false;
   bool get loading => _loading;
   set loading(bool loading) {
