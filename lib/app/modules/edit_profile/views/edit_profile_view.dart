@@ -189,8 +189,7 @@ class EditProfileView extends GetView<EditProfileController> {
                               style: style.labelLarge),
                           SizedBox(height: Get.height * 0.01),
                           TextFormField(
-                            enabled: false,
-                            // !_controller.loading,
+                            enabled: !_controller.loading,
                             decoration: InputDecoration(
                               hintText: _controller.profileModel.username,
                               prefixIcon: Icon(
@@ -203,11 +202,13 @@ class EditProfileView extends GetView<EditProfileController> {
                                   RegExp('[a-zA-Z0-9]')),
                             ],
                             keyboardType: TextInputType.name,
-                            // validator: (value) {
-                            //   return value!.isEmpty
-                            //       ? 'Username is required'
-                            //       : null;
-                            // },
+                            validator: (value) {
+                              return value!.isEmpty
+                                  ? 'Username is required'
+                                  : value.length > 12
+                                      ? "Username cannot be greater than 12 characters"
+                                      : null;
+                            },
                             onChanged: (v) => _controller.username = v,
                           ),
                           SizedBox(height: Get.height * 0.02),

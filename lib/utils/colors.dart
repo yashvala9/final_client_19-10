@@ -28,7 +28,7 @@ class AppColors {
   static const lightOrange = Color(0xffFF942C);
   static const yellowOrange = Color(0xffFBA800);
 
-  static const buttonGradiantColor = [Color(0xffFfffff), Color(0xffFDBA3C)];
+  static const buttonGradiantColor = [Color(0xffFDB62C), Color(0xffFDBA3C)];
 
   static const pokeGradiantColor = [Color(0xffFDB62C), Color(0xffFFD27B)];
   static const pokeDisabledGradiantColor = [

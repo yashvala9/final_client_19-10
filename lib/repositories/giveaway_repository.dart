@@ -164,7 +164,7 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-
+    print('212121 $body');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
     } else {

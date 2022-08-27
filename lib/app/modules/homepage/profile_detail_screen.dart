@@ -143,7 +143,7 @@ class ProfileDetail extends StatelessWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: style.headline6),
-                                                    subtitle: Text("Followings",
+                                                    subtitle: Text("Following",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:

@@ -11,6 +11,7 @@ class ReelModel {
   final String media_ext;
   final String thumbnail;
   final String filepath;
+  final String url;
   final ProfileModel user;
 
   ReelModel({
@@ -21,6 +22,7 @@ class ReelModel {
     required this.media_ext,
     required this.thumbnail,
     required this.filepath,
+    this.url = '',
     required this.user,
   });
 
@@ -32,16 +34,18 @@ class ReelModel {
     String? media_ext,
     String? thumbnail,
     String? filepath,
+    String? url,
     ProfileModel? user,
   }) {
     return ReelModel(
       id: id ?? this.id,
       video_title: video_title ?? this.video_title,
       description: description ?? this.description,
-      thumbnail: thumbnail ?? this.thumbnail,
-      filepath: filepath ?? this.filepath,
       filename: filename ?? this.filename,
       media_ext: media_ext ?? this.media_ext,
+      thumbnail: thumbnail ?? this.thumbnail,
+      filepath: filepath ?? this.filepath,
+      url: url ?? this.url,
       user: user ?? this.user,
     );
   }
@@ -55,6 +59,7 @@ class ReelModel {
       'media_ext': media_ext,
       'thumbnail': thumbnail,
       'filepath': filepath,
+      'url': url,
       'user': user.toMap(),
     };
   }
@@ -64,6 +69,7 @@ class ReelModel {
       id: map['id'] as int,
       video_title:
           map['video_title'] != null ? map['video_title'] as String : "",
+      url: map['url'] != null ? map['url'] as String : "",
       description: map['description'] as String,
       filename: map['filename'] as String,
       media_ext: map['media_ext'] as String,
@@ -80,7 +86,7 @@ class ReelModel {
 
   @override
   String toString() {
-    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filepath: $filepath, thumbnail: $thumbnail, filename: $filename, media_ext: $media_ext, user: $user)';
+    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, media_ext: $media_ext, thumbnail: $thumbnail, filepath: $filepath, url: $url, user: $user)';
   }
 
   @override
@@ -92,6 +98,9 @@ class ReelModel {
         other.description == description &&
         other.filename == filename &&
         other.media_ext == media_ext &&
+        other.thumbnail == thumbnail &&
+        other.filepath == filepath &&
+        other.url == url &&
         other.user == user;
   }
 
@@ -102,6 +111,9 @@ class ReelModel {
         description.hashCode ^
         filename.hashCode ^
         media_ext.hashCode ^
+        thumbnail.hashCode ^
+        filepath.hashCode ^
+        url.hashCode ^
         user.hashCode;
   }
 }

@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           style:
                                                               style.headline6),
                                                       subtitle: Text(
-                                                          "Followings",
+                                                          "Following",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: style

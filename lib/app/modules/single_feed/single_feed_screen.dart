@@ -35,17 +35,18 @@ class SingleFeedScreen extends StatelessWidget {
   final _commentRepo = Get.put(CommentRepository());
   final _giveawayRepo = Get.put(GiveawayRepository());
   void openCommentSheet() {
-    Get.bottomSheet(
-      CommentSheet(
-        reelId: reels![currentIndex].id,
-      ),
-      backgroundColor: Colors.white,
-    );
+    if (openComment) {
+      Get.bottomSheet(
+        CommentSheet(
+          reelId: reels![currentIndex].id,
+        ),
+        backgroundColor: Colors.white,
+      );
+      openComment = false;
+    }
   }
 
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +54,7 @@ class SingleFeedScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
+    WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
     return GetBuilder<SingleFeedController>(
         builder: (_) => SafeArea(
               child: Scaffold(
@@ -70,6 +72,7 @@ class SingleFeedScreen extends StatelessWidget {
                 body: _controller.loading
                     ? Loading()
                     : PageView.builder(
+                        allowImplicitScrolling: true,
                         itemCount: reels!.length,
                         controller: PageController(
                             initialPage: currentIndex, viewportFraction: 1),

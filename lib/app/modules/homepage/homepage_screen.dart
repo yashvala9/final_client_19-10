@@ -21,6 +21,7 @@ import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/video_player_item.dart';
+import '../../../widgets/my_elevated_button.dart';
 import '../../notification_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
@@ -29,7 +30,13 @@ import 'comment_screen.dart';
 
 import 'profile_detail_screen.dart';
 
-enum ReportReason { reason1, reason2, reason3, reason4, reason5 }
+enum ReportReason {
+  hateSpeech,
+  bullying,
+  impersonation,
+  illegalContent,
+  abusiveContent
+}
 
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
@@ -46,8 +53,8 @@ class HomePageScreen extends StatelessWidget {
     'Report',
   ];
 
-  void onSelect(int id, int index) {
-    controller.reportReelOrComment('reel', id, index);
+  void onSelect(int id, int index, String reason) {
+    controller.reportReelOrComment(reason, id, index);
     moveNextReel(index + 1);
   }
 
@@ -62,6 +69,12 @@ class HomePageScreen extends StatelessWidget {
 
   void moveNextReel(int index) {
     pageController.jumpToPage(index);
+    controller.updateManually();
+  }
+
+  void goToFirstPage() {
+    pageController.animateToPage(0,
+        curve: Curves.decelerate, duration: Duration(seconds: 2));
     controller.updateManually();
   }
 
@@ -89,11 +102,13 @@ class HomePageScreen extends StatelessWidget {
                       return Future.value();
                     },
                     child: PageView.builder(
+                        allowImplicitScrolling: true,
                         itemCount: controller.reelList.length,
                         controller: pageController,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          Rx<ReportReason?> _reason = ReportReason.reason1.obs;
+                          Rx<ReportReason?> _reason =
+                              ReportReason.hateSpeech.obs;
                           var isReel = true;
                           if (index == (controller.reelList.length - 3) &&
                               !controller.loadingMore) {
@@ -108,216 +123,242 @@ class HomePageScreen extends StatelessWidget {
                             isReel = false;
                           }
                           return PageView.builder(
-                            itemCount: 2,
+                            itemCount: isReel ? 2 : 1,
                             controller: pageController2,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index2) {
-                              return (index2 == 0)
-                                  ? Scaffold(
-                                      backgroundColor: Colors.black,
-                                      extendBodyBehindAppBar: true,
-                                      appBar: AppBar(
-                                        backgroundColor: Colors.transparent,
-                                        elevation: 0,
-                                        centerTitle: true,
-                                        title: const Center(
-                                            child: Text(
-                                          "Rolls For You",
-                                        )),
-                                        actions: [
-                                          IconButton(
-                                              icon: const Icon(
-                                                Icons.notifications_none,
-                                              ),
-                                              onPressed: () {
-                                                Get.to(NotificationScreen());
+                              var scaffold = Scaffold(
+                                  backgroundColor: Colors.black,
+                                  extendBodyBehindAppBar: true,
+                                  appBar: AppBar(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    centerTitle: true,
+                                    title: const Center(
+                                        child: Text(
+                                      "Rolls For You",
+                                    )),
+                                    actions: [
+                                      IconButton(
+                                          icon: const Icon(
+                                            Icons.notifications_none,
+                                          ),
+                                          onPressed: () {
+                                            Get.to(NotificationScreen());
+                                          }),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.add_box_outlined,
+                                        ),
+                                        onPressed: () async {
+                                          var video = await ImagePicker()
+                                              .pickVideo(
+                                                  source: ImageSource.gallery);
+                                          if (video != null) {
+                                            final val =
+                                                await Navigator.of(context)
+                                                    .push(
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                return VideoTrimmerView(
+                                                    File(video.path));
                                               }),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.add_box_outlined,
-                                            ),
-                                            onPressed: () async {
-                                              var video = await ImagePicker()
-                                                  .pickVideo(
-                                                      source:
-                                                          ImageSource.gallery);
-                                              if (video != null) {
-                                                final val =
-                                                    await Navigator.of(context)
-                                                        .push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                    return VideoTrimmerView(
-                                                        File(video.path));
-                                                  }),
-                                                );
-                                                if (val != null) {
-                                                  log("VideoAdded: $val");
-                                                  _profileController
-                                                      .updateManually();
-                                                }
-                                              }
-                                            },
-                                          ),
-                                        ],
+                                            );
+                                            if (val != null) {
+                                              log("VideoAdded: $val");
+                                              _profileController
+                                                  .updateManually();
+                                            }
+                                          }
+                                        },
                                       ),
-                                      body: Stack(
+                                    ],
+                                  ),
+                                  body: Stack(
+                                    children: [
+                                      VideoPlayerItem(
+                                        videoUrl: videoUrl,
+                                        videoId: data.id,
+                                        isReel: isReel,
+                                        updatePoints: () {
+                                          controller.updateManually();
+                                          _changeRotation();
+                                        },
+                                        doubleTap: () {
+                                          if (isReel) {
+                                            controller.likeToggle(index);
+                                          }
+                                        },
+                                        swipeRight: () {
+                                          // if (isReel) {
+                                          //   if (controller
+                                          //           .profileId !=
+                                          //       data.user.id) {
+                                          //     Get.to(
+                                          //       () => ProfileDetail(
+                                          //           profileModel:
+                                          //               data.user),
+                                          //     );
+                                          //   }
+                                          // }
+                                        },
+                                        showLike: controller.showLike,
+                                      ),
+                                      Column(
                                         children: [
-                                          VideoPlayerItem(
-                                            videoUrl: videoUrl,
-                                            videoId: data.id,
-                                            isReel: isReel,
-                                            updatePoints: () {
-                                              controller.updateManually();
-                                              _changeRotation();
-                                            },
-                                            doubleTap: () {
-                                              if (isReel) {
-                                                controller.likeToggle(index);
-                                              }
-                                            },
-                                            swipeRight: () {
-                                              // if (isReel) {
-                                              //   if (controller
-                                              //           .profileId !=
-                                              //       data.user.id) {
-                                              //     Get.to(
-                                              //       () => ProfileDetail(
-                                              //           profileModel:
-                                              //               data.user),
-                                              //     );
-                                              //   }
-                                              // }
-                                            },
-                                            showLike: controller.showLike,
+                                          const SizedBox(
+                                            height: 100,
                                           ),
-                                          Column(
-                                            children: [
-                                              const SizedBox(
-                                                height: 100,
-                                              ),
-                                              Expanded(
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 20,
-                                                                bottom: 12),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            InkWell(
-                                                              onTap: () {
-                                                                if (controller
-                                                                        .profileId !=
-                                                                    data.user
-                                                                        .id) {
-                                                                  Get.to(
-                                                                    () => ProfileDetail(
-                                                                        profileModel:
-                                                                            data.user),
-                                                                  );
-                                                                }
-                                                              },
-                                                              child: isReel
-                                                                  ? Text(
-                                                                      "@${data.user.username}",
-                                                                      style: style
-                                                                          .titleMedium!
-                                                                          .copyWith(
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                    )
-                                                                  : Text(
-                                                                      "@sponsored",
-                                                                      style: style
-                                                                          .titleLarge!
-                                                                          .copyWith(
-                                                                        color: Colors
-                                                                            .pink,
-                                                                      ),
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 20,
+                                                            bottom: 15),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        isReel
+                                                            ? InkWell(
+                                                                onTap: () {
+                                                                  if (controller
+                                                                          .profileId !=
+                                                                      data.user
+                                                                          .id) {
+                                                                    Get.to(
+                                                                      () => ProfileDetail(
+                                                                          profileModel:
+                                                                              data.user),
+                                                                    );
+                                                                  }
+                                                                },
+                                                                child: Text(
+                                                                  "@${data.user.username}",
+                                                                  style: style
+                                                                      .titleMedium!
+                                                                      .copyWith(
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ))
+                                                            : Column(
+                                                                children: [
+                                                                  Text(
+                                                                    "@sponsored",
+                                                                    style: style
+                                                                        .titleLarge!
+                                                                        .copyWith(
+                                                                      color: Colors
+                                                                          .pink,
                                                                     ),
-                                                            ),
-                                                            controller.profileId ==
-                                                                    data.user.id
-                                                                ? SizedBox()
-                                                                : isReel
-                                                                    ? FutureBuilder<
-                                                                            bool>(
-                                                                        future: _profileRepo.isFollowing(
-                                                                            data
-                                                                                .user.id,
-                                                                            controller
-                                                                                .token!),
-                                                                        builder:
-                                                                            (context,
-                                                                                snapshot) {
-                                                                          if (!snapshot
-                                                                              .hasData) {
-                                                                            return Container();
-                                                                          }
-                                                                          return TextButton(
-                                                                            child: snapshot.data!
-                                                                                ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12))
-                                                                                : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
-                                                                            onPressed:
-                                                                                () {
-                                                                              Get.dialog(AlertDialog(
-                                                                                title: snapshot.data! ? Text("Do you wish to unfollow?") : Text("Do you wish to follow?"),
-                                                                                actionsAlignment: MainAxisAlignment.spaceAround,
-                                                                                actions: [
-                                                                                  TextButton(
-                                                                                      onPressed: () {
-                                                                                        Get.back();
-                                                                                      },
-                                                                                      child: const Text("Cancel")),
-                                                                                  MaterialButton(
-                                                                                    onPressed: () {
-                                                                                      Get.back();
-                                                                                      controller.toggleFollowing(data.user.id);
-                                                                                    },
-                                                                                    child: const Text("Confirm"),
-                                                                                    color: AppColors.buttonColor,
-                                                                                  ),
-                                                                                ],
-                                                                              ));
-                                                                            },
-                                                                            style:
-                                                                                ButtonStyle(
-                                                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
-                                                                            ),
-                                                                          );
-                                                                        })
-                                                                    : SizedBox(),
-                                                            Text(
-                                                              parser.emojify(data
-                                                                  .video_title),
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 150,
+                                                                    child:
+                                                                        MyElevatedButton(
+                                                                      buttonText:
+                                                                          "Click Here",
+                                                                      height:
+                                                                          30,
+                                                                      style: style
+                                                                          .titleMedium,
+                                                                      onPressed:
+                                                                          () {
+                                                                        // if (data.url !=
+                                                                        //     "") {
+                                                                        Get.to(WebViewScreen(
+                                                                            // data.url
+                                                                            'https://flutter.dev'));
+                                                                        // }
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ),
-                                                            HashTagText(
+                                                        controller.profileId ==
+                                                                data.user.id
+                                                            ? SizedBox()
+                                                            : isReel
+                                                                ? FutureBuilder<
+                                                                        bool>(
+                                                                    future: _profileRepo.isFollowing(
+                                                                        data.user
+                                                                            .id,
+                                                                        controller
+                                                                            .token!),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      if (!snapshot
+                                                                          .hasData) {
+                                                                        return Container();
+                                                                      }
+                                                                      return TextButton(
+                                                                        child: snapshot.data!
+                                                                            ? Text("Following",
+                                                                                style: TextStyle(color: Colors.white, fontSize: 12))
+                                                                            : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.dialog(
+                                                                              AlertDialog(
+                                                                            title: snapshot.data!
+                                                                                ? Text("Do you wish to unfollow?")
+                                                                                : Text("Do you wish to follow?"),
+                                                                            actionsAlignment:
+                                                                                MainAxisAlignment.spaceAround,
+                                                                            actions: [
+                                                                              TextButton(
+                                                                                  onPressed: () {
+                                                                                    Get.back();
+                                                                                  },
+                                                                                  child: const Text("Cancel")),
+                                                                              MaterialButton(
+                                                                                onPressed: () {
+                                                                                  Get.back();
+                                                                                  controller.toggleFollowing(data.user.id);
+                                                                                },
+                                                                                child: const Text("Confirm"),
+                                                                                color: AppColors.buttonColor,
+                                                                              ),
+                                                                            ],
+                                                                          ));
+                                                                        },
+                                                                        style:
+                                                                            ButtonStyle(
+                                                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                                              side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid),
+                                                                              borderRadius: BorderRadius.circular(10.0))),
+                                                                        ),
+                                                                      );
+                                                                    })
+                                                                : SizedBox(),
+                                                        Text(
+                                                          parser.emojify(
+                                                              "data.video_title"),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        isReel
+                                                            ? HashTagText(
                                                                 onTap: (tag) {
                                                                   Get.to(
                                                                       SearchHashTags(
@@ -339,327 +380,40 @@ class HomePageScreen extends StatelessWidget {
                                                                   fontSize: 15,
                                                                   color: Colors
                                                                       .blue,
-                                                                )),
-                                                          ],
-                                                        ),
-                                                      ),
+                                                                ))
+                                                            : SizedBox(),
+                                                      ],
                                                     ),
-                                                    Container(
-                                                      width: 70,
-                                                      margin: isReel
-                                                          ? EdgeInsets.only(
-                                                              top: size.height /
-                                                                  (3))
-                                                          : EdgeInsets.only(
-                                                              top: size.height /
-                                                                  5 *
-                                                                  3.5),
-                                                      child: isReel
-                                                          ? Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 70,
+                                                  margin: isReel
+                                                      ? EdgeInsets.only(
+                                                          bottom: 15)
+                                                      : EdgeInsets.only(
+                                                          bottom: 50),
+                                                  child: isReel
+                                                      ? Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Column(
                                                               children: [
-                                                                Column(
-                                                                  children: [
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        Get.to(
-                                                                            EntryCountView());
-                                                                      },
-                                                                      child:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .card_giftcard,
-                                                                        size:
-                                                                            30,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                    ),
-                                                                    // Text(
-                                                                    //   _controller
-                                                                    //       .totalEntryPoints
-                                                                    //       .value,
-                                                                    //   style: style
-                                                                    //       .headlineSmall!
-                                                                    //       .copyWith(
-                                                                    //     fontSize: 18,
-                                                                    //     color: Colors
-                                                                    //         .white,
-                                                                    //   ),
-                                                                    // ),
-                                                                    FutureBuilder<
-                                                                            String>(
-                                                                        future: _giveawayRepo.getTotalEntryCountByUserId(
-                                                                            controller
-                                                                                .profileId!,
-                                                                            controller
-                                                                                .token!),
-                                                                        builder:
-                                                                            (context,
-                                                                                snapshot) {
-                                                                          if (!snapshot
-                                                                              .hasData) {
-                                                                            return Text(
-                                                                              "0",
-                                                                              style: style.headlineSmall!.copyWith(
-                                                                                fontSize: 18,
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                            );
-                                                                          }
-                                                                          if (snapshot
-                                                                              .hasError) {
-                                                                            printInfo(info: "getTotalEntryCountByUserId: ${snapshot.hasError}");
-                                                                            return Container();
-                                                                          }
-                                                                          return Text(
-                                                                            snapshot.data.toString(),
-                                                                            style:
-                                                                                style.headlineSmall!.copyWith(
-                                                                              fontSize: 18,
-                                                                              color: Colors.white,
-                                                                            ),
-                                                                          );
-                                                                        })
-                                                                  ],
-                                                                ),
-                                                                Column(
-                                                                  children: [
-                                                                    InkWell(
-                                                                        onTap:
-                                                                            () {
-                                                                          controller
-                                                                              .likeToggle(index);
-                                                                        },
-                                                                        // _controller.likeVideo(data.id),
-                                                                        child: FutureBuilder<
-                                                                                bool>(
-                                                                            future:
-                                                                                _reelRepo.getLikeFlag(data.id, controller.token!),
-                                                                            builder: (context, snap) {
-                                                                              return Icon(
-                                                                                snap.hasData
-                                                                                    ? snap.data!
-                                                                                        ? Icons.favorite
-                                                                                        : Icons.favorite_border
-                                                                                    : Icons.favorite_border,
-                                                                                size: 30,
-                                                                                color: snap.hasData
-                                                                                    ? snap.data!
-                                                                                        ? Colors.red
-                                                                                        : Colors.white
-                                                                                    : Colors.white,
-                                                                              );
-                                                                            })),
-                                                                    // const SizedBox(height: 7),
-                                                                    FutureBuilder<
-                                                                            int>(
-                                                                        future: _reelRepo.getLikeCountByReelId(
-                                                                            data
-                                                                                .id,
-                                                                            controller
-                                                                                .token!),
-                                                                        builder:
-                                                                            (context,
-                                                                                snap) {
-                                                                          return Text(
-                                                                            snap.hasData
-                                                                                ? snap.data!.toString()
-                                                                                : '0',
-                                                                            // data.likeCount.toString(),
-                                                                            style:
-                                                                                style.headlineSmall!.copyWith(
-                                                                              fontSize: 18,
-                                                                              color: Colors.white,
-                                                                            ),
-                                                                          );
-                                                                        }),
-                                                                  ],
-                                                                ),
-                                                                Column(
-                                                                  children: [
-                                                                    InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        Get.bottomSheet(
-                                                                          CommentSheet(
-                                                                            reelId:
-                                                                                data.id,
-                                                                          ),
-                                                                          backgroundColor:
-                                                                              Colors.white,
-                                                                        );
-                                                                      },
-                                                                      child:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .comment,
-                                                                        size:
-                                                                            30,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                    ),
-                                                                    FutureBuilder<
-                                                                            int>(
-                                                                        future: _commentRepo.getCommentCountByReelId(
-                                                                            data
-                                                                                .id,
-                                                                            controller
-                                                                                .token!),
-                                                                        builder:
-                                                                            (context,
-                                                                                snapshot) {
-                                                                          return Text(
-                                                                            snapshot.hasData
-                                                                                ? snapshot.data!.toString()
-                                                                                : '0',
-                                                                            style:
-                                                                                style.headlineSmall!.copyWith(
-                                                                              fontSize: 18,
-                                                                              color: Colors.white,
-                                                                            ),
-                                                                          );
-                                                                        })
-                                                                  ],
-                                                                ),
                                                                 InkWell(
-                                                                  onTap: () {},
+                                                                  onTap: () {
+                                                                    Get.to(
+                                                                        EntryCountView());
+                                                                  },
                                                                   child:
                                                                       const Icon(
-                                                                    Icons.reply,
+                                                                    Icons
+                                                                        .card_giftcard,
                                                                     size: 30,
                                                                     color: Colors
                                                                         .white,
                                                                   ),
-                                                                ),
-                                                                PopupMenuButton<
-                                                                        String>(
-                                                                    child:
-                                                                        const Icon(
-                                                                      Icons
-                                                                          .more_vert,
-                                                                      size: 30,
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ),
-                                                                    onSelected:
-                                                                        (v) {
-                                                                      Get.dialog(
-                                                                          AlertDialog(
-                                                                        title: const Text(
-                                                                            "Please select the reason:"),
-                                                                        content: Obx(() =>
-                                                                            Column(
-                                                                              mainAxisSize: MainAxisSize.min,
-                                                                              children: <Widget>[
-                                                                                RadioListTile<ReportReason>(
-                                                                                  title: const Text('reason1'),
-                                                                                  value: ReportReason.reason1,
-                                                                                  groupValue: _reason.value,
-                                                                                  onChanged: (ReportReason? value) {
-                                                                                    _reason.value = value;
-                                                                                  },
-                                                                                ),
-                                                                                RadioListTile<ReportReason>(
-                                                                                  title: const Text('reason2'),
-                                                                                  value: ReportReason.reason2,
-                                                                                  groupValue: _reason.value,
-                                                                                  onChanged: (ReportReason? value) {
-                                                                                    _reason.value = value;
-                                                                                  },
-                                                                                ),
-                                                                                RadioListTile<ReportReason>(
-                                                                                  title: const Text('reason3'),
-                                                                                  value: ReportReason.reason3,
-                                                                                  groupValue: _reason.value,
-                                                                                  onChanged: (ReportReason? value) {
-                                                                                    _reason.value = value;
-                                                                                  },
-                                                                                ),
-                                                                                RadioListTile<ReportReason>(
-                                                                                  title: const Text('reason4'),
-                                                                                  value: ReportReason.reason4,
-                                                                                  groupValue: _reason.value,
-                                                                                  onChanged: (ReportReason? value) {
-                                                                                    _reason.value = value;
-                                                                                  },
-                                                                                ),
-                                                                                RadioListTile<ReportReason>(
-                                                                                  title: const Text('reason5'),
-                                                                                  value: ReportReason.reason5,
-                                                                                  groupValue: _reason.value,
-                                                                                  onChanged: (ReportReason? value) {
-                                                                                    _reason.value = value;
-                                                                                  },
-                                                                                ),
-                                                                              ],
-                                                                            )),
-                                                                        actions: [
-                                                                          TextButton(
-                                                                              onPressed: () {
-                                                                                Get.back();
-                                                                              },
-                                                                              child: const Text("Cancel")),
-                                                                          MaterialButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              Get.back();
-                                                                              onSelect(data.id, index);
-                                                                              showSnackBar('This reel has been reported to the Admin!');
-                                                                            },
-                                                                            child:
-                                                                                const Text("Report"),
-                                                                            color:
-                                                                                Colors.red,
-                                                                          ),
-                                                                        ],
-                                                                      ));
-                                                                    },
-                                                                    itemBuilder:
-                                                                        (BuildContext
-                                                                            context) {
-                                                                      return myMenuItems.map(
-                                                                          (String
-                                                                              choice) {
-                                                                        return PopupMenuItem<
-                                                                            String>(
-                                                                          child:
-                                                                              Text(choice),
-                                                                          value:
-                                                                              choice,
-                                                                        );
-                                                                      }).toList();
-                                                                    })
-                                                              ],
-                                                            )
-                                                          : Column(
-                                                              children: [
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    // _changeRotation();
-                                                                    Get.to(
-                                                                        EntryCountView());
-                                                                  },
-                                                                  child: Obx(() =>
-                                                                      AnimatedRotation(
-                                                                        turns: turns
-                                                                            .value,
-                                                                        duration:
-                                                                            const Duration(seconds: 1),
-                                                                        child:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .card_giftcard,
-                                                                          size:
-                                                                              30,
-                                                                          color:
-                                                                              Colors.pink,
-                                                                        ),
-                                                                      )),
                                                                 ),
                                                                 // Text(
                                                                 //   _controller
@@ -685,7 +439,17 @@ class HomePageScreen extends StatelessWidget {
                                                                             snapshot) {
                                                                       if (!snapshot
                                                                           .hasData) {
-                                                                        return const Loading();
+                                                                        return Text(
+                                                                          "0",
+                                                                          style: style
+                                                                              .headlineSmall!
+                                                                              .copyWith(
+                                                                            fontSize:
+                                                                                18,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        );
                                                                       }
                                                                       if (snapshot
                                                                           .hasError) {
@@ -710,19 +474,328 @@ class HomePageScreen extends StatelessWidget {
                                                                     })
                                                               ],
                                                             ),
-                                                    ),
-                                                  ],
+                                                            SizedBox(
+                                                                height: 15),
+                                                            Column(
+                                                              children: [
+                                                                InkWell(
+                                                                    onTap: () {
+                                                                      controller
+                                                                          .likeToggle(
+                                                                              index);
+                                                                    },
+                                                                    // _controller.likeVideo(data.id),
+                                                                    child: FutureBuilder<
+                                                                            bool>(
+                                                                        future: _reelRepo.getLikeFlag(
+                                                                            data
+                                                                                .id,
+                                                                            controller
+                                                                                .token!),
+                                                                        builder:
+                                                                            (context,
+                                                                                snap) {
+                                                                          return Icon(
+                                                                            snap.hasData
+                                                                                ? snap.data!
+                                                                                    ? Icons.favorite
+                                                                                    : Icons.favorite_border
+                                                                                : Icons.favorite_border,
+                                                                            size:
+                                                                                30,
+                                                                            color: snap.hasData
+                                                                                ? snap.data!
+                                                                                    ? Colors.red
+                                                                                    : Colors.white
+                                                                                : Colors.white,
+                                                                          );
+                                                                        })),
+                                                                // const SizedBox(height: 7),
+                                                                FutureBuilder<
+                                                                        int>(
+                                                                    future: _reelRepo.getLikeCountByReelId(
+                                                                        data.id,
+                                                                        controller
+                                                                            .token!),
+                                                                    builder:
+                                                                        (context,
+                                                                            snap) {
+                                                                      return Text(
+                                                                        snap.hasData
+                                                                            ? snap.data!.toString()
+                                                                            : '0',
+                                                                        // data.likeCount.toString(),
+                                                                        style: style
+                                                                            .headlineSmall!
+                                                                            .copyWith(
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                      );
+                                                                    }),
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                                height: 15),
+                                                            Column(
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    Get.bottomSheet(
+                                                                      CommentSheet(
+                                                                        reelId:
+                                                                            data.id,
+                                                                      ),
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .white,
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .comment,
+                                                                    size: 30,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                                FutureBuilder<
+                                                                        int>(
+                                                                    future: _commentRepo.getCommentCountByReelId(
+                                                                        data.id,
+                                                                        controller
+                                                                            .token!),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      return Text(
+                                                                        snapshot.hasData
+                                                                            ? snapshot.data!.toString()
+                                                                            : '0',
+                                                                        style: style
+                                                                            .headlineSmall!
+                                                                            .copyWith(
+                                                                          fontSize:
+                                                                              18,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                      );
+                                                                    })
+                                                              ],
+                                                            ),
+                                                            SizedBox(
+                                                                height: 15),
+                                                            InkWell(
+                                                              onTap: () {},
+                                                              child: const Icon(
+                                                                Icons.reply,
+                                                                size: 30,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                                height: 15),
+                                                            PopupMenuButton<
+                                                                    String>(
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .more_vert,
+                                                                  size: 30,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                onSelected:
+                                                                    (v) {
+                                                                  Get.dialog(
+                                                                      AlertDialog(
+                                                                    title: const Text(
+                                                                        "Please select the reason:"),
+                                                                    content: Obx(
+                                                                        () =>
+                                                                            Column(
+                                                                              mainAxisSize: MainAxisSize.min,
+                                                                              children: <Widget>[
+                                                                                RadioListTile<ReportReason>(
+                                                                                  title: const Text('Hate Speech'),
+                                                                                  value: ReportReason.hateSpeech,
+                                                                                  groupValue: _reason.value,
+                                                                                  onChanged: (ReportReason? value) {
+                                                                                    _reason.value = value;
+                                                                                  },
+                                                                                ),
+                                                                                RadioListTile<ReportReason>(
+                                                                                  title: const Text('Bullying'),
+                                                                                  value: ReportReason.bullying,
+                                                                                  groupValue: _reason.value,
+                                                                                  onChanged: (ReportReason? value) {
+                                                                                    _reason.value = value;
+                                                                                  },
+                                                                                ),
+                                                                                RadioListTile<ReportReason>(
+                                                                                  title: const Text('Impersonation'),
+                                                                                  value: ReportReason.impersonation,
+                                                                                  groupValue: _reason.value,
+                                                                                  onChanged: (ReportReason? value) {
+                                                                                    _reason.value = value;
+                                                                                  },
+                                                                                ),
+                                                                                RadioListTile<ReportReason>(
+                                                                                  title: const Text('Illegal content'),
+                                                                                  value: ReportReason.illegalContent,
+                                                                                  groupValue: _reason.value,
+                                                                                  onChanged: (ReportReason? value) {
+                                                                                    _reason.value = value;
+                                                                                  },
+                                                                                ),
+                                                                                RadioListTile<ReportReason>(
+                                                                                  title: const Text('Abusive content'),
+                                                                                  value: ReportReason.abusiveContent,
+                                                                                  groupValue: _reason.value,
+                                                                                  onChanged: (ReportReason? value) {
+                                                                                    _reason.value = value;
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            )),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            Get.back();
+                                                                          },
+                                                                          child:
+                                                                              const Text("Cancel")),
+                                                                      MaterialButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Get.back();
+                                                                          onSelect(
+                                                                              data.id,
+                                                                              index,
+                                                                              _reason.value.toString());
+                                                                          showSnackBar(
+                                                                              'This reel has been reported to the Admin!');
+                                                                        },
+                                                                        child: const Text(
+                                                                            "Report"),
+                                                                        color: Colors
+                                                                            .red,
+                                                                      ),
+                                                                    ],
+                                                                  ));
+                                                                },
+                                                                itemBuilder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return myMenuItems
+                                                                      .map((String
+                                                                          choice) {
+                                                                    return PopupMenuItem<
+                                                                        String>(
+                                                                      child: Text(
+                                                                          choice),
+                                                                      value:
+                                                                          choice,
+                                                                    );
+                                                                  }).toList();
+                                                                })
+                                                          ],
+                                                        )
+                                                      : Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                // _changeRotation();
+                                                                Get.to(
+                                                                    EntryCountView());
+                                                              },
+                                                              child: Obx(() =>
+                                                                  AnimatedRotation(
+                                                                    turns: turns
+                                                                        .value,
+                                                                    duration: const Duration(
+                                                                        seconds:
+                                                                            1),
+                                                                    child:
+                                                                        const Icon(
+                                                                      Icons
+                                                                          .card_giftcard,
+                                                                      size: 30,
+                                                                      color: Colors
+                                                                          .pink,
+                                                                    ),
+                                                                  )),
+                                                            ),
+                                                            // Text(
+                                                            //   _controller
+                                                            //       .totalEntryPoints
+                                                            //       .value,
+                                                            //   style: style
+                                                            //       .headlineSmall!
+                                                            //       .copyWith(
+                                                            //     fontSize: 18,
+                                                            //     color: Colors
+                                                            //         .white,
+                                                            //   ),
+                                                            // ),
+                                                            FutureBuilder<
+                                                                    String>(
+                                                                future: _giveawayRepo.getTotalEntryCountByUserId(
+                                                                    controller
+                                                                        .profileId!,
+                                                                    controller
+                                                                        .token!),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  if (!snapshot
+                                                                      .hasData) {
+                                                                    return const Loading();
+                                                                  }
+                                                                  if (snapshot
+                                                                      .hasError) {
+                                                                    printInfo(
+                                                                        info:
+                                                                            "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                                    return Container();
+                                                                  }
+                                                                  return Text(
+                                                                    snapshot
+                                                                        .data
+                                                                        .toString(),
+                                                                    style: style
+                                                                        .headlineSmall!
+                                                                        .copyWith(
+                                                                      fontSize:
+                                                                          18,
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  );
+                                                                })
+                                                          ],
+                                                        ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ],
-                                      ))
-                                  : isReel
-                                      ? ProfileDetail(
-                                          profileModel:
-                                              controller.reelList[index].user)
-                                      : WebViewScreen();
+                                      ),
+                                    ],
+                                  ));
+                              return (index2 == 0)
+                                  ? scaffold
+                                  : ProfileDetail(
+                                      profileModel:
+                                          controller.reelList[index].user);
                             },
                           );
                         }),

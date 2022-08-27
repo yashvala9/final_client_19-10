@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/reel_repository.dart';
@@ -12,6 +13,7 @@ import 'comment_controller.dart';
 
 class CommentSheet extends StatelessWidget {
   final int reelId;
+
   CommentSheet({Key? key, required this.reelId}) : super(key: key);
 
   buildProfile(String profilePhoto) {
@@ -32,8 +34,8 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _controller.getCommentsByReelId(reelId);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _controller.getCommentsByReelId(reelId);
     });
     // _controller.customeInit();
     return GetBuilder<CommentController>(

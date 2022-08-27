@@ -175,8 +175,8 @@ class NotificationScreen extends StatelessWidget {
                                                             colorSchema.primary,
                                                         shape:
                                                             const StadiumBorder(),
-                                                        child:
-                                                            const Text("Folow"),
+                                                        child: const Text(
+                                                            "Follow"),
                                                       )
                                                 : const SizedBox();
                                           },
