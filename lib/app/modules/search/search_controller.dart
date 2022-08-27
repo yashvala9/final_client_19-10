@@ -96,6 +96,7 @@ class SearchController extends GetxController {
         var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
             limit: 10, skip: currentLength);
         if (newList.isEmpty) {
+          loadingMore = false;
           _loadMore = false;
         } else {
           reelList.addAll(newList);

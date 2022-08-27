@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,8 @@ import 'package:reel_ro/app/modules/search/widget/search_tile.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/chart_tile.dart';
+import 'package:reel_ro/widgets/shimmer_animation.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
@@ -34,24 +37,20 @@ class Debouncer {
   }
 }
 
-final _controller = Get.put(SearchController());
-
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
-  final _reelRepo = Get.put(ReelRepository());
-  final _profileRepo = Get.find<ProfileRepository>();
 
-  // final searchTextController = TextEditingController();
-  final _debounce = Debouncer(milliseconds: 500);
+  final _profileRepo = Get.find<ProfileRepository>();
+  final _controller = Get.put(SearchController());
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    final colorSchema = theme.colorScheme;
     return Scaffold(
       backgroundColor: Colors.black87,
-      body: SingleChildScrollView(
-        child: Column(
+      body: GetBuilder<SearchController>(
+        builder: (_) => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
@@ -84,42 +83,24 @@ class SearchScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Material(
                   color: Colors.transparent,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey.shade600,
-                        prefixIcon:
-                            const Icon(Icons.search, color: Colors.white),
-                        hintText: "Search here...",
-                        hintStyle: const TextStyle(
-                          color: Colors.white,
-                        )),
+                  child: InkWell(
                     onTap: () {
                       Get.to(
                         () => SearchUsers(username: ""),
                       );
                     },
-                    // controller: searchTextController,
-                    onFieldSubmitted: (value) {
-                      // _debounce.run(() {
-                      //   if (value.trim().isEmpty) {
-                      //     showSnackBar("Search is empty", color: Colors.red);
-                      //     return;
-                      //   }
-                      //   if (value.startsWith('#')) {
-                      //     value.replaceAll('#', '');
-                      //     Get.to(SearchHashTags(
-                      //       hashTag: value.trim(),
-                      //     ));
-                      //   } else {
-                      //     Get.to(
-                      //       () => SearchUsers(
-                      //         username: value.trim(),
-                      //       ),
-                      //     );
-                      //   }
-                      // });
-                    },
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey.shade600,
+                          enabled: false,
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.white),
+                          hintText: "Search here...",
+                          hintStyle: const TextStyle(
+                            color: Colors.white,
+                          )),
+                    ),
                   ),
                 ),
               ),
@@ -127,97 +108,83 @@ class SearchScreen extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            // FutureBuilder<List<ReelModel>>(
-            //     future: _reelRepo.getFeedsWithAds(
-            //         _controller.profileId!, _controller.token!,
-            //         limit: 10, skip: 0),
-            //     builder: (context, snapshot) {
-            //       if (!snapshot.hasData) {
-            //         return const Center(
-            //           child: CircularProgressIndicator(),
-            //         );
-            //       }
-            //       if (snapshot.hasError) {
-            //         printInfo(info: "profileReels: ${snapshot.error}");
-            //       }
-            //       var reels = snapshot.data;
-            //       if (reels!.isEmpty) {
-            //         return const Center(
-            //           child: Text("No reels available"),
-            //         );
-            //       }
-            // return
-
             _controller.loading
-                ? const Center(child: CircularProgressIndicator())
+                ? const Expanded(
+                    child: Loading(),
+                  )
                 : _controller.reelList.isEmpty
-                    ? const Center(
-                        child: Text("No reels available"),
-                      )
-                    : GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _controller.reelList.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5,
+                    ? const Expanded(
+                        child: Center(
+                          child: Text("No reels available"),
                         ),
-                        itemBuilder: (context, index) {
-                          if (index == (_controller.reelList.length - 1) &&
-                              !_controller.loadingMore) {
-                            _controller
-                                .getMoreFeed(_controller.reelList.length);
-                            // if (_controller.reelList.isNotEmpty) {
-                            //   reels.addAll(_controller.reelList);
-                            //   _controller.reelList.clear();
-                            //   _controller.update();
-                            // }
-                          }
-                          return GestureDetector(
-                              onTap: () {
-                                Get.to(SingleFeedScreen(
-                                    _controller.reelList, index));
-                              },
-                              child: FutureBuilder<String>(
-                                future: _profileRepo.getThumbnail(
-                                    _controller.reelList[index].thumbnail),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
+                      )
+                    : Expanded(
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (notification) {
+                            if (!_controller.loadingMore &&
+                                notification.metrics.pixels ==
+                                    notification.metrics.maxScrollExtent) {
+                              log("Loading...");
+                              _controller
+                                  .getMoreFeed(_controller.reelList.length);
+                            }
+                            return true;
+                          },
+                          child: CustomScrollView(
+                            shrinkWrap: true,
+                            slivers: [
+                              SliverGrid(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, index) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          Get.to(SingleFeedScreen(
+                                              _controller.reelList, index));
+                                        },
+                                        child: FutureBuilder<String>(
+                                          future: _profileRepo.getThumbnail(
+                                              _controller
+                                                  .reelList[index].thumbnail),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return const ShimmerCardAnimation();
+                                            }
 
-                                  return CachedNetworkImage(
-                                    key: UniqueKey(),
-                                    placeholder: (context, url) {
-                                      return IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.refresh_rounded));
-                                    },
-                                    errorWidget: (_, a, b) {
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: Loading(),
-                                        // Text("Processing..."),
-                                      );
-                                    },
-                                    imageUrl: snapshot.data!,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              ));
-                        },
+                                            return CachedNetworkImage(
+                                              key: UniqueKey(),
+                                              placeholder: (context, url) {
+                                                return const ShimmerCardAnimation();
+                                              },
+                                              errorWidget: (_, a, b) {
+                                                return const ShimmerCardAnimation();
+                                              },
+                                              imageUrl: snapshot.data!,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
+                                        ));
+                                  },
+                                  childCount: _controller.reelList.length,
+                                ),
+                              ),
+                              SliverToBoxAdapter(
+                                child: Center(
+                                  child: _controller.loadingMore
+                                      ? const Loading()
+                                      : const SizedBox(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-            _controller.loadingMore
-                ? const Center(child: CircularProgressIndicator())
-                : const SizedBox(),
           ],
         ),
       ),
@@ -229,6 +196,10 @@ class SearchUsers extends StatelessWidget {
   final String username;
   SearchUsers({Key? key, required this.username}) : super(key: key);
   final _debounce = Debouncer(milliseconds: 500);
+
+  final _controller = Get.isRegistered<SearchController>()
+      ? Get.find<SearchController>()
+      : Get.put(SearchController());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -238,67 +209,67 @@ class SearchUsers extends StatelessWidget {
         _controller.searchProfiles.clear();
         return true;
       },
-      child: GetBuilder<SearchController>(
-        builder: (_) => SafeArea(
-          child: Scaffold(
-              body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 16,
+      child: SafeArea(
+        child: Scaffold(
+            body: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 16,
+                ),
+                child: Text(
+                  "Search",
+                  style: style.titleMedium!.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
-                  child: Text(
-                    "Search",
-                    style: style.titleMedium!.copyWith(
-                      fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Hero(
+                tag: 'search',
+                child: Material(
+                  color: Colors.transparent,
+                  child: TextFormField(
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      hintText: "Search here...",
                     ),
+
+                    // controller: searchTextController,
+                    onChanged: (value) {
+                      _debounce.run(() {
+                        if (value.startsWith('#')) {
+                          value.replaceAll('#', '');
+                          // Get.to(SearchHashTags(
+                          //   hashTag: value.trim(),
+                          // ));
+
+                          _controller.getReelsByHashTag(value);
+                        } else {
+                          _controller.searchUser(value);
+                        }
+                      });
+                    },
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Hero(
-                  tag: 'search',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: TextFormField(
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: "Search here...",
-                      ),
-
-                      // controller: searchTextController,
-                      onChanged: (value) {
-                        _debounce.run(() {
-                          if (value.startsWith('#')) {
-                            value.replaceAll('#', '');
-                            // Get.to(SearchHashTags(
-                            //   hashTag: value.trim(),
-                            // ));
-
-                            _controller.getReelsByHashTag(value);
-                          } else {
-                            _controller.searchUser(value);
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                const Divider(
-                  thickness: 1,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Expanded(
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const Divider(
+                thickness: 1,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              GetBuilder<SearchController>(
+                builder: (_) => Expanded(
                   child: _controller.loading
                       ? const Loading()
                       : _controller.searchProfiles.isEmpty
@@ -310,11 +281,11 @@ class SearchUsers extends StatelessWidget {
                                 (index) => SearchTile(index: index),
                               ).toList(),
                             ),
-                )
-              ],
-            ),
-          )),
-        ),
+                ),
+              ),
+            ],
+          ),
+        )),
       ),
     );
   }
@@ -322,7 +293,11 @@ class SearchUsers extends StatelessWidget {
 
 class SearchHashTags extends StatelessWidget {
   final String hashTag;
-  const SearchHashTags({Key? key, required this.hashTag}) : super(key: key);
+  SearchHashTags({Key? key, required this.hashTag}) : super(key: key);
+
+  final _controller = Get.isRegistered<SearchController>()
+      ? Get.find<SearchController>()
+      : Get.put(SearchController());
 
   @override
   Widget build(BuildContext context) {
