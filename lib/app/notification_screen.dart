@@ -503,7 +503,9 @@ class NotificationTile extends StatelessWidget {
                   Get.to(
                     () => ProfileDetail(
                       profileModel: profile,
-                      onBack: () {},
+                      onBack: () {
+                        Get.back();
+                      },
                     ),
                   );
                 },

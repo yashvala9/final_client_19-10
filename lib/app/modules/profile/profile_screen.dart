@@ -16,6 +16,7 @@ import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:reel_ro/widgets/shimmer_animation.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../utils/snackbar.dart';
 import '../add_feed/add_feed_screen.dart';
@@ -532,18 +533,7 @@ class ProfileReel extends StatelessWidget {
                 future: _profileRepo.getThumbnail(reels[index].thumbnail),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return SizedBox(
-                      width: 200.0,
-                      height: 100.0,
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Card(
-                          elevation: 1.0,
-                          child: const SizedBox(height: 80),
-                        ),
-                      ),
-                    );
+                    return ShimmerCardAnimation();
                   }
 
                   return CachedNetworkImage(

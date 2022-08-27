@@ -235,7 +235,9 @@ class HomePageScreen extends StatelessWidget {
                                                                           data
                                                                               .user,
                                                                       onBack:
-                                                                          () {}),
+                                                                          () {
+                                                                            Get.back();
+                                                                          }),
                                                                 );
                                                               }
                                                             },

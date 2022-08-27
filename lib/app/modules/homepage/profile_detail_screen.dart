@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/widgets/shimmer_animation.dart';
 
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
@@ -45,7 +46,7 @@ class ProfileDetail extends StatelessWidget {
                 color: Colors.black54,
               ),
               onPressed: () async {
-                 onBack();
+                onBack();
               },
             ),
           ),
@@ -513,9 +514,7 @@ class ProfileReel extends StatelessWidget {
                 _controller.profileId!, _controller.token!),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Loading();
           }
           if (snapshot.hasError) {
             printInfo(info: "profileReels: ${snapshot.error}");
@@ -545,28 +544,16 @@ class ProfileReel extends StatelessWidget {
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const ShimmerCardAnimation();
                       }
 
                       return CachedNetworkImage(
                         key: UniqueKey(),
-                        placeholder: (context, url) {
-                          return IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.refresh_rounded));
-                        },
                         errorWidget: (_, a, b) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                            ),
-                            alignment: Alignment.center,
-                            child: Loading(),
-                            // Text("Processing..."),
-                          );
+                          return const ShimmerCardAnimation();
                         },
+                        placeholder: (context, url) =>
+                            const ShimmerCardAnimation(),
                         imageUrl: snapshot.data!,
                         fit: BoxFit.cover,
                       );

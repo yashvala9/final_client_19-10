@@ -89,7 +89,9 @@ class ListUsersView extends StatelessWidget {
                         Get.to(
                           ProfileDetail(
                             profileModel: snapshot.data![index],
-                            onBack: () {},
+                            onBack: () {
+                              Get.back();
+                            },
                           ),
                         );
                       },
@@ -186,7 +188,9 @@ class ListUsersView extends StatelessWidget {
                         Get.to(
                           ProfileDetail(
                             profileModel: snapshot.data![index],
-                            onBack: () {},
+                            onBack: () {
+                              Get.back();
+                            },
                           ),
                         );
                       },
