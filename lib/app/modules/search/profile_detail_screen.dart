@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/search/profile_detail_controller.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/widgets/shimmer_animation.dart';
 
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
@@ -439,9 +440,6 @@ class ProfileDetail extends StatelessWidget {
           // const Tab(text: "Photos"),
           if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
-        const SizedBox(
-          height: 8,
-        ),
         Expanded(
           child: TabBarView(children: [
             ProfileReel(profileId: profileModel.id),
@@ -515,9 +513,7 @@ class ProfileReel extends StatelessWidget {
                 _controller.profileId!, _controller.token!),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Loading();
           }
           if (snapshot.hasError) {
             printInfo(info: "profileReels: ${snapshot.error}");
@@ -547,42 +543,22 @@ class ProfileReel extends StatelessWidget {
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const ShimmerCardAnimation();
                       }
 
                       return CachedNetworkImage(
                         key: UniqueKey(),
                         placeholder: (context, url) {
-                          return IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.refresh_rounded));
+                          return const ShimmerCardAnimation();
                         },
                         errorWidget: (_, a, b) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                            ),
-                            alignment: Alignment.center,
-                            child: Loading(),
-                            //  Text("Processing..."),
-                          );
+                          return const ShimmerCardAnimation();
                         },
                         imageUrl: snapshot.data!,
                         fit: BoxFit.cover,
                       );
                     },
-                  )
-                  // CachedNetworkImage(
-                  //     imageUrl: reels[index].thumbnail,
-                  //     errorWidget: (context, a, b) => const Icon(
-                  //       Icons.error,
-                  //       color: Colors.red,
-                  //     ),
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  );
+                  ));
             },
           );
         });
