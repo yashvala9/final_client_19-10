@@ -255,6 +255,9 @@ class HomePageScreen extends StatelessWidget {
                                                                   ),
                                                                 ))
                                                             : Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
                                                                 children: [
                                                                   Text(
                                                                     "@sponsored",
@@ -264,6 +267,9 @@ class HomePageScreen extends StatelessWidget {
                                                                       color: Colors
                                                                           .pink,
                                                                     ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 10,
                                                                   ),
                                                                   SizedBox(
                                                                     width: 150,
@@ -285,6 +291,9 @@ class HomePageScreen extends StatelessWidget {
                                                                         // }
                                                                       },
                                                                     ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 10,
                                                                   ),
                                                                 ],
                                                               ),
@@ -348,7 +357,7 @@ class HomePageScreen extends StatelessWidget {
                                                                 : SizedBox(),
                                                         Text(
                                                           parser.emojify(
-                                                              "data.video_title"),
+                                                              data.video_title),
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 15,
