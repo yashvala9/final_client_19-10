@@ -313,22 +313,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             color: Colors.red,
                                                             fontSize: 18),
                                                       )),
-                                                      // Center(
-                                                      //     child: Text(
-                                                      //   "Stay Tuned",
-                                                      //   style: TextStyle(
-                                                      //       color: Colors.red,
-                                                      //       fontSize: 18),
-                                                      // )),
-                                                      // Center(
-                                                      //   child: Text(
-                                                      //     "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                      //     style: TextStyle(
-                                                      //         fontSize: 16),
-                                                      //     textAlign:
-                                                      //         TextAlign.center,
-                                                      //   ),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
@@ -380,7 +364,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _tabSection(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TabBar(tabs: [
           Tab(text: "Rolls"),
@@ -388,11 +371,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (_controller.profileModel.status == 'VERIFIED')
             Tab(text: "Giveaway"),
         ]),
-        const SizedBox(
-          height: 8,
-        ),
         Expanded(
           child: TabBarView(children: [
+         
             ProfileReel(
               key: UniqueKey(),
             ),
@@ -481,6 +462,7 @@ class ProfileReel extends StatelessWidget {
           );
         }
         return GridView.builder(
+          padding: EdgeInsets.zero,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: reels.length,
@@ -502,7 +484,7 @@ class ProfileReel extends StatelessWidget {
             log("Index $index:  ${reels[index].thumbnail}");
             var tumb = reels[index].thumbnail;
 
-            return GestureDetector(
+            return InkWell(
               onTap: () {
                 Get.to(SingleFeedScreen(reels, index));
               },
@@ -536,10 +518,7 @@ class ProfileReel extends StatelessWidget {
 
                   return CachedNetworkImage(
                     key: UniqueKey(),
-                    // placeholder: (context, url) {
-                    //   return IconButton(
-                    //       onPressed: () {}, icon: Icon(Icons.refresh_rounded));
-                    // },
+               
                     errorWidget: (_, a, b) {
                       return Container(
                         decoration: BoxDecoration(
