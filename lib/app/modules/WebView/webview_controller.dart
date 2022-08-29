@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebController extends GetxController {
-  final RxBool magazineHasUrl = false.obs;
-  final RxBool isLoading = false.obs;
+  RxBool isLoading = true.obs;
 
   late WebViewController _rootwebViewController;
 

@@ -119,7 +119,7 @@ class GiveawayRepository {
         },
       );
       final body = jsonDecode(response.body);
-      print('list21212145body $body');
+      // print('list21212145body $body');
       if (response.statusCode == 200) {
         Iterable list = body;
         var v = list.map((e) => ContestModel.fromMap(e)).toList();
@@ -145,8 +145,8 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list212121body2 $profileId');
-    print('list212121body2 $body');
+    // print('list212121body2 $profileId');
+    // print('list212121body2 $body');
     if (response.statusCode == 200) {
       return ContestModel.fromMap(json.decode(response.body)[0]);
     } else {
@@ -164,7 +164,7 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-
+    // print('212121 $body');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
     } else {
@@ -182,7 +182,7 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print('list212121winnerbody $body');
+    // print('list212121winnerbody $body');
     if (response.statusCode == 200) {
       final Iterable list = body;
       return list.map((e) => WinnerModel.fromMap(e)).toList();

@@ -253,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                           style:
                                                               style.headline6),
                                                       subtitle: Text(
-                                                          "Followings",
+                                                          "Following",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: style
@@ -287,54 +287,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              if (profileModel.status ==
-                                                  "VERIFIED")
-                                                Container(
-                                                  width: Get.width * 0.9,
-                                                  decoration: BoxDecoration(
-                                                      color: Color.fromRGBO(
-                                                          255, 240, 218, 1),
-                                                      border: Border.all(
-                                                        color:
-                                                            Colors.transparent,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20))),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            16.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Center(
-                                                            child: Text(
-                                                          "Upcoming giveaway on 18th June.",
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 18),
-                                                        )),
-                                                        Center(
-                                                            child: Text(
-                                                          "Stay Tuned",
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 18),
-                                                        )),
-                                                        Center(
-                                                          child: Text(
-                                                            "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                            style: TextStyle(
-                                                                fontSize: 16),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ],
+                                              // if (profileModel.status ==
+                                              //     "VERIFIED")
+                                              Container(
+                                                width: Get.width * 0.9,
+                                                decoration: BoxDecoration(
+                                                    color: Color.fromRGBO(
+                                                        255, 240, 218, 1),
+                                                    border: Border.all(
+                                                      color: Colors.transparent,
                                                     ),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                20))),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      16.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Center(
+                                                          child: Text(
+                                                        "\"${profileModel.user_profile!.bio!}\"",
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontSize: 18),
+                                                      )),
+                                                      // Center(
+                                                      //     child: Text(
+                                                      //   "Stay Tuned",
+                                                      //   style: TextStyle(
+                                                      //       color: Colors.red,
+                                                      //       fontSize: 18),
+                                                      // )),
+                                                      // Center(
+                                                      //   child: Text(
+                                                      //     "Engineer who love dancing, modelling, photography. DM me for collaboration",
+                                                      //     style: TextStyle(
+                                                      //         fontSize: 16),
+                                                      //     textAlign:
+                                                      //         TextAlign.center,
+                                                      //   ),
+                                                      // ),
+                                                    ],
                                                   ),
                                                 ),
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -489,8 +487,8 @@ class ProfileReel extends StatelessWidget {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             childAspectRatio: 1,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5,
+            crossAxisSpacing: 2,
+            mainAxisSpacing: 2,
           ),
           itemBuilder: (context, index) {
             if (index == (reels.length - 3) && !_controller.loadingMore) {

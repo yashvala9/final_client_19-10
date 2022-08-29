@@ -190,7 +190,7 @@ class EditProfileView extends GetView<EditProfileController> {
                           SizedBox(height: Get.height * 0.01),
                           TextFormField(
                             enabled: false,
-                            // !_controller.loading,
+                            //  !_controller.loading,
                             decoration: InputDecoration(
                               hintText: _controller.profileModel.username,
                               prefixIcon: Icon(
@@ -206,7 +206,9 @@ class EditProfileView extends GetView<EditProfileController> {
                             // validator: (value) {
                             //   return value!.isEmpty
                             //       ? 'Username is required'
-                            //       : null;
+                            //       : value.length > 12
+                            //           ? "Username cannot be greater than 12 characters"
+                            //           : null;
                             // },
                             onChanged: (v) => _controller.username = v,
                           ),

@@ -37,7 +37,8 @@ class NavigationBarScreen extends StatelessWidget {
                         controller.changeTabIndex(0);
                       } else {
                         if (homepage.pageController.page != 0) {
-                          homepage.moveNextReel(0);
+                          homepage.goToFirstPage();
+                          // homepage.moveNextReel(0);
                         } else {
                           homepage.controller.getFeeds();
                           homepage.controller.update();

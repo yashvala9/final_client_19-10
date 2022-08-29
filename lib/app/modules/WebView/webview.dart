@@ -7,7 +7,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'webview_controller.dart';
 
 class WebViewScreen extends StatelessWidget {
-  WebViewScreen({Key? key}) : super(key: key);
+  WebViewScreen(this.url, {Key? key}) : super(key: key);
+  final String url;
   final _controller = Get.put(WebController());
 
   @override
@@ -17,12 +18,21 @@ class WebViewScreen extends StatelessWidget {
 
   Widget _buildWebView(BuildContext context) {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
-    return Scaffold(
-      body: WebView(
-        initialUrl: 'https://flutter.dev',
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: _controller.onWebViewCreated,
-        onPageFinished: _controller.onWebViewLoaded,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(),
+        body:
+            // _controller.isLoading.value
+            //     ? Center(
+            //         child: CircularProgressIndicator(),
+            //       )
+            //     :
+            WebView(
+          initialUrl: url,
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: _controller.onWebViewCreated,
+          onPageFinished: _controller.onWebViewLoaded,
+        ),
       ),
     );
   }

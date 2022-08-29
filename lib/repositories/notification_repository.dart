@@ -27,23 +27,6 @@ class NotificationRepository {
     }
   }
 
-  Future<CommentModel> getCommentById(int id, String token) async {
-    final response = await http.get(
-      Uri.parse("${Base.getEntity}/comment/$id"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-    print(response.body);
-    final body = jsonDecode(response.body);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return CommentModel.fromMap(body);
-    } else {
-      return Future.error(body['detail']);
-    }
-  }
-
   Future<void> pokeSingleUser(String token, int userId) async {
     final response = await http.post(
       Uri.parse('${Base.pokeSingleUser}$userId'),
@@ -73,23 +56,6 @@ class NotificationRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       showSnackBar("Poke successful!");
-    } else {
-      return Future.error(body['detail']);
-    }
-  }
-
-  Future<CommentModel> getReelByCommentId(int id, String token) async {
-    final response = await http.get(
-      Uri.parse("${Base.getEntity}/comment/$id"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-    print('212121 ${response.body}');
-    final body = jsonDecode(response.body);
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return CommentModel.fromMap(body);
     } else {
       return Future.error(body['detail']);
     }

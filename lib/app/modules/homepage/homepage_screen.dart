@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/video_player_item.dart';
+import '../../../widgets/my_elevated_button.dart';
 import '../../notification_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
@@ -28,7 +30,13 @@ import 'comment_screen.dart';
 
 import 'profile_detail_screen.dart';
 
-enum ReportReason { reason1, reason2, reason3, reason4, reason5 }
+enum ReportReason {
+  hateSpeech,
+  bullying,
+  impersonation,
+  illegalContent,
+  abusiveContent
+}
 
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
@@ -44,9 +52,11 @@ class HomePageScreen extends StatelessWidget {
   var myMenuItems = <String>[
     'Report',
   ];
+  late ConfettiController _controllerCenter;
+  bool isAnimationPlaying = false;
 
-  void onSelect(int id, int index) {
-    controller.reportReelOrComment('reel', id, index);
+  void onSelect(int id, int index, String reason) {
+    controller.reportReelOrComment(reason, id, index);
     moveNextReel(index + 1);
   }
 
@@ -64,6 +74,12 @@ class HomePageScreen extends StatelessWidget {
     controller.updateManually();
   }
 
+  void goToFirstPage() {
+    pageController.animateToPage(0,
+        curve: Curves.decelerate, duration: Duration(seconds: 2));
+    controller.updateManually();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -71,6 +87,8 @@ class HomePageScreen extends StatelessWidget {
     final style = theme.textTheme;
     var parser = EmojiParser();
     RxDouble turns = 0.0.obs;
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 1));
 
     void _changeRotation() {
       turns.value += 1.0;
@@ -88,6 +106,7 @@ class HomePageScreen extends StatelessWidget {
                       return Future.value();
                     },
                     child: PageView.builder(
+                        allowImplicitScrolling: true,
                         itemCount: controller.reelList.length,
                         controller: pageController,
                         physics: controller.secondPageIndex > 0
@@ -95,7 +114,8 @@ class HomePageScreen extends StatelessWidget {
                             : AlwaysScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          Rx<ReportReason?> _reason = ReportReason.reason1.obs;
+                          Rx<ReportReason?> _reason =
+                              ReportReason.hateSpeech.obs;
                           var isReel = true;
                           if (index == (controller.reelList.length - 3) &&
                               !controller.loadingMore) {
@@ -110,7 +130,7 @@ class HomePageScreen extends StatelessWidget {
                             isReel = false;
                           }
                           return PageView.builder(
-                            itemCount: 2,
+                            itemCount: isReel ? 2 : 1,
                             controller: pageController2,
                             scrollDirection: Axis.horizontal,
                             onPageChanged: (v) {
@@ -173,6 +193,8 @@ class HomePageScreen extends StatelessWidget {
                                           videoId: data.id,
                                           isReel: isReel,
                                           updatePoints: () {
+                                            _controllerCenter.play();
+
                                             controller.updateManually();
                                             _changeRotation();
                                           },
@@ -212,7 +234,7 @@ class HomePageScreen extends StatelessWidget {
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 20,
-                                                              bottom: 12),
+                                                              bottom: 15),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -223,26 +245,23 @@ class HomePageScreen extends StatelessWidget {
                                                             MainAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              if (controller
-                                                                      .profileId !=
-                                                                  data.user
-                                                                      .id) {
-                                                                Get.to(
-                                                                  () => ProfileDetail(
-                                                                      profileModel:
-                                                                          data
-                                                                              .user,
-                                                                      onBack:
-                                                                          () {
-                                                                            Get.back();
-                                                                          }),
-                                                                );
-                                                              }
-                                                            },
-                                                            child: isReel
-                                                                ? Text(
+                                                          isReel
+                                                              ? InkWell(
+                                                                  onTap: () {
+                                                                    if (controller
+                                                                            .profileId !=
+                                                                        data.user
+                                                                            .id) {
+                                                                      Get.to(
+                                                                        () => ProfileDetail(
+                                                                            profileModel: data.user,
+                                                                            onBack: () {
+                                                                              Get.back();
+                                                                            }),
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  child: Text(
                                                                     "@${data.user.username}",
                                                                     style: style
                                                                         .titleMedium!
@@ -250,17 +269,42 @@ class HomePageScreen extends StatelessWidget {
                                                                       color: Colors
                                                                           .white,
                                                                     ),
-                                                                  )
-                                                                : Text(
-                                                                    "@sponsored",
-                                                                    style: style
-                                                                        .titleLarge!
-                                                                        .copyWith(
-                                                                      color: Colors
-                                                                          .pink,
+                                                                  ))
+                                                              : Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      "@sponsored",
+                                                                      style: style
+                                                                          .titleLarge!
+                                                                          .copyWith(
+                                                                        color: Colors
+                                                                            .pink,
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                          ),
+                                                                    SizedBox(
+                                                                      width:
+                                                                          150,
+                                                                      child:
+                                                                          MyElevatedButton(
+                                                                        buttonText:
+                                                                            "Click Here",
+                                                                        height:
+                                                                            30,
+                                                                        style: style
+                                                                            .titleMedium,
+                                                                        onPressed:
+                                                                            () {
+                                                                          // if (data.url !=
+                                                                          //     "") {
+                                                                          Get.to(WebViewScreen(
+                                                                              // data.url
+                                                                              'https://flutter.dev'));
+                                                                          // }
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                           controller.profileId ==
                                                                   data.user.id
                                                               ? SizedBox()
@@ -326,28 +370,33 @@ class HomePageScreen extends StatelessWidget {
                                                                       .bold,
                                                             ),
                                                           ),
-                                                          HashTagText(
-                                                              onTap: (tag) {
-                                                                Get.to(
-                                                                    SearchHashTags(
-                                                                  hashTag: tag,
-                                                                ));
-                                                              },
-                                                              text: parser
-                                                                  .emojify(data
-                                                                      .description),
-                                                              basicStyle:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              decoratedStyle:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color:
-                                                                    Colors.blue,
-                                                              )),
+                                                          isReel
+                                                              ? HashTagText(
+                                                                  onTap: (tag) {
+                                                                    Get.to(
+                                                                        SearchHashTags(
+                                                                      hashTag:
+                                                                          tag,
+                                                                    ));
+                                                                  },
+                                                                  text: parser
+                                                                      .emojify(data
+                                                                          .description),
+                                                                  basicStyle:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  decoratedStyle:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ))
+                                                              : SizedBox(),
                                                         ],
                                                       ),
                                                     ),
@@ -356,17 +405,14 @@ class HomePageScreen extends StatelessWidget {
                                                     width: 70,
                                                     margin: isReel
                                                         ? EdgeInsets.only(
-                                                            top: size.height /
-                                                                (3))
+                                                            bottom: 15)
                                                         : EdgeInsets.only(
-                                                            top: size.height /
-                                                                5 *
-                                                                3.5),
+                                                            bottom: 50),
                                                     child: isReel
                                                         ? Column(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .spaceEvenly,
+                                                                    .end,
                                                             children: [
                                                               Column(
                                                                 children: [
@@ -439,6 +485,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       })
                                                                 ],
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               Column(
                                                                 children: [
                                                                   InkWell(
@@ -496,6 +544,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       }),
                                                                 ],
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               Column(
                                                                 children: [
                                                                   InkWell(
@@ -544,6 +594,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       })
                                                                 ],
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               InkWell(
                                                                 onTap: () {},
                                                                 child:
@@ -554,6 +606,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       .white,
                                                                 ),
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               PopupMenuButton<
                                                                       String>(
                                                                   child:
@@ -576,40 +630,40 @@ class HomePageScreen extends StatelessWidget {
                                                                                 mainAxisSize: MainAxisSize.min,
                                                                                 children: <Widget>[
                                                                                   RadioListTile<ReportReason>(
-                                                                                    title: const Text('reason1'),
-                                                                                    value: ReportReason.reason1,
+                                                                                    title: const Text('Hate Speech'),
+                                                                                    value: ReportReason.hateSpeech,
                                                                                     groupValue: _reason.value,
                                                                                     onChanged: (ReportReason? value) {
                                                                                       _reason.value = value;
                                                                                     },
                                                                                   ),
                                                                                   RadioListTile<ReportReason>(
-                                                                                    title: const Text('reason2'),
-                                                                                    value: ReportReason.reason2,
+                                                                                    title: const Text('Bullying'),
+                                                                                    value: ReportReason.bullying,
                                                                                     groupValue: _reason.value,
                                                                                     onChanged: (ReportReason? value) {
                                                                                       _reason.value = value;
                                                                                     },
                                                                                   ),
                                                                                   RadioListTile<ReportReason>(
-                                                                                    title: const Text('reason3'),
-                                                                                    value: ReportReason.reason3,
+                                                                                    title: const Text('Impersonation'),
+                                                                                    value: ReportReason.impersonation,
                                                                                     groupValue: _reason.value,
                                                                                     onChanged: (ReportReason? value) {
                                                                                       _reason.value = value;
                                                                                     },
                                                                                   ),
                                                                                   RadioListTile<ReportReason>(
-                                                                                    title: const Text('reason4'),
-                                                                                    value: ReportReason.reason4,
+                                                                                    title: const Text('Illegal content'),
+                                                                                    value: ReportReason.illegalContent,
                                                                                     groupValue: _reason.value,
                                                                                     onChanged: (ReportReason? value) {
                                                                                       _reason.value = value;
                                                                                     },
                                                                                   ),
                                                                                   RadioListTile<ReportReason>(
-                                                                                    title: const Text('reason5'),
-                                                                                    value: ReportReason.reason5,
+                                                                                    title: const Text('Abusive content'),
+                                                                                    value: ReportReason.abusiveContent,
                                                                                     groupValue: _reason.value,
                                                                                     onChanged: (ReportReason? value) {
                                                                                       _reason.value = value;
@@ -629,8 +683,10 @@ class HomePageScreen extends StatelessWidget {
                                                                           onPressed:
                                                                               () {
                                                                             Get.back();
-                                                                            onSelect(data.id,
-                                                                                index);
+                                                                            onSelect(
+                                                                                data.id,
+                                                                                index,
+                                                                                _reason.value.toString());
                                                                             showSnackBar('This reel has been reported to the Admin!');
                                                                           },
                                                                           child:
@@ -659,7 +715,27 @@ class HomePageScreen extends StatelessWidget {
                                                             ],
                                                           )
                                                         : Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
                                                             children: [
+                                                              ConfettiWidget(
+                                                                confettiController:
+                                                                    _controllerCenter,
+                                                                blastDirectionality:
+                                                                    BlastDirectionality
+                                                                        .explosive, // don't specify a direction, blast randomly
+                                                                shouldLoop:
+                                                                    false, // start again as soon as the animation is finished
+                                                                colors: const [
+                                                                  Colors.green,
+                                                                  Colors.blue,
+                                                                  Colors.pink,
+                                                                  Colors.orange,
+                                                                  Colors.purple
+                                                                ], // manually specify the colors to be used
+                                                                // createParticlePath: drawStar, // define a custom shape/path.
+                                                              ),
                                                               InkWell(
                                                                 onTap: () {
                                                                   // _changeRotation();
@@ -749,7 +825,7 @@ class HomePageScreen extends StatelessWidget {
                                           pageController2.jumpToPage(0);
                                         },
                                       )
-                                    : WebViewScreen();
+                                    : WebViewScreen("https://flutter.dev/");
                               }
                             },
                           );

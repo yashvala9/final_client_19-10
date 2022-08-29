@@ -174,7 +174,8 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           AccountTile(
             asset: Assets.accountStoke,
             title: "Random Follower Picker",
-            onPressed: () {
+            onPressed: () async {
+              await _controller.getContestByUser();
               if (_controller.contestModel == null) {
                 Get.dialog(
                   AlertDialog(

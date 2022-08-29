@@ -43,13 +43,14 @@ class CommentController extends GetxController {
     comment = "";
   }
 
-  void getCommentsByReelId(int reelId) async {
+  Future<void> getCommentsByReelId(int reelId) async {
     loading = true;
     try {
       commentList = await _reelRepo.getCommentByReelId(reelId, token!);
     } catch (e) {
       print("getCommentsByReelId: $e");
     }
+    commentList = commentList.reversed.toList();
     loading = false;
     update();
   }

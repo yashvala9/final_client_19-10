@@ -57,7 +57,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
 
       // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
-        videoPlayerController.play();
+        // videoPlayerController.play();
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);
@@ -88,9 +88,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     final size = MediaQuery.of(context).size;
 
     videoPlayerController.addListener(() async {
-      if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0 ||
-              videoPlayerController.value.duration.inSeconds - 1 <=
-                  videoPlayerController.value.position.inSeconds) &&
+      if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
           videoPlayerController.value.position.inSeconds != 0 &&
           updated != videoPlayerController.value.position.inSeconds) {
         //checking the duration and position every time Video Completed

@@ -30,6 +30,7 @@ class AccountSettingsController extends GetxController {
 
   Future<void> getContestByUser() async {
     try {
+      contestModel = null;
       var v = await _giveawayRepo.getContestsByUserId(profileId!, token!);
       printInfo(info: v.toString());
 

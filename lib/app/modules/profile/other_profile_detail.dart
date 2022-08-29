@@ -133,7 +133,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                       .toString(),
                                                   textAlign: TextAlign.center,
                                                   style: style.headline6),
-                                              subtitle: Text("Followings",
+                                              subtitle: Text("Following",
                                                   textAlign: TextAlign.center,
                                                   style: style.titleMedium),
                                             )),
@@ -293,29 +293,14 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Column(
-                                            children: const [
+                                            children: [
                                               Center(
                                                   child: Text(
-                                                "Upcoming giveaway on 18th June.",
+                                                "\"${widget.profileModel.user_profile!.bio!}\"",
                                                 style: TextStyle(
                                                     color: Colors.red,
                                                     fontSize: 18),
                                               )),
-                                              Center(
-                                                  child: Text(
-                                                "Stay Tuned",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 18),
-                                              )),
-                                              Center(
-                                                child: Text(
-                                                  "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),
@@ -421,8 +406,8 @@ class ProfileReel extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
             ),
             itemBuilder: (context, index) {
               return GestureDetector(

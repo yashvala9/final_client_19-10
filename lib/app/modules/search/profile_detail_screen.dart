@@ -153,7 +153,7 @@ class ProfileDetail extends StatelessWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: style.headline6),
-                                                    subtitle: Text("Followings",
+                                                    subtitle: Text("Following",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style:
@@ -334,61 +334,33 @@ class ProfileDetail extends StatelessWidget {
                                                           ),
                                                         );
                                                 }),
-                                            _controller.searchProfiles[index]
-                                                        .status ==
-                                                    'VERIFIED'
-                                                ? Container(
-                                                    width: Get.width * 0.9,
-                                                    decoration: BoxDecoration(
-                                                        color: const Color
-                                                                .fromRGBO(
-                                                            255, 240, 218, 1),
-                                                        border: Border.all(
-                                                          color: Colors
-                                                              .transparent,
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    20))),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              16.0),
-                                                      child: Column(
-                                                        children: const [
-                                                          Center(
-                                                              child: Text(
-                                                            "Upcoming giveaway on 18th June.",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.red,
-                                                                fontSize: 18),
-                                                          )),
-                                                          Center(
-                                                              child: Text(
-                                                            "Stay Tuned",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.red,
-                                                                fontSize: 18),
-                                                          )),
-                                                          Center(
-                                                            child: Text(
-                                                              "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                              style: TextStyle(
-                                                                  fontSize: 16),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(),
+                                            Container(
+                                              width: Get.width * 0.9,
+                                              decoration: BoxDecoration(
+                                                  color: const Color.fromRGBO(
+                                                      255, 240, 218, 1),
+                                                  border: Border.all(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(16.0),
+                                                child: Column(
+                                                  children: [
+                                                    Center(
+                                                        child: Text(
+                                                      "\"${profileModel.user_profile!.bio!}\"",
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 18),
+                                                    )),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
