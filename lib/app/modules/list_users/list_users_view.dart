@@ -95,8 +95,7 @@ class ListUsersView extends StatelessWidget {
                           ),
                         );
                       },
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 8),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       leading: CircleAvatar(
                         radius: 25,
                         backgroundColor: theme.colorScheme.primary,
@@ -194,8 +193,7 @@ class ListUsersView extends StatelessWidget {
                           ),
                         );
                       },
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 8),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       leading: CircleAvatar(
                         radius: 25,
                         backgroundColor: theme.colorScheme.primary,
