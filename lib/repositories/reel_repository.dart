@@ -47,9 +47,33 @@ class ReelRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
+      print('212121 ${ReelModel.fromMap(body)}');
       return ReelModel.fromMap(body);
     } else {
       return Future.error(body['detail']);
+    }
+  }
+
+  Future<ReelModel> getReelByCommentId(String commentId, String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse("${Base.getEntity}/comment/$commentId"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+      );
+      final body = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return await getSingleReel(body['reel_id'].toString(), token);
+      } else {
+        return Future.error(body['detail']);
+      }
+    } catch (e) {
+      // showSnackBar("Error getReelByCommentId $e");
+      printInfo(info: "Error getReelByCommentId $e");
+
+      return Future.error(e);
     }
   }
 
@@ -423,7 +447,7 @@ class ReelRepository {
         },
         body: jsonEncode(map),
       );
-      print('212121 ${response.body}');
+      // print('212121 ${response.body}');
       if (response.statusCode == 201 || response.statusCode == 200) {
         return;
       } else {

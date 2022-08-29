@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
@@ -7,10 +9,12 @@ import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import '../../../models/reel_model.dart';
+import '../../../repositories/profile_repository.dart';
 
 class SingleFeedController extends GetxController {
   final _reelRepo = Get.put(ReelRepository());
   final _authService = Get.put(AuthService());
+  final _profileRepo = Get.put(ProfileRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -22,6 +26,7 @@ class SingleFeedController extends GetxController {
     update();
   }
 
+  List<int> reportList = [];
   bool _showLike = false;
   bool get showLike => _showLike;
   set showLike(bool showLike) {
@@ -64,6 +69,15 @@ class SingleFeedController extends GetxController {
       print("TogglelikeError: $e");
     }
     update();
+  }
+
+  void toggleFollowing(int id) async {
+    try {
+      _profileRepo.toggleFollow(id, token!);
+      update();
+    } catch (e) {
+      log("toggleFollowingError: $e");
+    }
   }
 }
 

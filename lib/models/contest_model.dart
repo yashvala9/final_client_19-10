@@ -78,8 +78,8 @@ class ContestModel {
     var v = ContestModel(
       contest_name: map['contest_name'] as String,
       creator_type: map['creator_type'] as String,
-      start_date: DateTime.parse(map['start_date']),
-      end_date: DateTime.parse(map['end_date']),
+      start_date: DateTime.parse(map['start_date']).toLocal(),
+      end_date: DateTime.parse(map['end_date']).toLocal(),
       rules: map['rules'] as String,
       prize_name: map['prizes'].isNotEmpty
           ? map['prizes'][0]['prize_name'] as String

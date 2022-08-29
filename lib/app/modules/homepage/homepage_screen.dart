@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
@@ -51,6 +52,8 @@ class HomePageScreen extends StatelessWidget {
   var myMenuItems = <String>[
     'Report',
   ];
+  late ConfettiController _controllerCenter;
+  bool isAnimationPlaying = false;
 
   void onSelect(int id, int index, String reason) {
     controller.reportReelOrComment(reason, id, index);
@@ -84,6 +87,8 @@ class HomePageScreen extends StatelessWidget {
     final style = theme.textTheme;
     var parser = EmojiParser();
     RxDouble turns = 0.0.obs;
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 1));
 
     void _changeRotation() {
       turns.value += 1.0;
@@ -188,6 +193,8 @@ class HomePageScreen extends StatelessWidget {
                                           videoId: data.id,
                                           isReel: isReel,
                                           updatePoints: () {
+                                            _controllerCenter.play();
+
                                             controller.updateManually();
                                             _changeRotation();
                                           },
@@ -227,7 +234,7 @@ class HomePageScreen extends StatelessWidget {
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 20,
-                                                              bottom: 12),
+                                                              bottom: 15),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.min,
@@ -238,23 +245,23 @@ class HomePageScreen extends StatelessWidget {
                                                             MainAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              if (controller
-                                                                      .profileId !=
-                                                                  data.user
-                                                                      .id) {
-                                                                Get.to(
-                                                                  () => ProfileDetail(
-                                                                      profileModel: data.user,
-                                                                      onBack: () {
-                                                                        Get.back();
-                                                                      }),
-                                                                );
-                                                              }
-                                                            },
-                                                            child: isReel
-                                                                ? Text(
+                                                          isReel
+                                                              ? InkWell(
+                                                                  onTap: () {
+                                                                    if (controller
+                                                                            .profileId !=
+                                                                        data.user
+                                                                            .id) {
+                                                                      Get.to(
+                                                                        () => ProfileDetail(
+                                                                            profileModel: data.user,
+                                                                            onBack: () {
+                                                                              Get.back();
+                                                                            }),
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  child: Text(
                                                                     "@${data.user.username}",
                                                                     style: style
                                                                         .titleMedium!
@@ -262,17 +269,42 @@ class HomePageScreen extends StatelessWidget {
                                                                       color: Colors
                                                                           .white,
                                                                     ),
-                                                                  )
-                                                                : Text(
-                                                                    "@sponsored",
-                                                                    style: style
-                                                                        .titleLarge!
-                                                                        .copyWith(
-                                                                      color: Colors
-                                                                          .pink,
+                                                                  ))
+                                                              : Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      "@sponsored",
+                                                                      style: style
+                                                                          .titleLarge!
+                                                                          .copyWith(
+                                                                        color: Colors
+                                                                            .pink,
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                          ),
+                                                                    SizedBox(
+                                                                      width:
+                                                                          150,
+                                                                      child:
+                                                                          MyElevatedButton(
+                                                                        buttonText:
+                                                                            "Click Here",
+                                                                        height:
+                                                                            30,
+                                                                        style: style
+                                                                            .titleMedium,
+                                                                        onPressed:
+                                                                            () {
+                                                                          // if (data.url !=
+                                                                          //     "") {
+                                                                          Get.to(WebViewScreen(
+                                                                              // data.url
+                                                                              'https://flutter.dev'));
+                                                                          // }
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                           controller.profileId ==
                                                                   data.user.id
                                                               ? SizedBox()
@@ -338,28 +370,33 @@ class HomePageScreen extends StatelessWidget {
                                                                       .bold,
                                                             ),
                                                           ),
-                                                          HashTagText(
-                                                              onTap: (tag) {
-                                                                Get.to(
-                                                                    SearchHashTags(
-                                                                  hashTag: tag,
-                                                                ));
-                                                              },
-                                                              text: parser
-                                                                  .emojify(data
-                                                                      .description),
-                                                              basicStyle:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              decoratedStyle:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color:
-                                                                    Colors.blue,
-                                                              )),
+                                                          isReel
+                                                              ? HashTagText(
+                                                                  onTap: (tag) {
+                                                                    Get.to(
+                                                                        SearchHashTags(
+                                                                      hashTag:
+                                                                          tag,
+                                                                    ));
+                                                                  },
+                                                                  text: parser
+                                                                      .emojify(data
+                                                                          .description),
+                                                                  basicStyle:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                  decoratedStyle:
+                                                                      const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ))
+                                                              : SizedBox(),
                                                         ],
                                                       ),
                                                     ),
@@ -368,17 +405,14 @@ class HomePageScreen extends StatelessWidget {
                                                     width: 70,
                                                     margin: isReel
                                                         ? EdgeInsets.only(
-                                                            top: size.height /
-                                                                (3))
+                                                            bottom: 15)
                                                         : EdgeInsets.only(
-                                                            top: size.height /
-                                                                5 *
-                                                                3.5),
+                                                            bottom: 50),
                                                     child: isReel
                                                         ? Column(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .spaceEvenly,
+                                                                    .end,
                                                             children: [
                                                               Column(
                                                                 children: [
@@ -451,6 +485,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       })
                                                                 ],
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               Column(
                                                                 children: [
                                                                   InkWell(
@@ -508,6 +544,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       }),
                                                                 ],
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               Column(
                                                                 children: [
                                                                   InkWell(
@@ -556,6 +594,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       })
                                                                 ],
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               InkWell(
                                                                 onTap: () {},
                                                                 child:
@@ -566,6 +606,8 @@ class HomePageScreen extends StatelessWidget {
                                                                       .white,
                                                                 ),
                                                               ),
+                                                              SizedBox(
+                                                                  height: 15),
                                                               PopupMenuButton<
                                                                       String>(
                                                                   child:
@@ -673,7 +715,27 @@ class HomePageScreen extends StatelessWidget {
                                                             ],
                                                           )
                                                         : Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .end,
                                                             children: [
+                                                              ConfettiWidget(
+                                                                confettiController:
+                                                                    _controllerCenter,
+                                                                blastDirectionality:
+                                                                    BlastDirectionality
+                                                                        .explosive, // don't specify a direction, blast randomly
+                                                                shouldLoop:
+                                                                    false, // start again as soon as the animation is finished
+                                                                colors: const [
+                                                                  Colors.green,
+                                                                  Colors.blue,
+                                                                  Colors.pink,
+                                                                  Colors.orange,
+                                                                  Colors.purple
+                                                                ], // manually specify the colors to be used
+                                                                // createParticlePath: drawStar, // define a custom shape/path.
+                                                              ),
                                                               InkWell(
                                                                 onTap: () {
                                                                   // _changeRotation();

@@ -293,29 +293,14 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(16.0),
                                           child: Column(
-                                            children: const [
+                                            children: [
                                               Center(
                                                   child: Text(
-                                                "Upcoming giveaway on 18th June.",
+                                                "\"${widget.profileModel.user_profile!.bio!}\"",
                                                 style: TextStyle(
                                                     color: Colors.red,
                                                     fontSize: 18),
                                               )),
-                                              Center(
-                                                  child: Text(
-                                                "Stay Tuned",
-                                                style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 18),
-                                              )),
-                                              Center(
-                                                child: Text(
-                                                  "Engineer who love dancing, modelling, photography. DM me for collaboration",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),

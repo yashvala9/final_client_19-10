@@ -106,7 +106,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                             '2121 contestModel.id.toString() ${contestModel.id.toString()}');
                         var v = await _controller
                             .setRandomWinner(contestModel.id.toString());
-                        Get.to(FollowerPickerWinnerView(v));
+                        Get.off(FollowerPickerWinnerView(v));
                       },
                       style: ElevatedButton.styleFrom(
                         primary: const Color.fromRGBO(234, 67, 89, 1),
@@ -218,7 +218,6 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                         child: ElevatedButton(
                           onPressed: () {
                             showSnackBar('Winner has been Informed!');
-                            Get.to(AccountSettingsView());
                           },
                           style: ElevatedButton.styleFrom(
                             primary: const Color.fromRGBO(234, 67, 89, 1),

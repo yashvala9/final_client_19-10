@@ -188,7 +188,69 @@ class NotificationScreen extends StatelessWidget {
                                 title: e.title,
                                 subTile: e.body,
                                 userId: e.data.userId,
-                                traiing: const SizedBox(),
+                                traiing: FutureBuilder<ReelModel>(
+                                  future: _reelRepo.getReelByCommentId(
+                                      e.data.entityId, token!),
+                                  builder: (context, s) {
+                                    print(
+                                        '212121 comment response ${s.hasData}');
+                                    if (!s.hasData) {
+                                      log("single feed error: ${s.error}");
+                                      return const SizedBox();
+                                    }
+
+                                    var reel = s.data!;
+                                    log("tumbnail: ${reel.thumbnail}");
+                                    return InkWell(
+                                      onTap: () {
+                                        Get.to(() => SingleFeedScreen(
+                                              [reel],
+                                              0,
+                                              openComment: true,
+                                            ));
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: FutureBuilder<String>(
+                                          future: _profileRepo
+                                              .getThumbnail(reel.thumbnail),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return CircularProgressIndicator();
+                                            }
+
+                                            return CachedNetworkImage(
+                                              key: UniqueKey(),
+                                              placeholder: (context, url) {
+                                                return IconButton(
+                                                    onPressed: () {},
+                                                    icon: Icon(
+                                                        Icons.refresh_rounded));
+                                              },
+                                              errorWidget: (_, a, b) {
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(),
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                  child: Loading(),
+                                                  // Text("Processing..."),
+                                                );
+                                              },
+                                              imageUrl: snapshot.data!,
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
+                                        )
+
+                                        //  Image.network(
+                                        //   reel.thumbnail,
+                                        // )
+                                        ,
+                                      ),
+                                    );
+                                  },
+                                ),
                               );
                             } else if (e.data.notificationType ==
                                 NotificationType.like) {
