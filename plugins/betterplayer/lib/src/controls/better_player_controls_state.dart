@@ -464,13 +464,13 @@ abstract class BetterPlayerControlsState<T extends StatefulWidget>
             physics: const BouncingScrollPhysics(),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-              decoration: BoxDecoration(
-                color: betterPlayerControlsConfiguration.overflowModalColor,
-                /*shape: RoundedRectangleBorder(side: Bor,borderRadius: 24,)*/
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(24.0),
-                    topRight: Radius.circular(24.0)),
-              ),
+                decoration: BoxDecoration(
+                  color: betterPlayerControlsConfiguration.overflowModalColor,
+                  /*shape: RoundedRectangleBorder(side: Bor,borderRadius: 24,)*/
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(24.0),
+                      topRight: Radius.circular(24.0)),
+                ),
               child: Column(
                 children: children,
               ),

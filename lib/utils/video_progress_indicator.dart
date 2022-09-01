@@ -82,7 +82,7 @@ class _CustomVideoProgressIndicatorState
   Widget build(BuildContext context) {
     List<int> durationDiff = [];
     for (int i = 0; i < controller.value.duration.inSeconds / 5; i++) {
-      durationDiff.add(5);
+      durationDiff.add(i);
     }
 
     Widget progressIndicator;
@@ -108,39 +108,45 @@ class _CustomVideoProgressIndicatorState
           ),
           LinearProgressIndicator(
             value: position / duration,
-            valueColor: AlwaysStoppedAnimation<Color>(colors.playedColor),
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
             backgroundColor: Colors.transparent,
           ),
         ],
       );
     } else {
       progressIndicator = LinearProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(colors.playedColor),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
         backgroundColor: colors.backgroundColor,
       );
     }
-    final Widget paddedProgressIndicator = Stack(children: [
-      SizedBox(
-        height: 15,
-        child: progressIndicator,
-      ),
-      Container(
-          height: 15,
-          child: Row(
-            children: durationDiff
-                .map((e) => Expanded(
-                    flex: e,
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Container(
-                        height: double.infinity,
-                        width: 2,
-                        color: Colors.white70,
-                      ),
-                    )))
-                .toList(),
-          )),
-    ]);
+    final Widget paddedProgressIndicator = Padding(
+        padding: EdgeInsets.all(5.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Stack(children: [
+            SizedBox(
+              height: 25,
+              child: progressIndicator,
+            ),
+            Container(
+                height: 25,
+                child: Row(
+                  children: durationDiff.map((e) {
+                    return Expanded(
+                        flex: 5,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Container(
+                            height: double.infinity,
+                            width: 2,
+                            color:
+                                e == 0 ? Colors.pink.shade400 : Colors.white70,
+                          ),
+                        ));
+                  }).toList(),
+                )),
+          ]),
+        ));
     if (widget.allowScrubbing) {
       return _VideoScrubber(
         controller: controller,

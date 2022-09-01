@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -25,6 +26,7 @@ class EditProfileView extends GetView<EditProfileController> {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(EditProfileController());
   final _picker = ImagePicker();
+  var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -304,13 +306,14 @@ class EditProfileView extends GetView<EditProfileController> {
                             enabled: !_controller.loading,
                             maxLines: 3,
                             decoration: InputDecoration(
-                              hintText:
-                                  _controller.profileModel.user_profile!.bio,
+                              hintText: parser.emojify(
+                                  _controller.profileModel.user_profile!.bio!),
                             ),
                             keyboardType: TextInputType.text,
                             // validator: (v) =>
                             //     v!.isEmpty ? "About is required" : null,
-                            onChanged: (v) => _controller.bio = v,
+                            onChanged: (v) =>
+                                _controller.bio = parser.unemojify(v),
                           ),
                           SizedBox(height: Get.height * 0.03),
                           _controller.loading

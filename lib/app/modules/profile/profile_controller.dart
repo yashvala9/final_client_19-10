@@ -75,7 +75,7 @@ class ProfileController extends GetxController {
   //     print("getReelsById: $e");
   //   }
   // }
- 
+
   void updateManually() {
     update();
   }

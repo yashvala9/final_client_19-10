@@ -95,11 +95,21 @@ class NotificationScreen extends StatelessWidget {
                                                         onPressed: () {
                                                           Get.dialog(
                                                               AlertDialog(
+                                                            backgroundColor:
+                                                                Colors.black54,
                                                             title: snap.data!
                                                                 ? const Text(
-                                                                    "Do you wish to unfollow?")
+                                                                    "Do you wish to unfollow?",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  )
                                                                 : const Text(
-                                                                    "Do you wish to follow?"),
+                                                                    "Do you wish to follow?",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
                                                             actionsAlignment:
                                                                 MainAxisAlignment
                                                                     .spaceAround,
@@ -139,11 +149,21 @@ class NotificationScreen extends StatelessWidget {
                                                         onPressed: () {
                                                           Get.dialog(
                                                               AlertDialog(
+                                                            backgroundColor:
+                                                                Colors.black54,
                                                             title: snap.data!
                                                                 ? const Text(
-                                                                    "Do you wish to unfollow?")
+                                                                    "Do you wish to unfollow?",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  )
                                                                 : const Text(
-                                                                    "Do you wish to follow?"),
+                                                                    "Do you wish to follow?",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
                                                             actionsAlignment:
                                                                 MainAxisAlignment
                                                                     .spaceAround,

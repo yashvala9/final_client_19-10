@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
@@ -25,6 +26,7 @@ class OtherProfileDetail extends StatefulWidget {
 
 class _OtherProfileDetailState extends State<OtherProfileDetail> {
   final _profileRepo = Get.put(ProfileRepository());
+  var parser = EmojiParser();
 
   final _authService = Get.put(AuthService());
 
@@ -158,11 +160,21 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                     child: OutlinedButton(
                                                       onPressed: () {
                                                         Get.dialog(AlertDialog(
+                                                          backgroundColor:
+                                                              Colors.black54,
                                                           title: snapshot.data!
                                                               ? const Text(
-                                                                  "Do you wish to unfollow?")
+                                                                  "Do you wish to unfollow?",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                )
                                                               : const Text(
-                                                                  "Do you wish to follow?"),
+                                                                  "Do you wish to follow?",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
                                                           actionsAlignment:
                                                               MainAxisAlignment
                                                                   .spaceAround,
@@ -221,8 +233,16 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                               onPressed: () {
                                                                 Get.dialog(
                                                                     AlertDialog(
-                                                                  title: const Text(
-                                                                      "Do you wish to follow?"),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .black54,
+                                                                  title:
+                                                                      const Text(
+                                                                    "Do you wish to follow?",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
                                                                   actionsAlignment:
                                                                       MainAxisAlignment
                                                                           .spaceAround,
@@ -296,7 +316,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                             children: [
                                               Center(
                                                   child: Text(
-                                                "\"${widget.profileModel.user_profile!.bio!}\"",
+                                                "\"${parser.emojify(widget.profileModel.user_profile!.bio!)}\"",
                                                 style: TextStyle(
                                                     color: Colors.red,
                                                     fontSize: 18),
