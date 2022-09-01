@@ -44,6 +44,9 @@ class SingleFeedScreen extends StatelessWidget {
     if (openComment) {
       Get.bottomSheet(
         CommentSheet(
+          () {
+            _controller.update();
+          },
           reelId: reels![currentIndex].id,
         ),
         backgroundColor: Colors.white,
@@ -81,7 +84,7 @@ class SingleFeedScreen extends StatelessWidget {
                         allowImplicitScrolling: true,
                         itemCount: reels!.length,
                         controller: PageController(
-                          initialPage: 0,
+                          initialPage: currentIndex,
                           viewportFraction: 1,
                         ),
                         scrollDirection: Axis.vertical,
@@ -129,34 +132,99 @@ class SingleFeedScreen extends StatelessWidget {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 isReel
-                                                    ? InkWell(
-                                                        onTap: () {
-                                                          if (_controller
-                                                                  .profileId !=
-                                                              reels![index]
-                                                                  .user
-                                                                  .id) {
-                                                            Get.to(
-                                                              () =>
-                                                                  ProfileDetail(
-                                                                      profileModel:
+                                                    ? Row(
+                                                        children: [
+                                                          InkWell(
+                                                              onTap: () {
+                                                                if (_controller
+                                                                        .profileId !=
+                                                                    reels![index]
+                                                                        .user
+                                                                        .id) {
+                                                                  Get.to(
+                                                                    () => ProfileDetail(
+                                                                        profileModel: reels![index].user,
+                                                                        onBack: () {
+                                                                          Get.back();
+                                                                        }),
+                                                                  );
+                                                                }
+                                                              },
+                                                              child: Text(
+                                                                "@${reels![index].user.username}",
+                                                                style: style
+                                                                    .titleMedium!
+                                                                    .copyWith(
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              )),
+                                                          _controller.profileId ==
+                                                                  reels![index]
+                                                                      .user
+                                                                      .id
+                                                              ? SizedBox()
+                                                              : isReel
+                                                                  ? FutureBuilder<
+                                                                          bool>(
+                                                                      future: _profileRepo.isFollowing(
                                                                           reels![index]
-                                                                              .user,
-                                                                      onBack:
-                                                                          () {
-                                                                        Get.back();
-                                                                      }),
-                                                            );
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          "@${reels![index].user.username}",
-                                                          style: style
-                                                              .titleMedium!
-                                                              .copyWith(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ))
+                                                                              .user
+                                                                              .id,
+                                                                          _controller
+                                                                              .token!),
+                                                                      builder:
+                                                                          (context,
+                                                                              snapshot) {
+                                                                        if (!snapshot
+                                                                            .hasData) {
+                                                                          return Container();
+                                                                        }
+                                                                        return TextButton(
+                                                                          child: snapshot.data!
+                                                                              ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12))
+                                                                              : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                          onPressed:
+                                                                              () {
+                                                                            Get.dialog(AlertDialog(
+                                                                              backgroundColor: Colors.black54,
+                                                                              title: snapshot.data!
+                                                                                  ? Text(
+                                                                                      "Do you wish to unfollow?",
+                                                                                      style: TextStyle(color: Colors.white),
+                                                                                    )
+                                                                                  : Text(
+                                                                                      "Do you wish to follow?",
+                                                                                      style: TextStyle(color: Colors.white),
+                                                                                    ),
+                                                                              actionsAlignment: MainAxisAlignment.spaceAround,
+                                                                              actions: [
+                                                                                TextButton(
+                                                                                    onPressed: () {
+                                                                                      Get.back();
+                                                                                    },
+                                                                                    child: const Text("Cancel")),
+                                                                                MaterialButton(
+                                                                                  onPressed: () {
+                                                                                    Get.back();
+                                                                                    _controller.toggleFollowing(reels![index].user.id);
+                                                                                  },
+                                                                                  child: const Text("Confirm"),
+                                                                                  color: AppColors.buttonColor,
+                                                                                ),
+                                                                              ],
+                                                                            ));
+                                                                          },
+                                                                          style:
+                                                                              ButtonStyle(
+                                                                            shape:
+                                                                                MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
+                                                                          ),
+                                                                        );
+                                                                      })
+                                                                  : SizedBox(),
+                                                        ],
+                                                      )
                                                     : Column(
                                                         children: [
                                                           Text(
@@ -189,93 +257,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                           ),
                                                         ],
                                                       ),
-                                                _controller.profileId ==
-                                                        reels![index].user.id
-                                                    ? SizedBox()
-                                                    : isReel
-                                                        ? FutureBuilder<bool>(
-                                                            future: _profileRepo
-                                                                .isFollowing(
-                                                                    reels![index]
-                                                                        .user
-                                                                        .id,
-                                                                    _controller
-                                                                        .token!),
-                                                            builder: (context,
-                                                                snapshot) {
-                                                              if (!snapshot
-                                                                  .hasData) {
-                                                                return Container();
-                                                              }
-                                                              return TextButton(
-                                                                child: snapshot
-                                                                        .data!
-                                                                    ? Text(
-                                                                        "Following",
-                                                                        style: TextStyle(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            fontSize:
-                                                                                12))
-                                                                    : Text(
-                                                                        "Follow",
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                            fontSize: 12)),
-                                                                onPressed: () {
-                                                                  Get.dialog(
-                                                                      AlertDialog(
-                                                                    title: snapshot
-                                                                            .data!
-                                                                        ? Text(
-                                                                            "Do you wish to unfollow?")
-                                                                        : Text(
-                                                                            "Do you wish to follow?"),
-                                                                    actionsAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceAround,
-                                                                    actions: [
-                                                                      TextButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            Get.back();
-                                                                          },
-                                                                          child:
-                                                                              const Text("Cancel")),
-                                                                      MaterialButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          Get.back();
-                                                                          _controller.toggleFollowing(reels![index]
-                                                                              .user
-                                                                              .id);
-                                                                        },
-                                                                        child: const Text(
-                                                                            "Confirm"),
-                                                                        color: AppColors
-                                                                            .buttonColor,
-                                                                      ),
-                                                                    ],
-                                                                  ));
-                                                                },
-                                                                style:
-                                                                    ButtonStyle(
-                                                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                                                      side: BorderSide(
-                                                                          color: Colors
-                                                                              .white,
-                                                                          width:
-                                                                              1,
-                                                                          style: BorderStyle
-                                                                              .solid),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10.0))),
-                                                                ),
-                                                              );
-                                                            })
-                                                        : SizedBox(),
                                                 Text(
                                                   parser.emojify(reels![index]
                                                       .video_title),
@@ -341,7 +322,7 @@ class SingleFeedScreen extends StatelessWidget {
                                           ),
                                         ),
                                         Container(
-                                          width: 70,
+                                          width: 50,
                                           margin: isReel
                                               ? EdgeInsets.only(bottom: 15)
                                               : EdgeInsets.only(bottom: 50),
@@ -496,6 +477,10 @@ class SingleFeedScreen extends StatelessWidget {
                                                           onTap: () {
                                                             Get.bottomSheet(
                                                               CommentSheet(
+                                                                () {
+                                                                  _controller
+                                                                      .update();
+                                                                },
                                                                 reelId: reels![
                                                                         index]
                                                                     .id,

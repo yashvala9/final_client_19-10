@@ -50,7 +50,6 @@ class CommentController extends GetxController {
     } catch (e) {
       print("getCommentsByReelId: $e");
     }
-    commentList = commentList.reversed.toList();
     loading = false;
     update();
   }

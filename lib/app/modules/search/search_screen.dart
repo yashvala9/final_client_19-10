@@ -138,8 +138,8 @@ class SearchScreen extends StatelessWidget {
                                     const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 3,
                                   childAspectRatio: 1,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 5,
+                                  crossAxisSpacing: 2,
+                                  mainAxisSpacing: 2,
                                 ),
                                 delegate: SliverChildBuilderDelegate(
                                   (context, index) {

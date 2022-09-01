@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(AuthController());
-  
+
   // final _emailController = TextEditingController();
   // final _passwordController = TextEditingController();
 
@@ -61,7 +61,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                               SizedBox(height: Get.height * 0.03),
                               Text(
-                                'Username',
+                                'Email',
                                 textScaleFactor: Get.textScaleFactor,
                                 style: style.labelLarge?.copyWith(
                                   color: AppColors.labelLarge,
