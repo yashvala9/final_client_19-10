@@ -23,7 +23,7 @@ class NavigationBarScreen extends StatelessWidget {
         child: Container(
           height: 66,
           decoration: BoxDecoration(
-            color: controller.tabIndex.value == 0 ? Colors.black : Colors.white,
+            color: Colors.black,
             borderRadius: const BorderRadius.only(),
           ),
           child: Row(
@@ -36,8 +36,11 @@ class NavigationBarScreen extends StatelessWidget {
                     onPressed: () {
                       if (controller.tabIndex.value != 0) {
                         controller.changeTabIndex(0);
+                        homepage.moveToReel();
                       } else {
-                        if (homepage.pageController.page != 0) {
+                        if (homepage.controller.secondPageIndex != 0) {
+                          homepage.moveToReel();
+                        } else if (homepage.pageController.page != 0) {
                           homepage.goToFirstPage();
                           // homepage.moveNextReel(0);
                         } else {

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/search/profile_detail_controller.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
@@ -24,6 +25,7 @@ import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
+import '../profile/profile_photo_view.dart';
 import '../profile/profile_screen.dart';
 import '../single_feed/single_feed_screen.dart';
 
@@ -34,6 +36,7 @@ class ProfileDetail extends StatelessWidget {
   final _profileRepo = Get.put(ProfileRepository());
 
   final CommunicationService _communicationService = CommunicationService.to;
+  var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -195,12 +198,19 @@ class ProfileDetail extends StatelessWidget {
                                                                       () {
                                                                     Get.dialog(
                                                                         AlertDialog(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .black54,
                                                                       title: snapshot
                                                                               .data!
                                                                           ? const Text(
-                                                                              "Do you wish to unfollow?")
+                                                                              "Do you wish to unfollow?",
+                                                                              style: TextStyle(color: Colors.white),
+                                                                            )
                                                                           : const Text(
-                                                                              "Do you wish to follow?"),
+                                                                              "Do you wish to follow?",
+                                                                              style: TextStyle(color: Colors.white),
+                                                                            ),
                                                                       actionsAlignment:
                                                                           MainAxisAlignment
                                                                               .spaceAround,
@@ -322,9 +332,17 @@ class ProfileDetail extends StatelessWidget {
                                                                         () {
                                                                       Get.dialog(
                                                                           AlertDialog(
+                                                                        backgroundColor:
+                                                                            Colors.black54,
                                                                         title: snapshot.data!
-                                                                            ? const Text("Do you wish to unfollow?")
-                                                                            : const Text("Do you wish to follow?"),
+                                                                            ? const Text(
+                                                                                "Do you wish to unfollow?",
+                                                                                style: TextStyle(color: Colors.white),
+                                                                              )
+                                                                            : const Text(
+                                                                                "Do you wish to follow?",
+                                                                                style: TextStyle(color: Colors.white),
+                                                                              ),
                                                                         actionsAlignment:
                                                                             MainAxisAlignment.spaceAround,
                                                                         actions: [
@@ -444,7 +462,7 @@ class ProfileDetail extends StatelessWidget {
                                                   children: [
                                                     Center(
                                                         child: Text(
-                                                      "\"${profileModel.user_profile!.bio!}\"",
+                                                      "\"${parser.emojify(profileModel.user_profile!.bio!)}\"",
                                                       style: TextStyle(
                                                           color: Colors.red,
                                                           fontSize: 18),
@@ -466,15 +484,36 @@ class ProfileDetail extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Material(
-                                          elevation: 3,
-                                          shape: CircleBorder(),
-                                          child: CircleAvatar(
-                                            radius: 40,
-                                            backgroundImage: NetworkImage(
-                                                "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(ProfilePhotoView(
+                                                'hero3',
+                                                profileModel
+                                                    .user_profile!.fullname!,
+                                                "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"));
+                                          },
+                                          child: Material(
+                                            elevation: 3,
+                                            shape: CircleBorder(),
+                                            child: Hero(
+                                              tag: "hero3",
+                                              child: CircleAvatar(
+                                                radius: 40,
+                                                backgroundImage: NetworkImage(
+                                                    "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        )
+                                        // Material(
+                                        //   elevation: 3,
+                                        //   shape: CircleBorder(),
+                                        //   child: CircleAvatar(
+                                        //     radius: 40,
+                                        //     backgroundImage: NetworkImage(
+                                        //         "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -595,8 +634,8 @@ class ProfileReel extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
+              crossAxisSpacing: 2,
+              mainAxisSpacing: 2,
             ),
             itemBuilder: (context, index) {
               return GestureDetector(

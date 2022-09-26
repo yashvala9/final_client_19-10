@@ -13,8 +13,10 @@ import 'comment_controller.dart';
 
 class CommentSheet extends StatelessWidget {
   final int reelId;
+  final VoidCallback onCommentUpdated;
 
-  CommentSheet({Key? key, required this.reelId}) : super(key: key);
+  CommentSheet(this.onCommentUpdated, {Key? key, required this.reelId})
+      : super(key: key);
 
   buildProfile(String profilePhoto) {
     return CircleAvatar(
@@ -101,6 +103,8 @@ class CommentSheet extends StatelessWidget {
                                       MaterialButton(
                                         onPressed: () {
                                           _controller.deleteComment(index);
+
+                                          onCommentUpdated();
                                           Get.back();
                                         },
                                         child: const Text("YES"),
@@ -153,6 +157,7 @@ class CommentSheet extends StatelessWidget {
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.fastOutSlowIn);
                             });
+                            onCommentUpdated();
                           }
                         },
                         icon: const Icon(Icons.send),

@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
@@ -39,6 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final authService = Get.put(AuthService());
 
   final _profileRepo = Get.put(ProfileRepository());
+  var parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     children: [
                                                       Center(
                                                           child: Text(
-                                                        "\"${profileModel.user_profile!.bio!}\"",
+                                                        "\"${parser.emojify(profileModel.user_profile!.bio!)}\"",
                                                         style: TextStyle(
                                                             color: Colors.red,
                                                             fontSize: 18),
@@ -329,13 +331,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: GestureDetector(
                                         onTap: () {
                                           Get.to(ProfilePhotoView(
+                                              'hero2',
+                                              profileModel
+                                                  .user_profile!.fullname!,
                                               "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"));
                                         },
                                         child: Material(
                                           elevation: 3,
                                           shape: CircleBorder(),
                                           child: Hero(
-                                            tag: "hero",
+                                            tag: "hero2",
                                             child: CircleAvatar(
                                               radius: 40,
                                               backgroundImage: NetworkImage(
@@ -373,7 +378,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ]),
         Expanded(
           child: TabBarView(children: [
-         
             ProfileReel(
               key: UniqueKey(),
             ),
@@ -442,9 +446,11 @@ class ProfileReel extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<List<ReelModel>>(
       future: profileId != null
-          ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
+          ? _profileRepo.getReelByProfileId(profileId!, _controller.token!,
+              limit: 50, skip: 0)
           : _profileRepo.getReelByProfileId(
-              _controller.profileId!, _controller.token!),
+              _controller.profileId!, _controller.token!,
+              limit: 50, skip: 0),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -517,7 +523,6 @@ class ProfileReel extends StatelessWidget {
 
                   return CachedNetworkImage(
                     key: UniqueKey(),
-               
                     errorWidget: (_, a, b) {
                       return Container(
                         decoration: BoxDecoration(
