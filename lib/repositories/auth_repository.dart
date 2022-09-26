@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reel_ro/app/modules/auth/create_profile/create_profile_view.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
+import 'package:reel_ro/services/communication_services.dart';
 import 'package:reel_ro/utils/constants.dart';
 
 import '../utils/base.dart';
@@ -15,8 +18,10 @@ import '../utils/base.dart';
 class AuthRepository {
   User? user = FirebaseAuth.instance.currentUser;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final _googleSignIn = GoogleSignIn();
   final _storage = GetStorage();
+  final _profileRepo = ProfileRepository();
 
   Future<String> signIn(
       {required String email, required String password}) async {
@@ -29,12 +34,21 @@ class AuthRepository {
       if (body['status'] == Constants.unverified) {
         return Constants.unverified;
       } else {
+        log("signInBody: $body");
         var map = {
           Constants.jwt: body['access_token'],
           // Constants.userId: body['user']['id'],
         };
         print("Token: $map");
+        print("ChatToken: ${body['access_token']}");
         await _storage.write(Constants.token, map);
+
+        final profile =
+            await _profileRepo.getCurrentUsesr(body['access_token']);
+        CommunicationService.to.saveStreamAccessToken(body['chat_token']);
+
+        // _storage.write('streamToken', body['chat_token']);
+        // _communicationService.saveStreamAccessToken(body['chat_token']);
 
         return "Login successful";
       }
@@ -55,6 +69,7 @@ class AuthRepository {
       body: jsonEncode(data),
     );
     final body = jsonDecode(response.body);
+    log("SignUpBody: $body");
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
     } else {
@@ -276,7 +291,8 @@ class AuthRepository {
 
   Future<void> signOut(String deviceToken, String token) async {
     // await _auth.signOut();
-     removeToken(deviceToken, token);
-    _storage.remove(Constants.token);
+    // removeToken(deviceToken, token);
+    log("deletetingToken: ${_storage.read(Constants.token)}");
+    await _storage.remove(Constants.token);
   }
 }
