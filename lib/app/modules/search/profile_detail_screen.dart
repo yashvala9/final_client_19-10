@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +11,19 @@ import 'package:reel_ro/app/modules/search/profile_detail_controller.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
+import '../../../services/communication_services.dart';
 import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
+import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
 import '../profile/profile_photo_view.dart';
 import '../profile/profile_screen.dart';
@@ -29,6 +34,8 @@ class ProfileDetail extends StatelessWidget {
   ProfileDetail({Key? key, required this.index}) : super(key: key);
   final _controller = Get.find<SearchController>();
   final _profileRepo = Get.put(ProfileRepository());
+
+  final CommunicationService _communicationService = CommunicationService.to;
   var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
@@ -252,7 +259,45 @@ class ProfileDetail extends StatelessWidget {
                                                                 child:
                                                                     OutlinedButton(
                                                                   onPressed:
-                                                                      () {},
+                                                                      () {
+                                                                    log(">>>>>>>>>>>>>>>>>>>>");
+                                                                    String
+                                                                        queryId =
+                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${_controller.searchProfiles[index].id.hashCode}';
+                                                                    String
+                                                                        newChannelId =
+                                                                        '${_controller.searchProfiles[index].id.hashCode}${_communicationService.client.state.currentUser!.id.hashCode}';
+                                                                    final Channel
+                                                                        _newChannel =
+                                                                        _communicationService
+                                                                            .client
+                                                                            .channel(
+                                                                      'messaging',
+                                                                      id: newChannelId,
+                                                                      extraData: {
+                                                                        'isGroupChat':
+                                                                            false,
+                                                                        'presence':
+                                                                            true,
+                                                                        'members':
+                                                                            [
+                                                                          _controller
+                                                                              .searchProfiles[index]
+                                                                              .id,
+                                                                          _communicationService
+                                                                              .client
+                                                                              .state
+                                                                              .currentUser!
+                                                                              .id,
+                                                                        ],
+                                                                      },
+                                                                    );
+                                                                    ChatView
+                                                                        .open(
+                                                                      channel:
+                                                                          _newChannel,
+                                                                    );
+                                                                  },
                                                                   style: OutlinedButton.styleFrom(
                                                                       minimumSize:
                                                                           const Size.fromHeight(
@@ -336,7 +381,54 @@ class ProfileDetail extends StatelessWidget {
                                                                 child:
                                                                     OutlinedButton(
                                                                   onPressed:
-                                                                      () {},
+                                                                      () async {
+                                                                    log("aaaaaaaaaaaaaaaaa");
+
+                                                                    log("State: ${_communicationService.client.state}");
+                                                                    log("CurrentUser: ${_communicationService.client.state.currentUser}");
+                                                                    String
+                                                                        queryId =
+                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
+                                                                    String
+                                                                        newChannelId =
+                                                                        '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+
+                                                                    final Channel
+                                                                        _newChannel =
+                                                                        _communicationService
+                                                                            .client
+                                                                            .channel(
+                                                                      'messaging',
+                                                                      id: newChannelId,
+                                                                      extraData: {
+                                                                        'isGroupChat':
+                                                                            false,
+                                                                        'presence':
+                                                                            true,
+                                                                        'members':
+                                                                            [
+                                                                          profileModel
+                                                                              .id
+                                                                              .toString(),
+                                                                          _communicationService
+                                                                              .client
+                                                                              .state
+                                                                              .currentUser!
+                                                                              .id
+                                                                              .toString(),
+                                                                        ],
+                                                                      },
+                                                                    );
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(builder:
+                                                                            (context) {
+                                                                      return ChannelPage(
+                                                                        channel:
+                                                                            _newChannel,
+                                                                      );
+                                                                    }));
+                                                                  },
                                                                   style: OutlinedButton.styleFrom(
                                                                       minimumSize:
                                                                           const Size.fromHeight(

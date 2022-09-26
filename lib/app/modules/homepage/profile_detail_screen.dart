@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
@@ -5,13 +7,16 @@ import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
+import '../../../services/communication_services.dart';
 import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
+import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
 import '../profile/profile_photo_view.dart';
 import '../single_feed/single_feed_screen.dart';
@@ -27,6 +32,9 @@ class ProfileDetail extends StatelessWidget {
   }) : super(key: key);
   final _controller = Get.find<HomePageController>();
   final _profileRepo = Get.put(ProfileRepository());
+
+  final CommunicationService _communicationService = CommunicationService.to;
+
   var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
@@ -336,7 +344,39 @@ class ProfileDetail extends StatelessWidget {
                                                                   child:
                                                                       OutlinedButton(
                                                                     onPressed:
-                                                                        () {},
+                                                                        () {
+                                                                      log("...................");
+                                                                      String
+                                                                          queryId =
+                                                                          '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
+                                                                      String
+                                                                          newChannelId =
+                                                                          '${profileModel.id.hashCode}${_communicationService.client.state.currentUser!.id.hashCode}';
+                                                                      final Channel
+                                                                          _newChannel =
+                                                                          _communicationService
+                                                                              .client
+                                                                              .channel(
+                                                                        'messaging',
+                                                                        id: newChannelId,
+                                                                        extraData: {
+                                                                          'isGroupChat':
+                                                                              false,
+                                                                          'presence':
+                                                                              true,
+                                                                          'members':
+                                                                              [
+                                                                            profileModel.id,
+                                                                            _communicationService.client.state.currentUser!.id,
+                                                                          ],
+                                                                        },
+                                                                      );
+                                                                      ChatView
+                                                                          .open(
+                                                                        channel:
+                                                                            _newChannel,
+                                                                      );
+                                                                    },
                                                                     style: OutlinedButton.styleFrom(
                                                                         minimumSize:
                                                                             const Size.fromHeight(50)),

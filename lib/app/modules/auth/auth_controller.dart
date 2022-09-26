@@ -14,6 +14,7 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/constants.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
+import '../../../services/communication_services.dart';
 import '../navigation_bar/navigation_bar_screen.dart';
 
 class AuthController extends GetxController {

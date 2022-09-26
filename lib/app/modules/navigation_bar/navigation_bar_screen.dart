@@ -6,6 +6,7 @@ import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
 
 import '../../inbox_screen.dart';
+import '../chat/chat_list.dart';
 import '../homepage/homepage_screen.dart';
 import 'navigation_bar_controller.dart';
 
@@ -182,7 +183,7 @@ class NavigationBarScreen extends StatelessWidget {
                   homepage,
                   SearchScreen(),
                   GiveawayView(),
-                  const InboxScreen(),
+                  ChatList(),
                   ProfileScreen(),
                 ],
                 index: controller.tabIndex.value,

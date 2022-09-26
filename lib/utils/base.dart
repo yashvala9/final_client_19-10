@@ -1,5 +1,5 @@
 class Base {
-  static const _url = 'http://13.234.159.127';
+  static const _url = 'http://15.207.250.118';
 
   static const register = "$_url/users/";
   static const login = '$_url/login';
