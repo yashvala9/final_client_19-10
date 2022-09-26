@@ -487,7 +487,6 @@ class ProfileReel extends StatelessWidget {
                 _controller.update();
               }
             }
-            log("Index $index:  ${reels[index].thumbnail}");
             var tumb = reels[index].thumbnail;
 
             return InkWell(

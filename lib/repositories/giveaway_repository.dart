@@ -135,7 +135,7 @@ class GiveawayRepository {
     }
   }
 
-  Future<ContestModel> getContestsByUserId(int profileId, String token) async {
+  Future<ContestModel?> getContestsByUserId(int profileId, String token) async {
     final response = await http.get(
       Uri.parse('${Base.giveaway}user/$profileId'),
       // user?user_id=$profileId'),
@@ -148,7 +148,10 @@ class GiveawayRepository {
     // print('list212121body2 $profileId');
     // print('list212121body2 $body');
     if (response.statusCode == 200) {
-      return ContestModel.fromMap(json.decode(response.body)[0]);
+      if(response.body == "[]"){
+        return null;
+      }
+      return ContestModel.fromMap(body[0]);
     } else {
       return Future.error(body);
     }

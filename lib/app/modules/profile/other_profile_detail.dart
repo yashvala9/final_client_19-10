@@ -282,7 +282,9 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                               const EdgeInsets
                                                                   .all(8.0),
                                                           child: OutlinedButton(
-                                                            onPressed: () {},
+                                                            onPressed: () {
+                                                              log("KKKkkkkkkkkkkkkkk");
+                                                            },
                                                             style: OutlinedButton
                                                                 .styleFrom(
                                                                     minimumSize:
