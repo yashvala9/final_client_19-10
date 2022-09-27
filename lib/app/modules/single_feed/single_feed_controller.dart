@@ -71,6 +71,19 @@ class SingleFeedController extends GetxController {
     update();
   }
 
+  void phototLikeToggle(int id) async {
+    try {
+      await _reelRepo.photoToggleLike(id, token!);
+      final isLiked = await _reelRepo.getPhotosLikeFlag(id, token!);
+      if (isLiked) {
+        toggleLikeShow();
+      }
+    } catch (e) {
+      print("TogglelikeError: $e");
+    }
+    update();
+  }
+
   void toggleFollowing(int id) async {
     try {
       _profileRepo.toggleFollow(id, token!);

@@ -100,9 +100,12 @@ class CommentRepository {
     }
   }
 
-  Future<void> toggleCommentLike(int commentId, String token) async {
+  Future<void> toggleCommentLike(int id, String token,
+      {bool isPhoto = false}) async {
     final response = await http.post(
-      Uri.parse("${Base.toggleCommentLike}/$commentId"),
+      isPhoto
+          ? Uri.parse("${Base.togglePhotoCommentLike}/$id")
+          : Uri.parse("${Base.toggleCommentLike}/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",

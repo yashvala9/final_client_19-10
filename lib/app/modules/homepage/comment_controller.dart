@@ -43,10 +43,11 @@ class CommentController extends GetxController {
     comment = "";
   }
 
-  Future<void> getCommentsByReelId(int reelId) async {
+  Future<void> getCommentsById(int id, {bool isPhoto = false}) async {
     loading = true;
     try {
-      commentList = await _reelRepo.getCommentByReelId(reelId, token!);
+      commentList =
+          await _reelRepo.getCommentById(id, token!, isPhoto: isPhoto);
     } catch (e) {
       print("getCommentsByReelId: $e");
     }
@@ -54,14 +55,15 @@ class CommentController extends GetxController {
     update();
   }
 
-  void toggleLike(int index) {
+  void toggleLike(int index, {bool isPhoto = false}) {
     commentList[index].isLiked = !commentList[index].isLiked;
     if (commentList[index].isLiked) {
       commentList[index].likeCount++;
     } else {
       commentList[index].likeCount--;
     }
-    _commentRepo.toggleCommentLike(commentList[index].id, token!);
+    _commentRepo.toggleCommentLike(commentList[index].id, token!,
+        isPhoto: isPhoto);
     update();
   }
 

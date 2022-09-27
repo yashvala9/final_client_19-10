@@ -12,11 +12,16 @@ import '../../../widgets/loading.dart';
 import 'comment_controller.dart';
 
 class CommentSheet extends StatelessWidget {
-  final int reelId;
+  final int id;
+  final bool isPhoto;
   final VoidCallback onCommentUpdated;
 
-  CommentSheet(this.onCommentUpdated, {Key? key, required this.reelId})
-      : super(key: key);
+  CommentSheet(
+    this.onCommentUpdated, {
+    Key? key,
+    required this.id,
+    this.isPhoto = false,
+  }) : super(key: key);
 
   buildProfile(String profilePhoto) {
     return CircleAvatar(
@@ -37,12 +42,13 @@ class CommentSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _controller.getCommentsByReelId(reelId);
+      await _controller.getCommentsById(id, isPhoto: isPhoto);
     });
     // _controller.customeInit();
     return GetBuilder<CommentController>(
       builder: (_) => FutureBuilder<List<CommentModel>>(
-          future: _reelRepo.getCommentByReelId(reelId, _controller.token!),
+          future: _reelRepo.getCommentById(id, _controller.token!,
+              isPhoto: isPhoto),
           builder: (context, snapshot) {
             if (_controller.loading) {
               return const Loading();
@@ -151,7 +157,7 @@ class CommentSheet extends StatelessWidget {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             _commentTextController.clear();
-                            _controller.addComment(reelId, () {
+                            _controller.addComment(id, () {
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
                                   duration: const Duration(milliseconds: 500),

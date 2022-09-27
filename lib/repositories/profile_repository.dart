@@ -279,9 +279,8 @@ class ProfileRepository {
 
   Future<List<PhotoModel>> getPhotosByProfileId(
       int profileId, String token) async {
-    List<PhotoModel> photos = [];
     final response = await http.get(
-      Uri.parse("${Base.getPhotosByUserId}?currentUserId=$profileId"),
+      Uri.parse("${Base.getPhotosByUserId}$profileId?limit=500&skip=0"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -290,11 +289,7 @@ class ProfileRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-
-      for (var item in list as List<dynamic>) {
-        photos.add(PhotoModel.fromJson(item));
-      }
-      return photos;
+      return list.map((e) => PhotoModel.fromMap(e)).toList();
     } else {
       return Future.error(body['detail']);
     }

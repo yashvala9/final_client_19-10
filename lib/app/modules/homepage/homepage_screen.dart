@@ -568,8 +568,8 @@ class HomePageScreen extends StatelessWidget {
                                                                           () {
                                                                             controller.update();
                                                                           },
-                                                                          reelId:
-                                                                              data.id,
+                                                                          id: data
+                                                                              .id,
                                                                         ),
                                                                         backgroundColor:
                                                                             Colors.white,

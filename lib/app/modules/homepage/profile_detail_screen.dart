@@ -590,7 +590,7 @@ class ProfileReel extends StatelessWidget {
               return GestureDetector(
                   onTap: () {
                     showSnackBar(index.toString());
-                    Get.to(SingleFeedScreen(reels, index));
+                    Get.to(SingleFeedScreen(null, reels, index));
                   },
                   child: FutureBuilder<String>(
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
