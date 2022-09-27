@@ -9,11 +9,13 @@ import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
+import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../services/communication_services.dart';
 import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../chat/chat_view.dart';
@@ -47,7 +49,7 @@ class ProfileDetail extends StatelessWidget {
         return false;
       },
       child: DefaultTabController(
-        length: profileModel.status == 'VERIFIED' ? 2 : 1,
+        length: profileModel.status == 'VERIFIED' ? 3 : 2,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -486,7 +488,7 @@ class ProfileDetail extends StatelessWidget {
       children: <Widget>[
         TabBar(tabs: [
           const Tab(text: "Rolls"),
-          // const Tab(text: "Photos"),
+          const Tab(text: "Photos"),
           if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
         const SizedBox(
@@ -495,51 +497,56 @@ class ProfileDetail extends StatelessWidget {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(profileId: profileModel.id),
-            // FutureBuilder<List<PhotoModel>>(
-            //     future: _profileRepo.getPhotosByProfileId(
-            //         profileModel.id, _controller.token!),
-            //     builder: (context, snapshot) {
-            //       if (!snapshot.hasData) {
-            //         return const Loading();
-            //       }
-            //       if (snapshot.hasError) {
-            //         printInfo(
-            //             info: "getCurrentUserPhoto: ${snapshot.hasError}");
-            //         return Container();
-            //       }
-            //       var photos = snapshot.data!;
-            //       return photos.isEmpty
-            //           ? const EmptyWidget("No photos available")
-            //           : GridView.builder(
-            //               shrinkWrap: true,
-            //               physics: const NeverScrollableScrollPhysics(),
-            //               itemCount: photos.length,
-            //               gridDelegate:
-            //                   const SliverGridDelegateWithFixedCrossAxisCount(
-            //                 crossAxisCount: 3,
-            //                 childAspectRatio: 1,
-            //                 crossAxisSpacing: 5,
-            //               ),
-            //               itemBuilder: (context, index) {
-            //                 String thumbnail = photos[index].videoId.url;
-            //                 printInfo(
-            //                     info: "ProfileId: ${_controller.profileId}");
-            //                 printInfo(info: "tumbnail: $thumbnail");
-            //                 return GestureDetector(
-            //                   onTap: () {
-            //                     Get.to(SingleFeedScreen(null, photos[index]));
-            //                   },
-            //                   child: CachedNetworkImage(
-            //                     imageUrl: thumbnail,
-            //                     fit: BoxFit.cover,
-            //                     errorWidget: (c, s, e) =>
-            //                         const Icon(Icons.error),
-            //                   ),
-            //                 );
-            //               },
-            //             );
-            //     }),
-
+            FutureBuilder<List<PhotoModel>>(
+                future: _profileRepo.getPhotosByProfileId(
+                    profileModel.id, _controller.token!),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Loading();
+                  }
+                  if (snapshot.hasError) {
+                    printInfo(
+                        info: "getCurrentUserPhoto: ${snapshot.hasError}");
+                    return Container();
+                  }
+                  var photos = snapshot.data!;
+                  return photos.isEmpty
+                      ? EmptyWidget("No photos available")
+                      : GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: photos.length,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 5,
+                          ),
+                          itemBuilder: (context, index) {
+                            // String thumbnail = photos[index].videoId.url;
+                            // printInfo(
+                            //     info: "ProfileId: ${_controller.profileId}");
+                            // printInfo(info: "tumbnail: $thumbnail");
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(SingleFeedScreen(
+                                  photos,
+                                  null,
+                                  index,
+                                  isPhoto: true,
+                                ));
+                              },
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    "${Base.profileBucketUrl}/${photos[index].filename}",
+                                fit: BoxFit.cover,
+                                errorWidget: (c, s, e) =>
+                                    const Icon(Icons.error),
+                              ),
+                            );
+                          },
+                        );
+                }),
             if (profileModel.status == 'VERIFIED')
               const Center(child: Text("Giveaway")),
           ]),

@@ -132,18 +132,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //   }
                     //   _controller.update();
                     // }
-                    var video = await ImagePicker()
-                        .pickVideo(source: ImageSource.gallery);
-                    if (video != null) {
-                      final val = await Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) {
-                          return VideoTrimmerView(File(video.path));
-                        }),
-                      );
-                      if (val != null) {
-                        setState(() {});
+
+                    final val = await showDialog(
+                      context: context,
+                      builder: (_) => Dialog(
+                          child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context, true);
+                            },
+                            leading: Icon(Icons.video_call),
+                            title: Text("Video"),
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Navigator.pop(context, false);
+                            },
+                            leading: Icon(Icons.photo),
+                            title: Text("Photo"),
+                          ),
+                        ],
+                      )),
+                    );
+                    if (val != null) {
+                      if (val) {
+                        var video = await ImagePicker()
+                            .pickVideo(source: ImageSource.gallery);
+                        if (video != null) {
+                          final val = await Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return VideoTrimmerView(File(video.path));
+                            }),
+                          );
+                          if (val != null) {
+                            log("VideoAdded: $val");
+                            _controller.updateManually();
+                          }
+                        }
+                      } else {
+                        var photo = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
+                        if (photo != null) {
+                          Get.to(
+                            () => AddFeedScreen(
+                              file: File(photo.path),
+                              type: 1,
+                            ),
+                          );
+                        }
                       }
                     }
+                    // var video = await ImagePicker()
+                    //     .pickVideo(source: ImageSource.gallery);
+                    // if (video != null) {
+                    //   final val = await Navigator.of(context).push(
+                    //     MaterialPageRoute(builder: (context) {
+                    //       return VideoTrimmerView(File(video.path));
+                    //     }),
+                    //   );
+                    //   if (val != null) {
+                    //     setState(() {});
+                    //   }
+                    // }
                   },
                 ),
               ],

@@ -46,8 +46,9 @@ class CommentController extends GetxController {
   Future<void> getCommentsById(int id, {bool isPhoto = false}) async {
     loading = true;
     try {
+      print('21212121');
       commentList =
-          await _reelRepo.getCommentById(id, token!, isPhoto: isPhoto);
+          await _commentRepo.getCommentById(id, token!, isPhoto: isPhoto);
     } catch (e) {
       print("getCommentsByReelId: $e");
     }

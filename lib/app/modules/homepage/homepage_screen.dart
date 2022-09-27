@@ -23,6 +23,7 @@ import '../../../utils/colors.dart';
 import '../../../utils/video_player_item.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../../notification_screen.dart';
+import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
 import '../search/search_screen.dart';
@@ -173,24 +174,68 @@ class HomePageScreen extends StatelessWidget {
                                             Icons.add_box_outlined,
                                           ),
                                           onPressed: () async {
-                                            var video = await ImagePicker()
-                                                .pickVideo(
-                                                    source:
-                                                        ImageSource.gallery);
-                                            if (video != null) {
-                                              final val =
-                                                  await Navigator.of(context)
-                                                      .push(
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                                  return VideoTrimmerView(
-                                                      File(video.path));
-                                                }),
-                                              );
-                                              if (val != null) {
-                                                log("VideoAdded: $val");
-                                                _profileController
-                                                    .updateManually();
+                                            final val = await showDialog(
+                                              context: context,
+                                              builder: (_) => Dialog(
+                                                  child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  ListTile(
+                                                    onTap: () {
+                                                      Navigator.pop(
+                                                          context, true);
+                                                    },
+                                                    leading:
+                                                        Icon(Icons.video_call),
+                                                    title: Text("Video"),
+                                                  ),
+                                                  ListTile(
+                                                    onTap: () {
+                                                      Navigator.pop(
+                                                          context, false);
+                                                    },
+                                                    leading: Icon(Icons.photo),
+                                                    title: Text("Photo"),
+                                                  ),
+                                                ],
+                                              )),
+                                            );
+                                            if (val != null) {
+                                              if (val) {
+                                                var video = await ImagePicker()
+                                                    .pickVideo(
+                                                        source: ImageSource
+                                                            .gallery);
+                                                if (video != null) {
+                                                  final val =
+                                                      await Navigator.of(
+                                                              context)
+                                                          .push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                                      return VideoTrimmerView(
+                                                          File(video.path));
+                                                    }),
+                                                  );
+                                                  if (val != null) {
+                                                    log("VideoAdded: $val");
+                                                    _profileController
+                                                        .updateManually();
+                                                  }
+                                                }
+                                              } else {
+                                                var photo = await ImagePicker()
+                                                    .pickImage(
+                                                        source: ImageSource
+                                                            .gallery);
+                                                if (photo != null) {
+                                                  Get.to(
+                                                    () => AddFeedScreen(
+                                                      file: File(photo.path),
+                                                      type: 1,
+                                                    ),
+                                                  );
+                                                }
                                               }
                                             }
                                           },
@@ -570,6 +615,8 @@ class HomePageScreen extends StatelessWidget {
                                                                           },
                                                                           id: data
                                                                               .id,
+                                                                          isPhoto:
+                                                                              false,
                                                                         ),
                                                                         backgroundColor:
                                                                             Colors.white,

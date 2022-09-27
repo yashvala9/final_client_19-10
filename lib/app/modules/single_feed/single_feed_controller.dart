@@ -139,7 +139,7 @@ class CommentController extends GetxController {
   void getCommentsByReelId() async {
     loading = true;
     try {
-      commentList = await _commentRepo.getCommentByReelId(reelId, token!);
+      commentList = await _commentRepo.getCommentById(reelId, token!);
       print("commentList: $commentList");
     } catch (e) {
       print("getCommentsByReelId: $e");

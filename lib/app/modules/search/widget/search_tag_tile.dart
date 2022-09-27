@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_screen.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';

@@ -52,6 +52,7 @@ class Base {
   static const getPhotosByUserId = '$_url/posts/user/';
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
+  static const posts = '$_url/posts/';
   static const reelsWithAds = '$_url/reels/with_ads';
   static const reelsByHashTag = '$_url/hashtags/reels/';
   static const getSingleReel = '$_url/reels/single';

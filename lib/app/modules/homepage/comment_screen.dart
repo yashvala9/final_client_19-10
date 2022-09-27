@@ -5,6 +5,7 @@ import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 import '../../../models/comment_model.dart';
+import '../../../repositories/comment_repository.dart';
 import '../../../repositories/reel_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
@@ -20,7 +21,7 @@ class CommentSheet extends StatelessWidget {
     this.onCommentUpdated, {
     Key? key,
     required this.id,
-    this.isPhoto = false,
+    required this.isPhoto,
   }) : super(key: key);
 
   buildProfile(String profilePhoto) {
@@ -41,13 +42,14 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
+    final _commentRepo = Get.put(CommentRepository());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _controller.getCommentsById(id, isPhoto: isPhoto);
     });
     // _controller.customeInit();
     return GetBuilder<CommentController>(
       builder: (_) => FutureBuilder<List<CommentModel>>(
-          future: _reelRepo.getCommentById(id, _controller.token!,
+          future: _commentRepo.getCommentById(id, _controller.token!,
               isPhoto: isPhoto),
           builder: (context, snapshot) {
             if (_controller.loading) {

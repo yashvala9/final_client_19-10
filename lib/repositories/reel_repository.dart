@@ -237,28 +237,6 @@ class ReelRepository {
     }
   }
 
-  Future<List<CommentModel>> getCommentById(int id, String token,
-      {bool isPhoto = false}) async {
-    Get.snackbar('title', "${Base.getCommentByPhotoId}$id");
-    final response = await http.get(
-      isPhoto
-          ? Uri.parse("${Base.getCommentByPhotoId}$id")
-          : Uri.parse("${Base.getCommentByReelId}$id"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-    // Get.snackbar('title', response.body);
-    final body = jsonDecode(response.body);
-    if (response.statusCode == 201) {
-      final Iterable list = body;
-      return list.map((e) => CommentModel.fromMap(e)).toList();
-    } else {
-      return Future.error(body['message']);
-    }
-  }
-
   Future<bool> isReelLikedByCurrentUser(int reelId, String token) async {
     final response = await http.get(
       Uri.parse("$reelId"),
@@ -279,6 +257,23 @@ class ReelRepository {
   Future<void> addReel(Map<String, dynamic> data, String token) async {
     final response = await http.post(
       Uri.parse(Base.reels),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 201) {
+      return;
+    } else {
+      final body = jsonDecode(response.body);
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> addPhoto(Map<String, dynamic> data, String token) async {
+    final response = await http.post(
+      Uri.parse(Base.posts),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",

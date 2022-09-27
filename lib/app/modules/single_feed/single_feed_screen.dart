@@ -897,6 +897,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   id: reels![
                                                                           index]
                                                                       .id,
+                                                                  isPhoto:
+                                                                      false,
                                                                 ),
                                                                 backgroundColor:
                                                                     Colors
