@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
@@ -26,9 +27,10 @@ class OtherProfileDetail extends StatefulWidget {
 
 class _OtherProfileDetailState extends State<OtherProfileDetail> {
   final _profileRepo = Get.put(ProfileRepository());
+  final _authService = Get.find<AuthService>();
   var parser = EmojiParser();
 
-  final _authService = Get.put(AuthService());
+  // final _authService = Get.put(AuthService());
 
   void toggleFollowing(int profileId, String token) async {
     try {
@@ -360,13 +362,13 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
               )
             ];
           },
-          body: _tabSection(context, widget.profileModel),
+          body: _tabSection(context, widget.profileModel,_authService.token!),
         ),
       ),
     );
   }
 
-  Widget _tabSection(BuildContext context, ProfileModel profileModel) {
+  Widget _tabSection(BuildContext context, ProfileModel profileModel,String token) {
     final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -382,7 +384,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
         Expanded(
           child: TabBarView(children: [
             ProfileReel(profileId: profileModel.id),
-            Container(),
+            PhotoSection(id: profileModel.id, token: token),
             if (profileModel.status == 'VERIFIED')
               const Center(child: Text("Giveaway")),
           ]),
@@ -423,6 +425,7 @@ class ProfileReel extends StatelessWidget {
           }
           return GridView.builder(
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: reels.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

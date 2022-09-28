@@ -7,6 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
@@ -42,7 +43,7 @@ class ProfileDetail extends StatelessWidget {
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return DefaultTabController(
-      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 2 : 1,
+      length: _controller.searchProfiles[index].status == 'VERIFIED' ? 3 : 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -539,57 +540,13 @@ class ProfileDetail extends StatelessWidget {
       children: <Widget>[
         TabBar(tabs: [
           const Tab(text: "Rolls"),
-          // const Tab(text: "Photos"),
+          const Tab(text: "Photos"),
           if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
         Expanded(
           child: TabBarView(children: [
             ProfileReel(profileId: profileModel.id),
-            // FutureBuilder<List<PhotoModel>>(
-            //     future: _profileRepo.getPhotosByProfileId(
-            //         profileModel.id, _controller.token!),
-            //     builder: (context, snapshot) {
-            //       if (!snapshot.hasData) {
-            //         return const Loading();
-            //       }
-            //       if (snapshot.hasError) {
-            //         printInfo(
-            //             info: "getCurrentUserPhoto: ${snapshot.hasError}");
-            //         return Container();
-            //       }
-            //       var photos = snapshot.data!;
-            //       return photos.isEmpty
-            //           ? const EmptyWidget("No photos available")
-            //           : GridView.builder(
-            //               shrinkWrap: true,
-            //               physics: const NeverScrollableScrollPhysics(),
-            //               itemCount: photos.length,
-            //               gridDelegate:
-            //                   const SliverGridDelegateWithFixedCrossAxisCount(
-            //                 crossAxisCount: 3,
-            //                 childAspectRatio: 1,
-            //                 crossAxisSpacing: 5,
-            //               ),
-            //               itemBuilder: (context, index) {
-            //                 String thumbnail = photos[index].videoId.url;
-            //                 printInfo(
-            //                     info: "ProfileId: ${_controller.profileId}");
-            //                 printInfo(info: "tumbnail: $thumbnail");
-            //                 return GestureDetector(
-            //                   onTap: () {
-            //                     Get.to(SingleFeedScreen(null, photos[index]));
-            //                   },
-            //                   child: CachedNetworkImage(
-            //                     imageUrl: thumbnail,
-            //                     fit: BoxFit.cover,
-            //                     errorWidget: (c, s, e) =>
-            //                         const Icon(Icons.error),
-            //                   ),
-            //                 );
-            //               },
-            //             );
-            //     }),
-
+            PhotoSection(id: profileModel.id, token: _controller.token!),
             if (profileModel.status == 'VERIFIED')
               const Center(child: Text("Giveaway")),
           ]),
@@ -628,6 +585,7 @@ class ProfileReel extends StatelessWidget {
           }
           return GridView.builder(
             shrinkWrap: true,
+            padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: reels.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -639,7 +597,7 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                   onTap: () {
-                    Get.to(SingleFeedScreen([],reels, index));
+                    Get.to(SingleFeedScreen([], reels, index));
                   },
                   child: FutureBuilder<String>(
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
