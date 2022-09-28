@@ -154,7 +154,7 @@ class HomePageController extends GetxController {
   }
 
   void removeReel(int index) {
-    reelList.removeAt(index);
+    _reelList.removeAt(index);
     update();
   }
 
@@ -163,7 +163,7 @@ class HomePageController extends GetxController {
       await _reelRepo.reportReelOrComment(type, id, token!);
       reportList.add(id);
       removeReel(index);
-      update();
+      // update();
     } catch (e) {
       log("reportReelOrComment: $e");
     }

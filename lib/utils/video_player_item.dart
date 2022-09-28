@@ -46,6 +46,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   String? get token => _authService.token;
 
   bool isManualPause = false;
+
+  bool loading = true;
   @override
   void initState() {
     super.initState();
@@ -57,6 +59,9 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
 
       // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
       ..initialize().then((value) {
+        setState(() {
+          loading = false;
+        });
         // videoPlayerController.play();
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
@@ -98,7 +103,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
       }
     });
 
-    return videoPlayerController.value.isBuffering
+    return videoPlayerController.value.isBuffering || loading
         ? const Loading()
         : SizedBox(
             width: double.infinity,

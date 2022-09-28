@@ -17,7 +17,6 @@ import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/base.dart';
-import '../../../utils/circle_animation.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/video_player_item.dart';
 import '../../../widgets/my_elevated_button.dart';

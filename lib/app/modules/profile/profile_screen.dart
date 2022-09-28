@@ -9,6 +9,7 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/list_users/list_users_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_photo_view.dart';
 import 'package:reel_ro/models/profile_model.dart';
@@ -435,56 +436,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ProfileReel(
               key: UniqueKey(),
             ),
-            // Container(),
-            FutureBuilder<List<PhotoModel>>(
-                future: _profileRepo.getPhotosByProfileId(
-                    _controller.profileId!, _controller.token!),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Loading();
-                  }
-                  if (snapshot.hasError) {
-                    printInfo(
-                        info: "getCurrentUserPhoto: ${snapshot.hasError}");
-                    return Container();
-                  }
-                  var photos = snapshot.data!;
-                  return photos.isEmpty
-                      ? EmptyWidget("No photos available")
-                      : GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: photos.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 5,
-                          ),
-                          itemBuilder: (context, index) {
-                            // String thumbnail = photos[index].videoId.url;
-                            // printInfo(
-                            //     info: "ProfileId: ${_controller.profileId}");
-                            // printInfo(info: "tumbnail: $thumbnail");
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(SingleFeedScreen(
-                                  photos,
-                                  null,
-                                  index,
-                                  isPhoto: true,
-                                ));
-                              },
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "${Base.profileBucketUrl}/${photos[index].filename}",
-                                fit: BoxFit.cover,
-                                errorWidget: (c, s, e) => Icon(Icons.error),
-                              ),
-                            );
-                          },
-                        );
-                }),
+            PhotoSection(
+                id: _controller.profileModel.id, token: _controller.token!),
             if (_controller.profileModel.status == 'VERIFIED')
               Center(child: Text("Giveaway")),
           ]),

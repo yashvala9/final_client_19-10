@@ -58,6 +58,7 @@ class AdsHistoryView extends StatelessWidget {
                 log("Ads: ${snapshot.data}");
                 return GridView.builder(
                   shrinkWrap: true,
+                  padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: ads.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
