@@ -43,10 +43,12 @@ class CommentController extends GetxController {
     comment = "";
   }
 
-  Future<void> getCommentsByReelId(int reelId) async {
+  Future<void> getCommentsById(int id, {bool isPhoto = false}) async {
     loading = true;
     try {
-      commentList = await _reelRepo.getCommentByReelId(reelId, token!);
+      print('21212121');
+      commentList =
+          await _commentRepo.getCommentById(id, token!, isPhoto: isPhoto);
     } catch (e) {
       print("getCommentsByReelId: $e");
     }
@@ -54,14 +56,15 @@ class CommentController extends GetxController {
     update();
   }
 
-  void toggleLike(int index) {
+  void toggleLike(int index, {bool isPhoto = false}) {
     commentList[index].isLiked = !commentList[index].isLiked;
     if (commentList[index].isLiked) {
       commentList[index].likeCount++;
     } else {
       commentList[index].likeCount--;
     }
-    _commentRepo.toggleCommentLike(commentList[index].id, token!);
+    _commentRepo.toggleCommentLike(commentList[index].id, token!,
+        isPhoto: isPhoto);
     update();
   }
 
@@ -89,7 +92,8 @@ class CommentController extends GetxController {
     update();
   }
 
-  void addComment(int reelId, VoidCallback onDone) async {
+  void addComment(int reelId, VoidCallback onDone,
+      {bool isPhoto = false}) async {
     if (comment.isEmpty) {
       showSnackBar("Please add comment", color: Colors.red);
       return;
@@ -99,8 +103,8 @@ class CommentController extends GetxController {
     };
     comment = "";
     try {
-      final commentModel =
-          await _commentRepo.addCommentToReelId(token!, map, reelId);
+      final commentModel = await _commentRepo
+          .addCommentToById(token!, map, reelId, isPhoto: isPhoto);
       addCommentLocally(commentModel);
       onDone();
     } catch (e) {

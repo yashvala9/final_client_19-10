@@ -151,7 +151,7 @@ class VerifyEmailView extends StatelessWidget {
                                       _authController.refereshVerifyEmail(
                                           email, password);
                                     },
-                                    child: Text("Referesh"),
+                                    child: const Text("Refresh"),
                                   ),
                                   SizedBox(height: Get.height * 0.03),
                                   _authController.loading

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
@@ -46,41 +47,81 @@ class AddFeedController extends GetxController {
   // }
 
   void addFeed(File file, int type) async {
-    List<String> splitted = description.split(" ");
-    for (var item in splitted) {
-      if (item.startsWith("#")) {
-        tags.add(item);
+    if (type == 1) {
+      //photo type
+      {
+        List<String> splitted = description.split(" ");
+        for (var item in splitted) {
+          if (item.startsWith("#")) {
+            tags.add(item);
+          }
+        }
+        loading = true;
+        log("File: $file");
+        file = await changeFileNameOnly(file, 'photo-$profileId');
+        final String _fileName =
+            genFileName(profileId!.toString(), path.basename(file.path));
+        var data = {
+          "title": description,
+          "content": "Photo",
+          "filename": _fileName,
+          "published": true,
+          "hashtags": tags
+        };
+        try {
+          //step 1: make entry in DB
+          await _reelRepo.addPhoto(data, token!);
+          //step 2: upload file to s3
+          final s3File = ProfileRepository().uploadProfileToAwsS3(
+              file: file, fileName: _fileName, userID: profileId!.toString());
+          showSnackBar("Photo added successfully!");
+          print(s3File);
+          clean();
+          Get.back(result: true);
+          Get.back(result: true);
+        } catch (e) {
+          showSnackBar(e.toString(), color: Colors.red);
+          print("addFeed: $e");
+        }
+        loading = false;
       }
+    } else {
+      List<String> splitted = description.split(" ");
+      for (var item in splitted) {
+        if (item.startsWith("#")) {
+          tags.add(item);
+        }
+      }
+      loading = true;
+      log("File: $file");
+      file = await changeFileNameOnly(file, 'video-$profileId');
+      final String _fileName =
+          genFileName(profileId!.toString(), path.basename(file.path));
+      var data = {
+        "description": description,
+        "filename": _fileName,
+        "media_ext": path.extension(file.path).replaceAll('.', ''),
+        "media_size": 65,
+        "hashtags": tags
+      };
+      try {
+        //step 1: make entry in DB
+        await _reelRepo.addReel(data, token!);
+        //step 2: upload file to s3
+        final s3File = await _reelRepo.uploadFileToAwsS3(
+            userID: profileId!.toString(), file: file, fileName: _fileName);
+        //step 3: make entry of upload status in db
+        await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
+        showSnackBar("Reel added successfully!");
+        clean();
+        Get.back(result: true);
+        Get.back(result: true);
+      } catch (e) {
+        showSnackBar(e.toString(), color: Colors.red);
+        print("addFeed: $e");
+      }
+      loading = false;
     }
-    loading = true;
-    log("File: $file");
-    file = await changeFileNameOnly(file, 'video-$profileId');
-    final String _fileName =
-        genFileName(profileId!.toString(), path.basename(file.path));
-    var data = {
-      "description": description,
-      "filename": _fileName,
-      "media_ext": path.extension(file.path).replaceAll('.', ''),
-      "media_size": 65,
-      "hashtags": tags
-    };
-    try {
-      //step 1: make entry in DB
-      await _reelRepo.addReel(data, token!);
-      //step 2: upload file to s3
-      final s3File = await _reelRepo.uploadFileToAwsS3(
-          userID: profileId!.toString(), file: file, fileName: _fileName);
-      //step 3: make entry of upload status in db
-      await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
-      showSnackBar("Reel added successfully!");
-      clean();
-      Get.back(result: true);
-      Get.back(result: true);
-    } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
-      print("addFeed: $e");
-    }
-    loading = false;
   }
 
   /// This is used to generate a unique key for a file

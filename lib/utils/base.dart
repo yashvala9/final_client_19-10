@@ -1,5 +1,6 @@
 class Base {
   static const _url = 'http://15.207.250.118';
+  // static const _url = 'http://13.234.159.127';
 
   static const register = "$_url/users/";
   static const login = '$_url/login';
@@ -48,9 +49,10 @@ class Base {
   //Reels
   static const getReelsByUserId = '$_url/reels/user';
   static const getFeedsByUserId = '$_url/getFeed';
-  static const getPhotosByUserId = '$_url/getPhotosByUserId';
+  static const getPhotosByUserId = '$_url/posts/user/';
   static const updateStatus = '$_url/reels/update/status/';
   static const reels = '$_url/reels/';
+  static const posts = '$_url/posts/';
   static const reelsWithAds = '$_url/reels/with_ads';
   static const reelsByHashTag = '$_url/hashtags/reels/';
   static const getSingleReel = '$_url/reels/single';
@@ -83,14 +85,20 @@ class Base {
 
   //Like
   static const toggleLike = '$_url/reels/likes';
+  static const photoToggleLike = '$_url/posts/likes';
   static const getLikeFlag = '$_url/reels/isLiked';
+  static const getPhotoLikeFlag = '$_url/posts/isLiked';
   static const getLikeCount = '$_url/count/likes/reels';
+  static const getPhotoLikeCount = '$_url/count/likes/posts';
 
   //Comment
 
   static const getCommentByReelId = '$_url/reels/comments/';
+  static const getCommentByPhotoId = '$_url/posts/comments/';
   static const addCommentToReelId = '$_url/reels/comments';
+  static const addCommentToPhotoId = '$_url/posts/comments';
   static const toggleCommentLike = '$_url/reels/likes/comments';
+  static const togglePhotoCommentLike = '$_url/posts/likes/comments';
 
   static const deleteComment = '$_url/reels/comments';
   static const nestedComment = '$_url/reels/comments';

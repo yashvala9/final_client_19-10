@@ -5,6 +5,7 @@ import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 import '../../../models/comment_model.dart';
+import '../../../repositories/comment_repository.dart';
 import '../../../repositories/reel_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
@@ -12,11 +13,16 @@ import '../../../widgets/loading.dart';
 import 'comment_controller.dart';
 
 class CommentSheet extends StatelessWidget {
-  final int reelId;
+  final int id;
+  final bool isPhoto;
   final VoidCallback onCommentUpdated;
 
-  CommentSheet(this.onCommentUpdated, {Key? key, required this.reelId})
-      : super(key: key);
+  CommentSheet(
+    this.onCommentUpdated, {
+    Key? key,
+    required this.id,
+    required this.isPhoto,
+  }) : super(key: key);
 
   buildProfile(String profilePhoto) {
     return CircleAvatar(
@@ -36,13 +42,15 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
+    final _commentRepo = Get.put(CommentRepository());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _controller.getCommentsByReelId(reelId);
+      await _controller.getCommentsById(id, isPhoto: isPhoto);
     });
     // _controller.customeInit();
     return GetBuilder<CommentController>(
       builder: (_) => FutureBuilder<List<CommentModel>>(
-          future: _reelRepo.getCommentByReelId(reelId, _controller.token!),
+          future: _commentRepo.getCommentById(id, _controller.token!,
+              isPhoto: isPhoto),
           builder: (context, snapshot) {
             if (_controller.loading) {
               return const Loading();
@@ -82,9 +90,11 @@ class CommentSheet extends StatelessWidget {
                               leading: buildProfile(
                                   "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
                               title: CommentWidget(
+                                isPhoto:isPhoto,
                                 commentModel: _controller.commentList[index],
                                 likeToggle: () {
-                                  _controller.toggleLike(index);
+                                  _controller.toggleLike(index,
+                                      isPhoto: isPhoto);
                                 },
                                 increaseNestedCountCallBack: () {
                                   _controller
@@ -151,12 +161,12 @@ class CommentSheet extends StatelessWidget {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
                             _commentTextController.clear();
-                            _controller.addComment(reelId, () {
+                            _controller.addComment(id, () {
                               _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.fastOutSlowIn);
-                            });
+                            }, isPhoto: isPhoto);
                             onCommentUpdated();
                           }
                         },

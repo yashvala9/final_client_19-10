@@ -18,8 +18,10 @@ class CommentWidget extends StatelessWidget {
   final VoidCallback deleteCallBack;
   final VoidCallback increaseNestedCountCallBack;
   final ProfileModel profileModel;
+  final bool isPhoto;
   CommentWidget(
       {Key? key,
+      required this.isPhoto,
       required this.commentModel,
       required this.likeToggle,
       required this.deleteCallBack,
@@ -140,6 +142,7 @@ class CommentWidget extends StatelessWidget {
                                         commentModel.id,
                                         parser.unemojify(replyController.text),
                                         _authService.token!,
+                                        isPhoto: isPhoto,
                                       );
                                       replyController.text = "";
                                       Get.back(result: true);

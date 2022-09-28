@@ -132,9 +132,43 @@ class ReelRepository {
     }
   }
 
+  Future<bool> getPhotosLikeFlag(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getPhotoLikeFlag}/$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['is_liked'] as bool;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
   Future<int> getLikeCountByReelId(int reelId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getLikeCount}/$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['like_count'] as int;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<int> getLikeCountByPhotoId(int reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getPhotoLikeCount}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -185,20 +219,20 @@ class ReelRepository {
     }
   }
 
-  Future<List<CommentModel>> getCommentByReelId(
-      int reelId, String token) async {
+  Future<void> photoToggleLike(int reelId, String token) async {
     final response = await http.get(
-      Uri.parse("${Base.getCommentByReelId}$reelId"),
+      Uri.parse("${Base.photoToggleLike}/$reelId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 201) {
-      final Iterable list = body;
-      return list.map((e) => CommentModel.fromMap(e)).toList();
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // return body['liked'] as bool;
+      return;
     } else {
+      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -223,6 +257,23 @@ class ReelRepository {
   Future<void> addReel(Map<String, dynamic> data, String token) async {
     final response = await http.post(
       Uri.parse(Base.reels),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 201) {
+      return;
+    } else {
+      final body = jsonDecode(response.body);
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> addPhoto(Map<String, dynamic> data, String token) async {
+    final response = await http.post(
+      Uri.parse(Base.posts),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -288,7 +339,8 @@ class ReelRepository {
     final body = jsonDecode(response.body);
     print(body);
     if (response.statusCode == 200) {
-      return photoFromJson(response.body);
+      final Iterable list = body;
+      return list.map((e) => PhotoModel.fromMap(e)).toList();
     } else {
       return Future.error(body['error']['message']);
     }

@@ -71,6 +71,19 @@ class SingleFeedController extends GetxController {
     update();
   }
 
+  void phototLikeToggle(int id) async {
+    try {
+      await _reelRepo.photoToggleLike(id, token!);
+      final isLiked = await _reelRepo.getPhotosLikeFlag(id, token!);
+      if (isLiked) {
+        toggleLikeShow();
+      }
+    } catch (e) {
+      print("TogglelikeError: $e");
+    }
+    update();
+  }
+
   void toggleFollowing(int id) async {
     try {
       _profileRepo.toggleFollow(id, token!);
@@ -126,7 +139,7 @@ class CommentController extends GetxController {
   void getCommentsByReelId() async {
     loading = true;
     try {
-      commentList = await _commentRepo.getCommentByReelId(reelId, token!);
+      commentList = await _commentRepo.getCommentById(reelId, token!);
       print("commentList: $commentList");
     } catch (e) {
       print("getCommentsByReelId: $e");
@@ -160,8 +173,7 @@ class CommentController extends GetxController {
     };
     addCommentLocally(map);
     try {
-      final message =
-          await _commentRepo.addCommentToReelId(token!, map, reelId);
+      final message = await _commentRepo.addCommentToById(token!, map, reelId);
       print("addCommentSuccess: $message");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);

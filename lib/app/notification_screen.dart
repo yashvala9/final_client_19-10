@@ -224,6 +224,7 @@ class NotificationScreen extends StatelessWidget {
                                     return InkWell(
                                       onTap: () {
                                         Get.to(() => SingleFeedScreen(
+                                              null,
                                               [reel],
                                               0,
                                               openComment: true,
@@ -291,8 +292,8 @@ class NotificationScreen extends StatelessWidget {
                                       log("tumbnail: ${reel.thumbnail}");
                                       return InkWell(
                                         onTap: () {
-                                          Get.to(() =>
-                                              SingleFeedScreen([reel], 0));
+                                          Get.to(() => SingleFeedScreen(
+                                              null, [reel], 0));
                                         },
                                         child: ClipRRect(
                                           borderRadius:
@@ -357,6 +358,7 @@ class NotificationScreen extends StatelessWidget {
                                       return InkWell(
                                         onTap: () {
                                           Get.to(() => SingleFeedScreen(
+                                                null,
                                                 [reel],
                                                 0,
                                                 openComment: true,

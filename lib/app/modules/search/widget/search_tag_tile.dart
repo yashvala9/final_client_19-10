@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_screen.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
@@ -24,7 +23,7 @@ class SearchTagTile extends StatelessWidget {
       var reelModel = _controller.searchReels[index];
       return ListTile(
         onTap: () => Get.to(
-          () => SingleFeedScreen(_controller.searchReels, index),
+          () => SingleFeedScreen(null, _controller.searchReels, index),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         leading: FutureBuilder<String>(

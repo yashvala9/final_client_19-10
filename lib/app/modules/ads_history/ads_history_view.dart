@@ -71,6 +71,7 @@ class AdsHistoryView extends StatelessWidget {
                     return GestureDetector(
                         onTap: () {
                           Get.to(SingleFeedScreen(
+                              null,
                               ads
                                   .map((e) => ReelModel(
                                       id: e.ads.id,

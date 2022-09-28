@@ -145,7 +145,7 @@ class SearchScreen extends StatelessWidget {
                                   (context, index) {
                                     return GestureDetector(
                                         onTap: () {
-                                          Get.to(SingleFeedScreen(
+                                          Get.to(SingleFeedScreen(null,
                                               _controller.reelList, index));
                                         },
                                         child: FutureBuilder<String>(
