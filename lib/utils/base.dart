@@ -96,6 +96,7 @@ class Base {
   static const getCommentByReelId = '$_url/reels/comments/';
   static const getCommentByPhotoId = '$_url/posts/comments/';
   static const addCommentToReelId = '$_url/reels/comments';
+  static const addCommentToPhotoId = '$_url/posts/comments';
   static const toggleCommentLike = '$_url/reels/likes/comments';
   static const togglePhotoCommentLike = '$_url/posts/likes/comments';
 

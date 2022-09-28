@@ -90,9 +90,11 @@ class CommentSheet extends StatelessWidget {
                               leading: buildProfile(
                                   "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
                               title: CommentWidget(
+                                isPhoto:isPhoto,
                                 commentModel: _controller.commentList[index],
                                 likeToggle: () {
-                                  _controller.toggleLike(index);
+                                  _controller.toggleLike(index,
+                                      isPhoto: isPhoto);
                                 },
                                 increaseNestedCountCallBack: () {
                                   _controller
@@ -164,7 +166,7 @@ class CommentSheet extends StatelessWidget {
                                   _scrollController.position.maxScrollExtent,
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.fastOutSlowIn);
-                            });
+                            }, isPhoto: isPhoto);
                             onCommentUpdated();
                           }
                         },

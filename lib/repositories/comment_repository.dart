@@ -67,10 +67,13 @@ class CommentRepository {
     }
   }
 
-  Future<CommentModel> addCommentToReelId(
-      String token, Map<String, dynamic> data, int reelId) async {
+  Future<CommentModel> addCommentToById(
+      String token, Map<String, dynamic> data, int id,
+      {bool isPhoto = false}) async {
     final response = await http.post(
-      Uri.parse("${Base.addCommentToReelId}/$reelId"),
+      isPhoto
+          ? Uri.parse("${Base.addCommentToPhotoId}/$id")
+          : Uri.parse("${Base.addCommentToReelId}/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -86,7 +89,8 @@ class CommentRepository {
   }
 
   Future<NestedCommentModel> addNestedComment(
-      int commentId, String comment, String token) async {
+      int commentId, String comment, String token,
+      {bool isPhoto = false}) async {
     final response = await http.post(
       Uri.parse("${Base.nestedComment}/$commentId/responses"),
       headers: <String, String>{

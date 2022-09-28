@@ -92,7 +92,8 @@ class CommentController extends GetxController {
     update();
   }
 
-  void addComment(int reelId, VoidCallback onDone) async {
+  void addComment(int reelId, VoidCallback onDone,
+      {bool isPhoto = false}) async {
     if (comment.isEmpty) {
       showSnackBar("Please add comment", color: Colors.red);
       return;
@@ -102,8 +103,8 @@ class CommentController extends GetxController {
     };
     comment = "";
     try {
-      final commentModel =
-          await _commentRepo.addCommentToReelId(token!, map, reelId);
+      final commentModel = await _commentRepo
+          .addCommentToById(token!, map, reelId, isPhoto: isPhoto);
       addCommentLocally(commentModel);
       onDone();
     } catch (e) {
