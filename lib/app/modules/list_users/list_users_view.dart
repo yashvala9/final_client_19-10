@@ -118,54 +118,59 @@ class ListUsersView extends StatelessWidget {
                       ),
                       trailing: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: FutureBuilder<bool>(
-                          future: _profileRepo.isFollowing(
-                              snapshot.data![index].id, _controller.token!),
-                          builder: (context, snap) {
-                            return OutlinedButton(
-                              onPressed: () {
-                                Get.dialog(AlertDialog(
-                                  backgroundColor: Colors.black54,
-                                  title: snap.data!
-                                      ? const Text(
-                                          "Do you wish to unfollow?",
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      : const Text(
-                                          "Do you wish to follow?",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                  actionsAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: const Text("Cancel")),
-                                    MaterialButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        _controller.toggleFollowing(
-                                            snapshot.data![index].id);
-                                      },
-                                      child: const Text("Confirm"),
-                                      color: AppColors.buttonColor,
+                        child: snapshot.data![index].id != _controller.profileId
+                            ? FutureBuilder<bool>(
+                                future: _profileRepo.isFollowing(
+                                    snapshot.data![index].id,
+                                    _controller.token!),
+                                builder: (context, snap) {
+                                  return OutlinedButton(
+                                    onPressed: () {
+                                      Get.dialog(AlertDialog(
+                                        backgroundColor: Colors.black54,
+                                        title: snap.data!
+                                            ? const Text(
+                                                "Do you wish to unfollow?",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )
+                                            : const Text(
+                                                "Do you wish to follow?",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                        actionsAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: const Text("Cancel")),
+                                          MaterialButton(
+                                            onPressed: () {
+                                              Get.back();
+                                              _controller.toggleFollowing(
+                                                  snapshot.data![index].id);
+                                            },
+                                            child: const Text("Confirm"),
+                                            color: AppColors.buttonColor,
+                                          ),
+                                        ],
+                                      ));
+                                    },
+                                    child: Text(
+                                      snap.hasData
+                                          ? snap.data!
+                                              ? "Following"
+                                              : "Follow"
+                                          : "",
+                                      style: style.caption,
                                     ),
-                                  ],
-                                ));
-                              },
-                              child: Text(
-                                snap.hasData
-                                    ? snap.data!
-                                        ? "Following"
-                                        : "Follow"
-                                    : "",
-                                style: style.caption,
-                              ),
-                            );
-                          },
-                        ),
+                                  );
+                                },
+                              )
+                            : SizedBox(),
                       ),
                     );
                   },
@@ -223,54 +228,59 @@ class ListUsersView extends StatelessWidget {
                       ),
                       trailing: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: FutureBuilder<bool>(
-                          future: _profileRepo.isFollowing(
-                              snapshot.data![index].id, _controller.token!),
-                          builder: (context, snap) {
-                            return OutlinedButton(
-                              onPressed: () {
-                                Get.dialog(AlertDialog(
-                                  backgroundColor: Colors.black54,
-                                  title: snap.data!
-                                      ? const Text(
-                                          "Do you wish to unfollow?",
-                                          style: TextStyle(color: Colors.white),
-                                        )
-                                      : const Text(
-                                          "Do you wish to follow?",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                  actionsAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: const Text("Cancel")),
-                                    MaterialButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        _controller.toggleFollowing(
-                                            snapshot.data![index].id);
-                                      },
-                                      child: const Text("Confirm"),
-                                      color: AppColors.buttonColor,
+                        child: snapshot.data![index].id != _controller.profileId
+                            ? FutureBuilder<bool>(
+                                future: _profileRepo.isFollowing(
+                                    snapshot.data![index].id,
+                                    _controller.token!),
+                                builder: (context, snap) {
+                                  return OutlinedButton(
+                                    onPressed: () {
+                                      Get.dialog(AlertDialog(
+                                        backgroundColor: Colors.black54,
+                                        title: snap.data!
+                                            ? const Text(
+                                                "Do you wish to unfollow?",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )
+                                            : const Text(
+                                                "Do you wish to follow?",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                        actionsAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: const Text("Cancel")),
+                                          MaterialButton(
+                                            onPressed: () {
+                                              Get.back();
+                                              _controller.toggleFollowing(
+                                                  snapshot.data![index].id);
+                                            },
+                                            child: const Text("Confirm"),
+                                            color: AppColors.buttonColor,
+                                          ),
+                                        ],
+                                      ));
+                                    },
+                                    child: Text(
+                                      snap.hasData
+                                          ? snap.data!
+                                              ? "Following"
+                                              : "Follow"
+                                          : "",
+                                      style: style.caption,
                                     ),
-                                  ],
-                                ));
-                              },
-                              child: Text(
-                                snap.hasData
-                                    ? snap.data!
-                                        ? "Following"
-                                        : "Follow"
-                                    : "",
-                                style: style.caption,
-                              ),
-                            );
-                          },
-                        ),
+                                  );
+                                },
+                              )
+                            : SizedBox(),
                       ),
                     );
                   },
