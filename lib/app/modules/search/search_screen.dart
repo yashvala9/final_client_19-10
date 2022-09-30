@@ -20,6 +20,7 @@ import '../../../repositories/profile_repository.dart';
 import '../../../repositories/reel_repository.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/assets.dart';
+import '../../../utils/base.dart';
 import '../../../widgets/loading.dart';
 import '../profile/profile_controller.dart';
 import '../single_feed/single_feed_screen.dart';
@@ -143,33 +144,49 @@ class SearchScreen extends StatelessWidget {
                                 ),
                                 delegate: SliverChildBuilderDelegate(
                                   (context, index) {
+                                    var isPhoto =
+                                        _controller.reelList[index].media_ext !=
+                                            'mp4';
                                     return GestureDetector(
                                         onTap: () {
-                                          Get.to(SingleFeedScreen(null,
-                                              _controller.reelList, index));
+                                          Get.to(SingleFeedScreen(
+                                            null,
+                                            _controller.reelList,
+                                            index,
+                                          ));
                                         },
-                                        child: FutureBuilder<String>(
-                                          future: _profileRepo.getThumbnail(
-                                              _controller
-                                                  .reelList[index].thumbnail),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const ShimmerCardAnimation();
-                                            }
+                                        child: isPhoto
+                                            ? CachedNetworkImage(
+                                                imageUrl:
+                                                    "${Base.profileBucketUrl}/${_controller.reelList[index].filename}",
+                                                fit: BoxFit.cover,
+                                                errorWidget: (c, s, e) =>
+                                                    const Icon(Icons.error),
+                                              )
+                                            : FutureBuilder<String>(
+                                                future: _profileRepo
+                                                    .getThumbnail(_controller
+                                                        .reelList[index]
+                                                        .thumbnail),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData) {
+                                                    return const ShimmerCardAnimation();
+                                                  }
 
-                                            return CachedNetworkImage(
-                                              key: UniqueKey(),
-                                              placeholder: (context, url) {
-                                                return const ShimmerCardAnimation();
-                                              },
-                                              errorWidget: (_, a, b) {
-                                                return const ShimmerCardAnimation();
-                                              },
-                                              imageUrl: snapshot.data!,
-                                              fit: BoxFit.cover,
-                                            );
-                                          },
-                                        ));
+                                                  return CachedNetworkImage(
+                                                    key: UniqueKey(),
+                                                    placeholder:
+                                                        (context, url) {
+                                                      return const ShimmerCardAnimation();
+                                                    },
+                                                    errorWidget: (_, a, b) {
+                                                      return const ShimmerCardAnimation();
+                                                    },
+                                                    imageUrl: snapshot.data!,
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                },
+                                              ));
                                   },
                                   childCount: _controller.reelList.length,
                                 ),

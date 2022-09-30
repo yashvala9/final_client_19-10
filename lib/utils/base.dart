@@ -69,6 +69,7 @@ class Base {
   static const reelHistory = '$_url/reels/history/';
   static const addReel = '$_url/reels';
   static const deleteReel = '$_url/reels/delete';
+  static const deletePost = '$_url/posts';
   static const isActive = '$_url/ads/status/';
 
   //Following Followers
@@ -103,10 +104,13 @@ class Base {
   static const deleteComment = '$_url/reels/comments';
   static const nestedComment = '$_url/reels/comments';
   static const getCommentCount = '$_url/count/comments';
+  static const getPostCommentCount = '$_url/count/posts/comments';
+
   static const getCommentLikeCount = '$_url/count/likes/comments/';
 
   //Giveaway
   static const giveaway = '$_url/contests/';
+  static const adminContest = '$_url/superadmin/contests';
   static const CreateGiveaway = '$_url/createContest';
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';

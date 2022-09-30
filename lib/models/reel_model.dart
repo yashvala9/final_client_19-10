@@ -10,8 +10,6 @@ class ReelModel {
   final String filename;
   final String media_ext;
   final String thumbnail;
-  final String filepath;
-  final String url;
   final ProfileModel user;
 
   ReelModel({
@@ -21,8 +19,6 @@ class ReelModel {
     required this.filename,
     required this.media_ext,
     required this.thumbnail,
-    required this.filepath,
-    this.url = '',
     required this.user,
   });
 
@@ -33,8 +29,6 @@ class ReelModel {
     String? filename,
     String? media_ext,
     String? thumbnail,
-    String? filepath,
-    String? url,
     ProfileModel? user,
   }) {
     return ReelModel(
@@ -44,8 +38,6 @@ class ReelModel {
       filename: filename ?? this.filename,
       media_ext: media_ext ?? this.media_ext,
       thumbnail: thumbnail ?? this.thumbnail,
-      filepath: filepath ?? this.filepath,
-      url: url ?? this.url,
       user: user ?? this.user,
     );
   }
@@ -58,8 +50,6 @@ class ReelModel {
       'filename': filename,
       'media_ext': media_ext,
       'thumbnail': thumbnail,
-      'filepath': filepath,
-      'url': url,
       'user': user.toMap(),
     };
   }
@@ -67,15 +57,13 @@ class ReelModel {
   factory ReelModel.fromMap(Map<String, dynamic> map) {
     return ReelModel(
       id: map['id'] as int,
-      video_title:
-          map['video_title'] != null ? map['video_title'] as String : "",
-      url: map['url'] != null ? map['url'] as String : "",
-      description: map['description'] as String,
+      video_title: ((map['video_title'] ?? map['title']) ?? '') as String,
+      description: ((map['description'] ?? map['content']) ?? '') as String,
       filename: map['filename'] as String,
-      media_ext: map['media_ext'] as String,
-      thumbnail: map['thumbnail'] ?? '',
-      filepath: map['filepath'] ?? '',
-      user: ProfileModel.fromMap(map['user'] as Map<String, dynamic>),
+      media_ext: (map['media_ext'] ?? '') as String,
+      thumbnail: (map['thumbnail'] ?? '') as String,
+      user: ProfileModel.fromMap(
+          (map['user'] ?? map['owner']) as Map<String, dynamic>),
     );
   }
 
@@ -86,7 +74,7 @@ class ReelModel {
 
   @override
   String toString() {
-    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, media_ext: $media_ext, thumbnail: $thumbnail, filepath: $filepath, url: $url, user: $user)';
+    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, media_ext: $media_ext, thumbnail: $thumbnail, user: $user)';
   }
 
   @override
@@ -99,8 +87,6 @@ class ReelModel {
         other.filename == filename &&
         other.media_ext == media_ext &&
         other.thumbnail == thumbnail &&
-        other.filepath == filepath &&
-        other.url == url &&
         other.user == user;
   }
 
@@ -112,8 +98,6 @@ class ReelModel {
         filename.hashCode ^
         media_ext.hashCode ^
         thumbnail.hashCode ^
-        filepath.hashCode ^
-        url.hashCode ^
         user.hashCode;
   }
 }

@@ -17,37 +17,38 @@ class ContestDatesView extends GetView<ContestDatesController> {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Contest Dates',
-          style: TextStyle(fontSize: 17),
+        appBar: AppBar(
+          title: const Text(
+            'Contest Dates',
+            style: TextStyle(fontSize: 17),
+          ),
         ),
-      ),
-      body: Center(
-        child: Text('No contests are live!'),
-        // FutureBuilder<List<ContestModel>>(
-        //   future: _giveawayRepo.getContests(
-        //       _controller.profileId!, _controller.token!),
-        //   builder: (context, snapshot) {
-        //     if (!snapshot.hasData) {
-        //       return const Loading();
-        //     }
-        //     if (snapshot.hasError) {
-        //       printInfo(info: "getContests: ${snapshot.hasError}");
-        //       return Container();
-        //     }
-        //     return ListView.builder(
-        //       itemCount: snapshot.data!.length,
-        //       itemBuilder: (BuildContext context, int index) {
-        //         return ContestCard(
-        //           contest: snapshot.data![index],
-        //         );
-        //       },
-        //     );
-        //   },
-        // )
-      ),
-    );
+        body:
+            // Center(
+            // child: Text('No contests are live!'),
+            FutureBuilder<List<ContestModel>>(
+          future: _giveawayRepo.getContests(
+              _controller.profileId!, _controller.token!),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Loading();
+            }
+            if (snapshot.hasError) {
+              printInfo(info: "getContests: ${snapshot.hasError}");
+              return Container();
+            }
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ContestCard(
+                  contest: snapshot.data![index],
+                );
+              },
+            );
+          },
+        )
+        // ),
+        );
   }
 }
 

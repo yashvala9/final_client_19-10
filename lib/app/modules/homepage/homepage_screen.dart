@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
@@ -19,6 +20,7 @@ import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
+import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/video_player_item.dart';
 import '../../../widgets/my_elevated_button.dart';
@@ -130,12 +132,17 @@ class HomePageScreen extends StatelessWidget {
                           }
                           final data = controller.reelList[index];
                           var isMe = controller.profileId == data.user.id;
+                          var videoSplit = [''];
+                          var videoUrl = "";
 
-                          var videoSplit = data.filename.split("_");
-                          var videoUrl =
-                              "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}";
-                          if (videoSplit[0].contains('ads')) {
-                            isReel = false;
+                          var isPhoto = data.media_ext != 'mp4';
+                          if (!isPhoto) {
+                            videoSplit = data.filename.split("_");
+                            videoUrl =
+                                "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}";
+                            if (videoSplit[0].contains('ads')) {
+                              isReel = false;
+                            }
                           }
                           return PageView.builder(
                             itemCount: isReel
@@ -244,36 +251,69 @@ class HomePageScreen extends StatelessWidget {
                                     ),
                                     body: Stack(
                                       children: [
-                                        VideoPlayerItem(
-                                          videoUrl: videoUrl,
-                                          videoId: data.id,
-                                          isReel: isReel,
-                                          updatePoints: () {
-                                            _controllerCenter.play();
+                                        isPhoto
+                                            ? Stack(
+                                                children: [
+                                                  Center(
+                                                    child: InkWell(
+                                                      onDoubleTap: () {
+                                                        controller.likeToggle(
+                                                            index,
+                                                            isPhoto: isPhoto);
+                                                      },
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            "${Base.profileBucketUrl}/${data.filename}",
+                                                        fit: BoxFit.cover,
+                                                        errorWidget: (c, s,
+                                                                e) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Center(
+                                                    child: controller.showLike
+                                                        ? const Icon(
+                                                            Icons.favorite,
+                                                            color: Colors.red,
+                                                            size: 100,
+                                                          )
+                                                        : const SizedBox(),
+                                                  ),
+                                                ],
+                                              )
+                                            : VideoPlayerItem(
+                                                videoUrl: videoUrl,
+                                                videoId: data.id,
+                                                isReel: isReel,
+                                                updatePoints: () {
+                                                  _controllerCenter.play();
 
-                                            controller.updateManually();
-                                            _changeRotation();
-                                          },
-                                          doubleTap: () {
-                                            if (isReel) {
-                                              controller.likeToggle(index);
-                                            }
-                                          },
-                                          swipeRight: () {
-                                            // if (isReel) {
-                                            //   if (controller
-                                            //           .profileId !=
-                                            //       data.user.id) {
-                                            //     Get.to(
-                                            //       () => ProfileDetail(
-                                            //           profileModel:
-                                            //               data.user),
-                                            //     );
-                                            //   }
-                                            // }
-                                          },
-                                          showLike: controller.showLike,
-                                        ),
+                                                  controller.updateManually();
+                                                  _changeRotation();
+                                                },
+                                                doubleTap: () {
+                                                  if (isReel) {
+                                                    controller
+                                                        .likeToggle(index);
+                                                  }
+                                                },
+                                                swipeRight: () {
+                                                  // if (isReel) {
+                                                  //   if (controller
+                                                  //           .profileId !=
+                                                  //       data.user.id) {
+                                                  //     Get.to(
+                                                  //       () => ProfileDetail(
+                                                  //           profileModel:
+                                                  //               data.user),
+                                                  //     );
+                                                  //   }
+                                                  // }
+                                                },
+                                                showLike: controller.showLike,
+                                              ),
                                         Column(
                                           children: [
                                             const SizedBox(
@@ -550,15 +590,17 @@ class HomePageScreen extends StatelessWidget {
                                                                   InkWell(
                                                                       onTap:
                                                                           () {
-                                                                        controller
-                                                                            .likeToggle(index);
+                                                                        controller.likeToggle(
+                                                                            index,
+                                                                            isPhoto:
+                                                                                isPhoto);
                                                                       },
                                                                       // _controller.likeVideo(data.id),
                                                                       child: FutureBuilder<
                                                                               bool>(
-                                                                          future: _reelRepo.getLikeFlag(
-                                                                              data.id,
-                                                                              controller.token!),
+                                                                          future: isPhoto
+                                                                              ? _reelRepo.getPhotosLikeFlag(data.id, controller.token!)
+                                                                              : _reelRepo.getLikeFlag(data.id, controller.token!),
                                                                           builder: (context, snap) {
                                                                             return Icon(
                                                                               snap.hasData
@@ -577,11 +619,17 @@ class HomePageScreen extends StatelessWidget {
                                                                   // const SizedBox(height: 7),
                                                                   FutureBuilder<
                                                                           int>(
-                                                                      future: _reelRepo.getLikeCountByReelId(
-                                                                          data
-                                                                              .id,
-                                                                          controller
-                                                                              .token!),
+                                                                      future: isPhoto
+                                                                          ? _reelRepo.getLikeCountByPhotoId(
+                                                                              data
+                                                                                  .id,
+                                                                              controller
+                                                                                  .token!)
+                                                                          : _reelRepo.getLikeCountByReelId(
+                                                                              data
+                                                                                  .id,
+                                                                              controller
+                                                                                  .token!),
                                                                       builder:
                                                                           (context,
                                                                               snap) {
@@ -616,7 +664,7 @@ class HomePageScreen extends StatelessWidget {
                                                                           id: data
                                                                               .id,
                                                                           isPhoto:
-                                                                              false,
+                                                                              isPhoto,
                                                                         ),
                                                                         backgroundColor:
                                                                             Colors.white,
@@ -633,11 +681,17 @@ class HomePageScreen extends StatelessWidget {
                                                                   ),
                                                                   FutureBuilder<
                                                                           int>(
-                                                                      future: _commentRepo.getCommentCountByReelId(
-                                                                          data
-                                                                              .id,
-                                                                          controller
-                                                                              .token!),
+                                                                      future: isPhoto
+                                                                          ? _commentRepo.getCommentCountByPostId(
+                                                                              data
+                                                                                  .id,
+                                                                              controller
+                                                                                  .token!)
+                                                                          : _commentRepo.getCommentCountByReelId(
+                                                                              data
+                                                                                  .id,
+                                                                              controller
+                                                                                  .token!),
                                                                       builder:
                                                                           (context,
                                                                               snapshot) {

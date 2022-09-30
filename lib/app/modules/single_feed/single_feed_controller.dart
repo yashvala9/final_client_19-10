@@ -58,10 +58,17 @@ class SingleFeedController extends GetxController {
         const Duration(milliseconds: 1000), () => showLike = false);
   }
 
-  void likeToggle(int id) async {
+  void likeToggle(int id, {bool isPhoto = false}) async {
     try {
-      await _reelRepo.toggleLike(id, token!);
-      final isLiked = await _reelRepo.getLikeFlag(id, token!);
+      var isLiked = false;
+      if (isPhoto) {
+        await _reelRepo.photoToggleLike(id, token!);
+        isLiked = await _reelRepo.getPhotosLikeFlag(id, token!);
+      } else {
+        await _reelRepo.toggleLike(id, token!);
+        isLiked = await _reelRepo.getLikeFlag(id, token!);
+      }
+
       if (isLiked) {
         toggleLikeShow();
       }
@@ -78,6 +85,7 @@ class SingleFeedController extends GetxController {
       if (isLiked) {
         toggleLikeShow();
       }
+      update();
     } catch (e) {
       print("TogglelikeError: $e");
     }

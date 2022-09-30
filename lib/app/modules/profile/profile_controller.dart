@@ -88,4 +88,13 @@ class ProfileController extends GetxController {
       print('delteReel: $e');
     }
   }
+
+  void deletePost(int postId) async {
+    try {
+      await _reelRepo.deletePost(postId, token!);
+      update();
+    } catch (e) {
+      print('deletePost: $e');
+    }
+  }
 }

@@ -126,6 +126,23 @@ class CommentRepository {
     }
   }
 
+  Future<int> getCommentCountByPostId(int id, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getPostCommentCount}/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['comment_count'] as int;
+    } else {
+      print(body['meesage']);
+      return Future.error(body['message']);
+    }
+  }
+
   Future<void> toggleCommentLike(int id, String token,
       {bool isPhoto = false}) async {
     final response = await http.post(
