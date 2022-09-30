@@ -8,11 +8,13 @@ import '../../../../repositories/giveaway_repository.dart';
 import '../../../../widgets/loading.dart';
 import '../controllers/send_invite_controller.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_share_me/flutter_share_me.dart';
 
 class SendInviteView extends GetView<SendInviteController> {
   final profile = Get.find<AuthService>().profileModel;
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(SendInviteController());
+  final FlutterShareMe flutterShareMe = FlutterShareMe();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -157,7 +159,11 @@ class SendInviteView extends GetView<SendInviteController> {
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     const Color(0xff3B9B45))),
-                            onPressed: () {},
+                            onPressed: () async {
+                              await flutterShareMe.shareToWhatsApp(
+                                  msg:
+                                      "Referral Code : ${profile!.username}@${profile!.id}");
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -172,7 +178,7 @@ class SendInviteView extends GetView<SendInviteController> {
                                   "Invite via Whatsapp",
                                   style: style.titleMedium?.copyWith(
                                       fontSize: 14, color: AppColors.white),
-                                )
+                                ),
                               ],
                             )),
                       ),

@@ -43,7 +43,7 @@ class ChatList extends StatelessWidget {
                           onPressed: () => Get.to(
                                 () => NotificationScreen(),
                               ),
-                          icon: const Icon(Icons.edit)),
+                          icon: const Icon(Icons.notifications)),
                     ],
                   ),
                 ),
