@@ -62,8 +62,8 @@ class AddFeedController extends GetxController {
         final String _fileName =
             genFileName(profileId!.toString(), path.basename(file.path));
         var data = {
-          "title": description,
-          "content": "Photo",
+          "title": title,
+          "content": description,
           "filename": _fileName,
           "published": true,
           "hashtags": tags

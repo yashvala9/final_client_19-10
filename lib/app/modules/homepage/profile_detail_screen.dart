@@ -596,6 +596,7 @@ class PhotoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _controller = Get.find<HomePageController>();
     return FutureBuilder<List<PhotoModel>>(
         future: _profileRepo.getPhotosByProfileId(id, token),
         builder: (context, snapshot) {

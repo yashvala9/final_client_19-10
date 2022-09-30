@@ -123,10 +123,16 @@ class HomePageController extends GetxController {
         const Duration(milliseconds: 1000), () => showLike = false);
   }
 
-  void likeToggle(int index) async {
+  void likeToggle(int index, {bool isPhoto = false}) async {
     try {
-      await _reelRepo.toggleLike(reelList[index].id, token!);
-      final isLiked = await _reelRepo.getLikeFlag(reelList[index].id, token!);
+      bool isLiked = false;
+      if (isPhoto) {
+        await _reelRepo.photoToggleLike(reelList[index].id, token!);
+        isLiked = await _reelRepo.getPhotosLikeFlag(reelList[index].id, token!);
+      } else {
+        await _reelRepo.toggleLike(reelList[index].id, token!);
+        isLiked = await _reelRepo.getLikeFlag(reelList[index].id, token!);
+      }
       if (isLiked) {
         toggleLikeShow();
       }

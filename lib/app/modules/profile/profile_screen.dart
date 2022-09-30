@@ -558,3 +558,85 @@ class ProfileReel extends StatelessWidget {
     );
   }
 }
+
+class PhotoSection extends StatelessWidget {
+  final int id;
+  final String token;
+  PhotoSection({Key? key, required this.id, required this.token})
+      : super(key: key);
+
+  final _profileRepo = ProfileRepository();
+
+  @override
+  Widget build(BuildContext context) {
+    final _controller = Get.find<ProfileController>();
+    return FutureBuilder<List<PhotoModel>>(
+        future: _profileRepo.getPhotosByProfileId(id, token),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Loading();
+          }
+          if (snapshot.hasError) {
+            printInfo(info: "getCurrentUserPhoto: ${snapshot.hasError}");
+            return Container();
+          }
+          var photos = snapshot.data!;
+          return photos.isEmpty
+              ? const EmptyWidget("No photos available")
+              : GridView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: photos.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 5,
+                  ),
+                  itemBuilder: (context, index) {
+                    // String thumbnail = photos[index].videoId.url;
+                    // printInfo(
+                    //     info: "ProfileId: ${_controller.profileId}");
+                    // printInfo(info: "tumbnail: $thumbnail");
+                    return GestureDetector(
+                      onLongPress: () {
+                        Get.dialog(AlertDialog(
+                          title: const Text(
+                              "Are you sure you want to delete this post?"),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text("NO")),
+                            MaterialButton(
+                              onPressed: () {
+                                Get.back();
+                                _controller.deletePost(photos[index].id);
+                              },
+                              child: const Text("YES"),
+                              color: Colors.red,
+                            ),
+                          ],
+                        ));
+                      },
+                      onTap: () {
+                        Get.to(SingleFeedScreen(
+                          photos,
+                          null,
+                          index,
+                          isPhoto: true,
+                        ));
+                      },
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "${Base.profileBucketUrl}/${photos[index].filename}",
+                        fit: BoxFit.cover,
+                        errorWidget: (c, s, e) => const Icon(Icons.error),
+                      ),
+                    );
+                  },
+                );
+        });
+  }
+}

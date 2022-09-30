@@ -111,15 +111,16 @@ class GiveawayRepository {
 
   Future<List<ContestModel>> getContests(int profileId, String token) async {
     try {
+      print('212145');
       final response = await http.get(
-        Uri.parse(Base.giveaway),
+        Uri.parse('${Base.adminContest}?skip=0&limit=1000'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
       );
       final body = jsonDecode(response.body);
-      // print('list21212145body $body');
+      print('list21212145body $body');
       if (response.statusCode == 200) {
         Iterable list = body;
         var v = list.map((e) => ContestModel.fromMap(e)).toList();
@@ -148,7 +149,7 @@ class GiveawayRepository {
     // print('list212121body2 $profileId');
     // print('list212121body2 $body');
     if (response.statusCode == 200) {
-      if(response.body == "[]"){
+      if (response.body == "[]") {
         return null;
       }
       return ContestModel.fromMap(body[0]);

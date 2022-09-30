@@ -81,7 +81,7 @@ class AdsHistoryView extends StatelessWidget {
                                       filename: e.ads.filename,
                                       media_ext: e.ads.media_ext,
                                       thumbnail: e.ads.thumbnail,
-                                      filepath: e.ads.filepath,
+                                      // filepath: e.ads.filepath,
                                       user: e.ads.user))
                                   .toList(),
                               0));

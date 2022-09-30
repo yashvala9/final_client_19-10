@@ -30,7 +30,7 @@ class SingleFeedScreen extends StatelessWidget {
   SingleFeedScreen(this.photos, this.reels, this.currentIndex,
       {this.openComment = false, this.isPhoto = false, Key? key})
       : super(key: key);
-  var isPhoto = false;
+  bool isPhoto;
   List<ReelModel>? reels;
   List<PhotoModel>? photos;
   int currentIndex;
@@ -401,7 +401,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                       // const SizedBox(height: 7),
                                                       FutureBuilder<int>(
                                                           future: _reelRepo
-                                                              .getLikeCountByReelId(
+                                                              .getLikeCountByPhotoId(
                                                                   photos![index]
                                                                       .id,
                                                                   _controller
@@ -451,7 +451,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                       ),
                                                       FutureBuilder<int>(
                                                           future: _commentRepo
-                                                              .getCommentCountByReelId(
+                                                              .getCommentCountByPostId(
                                                                   photos![index]
                                                                       .id,
                                                                   _controller
@@ -503,26 +503,65 @@ class SingleFeedScreen extends StatelessWidget {
                               ],
                             );
                           } else {
+                            var isPhoto = reels![index].media_ext != 'mp4';
                             var isReel = true;
-                            var videoSplit = reels![index].filename.split("_");
-                            var videoUrl =
-                                "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reels![index].filename}/MP4/${reels![index].filename}";
-                            if (videoSplit[0].contains('ads')) {
-                              isReel = false;
+                            var videoSplit = [''];
+                            var videoUrl = '';
+                            if (!isPhoto) {
+                              videoSplit = reels![index].filename.split("_");
+                              videoUrl =
+                                  "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reels![index].filename}/MP4/${reels![index].filename}";
+                              if (videoSplit[0].contains('ads')) {
+                                isReel = false;
+                              }
                             }
                             return Stack(
                               children: [
-                                VideoPlayerItem(
-                                  videoUrl: videoUrl,
-                                  videoId: reels![index].id,
-                                  isReel: true,
-                                  updatePoints: () {},
-                                  doubleTap: () {
-                                    _controller.likeToggle(reels![index].id);
-                                  },
-                                  swipeRight: () {},
-                                  showLike: _controller.showLike,
-                                ),
+                                isPhoto
+                                    ? Stack(
+                                        children: [
+                                          Center(
+                                            child: Container(
+                                              height: double.infinity,
+                                              color: Colors.black,
+                                              child: InkWell(
+                                                onDoubleTap: () {
+                                                  _controller.likeToggle(index,
+                                                      isPhoto: isPhoto);
+                                                },
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "${Base.profileBucketUrl}/${reels![index].filename}",
+                                                  fit: BoxFit.fitWidth,
+                                                  errorWidget: (c, s, e) =>
+                                                      const Icon(Icons.error),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: _controller.showLike
+                                                ? const Icon(
+                                                    Icons.favorite,
+                                                    color: Colors.red,
+                                                    size: 100,
+                                                  )
+                                                : const SizedBox(),
+                                          ),
+                                        ],
+                                      )
+                                    : VideoPlayerItem(
+                                        videoUrl: videoUrl,
+                                        videoId: reels![index].id,
+                                        isReel: true,
+                                        updatePoints: () {},
+                                        doubleTap: () {
+                                          _controller
+                                              .likeToggle(reels![index].id);
+                                        },
+                                        swipeRight: () {},
+                                        showLike: _controller.showLike,
+                                      ),
                                 Column(
                                   children: [
                                     const SizedBox(
@@ -825,16 +864,24 @@ class SingleFeedScreen extends StatelessWidget {
                                                               onTap: () {
                                                                 _controller
                                                                     .likeToggle(
-                                                                        index);
+                                                                        index,
+                                                                        isPhoto:
+                                                                            isPhoto);
                                                               },
                                                               // _controller.likeVideo(data.id),
                                                               child: FutureBuilder<
                                                                       bool>(
-                                                                  future: _reelRepo.getLikeFlag(
-                                                                      reels![index]
-                                                                          .id,
-                                                                      _controller
-                                                                          .token!),
+                                                                  future: isPhoto
+                                                                      ? _reelRepo.getPhotosLikeFlag(
+                                                                          reels![index]
+                                                                              .id,
+                                                                          _controller
+                                                                              .token!)
+                                                                      : _reelRepo.getLikeFlag(
+                                                                          reels![index]
+                                                                              .id,
+                                                                          _controller
+                                                                              .token!),
                                                                   builder:
                                                                       (context,
                                                                           snap) {
@@ -855,8 +902,13 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   })),
                                                           // const SizedBox(height: 7),
                                                           FutureBuilder<int>(
-                                                              future: _reelRepo
-                                                                  .getLikeCountByReelId(
+                                                              future: isPhoto
+                                                                  ? _reelRepo.getLikeCountByPhotoId(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      _controller
+                                                                          .token!)
+                                                                  : _reelRepo.getLikeCountByReelId(
                                                                       reels![index]
                                                                           .id,
                                                                       _controller
@@ -897,7 +949,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           index]
                                                                       .id,
                                                                   isPhoto:
-                                                                      false,
+                                                                      isPhoto,
                                                                 ),
                                                                 backgroundColor:
                                                                     Colors
@@ -912,8 +964,13 @@ class SingleFeedScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                           FutureBuilder<int>(
-                                                              future: _commentRepo
-                                                                  .getCommentCountByReelId(
+                                                              future: isPhoto
+                                                                  ? _commentRepo.getCommentCountByPostId(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      _controller
+                                                                          .token!)
+                                                                  : _commentRepo.getCommentCountByReelId(
                                                                       reels![index]
                                                                           .id,
                                                                       _controller

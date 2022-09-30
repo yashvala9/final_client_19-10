@@ -429,6 +429,24 @@ class ReelRepository {
     }
   }
 
+  Future<void> deletePost(int id, String token) async {
+    final response = await http.delete(
+      Uri.parse("${Base.deletePost}/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 ||
+        response.statusCode == 201 ||
+        response.statusCode == 204) {
+      return;
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<List<String>> setRandomWinner(String contestId, String token) async {
     final response = await http.post(
       Uri.parse('${Base.setRandomWinner}/$contestId/setRandom'),
