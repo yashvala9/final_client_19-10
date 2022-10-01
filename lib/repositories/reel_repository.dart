@@ -288,7 +288,8 @@ class ReelRepository {
     }
   }
 
-  Future<void> reportReelOrComment(String type, int id, String token) async {
+  Future<void> reportReelOrComment(
+      String type, String reason, int id, String token) async {
     final response = await http.post(
       Uri.parse("${Base.report}/$type/$id"),
       headers: <String, String>{
@@ -297,7 +298,7 @@ class ReelRepository {
       },
       body: jsonEncode(
         {
-          "reason": "Report",
+          "reason": reason,
           "info": {},
         },
       ),
