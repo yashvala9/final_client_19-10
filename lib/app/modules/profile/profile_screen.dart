@@ -542,8 +542,7 @@ class ProfileReel extends StatelessWidget {
                           border: Border.all(),
                         ),
                         alignment: Alignment.center,
-                        child: Loading(),
-                        // Text("Processing..."),
+                        child: Text("Processing..."),
                       );
                     },
                     imageUrl: snapshot.data!,

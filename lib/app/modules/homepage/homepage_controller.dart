@@ -164,11 +164,12 @@ class HomePageController extends GetxController {
     update();
   }
 
-  void reportReelOrComment(String type, int id, int index) async {
+  void reportReelOrComment(
+      String reason, String type, int id, VoidCallback onDone) async {
     try {
-      await _reelRepo.reportReelOrComment(type, id, token!);
-      reportList.add(id);
-      removeReel(index);
+      await _reelRepo.reportReelOrComment(type, reason, id, token!);
+      onDone();
+      // showSnackBar('This reel has been reported to the Admin!');
       // update();
     } catch (e) {
       log("reportReelOrComment: $e");

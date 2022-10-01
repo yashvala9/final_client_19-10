@@ -59,8 +59,11 @@ class HomePageScreen extends StatelessWidget {
   bool isAnimationPlaying = false;
 
   void onSelect(int id, int index, String reason) {
-    controller.reportReelOrComment(reason, id, index);
-    moveNextReel(index + 1);
+    controller.reportReelOrComment(reason, 'reel', id, () {
+      controller.reportList.add(id);
+      controller.removeReel(index);
+      moveNextReel(index + 1);
+    });
   }
 
   PageController pageController = PageController(
@@ -736,9 +739,10 @@ class HomePageScreen extends StatelessWidget {
                                                                         .white,
                                                                   ),
                                                                   onSelected:
-                                                                      (v) {
-                                                                    Get.dialog(
-                                                                        AlertDialog(
+                                                                      (v) async {
+                                                                    final val =
+                                                                        await Get.dialog(
+                                                                            AlertDialog(
                                                                       title: const Text(
                                                                           "Please select the reason:"),
                                                                       content: Obx(
@@ -799,12 +803,7 @@ class HomePageScreen extends StatelessWidget {
                                                                         MaterialButton(
                                                                           onPressed:
                                                                               () {
-                                                                            Get.back();
-                                                                            onSelect(
-                                                                                data.id,
-                                                                                index,
-                                                                                _reason.value.toString());
-                                                                            showSnackBar('This reel has been reported to the Admin!');
+                                                                            Get.back(result: true);
                                                                           },
                                                                           child:
                                                                               const Text("Report"),
@@ -813,6 +812,16 @@ class HomePageScreen extends StatelessWidget {
                                                                         ),
                                                                       ],
                                                                     ));
+                                                                    if (val !=
+                                                                        null) {
+                                                                      onSelect(
+                                                                          data
+                                                                              .id,
+                                                                          index,
+                                                                          _reason
+                                                                              .value
+                                                                              .toString());
+                                                                    }
                                                                   },
                                                                   itemBuilder:
                                                                       (BuildContext
