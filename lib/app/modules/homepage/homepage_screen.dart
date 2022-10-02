@@ -333,7 +333,7 @@ class HomePageScreen extends StatelessWidget {
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 20,
-                                                              bottom: 15),
+                                                              bottom: 30),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.min,

@@ -597,7 +597,7 @@ class PhotoSection extends StatelessWidget {
                     // printInfo(
                     //     info: "ProfileId: ${_controller.profileId}");
                     // printInfo(info: "tumbnail: $thumbnail");
-                    return GestureDetector(
+                    return InkWell(
                       onLongPress: () {
                         Get.dialog(AlertDialog(
                           title: const Text(
@@ -612,6 +612,7 @@ class PhotoSection extends StatelessWidget {
                               onPressed: () {
                                 Get.back();
                                 _controller.deletePost(photos[index].id);
+                                photos.removeAt(index);
                               },
                               child: const Text("YES"),
                               color: Colors.red,

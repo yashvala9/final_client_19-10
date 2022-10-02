@@ -362,7 +362,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                           onTap: () {
                                                             _controller
                                                                 .phototLikeToggle(
-                                                                    index);
+                                                                    photos![index]
+                                                                        .id);
                                                           },
                                                           // _controller.likeVideo(data.id),
                                                           child: FutureBuilder<
@@ -526,8 +527,13 @@ class SingleFeedScreen extends StatelessWidget {
                                               color: Colors.black,
                                               child: InkWell(
                                                 onDoubleTap: () {
-                                                  _controller.likeToggle(index,
-                                                      isPhoto: isPhoto);
+                                                  isPhoto
+                                                      ? _controller
+                                                          .phototLikeToggle(
+                                                              reels![index].id)
+                                                      : _controller.likeToggle(
+                                                          reels![index].id,
+                                                        );
                                                 },
                                                 child: CachedNetworkImage(
                                                   imageUrl:
@@ -862,11 +868,13 @@ class SingleFeedScreen extends StatelessWidget {
                                                         children: [
                                                           InkWell(
                                                               onTap: () {
-                                                                _controller
-                                                                    .likeToggle(
-                                                                        index,
-                                                                        isPhoto:
-                                                                            isPhoto);
+                                                                isPhoto
+                                                                    ? _controller
+                                                                        .phototLikeToggle(
+                                                                            index)
+                                                                    : _controller
+                                                                        .likeToggle(
+                                                                            index);
                                                               },
                                                               // _controller.likeVideo(data.id),
                                                               child: FutureBuilder<

@@ -90,7 +90,7 @@ class CommentSheet extends StatelessWidget {
                               leading: buildProfile(
                                   "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
                               title: CommentWidget(
-                                isPhoto:isPhoto,
+                                isPhoto: isPhoto,
                                 commentModel: _controller.commentList[index],
                                 likeToggle: () {
                                   _controller.toggleLike(index,
@@ -112,7 +112,8 @@ class CommentSheet extends StatelessWidget {
                                           child: const Text("NO")),
                                       MaterialButton(
                                         onPressed: () {
-                                          _controller.deleteComment(index);
+                                          _controller.deleteComment(
+                                              index, isPhoto);
 
                                           onCommentUpdated();
                                           Get.back();

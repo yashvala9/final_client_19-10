@@ -50,9 +50,11 @@ class CommentRepository {
   // }
 
   Future<List<NestedCommentModel>> getNestedCommentByCommentId(
-      int commentId, String token) async {
+      int commentId, String token, bool isPhoto) async {
     final response = await http.get(
-      Uri.parse("${Base.nestedComment}/$commentId/responses"),
+      isPhoto
+          ? Uri.parse("${Base.nestedPostComment}/$commentId/replies")
+          : Uri.parse("${Base.nestedComment}/$commentId/responses"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -92,7 +94,9 @@ class CommentRepository {
       int commentId, String comment, String token,
       {bool isPhoto = false}) async {
     final response = await http.post(
-      Uri.parse("${Base.nestedComment}/$commentId/responses"),
+      isPhoto
+          ? Uri.parse("${Base.nestedPostComment}/$commentId/replies")
+          : Uri.parse("${Base.nestedComment}/$commentId/responses"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -162,9 +166,12 @@ class CommentRepository {
     }
   }
 
-  Future<void> deleteComment(int commentId, String token) async {
+  Future<void> deleteComment(int commentId, String token,
+      {bool isPhoto = false}) async {
     final response = await http.delete(
-      Uri.parse("${Base.deleteComment}/$commentId"),
+      isPhoto
+          ? Uri.parse("${Base.deletePostComment}/$commentId")
+          : Uri.parse("${Base.deleteComment}/$commentId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
