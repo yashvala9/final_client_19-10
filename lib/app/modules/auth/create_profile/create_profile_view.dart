@@ -63,14 +63,6 @@ class CreateProfileView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Row(
-                          //   children: [
-                          //     Text('Set your Profile',
-                          //         textScaleFactor: Get.textScaleFactor,
-                          //         style: style.headlineSmall),
-                          //   ],
-                          // ),
-                          // SizedBox(height: Get.height * 0.02),
                           Text(
                             'Please fill following details',
                             textScaleFactor: Get.textScaleFactor,
@@ -132,16 +124,9 @@ class CreateProfileView extends StatelessWidget {
                                             CropAspectRatioPreset.ratio4x3,
                                             CropAspectRatioPreset.ratio16x9
                                           ],
-                                          /*   androidUiSettings:
-                                              const AndroidUiSettings(
-                                            activeControlsWidgetColor:
-                                                Utils.brandColor,
-                                            statusBarColor: Colors.transparent,
-                                          ), */
                                         );
                                         if (croppedFile != null) {
                                           _controller.file = croppedFile;
-                                          // Navigator.pop(context);
                                         }
                                       }
                                     } catch (e) {
@@ -169,60 +154,8 @@ class CreateProfileView extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              // Positioned(
-                              //   bottom: 0,
-                              //   child: GestureDetector(
-                              //     onTap: () {},
-                              //     child: Container(
-                              //       width: Get.width * 0.1,
-                              //       height: Get.width * 0.1,
-                              //       decoration: BoxDecoration(
-                              //         boxShadow: [
-                              //           BoxShadow(
-                              //             color: Colors.black.withOpacity(.1),
-                              //             offset: const Offset(0, 5),
-                              //             blurRadius: 3,
-                              //           ),
-                              //         ],
-                              //         borderRadius: BorderRadius.circular(
-                              //             Get.width * 0.1),
-                              //         color: Colors.white,
-                              //       ),
-                              //       child: const Icon(
-                              //         Icons.add,
-                              //         color: AppColors.yellowOrange,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
-                          // SizedBox(height: Get.height * 0.02),
-                          // Text('Username',
-                          //     textScaleFactor: Get.textScaleFactor,
-                          //     style: style.labelLarge),
-                          // SizedBox(height: Get.height * 0.01),
-                          // TextFormField(
-                          //   enabled: !_controller.loading,
-                          //   decoration: InputDecoration(
-                          //     hintText: 'jamesbond123',
-                          //     prefixIcon: Icon(
-                          //       CupertinoIcons.person_solid,
-                          //       color: AppColors.headline5Color.withOpacity(.5),
-                          //     ),
-                          //   ),
-                          //   inputFormatters: [
-                          //     FilteringTextInputFormatter.allow(
-                          //         RegExp('[a-zA-Z0-9]')),
-                          //   ],
-                          //   keyboardType: TextInputType.name,
-                          //   validator: (value) {
-                          //     return value!.isEmpty
-                          //         ? 'Username is required'
-                          //         : null;
-                          //   },
-                          //   onSaved: (v) => _controller.username = v!,
-                          // ),
                           SizedBox(height: Get.height * 0.02),
                           Text('Full Name',
                               textScaleFactor: Get.textScaleFactor,
@@ -288,7 +221,6 @@ class CreateProfileView extends StatelessWidget {
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
-                                  // maxLength: 10,
                                   validator: (value) {
                                     return value!.isEmpty
                                         ? 'Mobile number is required'
@@ -339,7 +271,6 @@ class CreateProfileView extends StatelessWidget {
                                     }
                                     _formKey.currentState!.save();
                                     _controller.addProfileData();
-                                    // Get.toNamed(AppRoutes.home);
                                   },
                                 ),
                         ],

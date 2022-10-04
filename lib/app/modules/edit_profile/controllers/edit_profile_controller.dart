@@ -12,8 +12,8 @@ import 'package:path/path.dart' as path;
 import '../../../../utils/snackbar.dart';
 
 class EditProfileController extends GetxController {
-  final _authService = Get.find<AuthService>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _authService = AuthService();
+  final _profileRepo = ProfileRepository();
 
   ProfileModel get profileModel => _authService.profileModel!;
   bool _loading = false;
@@ -81,7 +81,7 @@ class EditProfileController extends GetxController {
       };
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _fileName = '';
-      // await _authService.redirectUser();
+
       final profile = await _profileRepo.getCurrentUsesr(_authService.token!);
       if (profile.user_profile != null) {
         _authService.profileModel = profile;

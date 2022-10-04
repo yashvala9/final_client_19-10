@@ -15,7 +15,6 @@ class NavigationBarScreen extends StatelessWidget {
   final homepage = HomePageScreen();
 
   buildBottomNavigationMenu(context) {
-    // controller.changeTabIndex(0);
     return Obx(() => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Container(
@@ -40,7 +39,6 @@ class NavigationBarScreen extends StatelessWidget {
                           homepage.moveToReel();
                         } else if (homepage.pageController.page != 0) {
                           homepage.goToFirstPage();
-                          // homepage.moveNextReel(0);
                         } else {
                           homepage.controller.getFeeds();
                           homepage.controller.update();

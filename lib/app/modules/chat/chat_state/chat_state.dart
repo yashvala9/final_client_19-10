@@ -9,13 +9,6 @@ class ChatState with _$ChatState {
     User? chatWithUser,
     required User currentUser,
   }) = _ChatState;
-  // const factory ChatState({
-  //   required String conversationID,
-  //   ChatUserInfo? loggedInUser,
-  //   ChatUserInfo? chatWith,
-  //   ChatPresence? chatWithUserPrecense,
-  //   required List<ChatMessage> allMessages,
-  // }) = _ChatState;
 
   factory ChatState.initial(Channel channel) => ChatState(
         currentChannel: channel,

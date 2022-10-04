@@ -246,15 +246,10 @@ class SearchUsers extends StatelessWidget {
                       prefixIcon: Icon(Icons.search),
                       hintText: "Search here...",
                     ),
-
-                    // controller: searchTextController,
                     onChanged: (value) {
                       _debounce.run(() {
                         if (value.startsWith('#')) {
                           value.replaceAll('#', '');
-                          // Get.to(SearchHashTags(
-                          //   hashTag: value.trim(),
-                          // ));
 
                           _controller.getReelsByHashTag(value);
                         } else {

@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ActionsToolbar extends StatelessWidget {
-  // Full dimensions of an action
   static const double actionWidgetSize = 60.0;
 
-// The size of the icon showen for Social Actions
   static const double actionIconSize = 35.0;
 
-// The size of the share social icon
   static const double shareActionIconSize = 25.0;
 
-// The size of the profile image in the follow Action
   static const double profileImageSize = 50.0;
 
-// The size of the plus icon under the profile image in follow action
   static const double plusIconSize = 20.0;
 
   final String numLikes;
@@ -52,9 +47,6 @@ class ActionsToolbar extends StatelessWidget {
                 "https://firebasestorage.googleapis.com/v0/b/cucumia-369c1.appspot.com/o/images%2FMagazines%2F2022-06-17%2015%3A03%3A33.892_2022-06-17%2015%3A03%3A33.893.jpg?alt=media&token=75624798-52a6-4735-a422-092955a6aa3a"),
           ),
         ),
-        //   CircleImageAnimation(
-        //   child: _getMusicPlayerAction(userPic),
-        // )
       ]),
     );
   }

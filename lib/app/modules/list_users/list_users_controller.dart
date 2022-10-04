@@ -10,7 +10,7 @@ import '../../../services/auth_service.dart';
 
 class ListUsersController extends GetxController {
   final _authService = Get.find<AuthService>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
   ProfileModel get profileModel => _authService.profileModel!;
   late List<ReelModel> reels = [];
   late List<PhotoModel> photos = [];

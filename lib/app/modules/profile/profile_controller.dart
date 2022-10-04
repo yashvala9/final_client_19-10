@@ -11,8 +11,8 @@ import '../../../utils/snackbar.dart';
 
 class ProfileController extends GetxController {
   final _authService = Get.find<AuthService>();
-  final _profileRepo = Get.put(ProfileRepository());
-  final _reelRepo = Get.put(ReelRepository());
+  final _profileRepo = ProfileRepository();
+  final _reelRepo = ReelRepository();
   ProfileModel get profileModel => _authService.profileModel!;
   late List<ReelModel> reels = [];
   late List<PhotoModel> photos = [];

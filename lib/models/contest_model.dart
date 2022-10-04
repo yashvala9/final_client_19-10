@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 class ContestModel {
@@ -13,7 +14,6 @@ class ContestModel {
   final int winnerId;
   final int id;
 
-  // final List<WinnerModel>? winners;
   ContestModel({
     required this.contest_name,
     required this.creator_type,

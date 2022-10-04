@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
@@ -19,7 +17,7 @@ class ListUsersView extends StatelessWidget {
   final ProfileModel profileModel;
 
   final _controller = Get.put(ListUsersController());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,7 @@ class ListUsersView extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        TabBar(tabs: [
+        const TabBar(tabs: [
           Tab(text: "Followers"),
           Tab(text: "Following"),
         ]),
@@ -159,7 +157,7 @@ class ListUsersView extends StatelessWidget {
                                   );
                                 },
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ),
                     );
                   },
@@ -273,7 +271,7 @@ class ListUsersView extends StatelessWidget {
                                   );
                                 },
                               )
-                            : SizedBox(),
+                            : const SizedBox(),
                       ),
                     );
                   },

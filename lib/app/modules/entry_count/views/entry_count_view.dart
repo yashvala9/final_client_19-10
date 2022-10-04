@@ -8,8 +8,8 @@ import '../../../../repositories/giveaway_repository.dart';
 import '../controllers/entry_count_controller.dart';
 
 class EntryCountView extends GetView<EntryCountController> {
-  final _giveawayRepo = Get.put(GiveawayRepository());
-  final _controller = Get.put(EntryCountController());
+  final _giveawayRepo = GiveawayRepository();
+  final _controller = EntryCountController();
 
   EntryCountView({Key? key}) : super(key: key);
   @override
@@ -26,7 +26,6 @@ class EntryCountView extends GetView<EntryCountController> {
             style: TextStyle(fontSize: 17),
           ),
         ),
-        // backgroundColor: AppColors.white,
       ),
       body: SingleChildScrollView(
         child: Column(

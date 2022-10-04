@@ -10,7 +10,7 @@ class SearchTagTile extends StatelessWidget {
   SearchTagTile({Key? key, required this.index}) : super(key: key);
 
   final _controller = Get.find<SearchController>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

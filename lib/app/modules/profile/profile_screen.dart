@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'dart:developer';
 import 'dart:io';
 
@@ -39,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   final authService = Get.put(AuthService());
 
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
   var parser = EmojiParser();
 
   @override
@@ -72,65 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.black54,
                   ),
                   onPressed: () async {
-                    // final val = await showDialog(
-                    //   context: context,
-                    //   builder: (_) => Dialog(
-                    //       child: Column(
-                    //     mainAxisSize: MainAxisSize.min,
-                    //     children: [
-                    //       ListTile(
-                    //         onTap: () {
-                    //           Navigator.pop(context, true);
-                    //         },
-                    //         leading: Icon(Icons.video_camera_back),
-                    //         title: Text("Video"),
-                    //       ),
-                    //       ListTile(
-                    //         onTap: () {
-                    //           Navigator.pop(context, false);
-                    //         },
-                    //         leading: Icon(Icons.photo),
-                    //         title: Text("Photo"),
-                    //       ),
-                    //     ],
-                    //   )),
-                    // );
-                    // if (val != null) {
-                    //   if (val) {
-                    //     var video = await ImagePicker()
-                    //         .pickVideo(source: ImageSource.gallery);
-                    //     if (video != null) {
-                    //       Navigator.of(context).push(
-                    //         MaterialPageRoute(builder: (context) {
-                    //           return VideoTrimmerView(File(video.path));
-                    //         }),
-                    //       );
-                    //     }
-                    //     // var video = await ImagePicker()
-                    //     //     .pickVideo(source: ImageSource.gallery);
-                    //     // if (video != null) {
-                    //     //   Get.to(
-                    //     //     () => AddFeedScreen(
-                    //     //       file: File(video.path),
-                    //     //       type: 0,
-                    //     //     ),
-                    //     //   );
-                    //     // }
-                    //   } else {
-                    //     var photo = await ImagePicker()
-                    //         .pickImage(source: ImageSource.gallery);
-                    //     if (photo != null) {
-                    //       Get.to(
-                    //         () => AddFeedScreen(
-                    //           file: File(photo.path),
-                    //           type: 1,
-                    //         ),
-                    //       );
-                    //     }
-                    //   }
-                    //   _controller.update();
-                    // }
-
                     final val = await showDialog(
                       context: context,
                       builder: (_) => Dialog(
@@ -141,15 +80,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: () {
                               Navigator.pop(context, true);
                             },
-                            leading: Icon(Icons.video_call),
-                            title: Text("Video"),
+                            leading: const Icon(Icons.video_call),
+                            title: const Text("Video"),
                           ),
                           ListTile(
                             onTap: () {
                               Navigator.pop(context, false);
                             },
-                            leading: Icon(Icons.photo),
-                            title: Text("Photo"),
+                            leading: const Icon(Icons.photo),
+                            title: const Text("Photo"),
                           ),
                         ],
                       )),
@@ -182,18 +121,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
                       }
                     }
-                    // var video = await ImagePicker()
-                    //     .pickVideo(source: ImageSource.gallery);
-                    // if (video != null) {
-                    //   final val = await Navigator.of(context).push(
-                    //     MaterialPageRoute(builder: (context) {
-                    //       return VideoTrimmerView(File(video.path));
-                    //     }),
-                    //   );
-                    //   if (val != null) {
-                    //     setState(() {});
-                    //   }
-                    // }
                   },
                 ),
               ],
@@ -203,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 future: _profileRepo.getUserProfile(_controller.token!),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Loading();
+                    return const Loading();
                   }
                   var profileModel = snapshot.data!;
                   return NestedScrollView(
@@ -223,12 +150,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: 100, bottom: 10),
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
                                               topRight: Radius.circular(40))),
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
+                                        borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(50),
                                           topRight: Radius.circular(50),
                                         ),
@@ -333,7 +260,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   style:
                                                       OutlinedButton.styleFrom(
                                                     minimumSize:
-                                                        Size.fromHeight(40),
+                                                        const Size.fromHeight(
+                                                            40),
                                                   ),
                                                   child: Text(
                                                     "Edit Profile",
@@ -341,18 +269,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              // if (profileModel.status ==
-                                              //     "VERIFIED")
                                               Container(
                                                 width: Get.width * 0.9,
                                                 decoration: BoxDecoration(
-                                                    color: Color.fromRGBO(
+                                                    color: const Color.fromRGBO(
                                                         255, 240, 218, 1),
                                                     border: Border.all(
                                                       color: Colors.transparent,
                                                     ),
                                                     borderRadius:
-                                                        BorderRadius.all(
+                                                        const BorderRadius.all(
                                                             Radius.circular(
                                                                 20))),
                                                 child: Padding(
@@ -363,7 +289,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       Center(
                                                           child: Text(
                                                         "\"${parser.emojify(profileModel.user_profile!.bio!)}\"",
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color: Colors.red,
                                                             fontSize: 18),
                                                       )),
@@ -390,7 +316,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         },
                                         child: Material(
                                           elevation: 3,
-                                          shape: CircleBorder(),
+                                          shape: const CircleBorder(),
                                           child: Hero(
                                             tag: "hero2",
                                             child: CircleAvatar(
@@ -423,10 +349,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: <Widget>[
         TabBar(tabs: [
-          Tab(text: "Rolls"),
-          Tab(text: "Photos"),
+          const Tab(text: "Rolls"),
+          const Tab(text: "Photos"),
           if (_controller.profileModel.status == 'VERIFIED')
-            Tab(text: "Giveaway"),
+            const Tab(text: "Giveaway"),
         ]),
         Expanded(
           child: TabBarView(children: [
@@ -436,7 +362,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             PhotoSection(
                 id: _controller.profileModel.id, token: _controller.token!),
             if (_controller.profileModel.status == 'VERIFIED')
-              Center(child: Text("Giveaway")),
+              const Center(child: Text("Giveaway")),
           ]),
         ),
       ],
@@ -463,7 +389,7 @@ class ProfileReel extends StatelessWidget {
               limit: 50, skip: 0),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -473,7 +399,7 @@ class ProfileReel extends StatelessWidget {
         var reels = snapshot.data!;
 
         if (reels.isEmpty) {
-          return Center(
+          return const Center(
             child: Text("No reels available"),
           );
         }
@@ -527,7 +453,7 @@ class ProfileReel extends StatelessWidget {
                 future: _profileRepo.getThumbnail(reels[index].thumbnail),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return ShimmerCardAnimation();
+                    return const ShimmerCardAnimation();
                   }
 
                   return CachedNetworkImage(
@@ -538,7 +464,7 @@ class ProfileReel extends StatelessWidget {
                           border: Border.all(),
                         ),
                         alignment: Alignment.center,
-                        child: Text("Processing..."),
+                        child: const Text("Processing..."),
                       );
                     },
                     imageUrl: snapshot.data!,
@@ -589,10 +515,6 @@ class PhotoSection extends StatelessWidget {
                     crossAxisSpacing: 5,
                   ),
                   itemBuilder: (context, index) {
-                    // String thumbnail = photos[index].videoId.url;
-                    // printInfo(
-                    //     info: "ProfileId: ${_controller.profileId}");
-                    // printInfo(info: "tumbnail: $thumbnail");
                     return InkWell(
                       onLongPress: () {
                         Get.dialog(AlertDialog(

@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: unnecessary_type_check
+
 import 'dart:convert';
 
 import 'package:reel_ro/models/profile_model.dart';
@@ -86,7 +87,6 @@ class CommentModel {
   bool operator ==(covariant CommentModel other) {
     if (identical(this, other)) return true;
 
-    // ignore: unnecessary_type_check
     return other is CommentModel &&
         other.id == id &&
         other.comment == comment &&

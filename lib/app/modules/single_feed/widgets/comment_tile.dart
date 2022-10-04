@@ -47,12 +47,6 @@ class CommentWidget extends StatelessWidget {
             )
           ],
         ),
-        // InkWell(
-        //     onTap: () {},
-        //     child: const Text(
-        //       '2 Responses',
-        //       style: TextStyle(color: Colors.blue),
-        //     )),
       ],
     );
   }

@@ -14,7 +14,6 @@ class AddReferralScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(AuthController());
-  final _authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +89,11 @@ class AddReferralScreen extends StatelessWidget {
                                     _formKey.currentState!.save();
                                     _controller.addReferral(
                                         _controller.referrerId,
-                                        _authService.profileModel!.id
+                                        AuthService()
+                                            .profileModel!
+                                            .id
                                             .toString(),
-                                        _authService.token!);
+                                        AuthService().token!);
                                   },
                                 ),
                         ],
@@ -104,8 +105,8 @@ class AddReferralScreen extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           _controller.setReferralStatus(
-                              _authService.profileModel!.id.toString(),
-                              _authService.token!);
+                              AuthService().profileModel!.id.toString(),
+                              AuthService().token!);
                         },
                         child: const Text("SKIP"),
                       ),

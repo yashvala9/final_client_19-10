@@ -12,7 +12,7 @@ import '../controllers/send_invite_controller.dart';
 
 class SendInviteView extends GetView<SendInviteController> {
   final profile = Get.find<AuthService>().profileModel;
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _giveawayRepo = GiveawayRepository();
   final _controller = Get.put(SendInviteController());
   final FlutterShareMe flutterShareMe = FlutterShareMe();
 
@@ -31,7 +31,6 @@ class SendInviteView extends GetView<SendInviteController> {
               style: style.titleMedium,
             ),
           ),
-          // backgroundColor: AppColors.white,
         ),
         body: Center(
           child: Column(

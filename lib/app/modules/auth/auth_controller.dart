@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,8 +15,8 @@ import 'package:reel_ro/utils/constants.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 class AuthController extends GetxController {
-  final _authRepo = Get.put(AuthRepository());
-  // final _userRepo = Get.put(UserRepository());
+  final _authRepo = AuthRepository();
+
   final _authService = Get.find<AuthService>();
 
   final _storage = GetStorage();
@@ -66,7 +68,7 @@ class AuthController extends GetxController {
         _authService.redirectUser();
       }
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      log("login: $e");
     }
     loading = false;
   }
@@ -82,7 +84,7 @@ class AuthController extends GetxController {
         _authService.redirectUser();
       }
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      log("refereshVerifyEmail: $e");
     }
     loading = false;
   }
@@ -92,7 +94,6 @@ class AuthController extends GetxController {
       await _authRepo.sendVerifyEmailLink(email);
       showSnackBar("Veification email has been send");
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
       debugPrint(e.toString());
     }
   }
@@ -111,9 +112,6 @@ class AuthController extends GetxController {
       Get.off(
         () => VerifyEmailView(),
       );
-      // _storage.write(Constants.token, token);
-      // await _userRepo.createProfile(userModel);
-      // _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
     }

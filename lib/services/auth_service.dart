@@ -19,7 +19,7 @@ import '../utils/snackbar.dart';
 
 class AuthService extends GetxService {
   final _authRepo = Get.put(AuthRepository());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
   final _storage = GetStorage();
   UserModel? userModel;
   ProfileModel? profileModel;
@@ -32,17 +32,6 @@ class AuthService extends GetxService {
   bool get isAuthenticated => _storage.read(Constants.token);
 
   Future<void> redirectUser() async {
-    // var user = _authRepo.user;
-    // if (user == null) {
-    //   Get.offAllNamed(AppRoutes.getStarted);
-    //   return;
-    // }
-    // userModel = await _userRepo.getUserProfile(user.uid);
-    // if (userModel == null) {
-    //   Get.toNamed(AppRoutes.createProfile);
-    // } else {
-    //   Get.toNamed(AppRoutes.home);
-    // }
     final isLoggedIn = await _storage.read(Constants.token);
     debugPrint('2121 isLoggedIn != null ${isLoggedIn != null}');
     if (isLoggedIn != null) {
@@ -63,7 +52,6 @@ class AuthService extends GetxService {
         Get.off(() => CreateProfileView());
       }
     } else {
-      // Get.toNamed(AppRoutes.login_then("afterSuccessfulLogin"));
       Get.offAll(() => LoginScreen());
     }
   }

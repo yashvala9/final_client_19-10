@@ -55,13 +55,7 @@ class _ChannelPageState extends State<ChannelPage> {
                                   isCurrentUser ? Colors.white : Colors.black),
                           messageBackgroundColor: isCurrentUser
                               ? colorSchem.primary
-                              : colorSchem.primaryContainer)
-                      // messageTheme: StreamMessageThemeData(
-                      // messageBackgroundColor: colorSchem.primary,
-                      // messageTextStyle: const TextStyle(color: Colors.white),
-                      // reactionsBackgroundColor: colorSchem.primaryContainer,
-                      // ),
-                      );
+                              : colorSchem.primaryContainer));
                 },
               ),
             ),
@@ -78,8 +72,6 @@ class ChatView extends GetView<ChatController> {
 
   static void open({
     required Channel channel,
-    // User? chatWithUserStreamDetails,
-    // required User chatWithUserStreamDetails,
     Transition? transition,
   }) {
     Get.to(
@@ -93,26 +85,9 @@ class ChatView extends GetView<ChatController> {
   Widget build(BuildContext context) {
     return controller.obx(
       (state) {
-        // return ChatWrapper(
-        //   chatWith: state!.chatWith!,
-        //   chatWithUserPrecense: state.chatWithUserPrecense,
-        //   myInfo: state.loggedInUser!,
-        //   messages: state.allMessages,
-        //   onSend: controller.sendTextMessage,
-        //   onPaginate: controller.loadOldMessages,
-        // );
         return StreamChannel(
           channel: state!.currentChannel,
           child: Scaffold(
-            // appBar: StreamChannelHeader(
-            //   leading: _ChatBackButton(
-            //     onPressed: () => Get.back(),
-            //     showUnreads: true,
-            //     cid: state.currentChannel!.cid,
-            //   ),
-            //   onTitleTap: () {},
-            //   actions: [],
-            // ),
             appBar: AppBar(
               title: Text(state.currentChannel.name!),
             ),

@@ -15,9 +15,6 @@ class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(AuthController());
 
-  // final _emailController = TextEditingController();
-  // final _passwordController = TextEditingController();
-
   final RxBool isPassWordVisible = false.obs;
 
   @override

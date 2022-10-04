@@ -27,7 +27,7 @@ class ProfileDetail extends StatelessWidget {
   final int index;
   ProfileDetail({Key? key, required this.index}) : super(key: key);
   final _controller = Get.find<SearchController>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
 
   final CommunicationService _communicationService = CommunicationService.to;
   final parser = EmojiParser();
@@ -499,15 +499,6 @@ class ProfileDetail extends StatelessWidget {
                                             ),
                                           ),
                                         )
-                                        // Material(
-                                        //   elevation: 3,
-                                        //   shape: CircleBorder(),
-                                        //   child: CircleAvatar(
-                                        //     radius: 40,
-                                        //     backgroundImage: NetworkImage(
-                                        //         "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
-                                        //   ),
-                                        // ),
                                       ],
                                     ),
                                   ),

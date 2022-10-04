@@ -132,7 +132,6 @@ class ProfileRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // AuthService().redirectUser();
       return;
     } else {
       return Future.error(body['detail']);
@@ -156,27 +155,6 @@ class ProfileRepository {
       return Future.error(body['detail']);
     }
   }
-
-  // Future<ProfileModel?> getReelsByUserId(String userId, String token) async {
-  //   final response = await http.get(
-  //     Uri.parse("${Base.getReelsByUserId}?currentUserId=$userId"),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       HttpHeaders.authorizationHeader: "Bearer $token",
-  //     },
-  //   );
-  //   final body = jsonDecode(response.body);
-  //   if (response.statusCode == 200) {
-  //     if (body['profile'] != null) {
-  //       int profileId = body['profile'];
-  //       return await getProfileById(profileId, token);
-  //     } else {
-  //       return null;
-  //     }
-  //   } else {
-  //     return Future.error(body['message']);
-  //   }
-  // }
 
   Future<List<ReelModel>> getReelByProfileId(int profileId, String token,
       {int limit = 15, skip = 0}) async {
@@ -202,7 +180,6 @@ class ProfileRepository {
       Uri.parse(url.replaceAll("0000000", "0000001")),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
 
@@ -248,28 +225,6 @@ class ProfileRepository {
       return Future.error(body['detail']);
     }
   }
-
-  // Future<List<ReelModel>> getReelByProfileId(
-  //     int profileId, String token) async {
-  //   List<ReelModel> reels = [];
-  //   final response = await http.get(
-  //     Uri.parse("${Base.getReelsByUserId}?currentUserId=$profileId"),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       HttpHeaders.authorizationHeader: "Bearer $token",
-  //     },
-  //   );
-
-  //   final body = jsonDecode(response.body);
-  //   print('listRolls $body');
-  //   if (response.statusCode == 200) {
-  //     final Iterable list = body;
-
-  //     return list.map((e) => ReelModel.fromMap(e)).toList();
-  //   } else {
-  //     return Future.error(body['message']);
-  //   }
-  // }
 
   Future<List<PhotoModel>> getPhotosByProfileId(
       int profileId, String token) async {

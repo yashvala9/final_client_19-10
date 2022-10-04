@@ -39,11 +39,11 @@ class CommentSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = Get.put(CommentController());
-    final _commentRepo = Get.put(CommentRepository());
+    final _commentRepo = CommentRepository();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _controller.getCommentsById(id, isPhoto: isPhoto);
     });
-    // _controller.customeInit();
+
     return GetBuilder<CommentController>(
       builder: (_) => FutureBuilder<List<CommentModel>>(
           future: _commentRepo.getCommentById(id, _controller.token!,
@@ -52,14 +52,7 @@ class CommentSheet extends StatelessWidget {
             if (_controller.loading) {
               return const Loading();
             }
-            // if (snapshot.hasError) {
-            //   printInfo(info: "getCommentByReelId: ${snapshot.hasError}");
-            //   return Container();
-            // }
-            // if (_controller.commentList.isNotEmpty) {
-            //   snapshot.data!.addAll(_controller.commentList);
-            //   _controller.commentList.clear();
-            // }
+
             return Column(
               children: [
                 ListTile(

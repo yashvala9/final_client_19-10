@@ -32,14 +32,10 @@ class AuthRepository {
         log("signInBody: $body");
         var map = {
           Constants.jwt: body['access_token'],
-          // Constants.userId: body['user']['id'],
         };
         await _storage.write(Constants.token, map);
 
         CommunicationService.to.saveStreamAccessToken(body['chat_token']);
-
-        // _storage.write('streamToken', body['chat_token']);
-        // _communicationService.saveStreamAccessToken(body['chat_token']);
 
         return "Login successful";
       }
@@ -73,7 +69,6 @@ class AuthRepository {
       Uri.parse(Base.verifyOtp),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode(data),
     );
@@ -129,7 +124,6 @@ class AuthRepository {
       Uri.parse(Base.generateForgetPasswordToken),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode({
         "email": email,
@@ -148,7 +142,6 @@ class AuthRepository {
       Uri.parse(Base.validateForgetPasswordtoken),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode({
         "email": email,
@@ -221,7 +214,6 @@ class AuthRepository {
       Uri.parse(Base.setForgetPassword),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: "Bearer $token",
       },
       body: jsonEncode(
           {"email": email, 'token': token, 'new_password': newPassword}),
@@ -270,13 +262,10 @@ class AuthRepository {
       return;
     } else {
       return;
-      // return Future.error(body['detail']);
     }
   }
 
   Future<void> signOut(String deviceToken, String token) async {
-    // await _auth.signOut();
-    // removeToken(deviceToken, token);
     log("deletetingToken: ${_storage.read(Constants.token)}");
     await _storage.remove(Constants.token);
   }

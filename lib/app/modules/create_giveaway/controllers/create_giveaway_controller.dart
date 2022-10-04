@@ -11,9 +11,9 @@ import '../../../../utils/snackbar.dart';
 import 'package:path/path.dart' as path;
 
 class CreateGiveawayController extends GetxController {
-  final _giveawayRepo = Get.put(GiveawayRepository());
-  final _authService = Get.put(AuthService());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _giveawayRepo = GiveawayRepository();
+  final _authService = AuthService();
+  final _profileRepo = ProfileRepository();
 
   File? _file;
   File? get file => _file;

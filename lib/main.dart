@@ -17,19 +17,6 @@ late PackageInfo kPackageInfo;
 
 late sc.StreamChatClient kDefaultStreamChatClient;
 
-// sc.StreamChatClient _initStreamChatClient() {
-//   Get.put<ConnectivityService>(ConnectivityService());
-//   kDefaultStreamChatClient = sc.StreamChatClient(
-//     StreamConfig.STREAM_API_KEY,
-//     logLevel: kDebugMode ? sc.Level.INFO : sc.Level.OFF,
-//   )..chatPersistenceClient = StreamChatPersistenceClient(
-//       logLevel: kDebugMode ? sc.Level.INFO : sc.Level.OFF,
-//       connectionMode: ConnectionMode.background,
-//     );
-
-//   return kDefaultStreamChatClient;
-// }
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
@@ -38,7 +25,7 @@ Future<void> main() async {
   );
   FCMService.instance.notificationConfig();
   kPackageInfo = await PackageInfo.fromPlatform();
-  // final sc.StreamChatClient _chatClient = _initStreamChatClient();
+
   final client = sc.StreamChatClient(
     StreamConfig.STREAM_API_KEY,
     logLevel: sc.Level.INFO,
@@ -163,9 +150,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialBinding: _RootBindings(),
       initialRoute: AppPages.initial,
-      // initialBinding: BindingsBuilder(() {
-      //   Get.lazyPut(() => AuthService());
-      // }),
     );
   }
 }
@@ -175,21 +159,5 @@ class _RootBindings extends Bindings {
   void dependencies() {
     Get.put<CommunicationService>(CommunicationService());
     Get.put<AuthService>(AuthService());
-    // Get.put<MasterDataService>(MasterDataService());
-    // Get.put<LocationService>(LocationService());
-    // Get.put<NotificationService>(NotificationService());
   }
 }
-
-/* class Root extends StatelessWidget {
-  const Root({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home page"),
-      ),
-    );
-  }
-} */

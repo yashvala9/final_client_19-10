@@ -10,7 +10,7 @@ import '../../../services/auth_service.dart';
 import '../../../utils/snackbar.dart';
 
 class CommentController extends GetxController {
-  final _commentRepo = Get.put(CommentRepository());
+  final _commentRepo = CommentRepository();
   final _authService = Get.put(AuthService());
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -67,7 +67,7 @@ class CommentController extends GetxController {
           isPhoto: isPhoto);
       commentList.removeAt(index);
       HomePageController().update();
-      // deleteCommentLocally(commentList[index].id);
+
       update();
     } catch (e) {
       log('Delete Comment: $e');

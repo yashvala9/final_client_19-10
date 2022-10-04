@@ -10,9 +10,8 @@ import 'package:path/path.dart' as path;
 import '../../../../utils/snackbar.dart';
 
 class CreateProfileController extends GetxController {
-  // final _authRepo = Get.put(AuthRepository());
   final _authService = Get.find<AuthService>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
 
   bool _loading = false;
   bool get loading => _loading;

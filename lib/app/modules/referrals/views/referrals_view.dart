@@ -13,10 +13,10 @@ import '../../../../widgets/loading.dart';
 import '../controllers/referrals_controller.dart';
 
 class ReferralsView extends GetView<ReferralsController> {
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _giveawayRepo = GiveawayRepository();
   final _controller = Get.put(ReferralsController());
   final _notificationRepo = Get.put(NotificationRepository());
-  final _reelRepo = Get.put(ReelRepository());
+  final _reelRepo = ReelRepository();
 
   ReferralsView({Key? key}) : super(key: key);
 
@@ -34,7 +34,6 @@ class ReferralsView extends GetView<ReferralsController> {
             style: TextStyle(fontSize: 17),
           ),
         ),
-        // backgroundColor: AppColors.white,
       ),
       body: CustomScrollView(
         slivers: [
@@ -200,8 +199,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                           textAlign: TextAlign.center),
                                     )
                                   ],
-                                  rows: _controller
-                                      .referrals // Loops through dataColumnText, each iteration assigning the value to element
+                                  rows: _controller.referrals
                                       .map(
                                         ((element) => DataRow(
                                               cells: <DataCell>[
@@ -288,8 +286,6 @@ class ReferralsView extends GetView<ReferralsController> {
                                                       }
                                                       return Text(
                                                         '1',
-                                                        // snapshot.data
-                                                        //     .toString(),
                                                         style: style
                                                             .headlineSmall
                                                             ?.copyWith(
@@ -406,7 +402,6 @@ Widget pokebtn() {
           end: FractionalOffset.bottomCenter,
         )),
     child: const Icon(Icons.arrow_right),
-    // const Center(child: Text("Poke")),
     width: Get.width * 0.15,
     height: Get.height * 0.04,
   );
@@ -426,7 +421,6 @@ Widget disabledPokeButton() {
         Icons.arrow_right,
         color: Colors.grey,
       ),
-      // child: Text("Poke", style: TextStyle(color: Colors.grey)),
     ),
     width: Get.width * 0.15,
     height: Get.height * 0.04,

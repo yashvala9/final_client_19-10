@@ -13,10 +13,10 @@ import '../../../utils/snackbar.dart';
 class SearchController extends GetxController {
   SearchController();
 
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
   final _authService = Get.put(AuthService());
 
-  final _reelRepo = Get.put(ReelRepository());
+  final _reelRepo = ReelRepository();
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -107,7 +107,7 @@ class SearchController extends GetxController {
       searchProfiles = await _profileRepo.searchByUserName(username, token!);
       log("searchResult: $searchProfiles");
     } catch (e) {
-      // showSnackBar(e.toString(), color: Colors.red);
+      log("searchUser: $e");
     }
     loading = false;
   }
@@ -118,20 +118,12 @@ class SearchController extends GetxController {
       searchReels = await _reelRepo
           .getReelsByHashTag(hashTag, profileId!, token!, limit: 500, skip: 0);
     } catch (e) {
-      // showSnackBar(e.toString(), color: Colors.red);
+      log("getReelsByHashTag: $e");
     }
     loading = false;
   }
 
   void toggleFollowing(int index) async {
-    // searchProfiles[index].isFollowing = !searchProfiles[index].isFollowing!;
-    // if (searchProfiles[index].isFollowing!) {
-    //   searchProfiles[index].followerCount++;
-    //   _profileControllere.profileModel.followingCount++;
-    // } else {
-    //   searchProfiles[index].followerCount--;
-    //   _profileControllere.profileModel.followingCount--;
-    // }
     try {
       _profileRepo.toggleFollow(searchProfiles[index].id, token!);
       update();

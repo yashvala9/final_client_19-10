@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names, hash_and_equals, camel_case_types
+// ignore_for_file: non_constant_identifier_names, hash_and_equals, camel_case_types
+
 import 'dart:convert';
 
 class ProfileModel {

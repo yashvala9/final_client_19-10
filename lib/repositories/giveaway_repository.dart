@@ -121,7 +121,6 @@ class GiveawayRepository {
         return Future.error(body);
       }
     } catch (e) {
-      // showSnackBar(e.toString(), color: Colors.red);
       return Future.error(e);
     }
   }
@@ -129,15 +128,13 @@ class GiveawayRepository {
   Future<ContestModel?> getContestsByUserId(int profileId, String token) async {
     final response = await http.get(
       Uri.parse('${Base.giveaway}user/$profileId'),
-      // user?user_id=$profileId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    // print('list212121body2 $profileId');
-    // print('list212121body2 $body');
+
     if (response.statusCode == 200) {
       if (response.body == "[]") {
         return null;
@@ -151,14 +148,13 @@ class GiveawayRepository {
   Future<void> deleteContest(int contestId, String token) async {
     final response = await http.delete(
       Uri.parse('${Base.giveaway}delete/$contestId'),
-      // user?user_id=$profileId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
     final body = jsonDecode(response.body);
-    // print('212121 $body');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
     } else {
@@ -175,7 +171,7 @@ class GiveawayRepository {
       },
     );
     final body = jsonDecode(response.body);
-    // print('list212121winnerbody $body');
+
     if (response.statusCode == 200) {
       final Iterable list = body;
       return list.map((e) => WinnerModel.fromMap(e)).toList();
@@ -218,7 +214,6 @@ class GiveawayRepository {
       final response = await http.get(
         Uri.parse(Base.referrals),
         headers: <String, String>{
-          // 'accept': '*/*',
           'Content-Type': 'application/json; charset=UTF-8',
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
@@ -232,7 +227,6 @@ class GiveawayRepository {
         return Future.error(body);
       }
     } catch (e) {
-      // showSnackBar(e.toString(), color: Colors.red);
       return Future.error(e);
     }
   }

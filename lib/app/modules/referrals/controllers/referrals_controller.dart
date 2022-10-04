@@ -5,7 +5,7 @@ import '../../../../models/profile_model.dart';
 import '../../../../services/auth_service.dart';
 
 class ReferralsController extends GetxController {
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _giveawayRepo = GiveawayRepository();
   final _authService = Get.put(AuthService());
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;

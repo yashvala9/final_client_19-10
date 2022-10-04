@@ -39,12 +39,6 @@ class WinnerCardWidget extends StatelessWidget {
               winner.contestName,
               style: style.subtitle1,
             ),
-            // Text(
-            //   winner.prize_name,
-            //   style: style.titleLarge!.copyWith(
-            //     color: AppColors.winnercardpink,
-            //   ),
-            // ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
               height: 105,

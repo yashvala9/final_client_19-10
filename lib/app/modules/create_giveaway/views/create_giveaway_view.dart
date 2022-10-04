@@ -103,7 +103,6 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                                 ],
                               );
                               if (croppedFile != null) {
-                                // _controller.updateFile(croppedFile);
                                 _controller.file = croppedFile;
                               }
                               _controller.update();
@@ -203,19 +202,14 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                 ),
                 TextField(
                   controller: dateInput,
-                  //editing controller of this TextField
                   decoration: const InputDecoration(
-                      icon: Icon(Icons.calendar_today), //icon of text field
-                      hintText: "End Date" //label text of field
-                      ),
+                      icon: Icon(Icons.calendar_today), hintText: "End Date"),
                   readOnly: true,
-                  //set it true, so that user will not able to edit text
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now(),
-                        // - not to allow to choose before today.
                         lastDate: DateTime(2100));
 
                     if (pickedDate != null) {
@@ -224,9 +218,7 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
 
                       _controller.endDate = DateTime.parse(formattedDate);
 
-                      dateInput.text =
-                          formattedDate; //set output date to TextField value.
-
+                      dateInput.text = formattedDate;
                     } else {}
                   },
                 ),

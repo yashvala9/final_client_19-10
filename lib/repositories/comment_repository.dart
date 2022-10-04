@@ -19,7 +19,7 @@ class CommentRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    // Get.snackbar('title', response.body);
+
     final body = jsonDecode(response.body);
     if (response.statusCode == 201) {
       final Iterable list = body;
@@ -28,23 +28,6 @@ class CommentRepository {
       return Future.error(body['message']);
     }
   }
-  // Future<List<CommentModel>> getCommentByReelId(
-  //     int reelId, String token) async {
-  //   final response = await http.get(
-  //     Uri.parse("${Base.getCommentByReelId}/$reelId"),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       HttpHeaders.authorizationHeader: "Bearer $token",
-  //     },
-  //   );
-  //   final body = jsonDecode(response.body);
-  //   if (response.statusCode == 200 || response.statusCode == 201) {
-  //     final Iterable list = body;
-  //     return list.map((e) => CommentModel.fromMap(e)).toList();
-  //   } else {
-  //     return Future.error(body['detail']);
-  //   }
-  // }
 
   Future<List<NestedCommentModel>> getNestedCommentByCommentId(
       int commentId, String token, bool isPhoto) async {

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors_in_immutables
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/snackbar.dart';
@@ -34,12 +32,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
         ),
         title: Text(
           "Random Follower Picker",
-          style: style
-              .titleMedium, /*TextStyle(
-            color: Color.fromRGBO(22, 23, 34, 1),
-            fontWeight: FontWeight.w400,
-            fontSize: 16,
-          ),*/
+          style: style.titleMedium,
         ),
       ),
       body: Container(
@@ -77,22 +70,14 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                   ),
                   Text(
                     "Pick a random follower",
-                    style: style
-                        .headline6, /*TextStyle(
-                        color: Color.fromRGBO(119, 79, 0, 1),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600),*/
+                    style: style.headline6,
                   ),
                   SizedBox(
                     height: Get.height * 0.01,
                   ),
                   Text(
                     "You can randomly choose the contest winner",
-                    style: style
-                        .titleMedium, /*TextStyle(
-                        color: Color.fromRGBO(22, 23, 34, 1),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),*/
+                    style: style.titleMedium,
                   ),
                   Image.asset(
                     "assets/Winner 1.png",
@@ -113,12 +98,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                       ),
                       child: Text(
                         "Start",
-                        style: style
-                            .titleMedium, /*TextStyle(
-                          color: Color.fromRGBO(255, 255, 255, 1),
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),*/
+                        style: style.titleMedium,
                       ),
                     ),
                   ),
@@ -136,7 +116,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
 }
 
 class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
-  FollowerPickerWinnerView(this.winnerName, {Key? key}) : super(key: key);
+  const FollowerPickerWinnerView(this.winnerName, {Key? key}) : super(key: key);
 
   final String winnerName;
 
@@ -207,11 +187,6 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
                       ),
-                      // Image.asset(
-                      //   "assets/Winner 2.png",
-                      //   height: 250,
-                      //   width: 250,
-                      // ),
                       SizedBox(
                         height: 40,
                         width: 160,

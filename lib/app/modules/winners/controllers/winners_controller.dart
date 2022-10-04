@@ -4,7 +4,7 @@ import 'package:reel_ro/app/data/demo_data.dart';
 import '../../../../services/auth_service.dart';
 
 class WinnersController extends GetxController {
-  final _authService = Get.put(AuthService());
+  final _authService = AuthService();
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
   final RxList<WinnerList> winnerList = RxList<WinnerList>();
@@ -16,9 +16,7 @@ class WinnersController extends GetxController {
     super.onInit();
   }
 
-  _fetch() async {
-    // await getWinnerList();
-  }
+  _fetch() async {}
 
   Future<void> getWinnerList() async {
     winnerList.clear();

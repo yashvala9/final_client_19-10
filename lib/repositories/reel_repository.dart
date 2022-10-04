@@ -65,7 +65,6 @@ class ReelRepository {
         return Future.error(body['detail']);
       }
     } catch (e) {
-      // showSnackBar("Error getReelByCommentId $e");
       printInfo(info: "Error getReelByCommentId $e");
 
       return Future.error(e);
@@ -201,7 +200,6 @@ class ReelRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // return body['liked'] as bool;
       return;
     } else {
       return Future.error(body['message']);
@@ -218,7 +216,6 @@ class ReelRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // return body['liked'] as bool;
       return;
     } else {
       return Future.error(body['message']);
@@ -357,7 +354,6 @@ class ReelRepository {
     }
   }
 
-  /// Uploads the video file to AWS VOD input bucket and saves the key to get url later
   Future<String?> uploadFileToAwsS3({
     required String userID,
     required File file,
@@ -463,8 +459,6 @@ class ReelRepository {
   Future<void> updateAdsHistory(
       int secondsWatched, int adId, String token) async {
     try {
-      // http://13.234.159.127/ads/history/1
-
       var map = {"time_duration": secondsWatched};
       final response = await http.post(
         Uri.parse('${Base.adsHistory}$adId'),
@@ -474,7 +468,7 @@ class ReelRepository {
         },
         body: jsonEncode(map),
       );
-      // print('212121 ${response.body}');
+
       if (response.statusCode == 201) {
         return;
       } else {
@@ -482,7 +476,6 @@ class ReelRepository {
         return Future.error(body['detail']);
       }
     } catch (e) {
-      // showSnackBar("Error updateAdsHistory $e");
       printInfo(info: "updateAdsHistory.......");
     }
   }
@@ -499,7 +492,7 @@ class ReelRepository {
         },
         body: jsonEncode(map),
       );
-      // print('212121 ${response.body}');
+
       if (response.statusCode == 201 || response.statusCode == 200) {
         return;
       } else {

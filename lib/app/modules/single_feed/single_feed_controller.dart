@@ -12,9 +12,9 @@ import 'package:reel_ro/utils/snackbar.dart';
 import '../../../repositories/profile_repository.dart';
 
 class SingleFeedController extends GetxController {
-  final _reelRepo = Get.put(ReelRepository());
-  final _authService = Get.put(AuthService());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _reelRepo = ReelRepository();
+  final _authService = AuthService();
+  final _profileRepo = ProfileRepository();
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -34,16 +34,7 @@ class SingleFeedController extends GetxController {
     update();
   }
 
-  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
-    // Comment(
-    //     username: "yashvala9",
-    //     comment: "comment",
-    //     datePublished: "datePublished",
-    //     likes: [],
-    //     profilePhoto: "profilePhoto",
-    //     uid: "1",
-    //     id: "1")
-  ]);
+  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
 
   void toggleLikeShow() async {
@@ -95,7 +86,7 @@ class SingleFeedController extends GetxController {
 class CommentController extends GetxController {
   CommentController({required this.reelId});
   final int reelId;
-  final _commentRepo = Get.put(CommentRepository());
+  final _commentRepo = CommentRepository();
   final _authService = Get.put(AuthService());
 
   String? get token => _authService.token;

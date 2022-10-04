@@ -12,7 +12,7 @@ import '../../winners/views/winners_view.dart';
 import '../controllers/giveaway_controller.dart';
 
 class GiveawayView extends GetView<GiveawayController> {
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _giveawayRepo = GiveawayRepository();
   final _controller = Get.put(GiveawayController());
 
   GiveawayView({Key? key}) : super(key: key);
