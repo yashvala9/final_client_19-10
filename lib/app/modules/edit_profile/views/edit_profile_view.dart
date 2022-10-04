@@ -8,9 +8,8 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
-import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/utils/assets.dart';
+
 import '../../../../utils/base.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/snackbar.dart';
@@ -26,7 +25,7 @@ class EditProfileView extends GetView<EditProfileController> {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(EditProfileController());
   final _picker = ImagePicker();
-  var parser = EmojiParser();
+  final parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -129,7 +128,8 @@ class EditProfileView extends GetView<EditProfileController> {
                                         }
                                       }
                                     } catch (e) {
-                                      print("selectSourcePage Gallery: $e");
+                                      showSnackBar(e.toString(),
+                                          color: Colors.red);
                                     }
                                   }
                                 },
@@ -258,7 +258,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                             ? "Country code must be 2 digits"
                                             : null,
                                     onChanged: (v) =>
-                                        _controller.phone_pin = int.parse(v)),
+                                        _controller.phonePin = int.parse(v)),
                               ),
                               SizedBox(
                                 width: Get.width * 0.03,
@@ -288,7 +288,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                         : null;
                                   },
                                   onChanged: (v) =>
-                                      _controller.phone_number = int.parse(v),
+                                      _controller.phoneNumber = int.parse(v),
                                 ),
                               ),
                             ],

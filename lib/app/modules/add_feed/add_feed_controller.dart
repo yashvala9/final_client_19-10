@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:intl/intl.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
@@ -72,16 +72,15 @@ class AddFeedController extends GetxController {
           //step 1: make entry in DB
           await _reelRepo.addPhoto(data, token!);
           //step 2: upload file to s3
-          final s3File = ProfileRepository().uploadProfileToAwsS3(
+          ProfileRepository().uploadProfileToAwsS3(
               file: file, fileName: _fileName, userID: profileId!.toString());
           showSnackBar("Photo added successfully!");
-          print(s3File);
+
           clean();
           Get.back(result: true);
           Get.back(result: true);
         } catch (e) {
           showSnackBar(e.toString(), color: Colors.red);
-          print("addFeed: $e");
         }
         loading = false;
       }
@@ -108,7 +107,7 @@ class AddFeedController extends GetxController {
         //step 1: make entry in DB
         await _reelRepo.addReel(data, token!);
         //step 2: upload file to s3
-        final s3File = await _reelRepo.uploadFileToAwsS3(
+        await _reelRepo.uploadFileToAwsS3(
             userID: profileId!.toString(), file: file, fileName: _fileName);
         //step 3: make entry of upload status in db
         await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
@@ -118,7 +117,6 @@ class AddFeedController extends GetxController {
         Get.back(result: true);
       } catch (e) {
         showSnackBar(e.toString(), color: Colors.red);
-        print("addFeed: $e");
       }
       loading = false;
     }

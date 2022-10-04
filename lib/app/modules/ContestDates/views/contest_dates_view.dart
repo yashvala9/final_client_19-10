@@ -14,8 +14,6 @@ class ContestDatesView extends GetView<ContestDatesController> {
   final _controller = Get.put(ContestDatesController());
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme;
     return Scaffold(
         appBar: AppBar(
           title: const Text(

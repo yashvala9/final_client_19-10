@@ -1,11 +1,6 @@
-import 'dart:developer';
-
-import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
@@ -90,15 +85,11 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     videoPlayerController.addListener(() async {
       if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
           videoPlayerController.value.position.inSeconds != 0 &&
           updated != videoPlayerController.value.position.inSeconds) {
         //checking the duration and position every time Video Completed
-        print(
-            'history updated 1212121 $updated ${videoPlayerController.value.position.inSeconds}');
         updateEntryPoints(videoPlayerController.value.position.inSeconds);
       }
     });

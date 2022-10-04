@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/splash/splash_controller.dart';
+
 import '../../../utils/assets.dart';
 
 class SplashScreen extends StatelessWidget {
-  SplashScreen({Key? key}) : super(key: key);
-  final _controller = Get.put(SplashController());
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

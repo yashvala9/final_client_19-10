@@ -1,21 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_page.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/services/communication_services.dart';
-import 'package:reel_ro/services/connectivity_service.dart';
 import 'package:reel_ro/services/fcm_services.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/constants.dart';
-import 'firebase_options.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as sc;
 
-import 'package:stream_chat_persistence/stream_chat_persistence.dart';
+import 'firebase_options.dart';
 
 late PackageInfo kPackageInfo;
 

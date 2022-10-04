@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:path/path.dart' as path;
+
+import '../../../../utils/snackbar.dart';
 
 class CreateProfileController extends GetxController {
   // final _authRepo = Get.put(AuthRepository());
@@ -54,7 +56,7 @@ class CreateProfileController extends GetxController {
       final String _fileName =
           genFileName("Profile", path.basename(file!.path));
 
-      final s3File = await _profileRepo.uploadProfileToAwsS3(
+      await _profileRepo.uploadProfileToAwsS3(
           userID: "Profile", file: file!, fileName: _fileName);
       var profileData = {
         'fullname': fullname,
@@ -67,7 +69,7 @@ class CreateProfileController extends GetxController {
       await _profileRepo.createProfile(profileData, _authService.token!);
       _authService.redirectUser();
     } catch (e) {
-      print("addProfileDate: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     loading = false;
   }

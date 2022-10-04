@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -37,7 +36,7 @@ class ProfileDetail extends StatelessWidget {
 
   final CommunicationService _communicationService = CommunicationService.to;
 
-  var parser = EmojiParser();
+  final parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -232,6 +231,8 @@ class ProfileDetail extends StatelessWidget {
                                                                             onPressed:
                                                                                 () {
                                                                               Get.back();
+                                                                              snapshot.data != snapshot.data! ? false : true;
+                                                                              _controller.update();
                                                                               _controller.toggleFollowing(profileModel.id);
                                                                             },
                                                                             child:
@@ -265,7 +266,44 @@ class ProfileDetail extends StatelessWidget {
                                                                   child:
                                                                       OutlinedButton(
                                                                     onPressed:
-                                                                        () {},
+                                                                        () {
+                                                                      log("aaaaaaaaaaaaaaaaa");
+
+                                                                      log("State: ${_communicationService.client.state}");
+                                                                      log("CurrentUser: ${_communicationService.client.state.currentUser}");
+                                                                      String
+                                                                          newChannelId =
+                                                                          '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+
+                                                                      final Channel
+                                                                          _newChannel =
+                                                                          _communicationService
+                                                                              .client
+                                                                              .channel(
+                                                                        'messaging',
+                                                                        id: newChannelId,
+                                                                        extraData: {
+                                                                          'isGroupChat':
+                                                                              false,
+                                                                          'presence':
+                                                                              true,
+                                                                          'members':
+                                                                              [
+                                                                            profileModel.id.toString(),
+                                                                            _communicationService.client.state.currentUser!.id.toString(),
+                                                                          ],
+                                                                        },
+                                                                      );
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (context) {
+                                                                        return ChannelPage(
+                                                                          channel:
+                                                                              _newChannel,
+                                                                        );
+                                                                      }));
+                                                                    },
                                                                     style: OutlinedButton.styleFrom(
                                                                         minimumSize:
                                                                             const Size.fromHeight(50)),
@@ -321,6 +359,8 @@ class ProfileDetail extends StatelessWidget {
                                                                             MaterialButton(
                                                                               onPressed: () {
                                                                                 Get.back();
+                                                                                snapshot.data != snapshot.data! ? false : true;
+                                                                                _controller.update();
                                                                                 _controller.toggleFollowing(profileModel.id);
                                                                               },
                                                                               child: const Text("Confirm"),
@@ -347,13 +387,14 @@ class ProfileDetail extends StatelessWidget {
                                                                       OutlinedButton(
                                                                     onPressed:
                                                                         () {
-                                                                      log("...................");
-                                                                      String
-                                                                          queryId =
-                                                                          '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
+                                                                      log("aaaaaaaaaaaaaaaaa");
+
+                                                                      log("State: ${_communicationService.client.state}");
+                                                                      log("CurrentUser: ${_communicationService.client.state.currentUser}");
                                                                       String
                                                                           newChannelId =
-                                                                          '${profileModel.id.hashCode}${_communicationService.client.state.currentUser!.id.hashCode}';
+                                                                          '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+
                                                                       final Channel
                                                                           _newChannel =
                                                                           _communicationService
@@ -368,16 +409,20 @@ class ProfileDetail extends StatelessWidget {
                                                                               true,
                                                                           'members':
                                                                               [
-                                                                            profileModel.id,
-                                                                            _communicationService.client.state.currentUser!.id,
+                                                                            profileModel.id.toString(),
+                                                                            _communicationService.client.state.currentUser!.id.toString(),
                                                                           ],
                                                                         },
                                                                       );
-                                                                      ChatView
-                                                                          .open(
-                                                                        channel:
-                                                                            _newChannel,
-                                                                      );
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (context) {
+                                                                        return ChannelPage(
+                                                                          channel:
+                                                                              _newChannel,
+                                                                        );
+                                                                      }));
                                                                     },
                                                                     style: OutlinedButton.styleFrom(
                                                                         minimumSize:
@@ -415,7 +460,7 @@ class ProfileDetail extends StatelessWidget {
                                                       Center(
                                                           child: Text(
                                                         "\"${parser.emojify(profileModel.user_profile!.bio!)}\"",
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color: Colors.red,
                                                             fontSize: 18),
                                                       )),
@@ -442,7 +487,7 @@ class ProfileDetail extends StatelessWidget {
                                           },
                                           child: Material(
                                             elevation: 3,
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                             child: Hero(
                                               tag: "hero1",
                                               child: CircleAvatar(
@@ -482,7 +527,6 @@ class ProfileDetail extends StatelessWidget {
   }
 
   Widget _tabSection(BuildContext context, ProfileModel profileModel) {
-    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -596,7 +640,6 @@ class PhotoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = Get.find<HomePageController>();
     return FutureBuilder<List<PhotoModel>>(
         future: _profileRepo.getPhotosByProfileId(id, token),
         builder: (context, snapshot) {

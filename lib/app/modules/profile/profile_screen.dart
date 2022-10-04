@@ -9,7 +9,6 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
-import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/list_users/list_users_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_photo_view.dart';
 import 'package:reel_ro/models/profile_model.dart';
@@ -19,19 +18,17 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
-import 'package:shimmer/shimmer.dart';
+
 import '../../../models/photo_model.dart';
 import '../../../utils/empty_widget.dart';
-import '../../../utils/snackbar.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../edit_profile/views/edit_profile_view.dart';
-import '../list_users/list_users_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -500,7 +497,6 @@ class ProfileReel extends StatelessWidget {
                 _controller.update();
               }
             }
-            var tumb = reels[index].thumbnail;
 
             return InkWell(
               onTap: () {

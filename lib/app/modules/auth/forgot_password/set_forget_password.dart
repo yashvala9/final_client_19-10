@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
-import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
 import '../../../../utils/assets.dart';
 import '../../../../utils/colors.dart';
 import '../../../../widgets/my_elevated_button.dart';
-import '../../../routes/app_routes.dart';
 
 class SetForgetPassword extends StatelessWidget {
   final String email;

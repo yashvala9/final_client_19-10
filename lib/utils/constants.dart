@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class Constants {
   static const token = 'token';
   static const jwt = 'jwt';
@@ -15,6 +17,7 @@ class NotificationType {
   static const comment = 'comment';
   static const like = 'like';
 }
+
 class StreamConfig {
   static const String STREAM_APP_ID = '1210047';
   static const String STREAM_API_KEY = '3jmqp4vz8vv7';

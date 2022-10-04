@@ -1,22 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/ads_history_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/repositories/auth_repository.dart';
-import 'package:reel_ro/repositories/profile_repository.dart';
-import 'package:video_player/video_player.dart';
-
-import '../../../models/photo_model.dart';
-import '../../../models/reel_model.dart';
-import '../../../repositories/reel_repository.dart';
 import '../../../services/auth_service.dart';
-import '../../../utils/snackbar.dart';
 
 class AdsHistoryController extends GetxController {
   final _authService = Get.find<AuthService>();
-  final _profileRepo = Get.put(ProfileRepository());
-  final _reelRepo = Get.put(ReelRepository());
-  final _authRepo = Get.put(AuthRepository());
 
   ProfileModel get profileModel => _authService.profileModel!;
 
@@ -26,7 +14,6 @@ class AdsHistoryController extends GetxController {
   String? get token => _authService.token;
 
   bool loadingMore = false;
-  bool _loadMore = true;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -37,7 +24,6 @@ class AdsHistoryController extends GetxController {
 
   // Future<void> getMoreFeed(int skip) async {
   //   loadingMore = true;
-  //   if (_loadMore) {
   //     try {
   //       var newList = await _profileRepo.getReelByProfileId(profileId!, token!,
   //           limit: 9, skip: skip);

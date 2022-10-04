@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:reel_ro/models/contest_model.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
 import '../../../../services/auth_service.dart';

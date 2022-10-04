@@ -212,8 +212,6 @@ class NotificationScreen extends StatelessWidget {
                                   future: _reelRepo.getReelByCommentId(
                                       e.data.entityId, token!),
                                   builder: (context, s) {
-                                    print(
-                                        '212121 comment response ${s.hasData}');
                                     if (!s.hasData) {
                                       log("single feed error: ${s.error}");
                                       return const SizedBox();
@@ -237,7 +235,7 @@ class NotificationScreen extends StatelessWidget {
                                               .getThumbnail(reel.thumbnail),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
-                                              return CircularProgressIndicator();
+                                              return const CircularProgressIndicator();
                                             }
 
                                             return CachedNetworkImage(
@@ -245,7 +243,7 @@ class NotificationScreen extends StatelessWidget {
                                               placeholder: (context, url) {
                                                 return IconButton(
                                                     onPressed: () {},
-                                                    icon: Icon(
+                                                    icon: const Icon(
                                                         Icons.refresh_rounded));
                                               },
                                               errorWidget: (_, a, b) {
@@ -254,7 +252,7 @@ class NotificationScreen extends StatelessWidget {
                                                     border: Border.all(),
                                                   ),
                                                   alignment: Alignment.center,
-                                                  child: Loading(),
+                                                  child: const Loading(),
                                                   // Text("Processing..."),
                                                 );
                                               },
@@ -303,7 +301,7 @@ class NotificationScreen extends StatelessWidget {
                                                 .getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
-                                                return CircularProgressIndicator();
+                                                return const CircularProgressIndicator();
                                               }
 
                                               return CachedNetworkImage(
@@ -311,7 +309,7 @@ class NotificationScreen extends StatelessWidget {
                                                 placeholder: (context, url) {
                                                   return IconButton(
                                                       onPressed: () {},
-                                                      icon: Icon(Icons
+                                                      icon: const Icon(Icons
                                                           .refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
@@ -320,7 +318,7 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: Loading(),
+                                                    child: const Loading(),
                                                     // Text("Processing..."),
                                                   );
                                                 },
@@ -372,7 +370,7 @@ class NotificationScreen extends StatelessWidget {
                                                 .getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
-                                                return CircularProgressIndicator();
+                                                return const CircularProgressIndicator();
                                               }
 
                                               return CachedNetworkImage(
@@ -380,7 +378,7 @@ class NotificationScreen extends StatelessWidget {
                                                 placeholder: (context, url) {
                                                   return IconButton(
                                                       onPressed: () {},
-                                                      icon: Icon(Icons
+                                                      icon: const Icon(Icons
                                                           .refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
@@ -389,7 +387,7 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: Loading(),
+                                                    child: const Loading(),
                                                     // Text("Processing..."),
                                                   );
                                                 },

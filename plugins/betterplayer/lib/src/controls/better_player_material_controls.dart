@@ -547,24 +547,6 @@ class _BetterPlayerMaterialControlsState
     );
   }
 
-  Widget _buildPlayPause(VideoPlayerController controller) {
-    return BetterPlayerMaterialClickableWidget(
-      key: const Key("better_player_material_controls_play_pause_button"),
-      onTap: _onPlayPause,
-      child: Container(
-        height: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Icon(
-          controller.value.isPlaying
-              ? _controlsConfiguration.pauseIcon
-              : _controlsConfiguration.playIcon,
-          color: _controlsConfiguration.iconsColor,
-        ),
-      ),
-    );
-  }
-
   Widget _buildPosition() {
     final position =
         _latestValue != null ? _latestValue!.position : Duration.zero;

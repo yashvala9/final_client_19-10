@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/notification_screen.dart';
 import 'package:reel_ro/widgets/chart_tile.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
 // class ChatList extends StatelessWidget {
 //   const ChatList({Key? key}) : super(key: key);

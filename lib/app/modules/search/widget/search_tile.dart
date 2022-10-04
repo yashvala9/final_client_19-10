@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/profile/other_profile_detail.dart';
 import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
@@ -77,6 +76,8 @@ class SearchTile extends StatelessWidget {
                         MaterialButton(
                           onPressed: () {
                             Get.back();
+                            snap.data != snap.data! ? false : true;
+                            _controller.update();
                             _controller.toggleFollowing(index);
                           },
                           child: const Text("Confirm"),

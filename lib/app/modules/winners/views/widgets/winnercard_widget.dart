@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/data/demo_data.dart';
 import 'package:reel_ro/models/winner_model.dart';
-import 'package:reel_ro/utils/colors.dart';
 
 import '../../../../../utils/base.dart';
 

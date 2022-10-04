@@ -8,7 +8,7 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-import '../../../models/reel_model.dart';
+
 import '../../../repositories/profile_repository.dart';
 
 class SingleFeedController extends GetxController {
@@ -46,12 +46,6 @@ class SingleFeedController extends GetxController {
   ]);
   List<CommentModel> get comments => _comments.value;
 
-  @override
-  void onInit() {
-    // getFeeds();
-    super.onInit();
-  }
-
   void toggleLikeShow() async {
     showLike = true;
     await Future.delayed(
@@ -69,7 +63,7 @@ class SingleFeedController extends GetxController {
         toggleLikeShow();
       }
     } catch (e) {
-      print("TogglelikeError: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     update();
   }
@@ -83,7 +77,7 @@ class SingleFeedController extends GetxController {
       }
       update();
     } catch (e) {
-      print("TogglelikeError: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     update();
   }
@@ -144,9 +138,8 @@ class CommentController extends GetxController {
     loading = true;
     try {
       commentList = await _commentRepo.getCommentById(reelId, token!);
-      print("commentList: $commentList");
     } catch (e) {
-      print("getCommentsByReelId: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     loading = false;
   }
@@ -177,11 +170,9 @@ class CommentController extends GetxController {
     };
     addCommentLocally(map);
     try {
-      final message = await _commentRepo.addCommentToById(token!, map, reelId);
-      print("addCommentSuccess: $message");
+      await _commentRepo.addCommentToById(token!, map, reelId);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("addComment: $e");
     }
   }
 }

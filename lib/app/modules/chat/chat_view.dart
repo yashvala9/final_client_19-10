@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/chat/controllers/chat_controller.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
@@ -28,7 +26,6 @@ class _ChannelPageState extends State<ChannelPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final style = theme.textTheme;
     final colorSchem = theme.colorScheme;
     return StreamChannel(
       channel: widget.channel,
@@ -50,9 +47,7 @@ class _ChannelPageState extends State<ChannelPage> {
                   final isCurrentUser =
                       StreamChat.of(context).currentUser!.id ==
                           message.user!.id;
-                  final textAlign =
-                      isCurrentUser ? TextAlign.right : TextAlign.left;
-                  final color = isCurrentUser ? Colors.blueGrey : Colors.blue;
+
                   return defaultMessageWidget.copyWith(
                       messageTheme: defaultMessageWidget.messageTheme.copyWith(
                           messageTextStyle: TextStyle(

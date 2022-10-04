@@ -1,23 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/contest_model.dart';
-import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/winner_model.dart';
-import 'package:reel_ro/utils/colors.dart';
 
 import '../models/profile_model.dart';
-import '../models/reel_model.dart';
 import '../utils/base.dart';
 import '../utils/snackbar.dart';
 
 class GiveawayRepository {
   Future<void> createGiveaway(
       Map<String, dynamic> giveawayData, String token) async {
-    print(jsonEncode(giveawayData));
     final response = await http.post(
       Uri.parse(Base.giveaway),
       headers: <String, String>{
@@ -27,7 +22,6 @@ class GiveawayRepository {
       body: jsonEncode(giveawayData),
     );
 
-    final body = jsonDecode(response.body);
     if (response.statusCode == 201 || response.statusCode == 200) {
       showSnackBar("Giveaway created successfully!");
     } else {
@@ -111,7 +105,6 @@ class GiveawayRepository {
 
   Future<List<ContestModel>> getContests(int profileId, String token) async {
     try {
-      print('212145');
       final response = await http.get(
         Uri.parse('${Base.adminContest}?skip=0&limit=1000'),
         headers: <String, String>{
@@ -120,18 +113,15 @@ class GiveawayRepository {
         },
       );
       final body = jsonDecode(response.body);
-      print('list21212145body $body');
       if (response.statusCode == 200) {
         Iterable list = body;
         var v = list.map((e) => ContestModel.fromMap(e)).toList();
-        print('212145 $v');
         return v;
       } else {
         return Future.error(body);
       }
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getContests: $e");
       return Future.error(e);
     }
   }
@@ -177,7 +167,6 @@ class GiveawayRepository {
   }
 
   Future<List<WinnerModel>> getWinners(int profileId, String token) async {
-    List<WinnerModel> winners = [];
     final response = await http.get(
       Uri.parse(Base.winners),
       headers: <String, String>{
@@ -244,7 +233,6 @@ class GiveawayRepository {
       }
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getReferrals: $e");
       return Future.error(e);
     }
   }

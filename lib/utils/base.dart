@@ -113,7 +113,7 @@ class Base {
   //Giveaway
   static const giveaway = '$_url/contests/';
   static const adminContest = '$_url/superadmin/contests';
-  static const CreateGiveaway = '$_url/createContest';
+  static const createGiveaway = '$_url/createContest';
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';
   static const getTotalEntryCountByUserId = '$_url/totalEntries';

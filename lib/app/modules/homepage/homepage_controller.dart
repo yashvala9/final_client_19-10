@@ -37,7 +37,7 @@ class HomePageController extends GetxController {
   }
 
   bool _loadingPoints = false;
-  bool get loadingPoints => _loading;
+  bool get loadingPoints => _loadingPoints;
   set loadingPoints(bool loadingPoints) {
     _loadingPoints = loadingPoints;
     update();
@@ -78,7 +78,6 @@ class HomePageController extends GetxController {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
     }
     loading = false;
     _loadMore = true;
@@ -91,7 +90,6 @@ class HomePageController extends GetxController {
           await _giveawayRepo.getTotalEntryCountByUserId(profileId!, token!);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
     }
     update();
     loadingPoints = false;
@@ -111,7 +109,6 @@ class HomePageController extends GetxController {
         update();
       } catch (e) {
         showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
       }
     }
     loadingMore = false;

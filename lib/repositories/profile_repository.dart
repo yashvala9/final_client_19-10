@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/ads_history_model.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/services/auth_service.dart';
 
 import '../models/reel_model.dart';
 import '../utils/base.dart';
@@ -81,7 +80,6 @@ class ProfileRepository {
 
   Future<List<ProfileModel>> searchByUserName(
       String userName, String token) async {
-    print('username:' + userName);
     final response = await http.get(
       Uri.parse("${Base.searchUser}/$userName"),
       headers: <String, String>{
@@ -89,7 +87,6 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
@@ -133,7 +130,6 @@ class ProfileRepository {
       },
       body: jsonEncode(profileData),
     );
-    print(response.statusCode);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // AuthService().redirectUser();
@@ -153,7 +149,6 @@ class ProfileRepository {
       },
       body: jsonEncode(profileData),
     );
-    print(response.statusCode);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
@@ -211,7 +206,6 @@ class ProfileRepository {
       },
     );
 
-    print('2121 ${response.statusCode}');
     if (response.statusCode == 200 || response.statusCode == 201) {
       return url.replaceAll("0000000", "0000001");
     } else {
@@ -306,7 +300,6 @@ class ProfileRepository {
         'user_id': followingProfileId,
       }),
     );
-    print("FolloingProfileId: $followingProfileId");
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
@@ -325,8 +318,6 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print('running 2121');
-    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
@@ -345,7 +336,6 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;

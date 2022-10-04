@@ -5,8 +5,6 @@ import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_screen.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 
-import '../../../../utils/base.dart';
-
 class SearchTagTile extends StatelessWidget {
   final int index;
   SearchTagTile({Key? key, required this.index}) : super(key: key);

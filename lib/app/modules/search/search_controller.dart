@@ -1,20 +1,13 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:reel_ro/app/modules/profile/profile_controller.dart';
-import 'package:reel_ro/app/modules/search/search_screen.dart';
 import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
 
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../repositories/reel_repository.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/snackbar.dart';
 
 class SearchController extends GetxController {
@@ -82,8 +75,7 @@ class SearchController extends GetxController {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!,
           limit: 10, skip: 0);
     } catch (e) {
-      // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     loading = false;
     _loadMore = true;
@@ -103,22 +95,19 @@ class SearchController extends GetxController {
         }
         update();
       } catch (e) {
-        // showSnackBar(e.toString(), color: Colors.red);
-        print("getMoreFeed: $e");
+        showSnackBar(e.toString(), color: Colors.red);
       }
     }
     loadingMore = false;
   }
 
   void searchUser(String username) async {
-    print("username: $username");
     loading = true;
     try {
       searchProfiles = await _profileRepo.searchByUserName(username, token!);
       log("searchResult: $searchProfiles");
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("searchUser: $e");
     }
     loading = false;
   }
@@ -130,7 +119,6 @@ class SearchController extends GetxController {
           .getReelsByHashTag(hashTag, profileId!, token!, limit: 500, skip: 0);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
     }
     loading = false;
   }

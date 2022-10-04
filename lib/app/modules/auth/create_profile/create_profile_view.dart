@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
@@ -9,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/auth/create_profile/create_profile_controller.dart';
-import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/snackbar.dart';
@@ -22,7 +20,7 @@ class CreateProfileView extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(CreateProfileController());
   final _picker = ImagePicker();
-  var parser = EmojiParser();
+  final parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +145,8 @@ class CreateProfileView extends StatelessWidget {
                                         }
                                       }
                                     } catch (e) {
-                                      print("selectSourcePage Gallery: $e");
+                                      showSnackBar(e.toString(),
+                                          color: Colors.red);
                                     }
                                   }
                                 },

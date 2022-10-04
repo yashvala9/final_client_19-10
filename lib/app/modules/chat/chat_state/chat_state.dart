@@ -1,6 +1,4 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:get/get.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 part 'chat_state.freezed.dart';
 

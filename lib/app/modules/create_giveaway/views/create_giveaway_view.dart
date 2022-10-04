@@ -6,21 +6,16 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:reel_ro/app/modules/my_contest/views/my_contest_view.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
-import '../../../../repositories/giveaway_repository.dart';
 import '../../../../utils/assets.dart';
 import '../../../../utils/colors.dart';
-import '../../../../widgets/loading.dart';
-import '../../account_settings/views/account_settings_view.dart';
-import '../../add_feed/add_feed_screen.dart';
+import '../../../../utils/snackbar.dart';
 import '../controllers/create_giveaway_controller.dart';
 
 class CreateGiveawayView extends GetView<CreateGiveawayController> {
   CreateGiveawayView({Key? key}) : super(key: key);
-  final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(CreateGiveawayController());
-  TextEditingController dateInput = TextEditingController();
+  final TextEditingController dateInput = TextEditingController();
   final _picker = ImagePicker();
 
   @override
@@ -110,12 +105,11 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                               if (croppedFile != null) {
                                 // _controller.updateFile(croppedFile);
                                 _controller.file = croppedFile;
-                                print('ola ola');
                               }
                               _controller.update();
                             }
                           } catch (e) {
-                            print("selectSourcePage Gallery: $e");
+                            showSnackBar(e.toString(), color: Colors.red);
                           }
                         }
                       },
@@ -225,12 +219,8 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                         lastDate: DateTime(2100));
 
                     if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
                       String formattedDate =
                           DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
 
                       _controller.endDate = DateTime.parse(formattedDate);
 

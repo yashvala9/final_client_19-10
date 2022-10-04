@@ -16,7 +16,6 @@ import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
@@ -52,25 +51,26 @@ class HomePageScreen extends StatelessWidget {
   final _profileController = Get.isRegistered<ProfileController>()
       ? Get.find<ProfileController>()
       : Get.put(ProfileController());
-  var myMenuItems = <String>[
+  final myMenuItems = <String>[
     'Report',
   ];
-  late ConfettiController _controllerCenter;
-  bool isAnimationPlaying = false;
+  final ConfettiController _controllerCenter =
+      ConfettiController(duration: const Duration(seconds: 1));
+  final bool isAnimationPlaying = false;
 
-  void onSelect(int id, int index, String reason) {
-    controller.reportReelOrComment(reason, 'reel', id, () {
+  void onSelect(int id, int index, String reason, String type) {
+    controller.reportReelOrComment(reason, type, id, () {
       controller.reportList.add(id);
       controller.removeReel(index);
       moveNextReel(index + 1);
     });
   }
 
-  PageController pageController = PageController(
+  final PageController pageController = PageController(
     initialPage: 0,
     viewportFraction: 1,
   );
-  PageController pageController2 = PageController(
+  final PageController pageController2 = PageController(
     initialPage: 0,
     viewportFraction: 1,
   );
@@ -94,13 +94,10 @@ class HomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
     RxDouble turns = 0.0.obs;
-    _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 1));
 
     void _changeRotation() {
       turns.value += 1.0;
@@ -407,6 +404,8 @@ class HomePageScreen extends StatelessWidget {
                                                                                           MaterialButton(
                                                                                             onPressed: () {
                                                                                               Get.back();
+                                                                                              snapshot.data != snapshot.data! ? false : true;
+                                                                                              controller.update();
                                                                                               controller.toggleFollowing(data.user.id);
                                                                                             },
                                                                                             child: const Text("Confirm"),
@@ -820,7 +819,10 @@ class HomePageScreen extends StatelessWidget {
                                                                           index,
                                                                           _reason
                                                                               .value
-                                                                              .toString());
+                                                                              .toString(),
+                                                                          isPhoto
+                                                                              ? 'post'
+                                                                              : 'reel');
                                                                     }
                                                                   },
                                                                   itemBuilder:

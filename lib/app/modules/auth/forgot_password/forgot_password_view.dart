@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
-import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/widgets/loading.dart';

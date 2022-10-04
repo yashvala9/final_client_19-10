@@ -3,7 +3,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
-import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/constants.dart';
@@ -13,21 +12,12 @@ import 'package:reel_ro/widgets/my_elevated_button.dart';
 class VerifyEmailView extends StatelessWidget {
   VerifyEmailView({Key? key}) : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final _authController = Get.put(AuthController());
   final _storage = GetStorage();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-
-    final _text1 = TextEditingController();
-    final _text2 = TextEditingController();
-    final _text3 = TextEditingController();
-    final _text4 = TextEditingController();
-    final _text5 = TextEditingController();
-
-    final node = FocusScope.of(context);
 
     return GetBuilder<AuthController>(
         builder: (_) => Scaffold(

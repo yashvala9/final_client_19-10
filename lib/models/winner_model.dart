@@ -1,10 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:reel_ro/models/contest_model.dart';
-import 'package:reel_ro/models/prize_model.dart';
-import 'package:reel_ro/models/profile_model.dart';
-
 class WinnerModel {
   final int id;
   final String userName;

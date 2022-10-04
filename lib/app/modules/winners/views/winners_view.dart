@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:reel_ro/models/winner_model.dart';
 import 'package:reel_ro/utils/assets.dart';
-import 'package:reel_ro/utils/colors.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
 import '../../../../widgets/loading.dart';
-import '../../../data/demo_data.dart';
 import '../controllers/winners_controller.dart';
 import 'widgets/winnercard_widget.dart';
 import 'widgets/winnerheaderimage_widget.dart';

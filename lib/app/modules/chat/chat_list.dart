@@ -4,7 +4,6 @@ import 'package:reel_ro/app/modules/chat/chat_view.dart';
 import 'package:reel_ro/app/modules/chat/controllers/chat_list_controller.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../notification_screen.dart';

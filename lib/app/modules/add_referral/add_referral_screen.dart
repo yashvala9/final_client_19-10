@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 
 import '../../../utils/assets.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/snackbar.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../auth/auth_controller.dart';
@@ -110,7 +107,7 @@ class AddReferralScreen extends StatelessWidget {
                               _authService.profileModel!.id.toString(),
                               _authService.token!);
                         },
-                        child: Text("SKIP"),
+                        child: const Text("SKIP"),
                       ),
                     ),
                   ],

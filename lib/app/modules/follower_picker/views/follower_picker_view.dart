@@ -1,14 +1,16 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/snackbar.dart';
+
 import '../../../../models/contest_model.dart';
-import '../../account_settings/views/account_settings_view.dart';
 import '../controllers/follower_picker_controller.dart';
 
 class FollowerPickerView extends GetView<FollowerPickerController> {
   FollowerPickerView(this.contestModel, {Key? key}) : super(key: key);
 
-  ContestModel contestModel;
+  final ContestModel contestModel;
 
   final _controller = Get.put(FollowerPickerController());
 
@@ -102,8 +104,6 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                     width: 160,
                     child: ElevatedButton(
                       onPressed: () async {
-                        print(
-                            '2121 contestModel.id.toString() ${contestModel.id.toString()}');
                         var v = await _controller
                             .setRandomWinner(contestModel.id.toString());
                         Get.off(FollowerPickerWinnerView(v));
@@ -138,7 +138,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
 class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
   FollowerPickerWinnerView(this.winnerName, {Key? key}) : super(key: key);
 
-  String winnerName;
+  final String winnerName;
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +202,7 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                       ),
                       Text(
                         "Winner Name: $winnerName",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Color.fromRGBO(119, 79, 0, 1),
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
