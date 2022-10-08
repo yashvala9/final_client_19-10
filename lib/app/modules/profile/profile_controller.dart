@@ -93,6 +93,7 @@ class ProfileController extends GetxController {
     try {
       await _reelRepo.deletePost(postId, token!);
       update();
+      onInit();
     } catch (e) {
       print('deletePost: $e');
     }

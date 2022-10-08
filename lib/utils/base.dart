@@ -102,7 +102,9 @@ class Base {
   static const togglePhotoCommentLike = '$_url/posts/likes/comments';
 
   static const deleteComment = '$_url/reels/comments';
+  static const deletePostComment = '$_url/posts/comments';
   static const nestedComment = '$_url/reels/comments';
+  static const nestedPostComment = '$_url/posts/comments';
   static const getCommentCount = '$_url/count/comments';
   static const getPostCommentCount = '$_url/count/posts/comments';
 

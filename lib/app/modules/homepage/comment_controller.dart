@@ -68,10 +68,11 @@ class CommentController extends GetxController {
     update();
   }
 
-  void deleteComment(int index) async {
+  void deleteComment(int index, bool isPhoto) async {
     print('index ${index.toString()}');
     try {
-      await _commentRepo.deleteComment(commentList[index].id, token!);
+      await _commentRepo.deleteComment(commentList[index].id, token!,
+          isPhoto: isPhoto);
       commentList.removeAt(index);
       HomePageController().update();
       // deleteCommentLocally(commentList[index].id);

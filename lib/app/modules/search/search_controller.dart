@@ -82,7 +82,7 @@ class SearchController extends GetxController {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!,
           limit: 10, skip: 0);
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
     }
     loading = false;
@@ -103,8 +103,8 @@ class SearchController extends GetxController {
         }
         update();
       } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
+        // showSnackBar(e.toString(), color: Colors.red);
+        print("getMoreFeed: $e");
       }
     }
     loadingMore = false;

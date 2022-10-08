@@ -174,7 +174,7 @@ class CommentWidget extends StatelessWidget {
               if (showNestedComment)
                 FutureBuilder<List<NestedCommentModel>>(
                     future: _commentRepo.getNestedCommentByCommentId(
-                        commentModel.id, _authService.token!),
+                        commentModel.id, _authService.token!, isPhoto),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Loading();
