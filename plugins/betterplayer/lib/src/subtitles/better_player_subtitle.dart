@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:better_player/src/core/better_player_utils.dart';
 
 class BetterPlayerSubtitle {

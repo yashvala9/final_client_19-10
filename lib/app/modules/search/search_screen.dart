@@ -2,27 +2,16 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/app/modules/search/widget/search_tile.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
-import 'package:reel_ro/utils/snackbar.dart';
-import 'package:reel_ro/widgets/chart_tile.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
-import 'package:shimmer/shimmer.dart';
 
-import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
-import '../../../repositories/reel_repository.dart';
-import '../../../services/auth_service.dart';
-import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
 import '../../../widgets/loading.dart';
-import '../profile/profile_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'widget/search_tag_tile.dart';
 
@@ -257,15 +246,10 @@ class SearchUsers extends StatelessWidget {
                       prefixIcon: Icon(Icons.search),
                       hintText: "Search here...",
                     ),
-
-                    // controller: searchTextController,
                     onChanged: (value) {
                       _debounce.run(() {
                         if (value.startsWith('#')) {
                           value.replaceAll('#', '');
-                          // Get.to(SearchHashTags(
-                          //   hashTag: value.trim(),
-                          // ));
 
                           _controller.getReelsByHashTag(value);
                         } else {

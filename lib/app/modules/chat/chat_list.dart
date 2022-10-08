@@ -4,7 +4,6 @@ import 'package:reel_ro/app/modules/chat/chat_view.dart';
 import 'package:reel_ro/app/modules/chat/controllers/chat_list_controller.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
 import '../../notification_screen.dart';
@@ -79,11 +78,6 @@ class ChatList extends StatelessWidget {
                           : lastMessage.text!;
                       var profileUrl = _member?.user?.extraData['profilePic'];
                       return defaultWidget.copyWith(
-                        // onLongPress: () {
-                        //   final channel = state
-                        //       .individualChannelsListController.client
-                        //       .channel('messaging', id: items[index].id);
-                        // },
                         leading: CircleAvatar(
                           radius: 25,
                           backgroundColor: colorSchem.primary,
@@ -137,63 +131,3 @@ class ChatList extends StatelessWidget {
     );
   }
 }
-
-
-// class ChatList extends StatelessWidget {
-//   ChatList({Key? key}) : super(key: key);
-
-//   final controller = Get.put(ChatListController());
-
-//   Widget _buildIndividualsList(BuildContext context, ChatListState state) {
-//     return RefreshIndicator(
-//       child: StreamChannelListView(
-//         controller: state.individualChannelsListController,
-//         itemBuilder: (BuildContext context, List<Channel> items, int index,
-//             StreamChannelListTile defaultWidget) {
-//           Member? _member = items[index].state!.members.firstWhereOrNull(
-//               (element) =>
-//                   element.user!.id !=
-//                   items[index].client.state.currentUser!.id);
-
-//           return defaultWidget.copyWith(
-//             title: Text(
-//               (_member?.user?.extraData['fullName'] ?? items[index].cid)
-//                   .toString(),
-//             ),
-//           );
-//         },
-//         padding: EdgeInsets.symmetric(
-//           horizontal: Get.width * 0.05,
-//           vertical: Get.height * 0.01,
-//         ),
-//         emptyBuilder: (context) => const EmptyWidget("No Communication"),
-//         loadingBuilder: (context) => const Loading(),
-//         errorBuilder: (BuildContext context, StreamChatError error) => Center(
-//           child: Text("Error: ${error.message}"),
-//         ),
-//         // onChannelTap: (Channel _channel) {
-//         // Member? _member = _channel.state!.members.firstWhereOrNull((element) =>
-//         //     element.user!.id != _channel.client.state.currentUser!.id);
-//         // if (_member != null && _member.user != null) {
-//         //   ChatView.open(
-//         //     chatWithUserStreamDetails: _member.user!,
-//         //   );
-//         // }
-//         // },
-//         // onChannelTap: (Channel _channel) => ChatView.open(
-//         //   channel: _channel,
-//         // ),
-//       ),
-//       onRefresh: state.individualChannelsListController.refresh,
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: controller.obx(
-//         (state) => _buildIndividualsList(context, state!),
-//       ),
-//     );
-//   }
-// }

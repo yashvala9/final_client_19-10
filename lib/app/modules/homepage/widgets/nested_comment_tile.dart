@@ -1,15 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/models/comment_model.dart';
 import 'package:reel_ro/models/nessted_comment_model.dart';
-import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/datetime_extension.dart';
-import 'package:reel_ro/widgets/loading.dart';
 
 class NestedCommentWidget extends StatelessWidget {
   final NestedCommentModel nestedCommentModel;
@@ -22,11 +16,8 @@ class NestedCommentWidget extends StatelessWidget {
     required this.deleteCallBack,
   }) : super(key: key);
 
-  final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
-  var parser = EmojiParser();
-
-  bool showNestedComment = false;
+  final parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
@@ -67,36 +58,8 @@ class NestedCommentWidget extends StatelessWidget {
                   parser.emojify(nestedCommentModel.response),
                 ),
                 Container(),
-                // Row(
-                //   children: [
-                //     IconButton(
-                //         onPressed: () {
-                //           log("CommentId: $nestedCommentModel");
-                //           likeToggle();
-                //         },
-                //         icon: const Icon(
-                //           Icons.favorite,
-                //           color: Colors.red,
-                //         )),
-                //     Text(nest.likeCount.toString()),
-                //   ],
-                // )
               ],
             ),
-            // StatefulBuilder(builder: (context, setState) {
-            //   if (!showNestedComment) {
-            //     return InkWell(
-            //         onTap: () {},
-            //         child: Text(
-            //           '${commentModel.responseCount} Responses',
-            //           style: const TextStyle(color: Colors.blue),
-            //         ));
-            //   } else {
-            //     return FutureBuilder(builder: (context, snapshot) {
-            //       return Container();
-            //     });
-            //   }
-            // }),
           ],
         ),
       ),

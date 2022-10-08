@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: unnecessary_const
 
 import 'dart:developer';
 import 'dart:io';
@@ -16,7 +16,6 @@ import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
@@ -44,33 +43,34 @@ enum ReportReason {
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
-  final _reelRepo = Get.put(ReelRepository());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _reelRepo = ReelRepository();
+  final _profileRepo = ProfileRepository();
   final controller = Get.put(HomePageController());
-  final _commentRepo = Get.put(CommentRepository());
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _commentRepo = CommentRepository();
+  final _giveawayRepo = GiveawayRepository();
   final _profileController = Get.isRegistered<ProfileController>()
       ? Get.find<ProfileController>()
       : Get.put(ProfileController());
-  var myMenuItems = <String>[
+  final myMenuItems = <String>[
     'Report',
   ];
-  late ConfettiController _controllerCenter;
-  bool isAnimationPlaying = false;
+  final ConfettiController _controllerCenter =
+      ConfettiController(duration: const Duration(seconds: 1));
+  final bool isAnimationPlaying = false;
 
-  void onSelect(int id, int index, String reason) {
-    controller.reportReelOrComment(reason, 'reel', id, () {
+  void onSelect(int id, int index, String reason, String type) {
+    controller.reportReelOrComment(reason, type, id, () {
       controller.reportList.add(id);
       controller.removeReel(index);
       moveNextReel(index + 1);
     });
   }
 
-  PageController pageController = PageController(
+  final PageController pageController = PageController(
     initialPage: 0,
     viewportFraction: 1,
   );
-  PageController pageController2 = PageController(
+  final PageController pageController2 = PageController(
     initialPage: 0,
     viewportFraction: 1,
   );
@@ -82,25 +82,22 @@ class HomePageScreen extends StatelessWidget {
 
   void moveToReel() {
     pageController2.animateTo(0,
-        curve: Curves.linear, duration: Duration(milliseconds: 500));
+        curve: Curves.linear, duration: const Duration(milliseconds: 500));
     controller.updateManually();
   }
 
   void goToFirstPage() {
     pageController.animateToPage(0,
-        curve: Curves.fastOutSlowIn, duration: Duration(seconds: 1));
+        curve: Curves.fastOutSlowIn, duration: const Duration(seconds: 1));
     controller.updateManually();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
     RxDouble turns = 0.0.obs;
-    _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 1));
 
     void _changeRotation() {
       turns.value += 1.0;
@@ -109,9 +106,9 @@ class HomePageScreen extends StatelessWidget {
     return GetBuilder<HomePageController>(
       builder: (_) => SafeArea(
         child: controller.loading
-            ? Loading()
+            ? const Loading()
             : controller.reelList.isEmpty
-                ? EmptyWidget("No reels available!")
+                ? const EmptyWidget("No reels available!")
                 : RefreshIndicator(
                     onRefresh: () {
                       controller.getFeeds();
@@ -122,8 +119,8 @@ class HomePageScreen extends StatelessWidget {
                         itemCount: controller.reelList.length,
                         controller: pageController,
                         physics: controller.secondPageIndex > 0
-                            ? NeverScrollableScrollPhysics()
-                            : AlwaysScrollableScrollPhysics(),
+                            ? const NeverScrollableScrollPhysics()
+                            : const AlwaysScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
                           Rx<ReportReason?> _reason =
@@ -195,17 +192,18 @@ class HomePageScreen extends StatelessWidget {
                                                       Navigator.pop(
                                                           context, true);
                                                     },
-                                                    leading:
-                                                        Icon(Icons.video_call),
-                                                    title: Text("Video"),
+                                                    leading: const Icon(
+                                                        Icons.video_call),
+                                                    title: const Text("Video"),
                                                   ),
                                                   ListTile(
                                                     onTap: () {
                                                       Navigator.pop(
                                                           context, false);
                                                     },
-                                                    leading: Icon(Icons.photo),
-                                                    title: Text("Photo"),
+                                                    leading:
+                                                        const Icon(Icons.photo),
+                                                    title: const Text("Photo"),
                                                   ),
                                                 ],
                                               )),
@@ -302,19 +300,7 @@ class HomePageScreen extends StatelessWidget {
                                                         .likeToggle(index);
                                                   }
                                                 },
-                                                swipeRight: () {
-                                                  // if (isReel) {
-                                                  //   if (controller
-                                                  //           .profileId !=
-                                                  //       data.user.id) {
-                                                  //     Get.to(
-                                                  //       () => ProfileDetail(
-                                                  //           profileModel:
-                                                  //               data.user),
-                                                  //     );
-                                                  //   }
-                                                  // }
-                                                },
+                                                swipeRight: () {},
                                                 showLike: controller.showLike,
                                               ),
                                         Column(
@@ -371,11 +357,11 @@ class HomePageScreen extends StatelessWidget {
                                                                                 Colors.white,
                                                                           ),
                                                                         )),
-                                                                    SizedBox(
+                                                                    const SizedBox(
                                                                       width: 10,
                                                                     ),
                                                                     isMe
-                                                                        ? SizedBox()
+                                                                        ? const SizedBox()
                                                                         : isReel
                                                                             ? FutureBuilder<bool>(
                                                                                 future: _profileRepo.isFollowing(data.user.id, controller.token!),
@@ -384,18 +370,18 @@ class HomePageScreen extends StatelessWidget {
                                                                                     return Container();
                                                                                   }
                                                                                   return TextButton(
-                                                                                    child: snapshot.data! ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12)) : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                                    child: snapshot.data! ? const Text("Following", style: const TextStyle(color: Colors.white, fontSize: 12)) : const Text("Follow", style: const TextStyle(color: Colors.white, fontSize: 12)),
                                                                                     onPressed: () {
                                                                                       Get.dialog(AlertDialog(
                                                                                         backgroundColor: Colors.black54,
                                                                                         title: snapshot.data!
-                                                                                            ? Text(
+                                                                                            ? const Text(
                                                                                                 "Do you wish to unfollow?",
                                                                                                 style: TextStyle(color: Colors.white),
                                                                                               )
-                                                                                            : Text(
+                                                                                            : const Text(
                                                                                                 "Do you wish to follow?",
-                                                                                                style: TextStyle(color: Colors.white),
+                                                                                                style: const TextStyle(color: Colors.white),
                                                                                               ),
                                                                                         actionsAlignment: MainAxisAlignment.spaceAround,
                                                                                         actions: [
@@ -407,6 +393,8 @@ class HomePageScreen extends StatelessWidget {
                                                                                           MaterialButton(
                                                                                             onPressed: () {
                                                                                               Get.back();
+                                                                                              snapshot.data != snapshot.data! ? false : true;
+                                                                                              controller.update();
                                                                                               controller.toggleFollowing(data.user.id);
                                                                                             },
                                                                                             child: const Text("Confirm"),
@@ -416,11 +404,11 @@ class HomePageScreen extends StatelessWidget {
                                                                                       ));
                                                                                     },
                                                                                     style: ButtonStyle(
-                                                                                      shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
+                                                                                      shape: MaterialStateProperty.all(RoundedRectangleBorder(side: const BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
                                                                                     ),
                                                                                   );
                                                                                 })
-                                                                            : SizedBox(),
+                                                                            : const SizedBox(),
                                                                   ],
                                                                 )
                                                               : Column(
@@ -447,12 +435,8 @@ class HomePageScreen extends StatelessWidget {
                                                                             .titleMedium,
                                                                         onPressed:
                                                                             () {
-                                                                          // if (data.url !=
-                                                                          //     "") {
-                                                                          Get.to(WebViewScreen(
-                                                                              // data.url
-                                                                              'https://flutter.dev'));
-                                                                          // }
+                                                                          Get.to(
+                                                                              WebViewScreen('https://flutter.dev'));
                                                                         },
                                                                       ),
                                                                     ),
@@ -497,7 +481,7 @@ class HomePageScreen extends StatelessWidget {
                                                                     color: Colors
                                                                         .blue,
                                                                   ))
-                                                              : SizedBox(),
+                                                              : const SizedBox(),
                                                         ],
                                                       ),
                                                     ),
@@ -505,9 +489,9 @@ class HomePageScreen extends StatelessWidget {
                                                   Container(
                                                     width: 50,
                                                     margin: isReel
-                                                        ? EdgeInsets.only(
+                                                        ? const EdgeInsets.only(
                                                             bottom: 15)
-                                                        : EdgeInsets.only(
+                                                        : const EdgeInsets.only(
                                                             bottom: 50),
                                                     child: isReel
                                                         ? Column(
@@ -531,18 +515,6 @@ class HomePageScreen extends StatelessWidget {
                                                                           .white,
                                                                     ),
                                                                   ),
-                                                                  // Text(
-                                                                  //   _controller
-                                                                  //       .totalEntryPoints
-                                                                  //       .value,
-                                                                  //   style: style
-                                                                  //       .headlineSmall!
-                                                                  //       .copyWith(
-                                                                  //     fontSize: 18,
-                                                                  //     color: Colors
-                                                                  //         .white,
-                                                                  //   ),
-                                                                  // ),
                                                                   FutureBuilder<
                                                                           String>(
                                                                       future: _giveawayRepo.getTotalEntryCountByUserId(
@@ -586,7 +558,7 @@ class HomePageScreen extends StatelessWidget {
                                                                       })
                                                                 ],
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   height: 15),
                                                               Column(
                                                                 children: [
@@ -598,7 +570,6 @@ class HomePageScreen extends StatelessWidget {
                                                                             isPhoto:
                                                                                 isPhoto);
                                                                       },
-                                                                      // _controller.likeVideo(data.id),
                                                                       child: FutureBuilder<
                                                                               bool>(
                                                                           future: isPhoto
@@ -619,7 +590,6 @@ class HomePageScreen extends StatelessWidget {
                                                                                   : Colors.white,
                                                                             );
                                                                           })),
-                                                                  // const SizedBox(height: 7),
                                                                   FutureBuilder<
                                                                           int>(
                                                                       future: isPhoto
@@ -640,7 +610,6 @@ class HomePageScreen extends StatelessWidget {
                                                                           snap.hasData
                                                                               ? snap.data!.toString()
                                                                               : '0',
-                                                                          // data.likeCount.toString(),
                                                                           style: style
                                                                               .headlineSmall!
                                                                               .copyWith(
@@ -653,7 +622,7 @@ class HomePageScreen extends StatelessWidget {
                                                                       }),
                                                                 ],
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   height: 15),
                                                               Column(
                                                                 children: [
@@ -714,7 +683,7 @@ class HomePageScreen extends StatelessWidget {
                                                                       })
                                                                 ],
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   height: 15),
                                                               InkWell(
                                                                 onTap: () {},
@@ -726,7 +695,7 @@ class HomePageScreen extends StatelessWidget {
                                                                       .white,
                                                                 ),
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   height: 15),
                                                               PopupMenuButton<
                                                                       String>(
@@ -820,7 +789,10 @@ class HomePageScreen extends StatelessWidget {
                                                                           index,
                                                                           _reason
                                                                               .value
-                                                                              .toString());
+                                                                              .toString(),
+                                                                          isPhoto
+                                                                              ? 'post'
+                                                                              : 'reel');
                                                                     }
                                                                   },
                                                                   itemBuilder:
@@ -850,21 +822,19 @@ class HomePageScreen extends StatelessWidget {
                                                                     _controllerCenter,
                                                                 blastDirectionality:
                                                                     BlastDirectionality
-                                                                        .explosive, // don't specify a direction, blast randomly
+                                                                        .explosive,
                                                                 shouldLoop:
-                                                                    false, // start again as soon as the animation is finished
+                                                                    false,
                                                                 colors: const [
                                                                   Colors.green,
                                                                   Colors.blue,
                                                                   Colors.pink,
                                                                   Colors.orange,
                                                                   Colors.purple
-                                                                ], // manually specify the colors to be used
-                                                                // createParticlePath: drawStar, // define a custom shape/path.
+                                                                ],
                                                               ),
                                                               InkWell(
                                                                 onTap: () {
-                                                                  // _changeRotation();
                                                                   Get.to(
                                                                       EntryCountView());
                                                                 },
@@ -886,18 +856,6 @@ class HomePageScreen extends StatelessWidget {
                                                                       ),
                                                                     )),
                                                               ),
-                                                              // Text(
-                                                              //   _controller
-                                                              //       .totalEntryPoints
-                                                              //       .value,
-                                                              //   style: style
-                                                              //       .headlineSmall!
-                                                              //       .copyWith(
-                                                              //     fontSize: 18,
-                                                              //     color: Colors
-                                                              //         .white,
-                                                              //   ),
-                                                              // ),
                                                               FutureBuilder<
                                                                       String>(
                                                                   future: _giveawayRepo.getTotalEntryCountByUserId(

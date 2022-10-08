@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -8,9 +9,11 @@ import '../../../../repositories/profile_repository.dart';
 import '../../../../services/auth_service.dart';
 import 'package:path/path.dart' as path;
 
+import '../../../../utils/snackbar.dart';
+
 class EditProfileController extends GetxController {
-  final _authService = Get.find<AuthService>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _authService = AuthService();
+  final _profileRepo = ProfileRepository();
 
   ProfileModel get profileModel => _authService.profileModel!;
   bool _loading = false;
@@ -29,8 +32,8 @@ class EditProfileController extends GetxController {
 
   String username = '';
   String fullname = '';
-  int phone_pin = 0;
-  int phone_number = 0;
+  int phonePin = 0;
+  int phoneNumber = 0;
   String bio = "";
 
   Future<File> changeFileNameOnly(File file, String newFileName) {
@@ -57,7 +60,7 @@ class EditProfileController extends GetxController {
         file = await changeFileNameOnly(file!, 'image');
         _fileName = genFileName("Profile", path.basename(file!.path));
 
-        final s3File = await _profileRepo.uploadProfileToAwsS3(
+        await _profileRepo.uploadProfileToAwsS3(
             userID: "Profile", file: file!, fileName: _fileName);
       }
 
@@ -68,17 +71,17 @@ class EditProfileController extends GetxController {
         "profile_img": _fileName == ''
             ? profileModel.user_profile!.profile_img!
             : _fileName,
-        "phone_pin": phone_pin == 0
+        "phone_pin": phonePin == 0
             ? profileModel.user_profile!.phone_pin!
-            : phone_pin.toString(),
-        "phone_number": phone_number == 0
+            : phonePin.toString(),
+        "phone_number": phoneNumber == 0
             ? profileModel.user_profile!.phone_number!
-            : phone_number.toString(),
+            : phoneNumber.toString(),
         "current_language": "en"
       };
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _fileName = '';
-      // await _authService.redirectUser();
+
       final profile = await _profileRepo.getCurrentUsesr(_authService.token!);
       if (profile.user_profile != null) {
         _authService.profileModel = profile;
@@ -86,7 +89,7 @@ class EditProfileController extends GetxController {
       update();
       Get.back();
     } catch (e) {
-      print("updateProfile: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     loading = false;
   }

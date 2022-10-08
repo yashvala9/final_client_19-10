@@ -1,10 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
-import 'package:reel_ro/models/prize_model.dart';
-import 'package:reel_ro/models/winner_model.dart';
 
 class ContestModel {
   final String contest_name;
@@ -18,7 +14,6 @@ class ContestModel {
   final int winnerId;
   final int id;
 
-  // final List<WinnerModel>? winners;
   ContestModel({
     required this.contest_name,
     required this.creator_type,
@@ -74,7 +69,6 @@ class ContestModel {
   }
 
   factory ContestModel.fromMap(Map<String, dynamic> map) {
-    print('212145 map $map');
     var v = ContestModel(
       contest_name: map['contest_name'] as String,
       creator_type: map['creator_type'] as String,
@@ -95,7 +89,6 @@ class ContestModel {
           : 0,
       id: map['id'] as int,
     );
-    print('212145 v $v');
     return v;
   }
 

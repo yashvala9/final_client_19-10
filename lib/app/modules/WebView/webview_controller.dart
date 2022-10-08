@@ -13,11 +13,6 @@ class WebController extends GetxController {
 
   final RxString webViewUrl = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   void onWebViewCreated(WebViewController _controller) async {
     _webViewController.future.then(
       (WebViewController value) => _rootwebViewController = _controller,

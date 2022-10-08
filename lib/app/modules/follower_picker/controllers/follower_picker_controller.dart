@@ -11,7 +11,6 @@ class FollowerPickerController extends GetxController {
 
   Future<String> setRandomWinner(String contestId) async {
     var v = await _reelRepo.setRandomWinner(contestId, token!);
-    print('2121 $v[0] $v[1] ');
     return v[1];
   }
 }

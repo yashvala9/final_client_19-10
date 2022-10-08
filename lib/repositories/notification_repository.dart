@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:reel_ro/models/comment_model.dart';
-import 'package:reel_ro/models/notification_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:reel_ro/models/notification_model.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 import '../utils/base.dart';
@@ -17,7 +16,6 @@ class NotificationRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
@@ -35,7 +33,6 @@ class NotificationRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       showSnackBar("Poke successful!");
@@ -52,7 +49,6 @@ class NotificationRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       showSnackBar("Poke successful!");
