@@ -48,161 +48,185 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    return Scaffold(
-      backgroundColor: Colors.black87,
-      body: GetBuilder<SearchController>(
-        builder: (_) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                left: 8,
-                right: 8,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.black87,
+        body: GetBuilder<SearchController>(
+          builder: (_) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 8,
               ),
-              child: Text(
-                "Search",
-                style: style.titleMedium!.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            const Divider(
-              thickness: 1,
-              color: Colors.white,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Hero(
-              tag: 'search',
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () {
-                      Get.to(
-                        () => SearchUsers(username: ""),
-                      );
-                    },
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey.shade600,
-                          enabled: false,
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.white),
-                          hintText: "Search here...",
-                          hintStyle: const TextStyle(
-                            color: Colors.white,
-                          )),
+              Hero(
+                tag: 'search',
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () {
+                        Get.to(
+                          () => SearchUsers(username: ""),
+                        );
+                      },
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey.shade600,
+                            enabled: false,
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                            ),
+                            prefixIcon:
+                                const Icon(Icons.search, color: Colors.white),
+                            hintText: "Search here...",
+                            hintStyle: const TextStyle(
+                              color: Colors.white,
+                            )),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            _controller.loading
-                ? const Expanded(
-                    child: Loading(),
-                  )
-                : _controller.reelList.isEmpty
-                    ? const Expanded(
-                        child: Center(
-                          child: Text("No reels available"),
-                        ),
-                      )
-                    : Expanded(
-                        child: NotificationListener<ScrollNotification>(
-                          onNotification: (notification) {
-                            if (!_controller.loadingMore &&
-                                notification.metrics.pixels ==
-                                    notification.metrics.maxScrollExtent) {
-                              log("Loading...");
-                              _controller
-                                  .getMoreFeed(_controller.reelList.length);
-                            }
-                            return true;
-                          },
-                          child: CustomScrollView(
-                            shrinkWrap: true,
-                            slivers: [
-                              SliverGrid(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  childAspectRatio: 1,
-                                  crossAxisSpacing: 2,
-                                  mainAxisSpacing: 2,
-                                ),
-                                delegate: SliverChildBuilderDelegate(
-                                  (context, index) {
-                                    var isPhoto =
-                                        _controller.reelList[index].media_ext !=
-                                            'mp4';
-                                    return GestureDetector(
-                                        onTap: () {
-                                          Get.to(SingleFeedScreen(
-                                            null,
-                                            _controller.reelList,
-                                            index,
-                                          ));
-                                        },
-                                        child: isPhoto
-                                            ? CachedNetworkImage(
-                                                imageUrl:
-                                                    "${Base.profileBucketUrl}/${_controller.reelList[index].filename}",
-                                                fit: BoxFit.cover,
-                                                errorWidget: (c, s, e) =>
-                                                    const Icon(Icons.error),
-                                              )
-                                            : FutureBuilder<String>(
-                                                future: _profileRepo
-                                                    .getThumbnail(_controller
-                                                        .reelList[index]
-                                                        .thumbnail),
-                                                builder: (context, snapshot) {
-                                                  if (!snapshot.hasData) {
-                                                    return const ShimmerCardAnimation();
-                                                  }
+              const SizedBox(
+                height: 8,
+              ),
+              TabBar(labelColor: Colors.white, tabs: const [
+                Tab(
+                  text: "Rolls",
+                ),
+                Tab(
+                  text: "Photos",
+                ),
+              ]),
+              Expanded(
+                child: TabBarView(children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _controller.loading
+                          ? const Expanded(
+                              child: Loading(),
+                            )
+                          : _controller.reelList.isEmpty
+                              ? const Expanded(
+                                  child: Center(
+                                    child: Text("No reels available"),
+                                  ),
+                                )
+                              : Expanded(
+                                  child:
+                                      NotificationListener<ScrollNotification>(
+                                    onNotification: (notification) {
+                                      if (!_controller.loadingMore &&
+                                          notification.metrics.pixels ==
+                                              notification
+                                                  .metrics.maxScrollExtent) {
+                                        log("Loading...");
+                                        _controller.getMoreFeed(
+                                            _controller.reelList.length);
+                                      }
+                                      return true;
+                                    },
+                                    child: CustomScrollView(
+                                      shrinkWrap: true,
+                                      slivers: [
+                                        SliverGrid(
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            childAspectRatio: 1,
+                                            crossAxisSpacing: 2,
+                                            mainAxisSpacing: 2,
+                                          ),
+                                          delegate: SliverChildBuilderDelegate(
+                                            (context, index) {
+                                              var isPhoto = _controller
+                                                      .reelList[index]
+                                                      .media_ext !=
+                                                  'mp4';
+                                              return GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(SingleFeedScreen(
+                                                      null,
+                                                      _controller.reelList,
+                                                      index,
+                                                    ));
+                                                  },
+                                                  child: isPhoto
+                                                      ? CachedNetworkImage(
+                                                          imageUrl:
+                                                              "${Base.profileBucketUrl}/${_controller.reelList[index].filename}",
+                                                          fit: BoxFit.cover,
+                                                          errorWidget: (c, s,
+                                                                  e) =>
+                                                              const Icon(
+                                                                  Icons.error),
+                                                        )
+                                                      : FutureBuilder<String>(
+                                                          future: _profileRepo
+                                                              .getThumbnail(
+                                                                  _controller
+                                                                      .reelList[
+                                                                          index]
+                                                                      .thumbnail),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return const ShimmerCardAnimation();
+                                                            }
 
-                                                  return CachedNetworkImage(
-                                                    key: UniqueKey(),
-                                                    placeholder:
-                                                        (context, url) {
-                                                      return const ShimmerCardAnimation();
-                                                    },
-                                                    errorWidget: (_, a, b) {
-                                                      return const ShimmerCardAnimation();
-                                                    },
-                                                    imageUrl: snapshot.data!,
-                                                    fit: BoxFit.cover,
-                                                  );
-                                                },
-                                              ));
-                                  },
-                                  childCount: _controller.reelList.length,
+                                                            return CachedNetworkImage(
+                                                              key: UniqueKey(),
+                                                              placeholder:
+                                                                  (context,
+                                                                      url) {
+                                                                return const ShimmerCardAnimation();
+                                                              },
+                                                              errorWidget:
+                                                                  (_, a, b) {
+                                                                return const ShimmerCardAnimation();
+                                                              },
+                                                              imageUrl: snapshot
+                                                                  .data!,
+                                                              fit: BoxFit.cover,
+                                                            );
+                                                          },
+                                                        ));
+                                            },
+                                            childCount:
+                                                _controller.reelList.length,
+                                          ),
+                                        ),
+                                        SliverToBoxAdapter(
+                                          child: Center(
+                                            child: _controller.loadingMore
+                                                ? const Loading()
+                                                : const SizedBox(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              SliverToBoxAdapter(
-                                child: Center(
-                                  child: _controller.loadingMore
-                                      ? const Loading()
-                                      : const SizedBox(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: const Text(
+                      "Photos",
+                      style: TextStyle(
+                        color: Colors.white,
                       ),
-          ],
+                    ),
+                  ),
+                ]),
+              ),
+            ],
+          ),
         ),
       ),
     );
