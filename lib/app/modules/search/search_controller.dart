@@ -1,20 +1,13 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:reel_ro/app/modules/profile/profile_controller.dart';
-import 'package:reel_ro/app/modules/search/search_screen.dart';
+import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
-import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
-
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../repositories/reel_repository.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/snackbar.dart';
 
 class SearchController extends GetxController {
@@ -35,7 +28,8 @@ class SearchController extends GetxController {
     update();
   }
 
-  bool _loadMore = true;
+  bool _loadMoreReels = true;
+  bool _loadMorePhotos = true;
 
   bool _loading = false;
   bool get loading => _loading;
@@ -48,6 +42,13 @@ class SearchController extends GetxController {
   List<ReelModel> get reelList => _reelList;
   set reelList(List<ReelModel> reelList) {
     _reelList = reelList;
+    update();
+  }
+
+  List<PhotoModel> _photosList = [];
+  List<PhotoModel> get photosList => _photosList;
+  set photosList(List<PhotoModel> photosList) {
+    _photosList = photosList;
     update();
   }
 
@@ -73,6 +74,7 @@ class SearchController extends GetxController {
   @override
   void onInit() {
     getFeeds();
+    getPhotos();
     super.onInit();
   }
 
@@ -86,20 +88,54 @@ class SearchController extends GetxController {
       print("getFeeds: $e");
     }
     loading = false;
-    _loadMore = true;
+    _loadMoreReels = true;
+  }
+
+  void getPhotos() async {
+    loading = true;
+    try {
+      photosList = await _reelRepo.getPhotosWithoutAds(profileId!, token!,
+          limit: 10, skip: 0);
+    } catch (e) {
+      showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
+    }
+    loading = false;
+    _loadMorePhotos = true;
   }
 
   void getMoreFeed(int currentLength) async {
     loadingMore = true;
-    if (_loadMore) {
+    if (_loadMoreReels) {
       try {
         var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
             limit: 10, skip: currentLength);
         if (newList.isEmpty) {
           loadingMore = false;
-          _loadMore = false;
+          _loadMoreReels = false;
         } else {
           reelList.addAll(newList);
+        }
+        update();
+      } catch (e) {
+        showSnackBar(e.toString(), color: Colors.red);
+        print("getFeeds: $e");
+      }
+    }
+    loadingMore = false;
+  }
+
+  void getMorePhotos(int currentLength) async {
+    loadingMore = true;
+    if (_loadMorePhotos) {
+      try {
+        var newList = await _reelRepo.getPhotosWithoutAds(profileId!, token!,
+            limit: 10, skip: currentLength);
+        if (newList.isEmpty) {
+          loadingMore = false;
+          _loadMorePhotos = false;
+        } else {
+          photosList.addAll(newList);
         }
         update();
       } catch (e) {

@@ -167,10 +167,6 @@ class HomePageScreen extends StatelessWidget {
                                       backgroundColor: Colors.transparent,
                                       elevation: 0,
                                       centerTitle: true,
-                                      title: const Center(
-                                          child: Text(
-                                        "Rolls For You",
-                                      )),
                                       actions: [
                                         IconButton(
                                             icon: const Icon(
@@ -347,30 +343,40 @@ class HomePageScreen extends StatelessWidget {
                                                           isReel
                                                               ? Row(
                                                                   children: [
-                                                                    InkWell(
-                                                                        onTap:
-                                                                            () {
-                                                                          if (controller.profileId !=
-                                                                              data.user.id) {
-                                                                            Get.to(
-                                                                              () => ProfileDetail(
-                                                                                  profileModel: data.user,
-                                                                                  onBack: () {
-                                                                                    Get.back();
-                                                                                  }),
-                                                                            );
-                                                                          }
-                                                                        },
-                                                                        child:
-                                                                            Text(
-                                                                          "@${data.user.username}",
-                                                                          style: style
-                                                                              .titleMedium!
-                                                                              .copyWith(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                        )),
+                                                                    CircleAvatar(
+                                                                      backgroundImage:
+                                                                          NetworkImage(
+                                                                              "${Base.profileBucketUrl}/${data.user.user_profile!.profile_img}"),
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .only(
+                                                                        left: 8,
+                                                                        right:
+                                                                            4,
+                                                                      ),
+                                                                      child: InkWell(
+                                                                          onTap: () {
+                                                                            if (controller.profileId !=
+                                                                                data.user.id) {
+                                                                              Get.to(
+                                                                                () => ProfileDetail(
+                                                                                    profileModel: data.user,
+                                                                                    onBack: () {
+                                                                                      Get.back();
+                                                                                    }),
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                          child: Text(
+                                                                            "${data.user.username}",
+                                                                            style:
+                                                                                style.titleMedium!.copyWith(
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          )),
+                                                                    ),
                                                                     SizedBox(
                                                                       width: 10,
                                                                     ),

@@ -95,6 +95,42 @@ class ReelRepository {
     }
   }
 
+  Future<List<ReelModel>> getReelsWithoutAd(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
+    final response = await http.get(
+      Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<PhotoModel>> getPhotosWithoutAds(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
+    final response = await http.get(
+      Uri.parse('${Base.posts}?limit=$limit&skip=$skip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => PhotoModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<List<ReelModel>> getReelsByHashTag(
       String hashTag, int profileId, String token,
       {int limit = 10, int skip = 0}) async {

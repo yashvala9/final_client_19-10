@@ -77,8 +77,6 @@ class SingleFeedScreen extends StatelessWidget {
                       onPressed: () {
                         Get.back();
                       }),
-                  title: Center(
-                      child: Text(isPhoto ? "Your Photos" : "Your Rolls")),
                 ),
                 body: _controller.loading
                     ? Loading()
@@ -136,35 +134,43 @@ class SingleFeedScreen extends StatelessWidget {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      InkWell(
-                                                          onTap: () {
-                                                            if (_controller
-                                                                    .profileId !=
-                                                                photos![index]
-                                                                    .owner
-                                                                    .id) {
-                                                              Get.to(
-                                                                () =>
-                                                                    ProfileDetail(
-                                                                        profileModel:
-                                                                            photos![index]
-                                                                                .owner,
-                                                                        onBack:
-                                                                            () {
-                                                                          Get.back();
-                                                                        }),
-                                                              );
-                                                            }
-                                                          },
-                                                          child: Text(
-                                                            "@${photos![index].owner.username}",
-                                                            style: style
-                                                                .titleMedium!
-                                                                .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          )),
+                                                      CircleAvatar(
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                                "${Base.profileBucketUrl}/${photos![index].owner.user_profile!.profile_img}"),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 8,
+                                                                right: 4),
+                                                        child: InkWell(
+                                                            onTap: () {
+                                                              if (_controller
+                                                                      .profileId !=
+                                                                  photos![index]
+                                                                      .owner
+                                                                      .id) {
+                                                                Get.to(
+                                                                  () => ProfileDetail(
+                                                                      profileModel: photos![index].owner,
+                                                                      onBack: () {
+                                                                        Get.back();
+                                                                      }),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                              "@${photos![index].owner.username}",
+                                                              style: style
+                                                                  .titleMedium!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            )),
+                                                      ),
                                                       _controller.profileId ==
                                                               photos![index]
                                                                   .owner
@@ -587,31 +593,46 @@ class SingleFeedScreen extends StatelessWidget {
                                                   isReel
                                                       ? Row(
                                                           children: [
-                                                            InkWell(
-                                                                onTap: () {
-                                                                  if (_controller
-                                                                          .profileId !=
-                                                                      reels![index]
-                                                                          .user
-                                                                          .id) {
-                                                                    Get.to(
-                                                                      () => ProfileDetail(
-                                                                          profileModel: reels![index].user,
-                                                                          onBack: () {
-                                                                            Get.back();
-                                                                          }),
-                                                                    );
-                                                                  }
-                                                                },
-                                                                child: Text(
-                                                                  "@${reels![index].user.username}",
-                                                                  style: style
-                                                                      .titleMedium!
-                                                                      .copyWith(
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                )),
+                                                            CircleAvatar(
+                                                              backgroundImage: isPhoto
+                                                                  ? NetworkImage(
+                                                                      "${Base.profileBucketUrl}/${photos![index].owner.user_profile!.profile_img}")
+                                                                  : NetworkImage(
+                                                                      "${Base.profileBucketUrl}/${reels![index].user.user_profile!.profile_img}"),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                left: 8,
+                                                                right: 4,
+                                                              ),
+                                                              child: InkWell(
+                                                                  onTap: () {
+                                                                    if (_controller
+                                                                            .profileId !=
+                                                                        reels![index]
+                                                                            .user
+                                                                            .id) {
+                                                                      Get.to(
+                                                                        () => ProfileDetail(
+                                                                            profileModel: reels![index].user,
+                                                                            onBack: () {
+                                                                              Get.back();
+                                                                            }),
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    "@${reels![index].user.username}",
+                                                                    style: style
+                                                                        .titleMedium!
+                                                                        .copyWith(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  )),
+                                                            ),
                                                             _controller.profileId ==
                                                                     reels![index]
                                                                         .user
