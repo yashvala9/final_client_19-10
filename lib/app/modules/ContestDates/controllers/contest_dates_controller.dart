@@ -4,7 +4,7 @@ import 'package:reel_ro/app/data/demo_data.dart';
 import '../../../../services/auth_service.dart';
 
 class ContestDatesController extends GetxController {
-  final _authService = AuthService();
+  final _authService = Get.put(AuthService());
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 
@@ -17,7 +17,9 @@ class ContestDatesController extends GetxController {
     super.onInit();
   }
 
-  _fetch() async {}
+  _fetch() async {
+    // await getContestDates();
+  }
 
   Future<void> getContestDates() async {
     contestDatesList.clear();
@@ -28,6 +30,11 @@ class ContestDatesController extends GetxController {
       }
     });
     isLoading(false);
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
   }
 
   @override

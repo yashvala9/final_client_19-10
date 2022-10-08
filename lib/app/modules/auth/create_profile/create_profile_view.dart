@@ -178,6 +178,7 @@ class CreateProfileView extends StatelessWidget {
                           SizedBox(height: Get.height * 0.01),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 flex: 1,
@@ -235,6 +236,36 @@ class CreateProfileView extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: Get.height * 0.02),
+                          Text('Country',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge),
+                          SizedBox(height: Get.height * 0.01),
+                          TextFormField(
+                            enabled: !_controller.loading,
+                            decoration: const InputDecoration(
+                              hintText: 'India',
+                            ),
+                            keyboardType: TextInputType.name,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Country is required' : null,
+                            onSaved: (v) => _controller.country = v!,
+                          ),
+                          SizedBox(height: Get.height * 0.02),
+                          Text('State',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge),
+                          SizedBox(height: Get.height * 0.01),
+                          TextFormField(
+                            enabled: !_controller.loading,
+                            decoration: const InputDecoration(
+                              hintText: 'Gujarat',
+                            ),
+                            keyboardType: TextInputType.name,
+                            validator: (value) =>
+                                value!.isEmpty ? 'State is required' : null,
+                            onSaved: (v) => _controller.state = v!,
+                          ),
+                          SizedBox(height: Get.height * 0.02),
                           Text(
                             'Add About Me',
                             textScaleFactor: Get.textScaleFactor,
@@ -245,11 +276,11 @@ class CreateProfileView extends StatelessWidget {
                           SizedBox(height: Get.height * 0.01),
                           TextFormField(
                             enabled: !_controller.loading,
-                            maxLines: 3,
+                            maxLines: 5,
                             decoration: const InputDecoration(
                               hintText: 'Type Here',
                             ),
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.multiline,
                             validator: (v) =>
                                 v!.isEmpty ? "About is required" : null,
                             onSaved: (v) =>

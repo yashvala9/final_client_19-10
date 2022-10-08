@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: non_constant_identifier_names, hash_and_equals, camel_case_types
 
 import 'dart:convert';
@@ -63,8 +64,7 @@ class ProfileModel {
       username: map['username'] != null ? map['username'] as String : null,
       status: map['status'] != null ? map['status'] as String : null,
       user_type: map['user_type'] != null ? map['user_type'] as String : null,
-      referrer_id:
-          map['referrer_id'] != null ? map['referrer_id'] as int : null,
+      referrer_id: map['referrer_id'] != null ? map['referrer_id'] as int : 0,
       is_deleted: map['is_deleted'] != null ? map['is_deleted'] as bool : null,
       created_at:
           map['created_at'] != null ? map['created_at'] as String : null,
@@ -81,7 +81,6 @@ class ProfileModel {
           map['isFollowing'] != null ? map['isFollowing'] as bool : null,
     );
   }
-
   String toJson() => json.encode(toMap());
 
   factory ProfileModel.fromJson(String source) =>
@@ -121,6 +120,8 @@ class User_profile {
   final String? phone_pin;
   final String? phone_number;
   final String? current_language;
+  final String? country;
+  final String? state;
   User_profile({
     this.fullname = '',
     this.bio = '',
@@ -128,6 +129,8 @@ class User_profile {
     this.phone_pin = '',
     this.phone_number = '',
     this.current_language = '',
+    this.country,
+    this.state,
   });
 
   Map<String, dynamic> toMap() {
@@ -138,21 +141,25 @@ class User_profile {
       'phone_pin': phone_pin,
       'phone_number': phone_number,
       'current_language': current_language,
+      'country': country,
+      'state': state,
     };
   }
 
   factory User_profile.fromMap(Map<String, dynamic> map) {
     return User_profile(
-      fullname: map['fullname'] != null ? map['fullname'] as String : null,
-      bio: map['bio'] != null ? map['bio'] as String : null,
+      fullname: map['fullname'] != null ? map['fullname'] as String : '',
+      bio: map['bio'] != null ? map['bio'] as String : '',
       profile_img:
-          map['profile_img'] != null ? map['profile_img'] as String : null,
-      phone_pin: map['phone_pin'] != null ? map['phone_pin'] as String : null,
+          map['profile_img'] != null ? map['profile_img'] as String : '',
+      phone_pin: map['phone_pin'] != null ? map['phone_pin'] as String : '',
       phone_number:
-          map['phone_number'] != null ? map['phone_number'] as String : null,
+          map['phone_number'] != null ? map['phone_number'] as String : '',
       current_language: map['current_language'] != null
           ? map['current_language'] as String
-          : null,
+          : '',
+      country: map['country'] != null ? map['country'] as String : '',
+      state: map['state'] != null ? map['state'] as String : '',
     );
   }
 
@@ -163,7 +170,7 @@ class User_profile {
 
   @override
   String toString() {
-    return 'User_profile(fullname: $fullname, bio: $bio, profile_img: $profile_img, phone_pin: $phone_pin, phone_number: $phone_number, current_language: $current_language)';
+    return 'User_profile(fullname: $fullname, bio: $bio, profile_img: $profile_img, phone_pin: $phone_pin, phone_number: $phone_number, current_language: $current_language, country: $country, state: $state)';
   }
 
   @override
@@ -175,6 +182,42 @@ class User_profile {
         other.profile_img == profile_img &&
         other.phone_pin == phone_pin &&
         other.phone_number == phone_number &&
-        other.current_language == current_language;
+        other.current_language == current_language &&
+        other.country == country &&
+        other.state == state;
+  }
+
+  User_profile copyWith({
+    String? fullname,
+    String? bio,
+    String? profile_img,
+    String? phone_pin,
+    String? phone_number,
+    String? current_language,
+    String? country,
+    String? state,
+  }) {
+    return User_profile(
+      fullname: fullname ?? this.fullname,
+      bio: bio ?? this.bio,
+      profile_img: profile_img ?? this.profile_img,
+      phone_pin: phone_pin ?? this.phone_pin,
+      phone_number: phone_number ?? this.phone_number,
+      current_language: current_language ?? this.current_language,
+      country: country ?? this.country,
+      state: state ?? this.state,
+    );
+  }
+
+  @override
+  int get hashCode {
+    return fullname.hashCode ^
+        bio.hashCode ^
+        profile_img.hashCode ^
+        phone_pin.hashCode ^
+        phone_number.hashCode ^
+        current_language.hashCode ^
+        country.hashCode ^
+        state.hashCode;
   }
 }

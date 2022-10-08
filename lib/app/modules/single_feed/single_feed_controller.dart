@@ -8,13 +8,13 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-
+import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 
 class SingleFeedController extends GetxController {
-  final _reelRepo = ReelRepository();
-  final _authService = AuthService();
-  final _profileRepo = ProfileRepository();
+  final _reelRepo = Get.put(ReelRepository());
+  final _authService = Get.put(AuthService());
+  final _profileRepo = Get.put(ProfileRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -34,8 +34,23 @@ class SingleFeedController extends GetxController {
     update();
   }
 
-  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
+  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
+    // Comment(
+    //     username: "yashvala9",
+    //     comment: "comment",
+    //     datePublished: "datePublished",
+    //     likes: [],
+    //     profilePhoto: "profilePhoto",
+    //     uid: "1",
+    //     id: "1")
+  ]);
   List<CommentModel> get comments => _comments.value;
+
+  @override
+  void onInit() {
+    // getFeeds();
+    super.onInit();
+  }
 
   void toggleLikeShow() async {
     showLike = true;
@@ -54,7 +69,7 @@ class SingleFeedController extends GetxController {
         toggleLikeShow();
       }
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      print("TogglelikeError: $e");
     }
     update();
   }
@@ -68,7 +83,7 @@ class SingleFeedController extends GetxController {
       }
       update();
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      print("TogglelikeError: $e");
     }
     update();
   }
@@ -86,7 +101,7 @@ class SingleFeedController extends GetxController {
 class CommentController extends GetxController {
   CommentController({required this.reelId});
   final int reelId;
-  final _commentRepo = CommentRepository();
+  final _commentRepo = Get.put(CommentRepository());
   final _authService = Get.put(AuthService());
 
   String? get token => _authService.token;
@@ -129,8 +144,9 @@ class CommentController extends GetxController {
     loading = true;
     try {
       commentList = await _commentRepo.getCommentById(reelId, token!);
+      print("commentList: $commentList");
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      print("getCommentsByReelId: $e");
     }
     loading = false;
   }
@@ -161,9 +177,11 @@ class CommentController extends GetxController {
     };
     addCommentLocally(map);
     try {
-      await _commentRepo.addCommentToById(token!, map, reelId);
+      final message = await _commentRepo.addCommentToById(token!, map, reelId);
+      print("addCommentSuccess: $message");
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
+      print("addComment: $e");
     }
   }
 }

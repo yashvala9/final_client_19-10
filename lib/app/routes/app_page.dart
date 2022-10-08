@@ -25,7 +25,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: AppRoutes.splash,
-      page: () => const SplashScreen(),
+      page: () => SplashScreen(),
     ),
     GetPage(
       name: AppRoutes.login,
@@ -61,7 +61,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.profile,
-      page: () => const ProfileScreen(),
+      page: () => ProfileScreen(),
     ),
     GetPage(
       name: AppRoutes.entryCount,
@@ -89,7 +89,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.contestRules,
-      page: () => const ContestRulesView(),
+      page: () => ContestRulesView(),
     ),
   ];
 }

@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+import 'package:reel_ro/repositories/giveaway_repository.dart';
 
 import '../../../../models/contest_model.dart';
+import '../../../../widgets/loading.dart';
 import '../controllers/my_contest_controller.dart';
 import 'widgets/contestcard_widget.dart';
 
 class MyContestView extends GetView<MyContestController> {
   MyContestView(this.contestModel, {Key? key}) : super(key: key);
   final ContestModel contestModel;
+  final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(MyContestController());
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           contestModel.contest_name,
-          style: const TextStyle(fontSize: 14),
+          style: TextStyle(fontSize: 14),
         ),
         leading: IconButton(
             onPressed: () {
@@ -35,12 +41,12 @@ class MyContestView extends GetView<MyContestController> {
                   onPressed: () {
                     Navigator.pop(context, true);
                   },
-                  child: const Text("Yes")),
+                  child: Text("Yes")),
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text("No")),
+                  child: Text("No")),
             ],
           ));
           if (val != null) {

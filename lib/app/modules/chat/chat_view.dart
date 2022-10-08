@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/chat/controllers/chat_controller.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
@@ -26,6 +28,7 @@ class _ChannelPageState extends State<ChannelPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final style = theme.textTheme;
     final colorSchem = theme.colorScheme;
     return StreamChannel(
       channel: widget.channel,
@@ -47,7 +50,9 @@ class _ChannelPageState extends State<ChannelPage> {
                   final isCurrentUser =
                       StreamChat.of(context).currentUser!.id ==
                           message.user!.id;
-
+                  final textAlign =
+                      isCurrentUser ? TextAlign.right : TextAlign.left;
+                  final color = isCurrentUser ? Colors.blueGrey : Colors.blue;
                   return defaultMessageWidget.copyWith(
                       messageTheme: defaultMessageWidget.messageTheme.copyWith(
                           messageTextStyle: TextStyle(
@@ -55,7 +60,13 @@ class _ChannelPageState extends State<ChannelPage> {
                                   isCurrentUser ? Colors.white : Colors.black),
                           messageBackgroundColor: isCurrentUser
                               ? colorSchem.primary
-                              : colorSchem.primaryContainer));
+                              : colorSchem.primaryContainer)
+                      // messageTheme: StreamMessageThemeData(
+                      // messageBackgroundColor: colorSchem.primary,
+                      // messageTextStyle: const TextStyle(color: Colors.white),
+                      // reactionsBackgroundColor: colorSchem.primaryContainer,
+                      // ),
+                      );
                 },
               ),
             ),
@@ -72,6 +83,8 @@ class ChatView extends GetView<ChatController> {
 
   static void open({
     required Channel channel,
+    // User? chatWithUserStreamDetails,
+    // required User chatWithUserStreamDetails,
     Transition? transition,
   }) {
     Get.to(
@@ -85,9 +98,26 @@ class ChatView extends GetView<ChatController> {
   Widget build(BuildContext context) {
     return controller.obx(
       (state) {
+        // return ChatWrapper(
+        //   chatWith: state!.chatWith!,
+        //   chatWithUserPrecense: state.chatWithUserPrecense,
+        //   myInfo: state.loggedInUser!,
+        //   messages: state.allMessages,
+        //   onSend: controller.sendTextMessage,
+        //   onPaginate: controller.loadOldMessages,
+        // );
         return StreamChannel(
           channel: state!.currentChannel,
           child: Scaffold(
+            // appBar: StreamChannelHeader(
+            //   leading: _ChatBackButton(
+            //     onPressed: () => Get.back(),
+            //     showUnreads: true,
+            //     cid: state.currentChannel!.cid,
+            //   ),
+            //   onTitleTap: () {},
+            //   actions: [],
+            // ),
             appBar: AppBar(
               title: Text(state.currentChannel.name!),
             ),

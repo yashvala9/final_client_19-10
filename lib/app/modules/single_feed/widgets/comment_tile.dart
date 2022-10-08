@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:reel_ro/models/comment_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
+import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/widgets/loading.dart';
 
 class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
   final ProfileModel profileModel;
-  const CommentWidget(
+  CommentWidget(
       {Key? key, required this.commentModel, required this.profileModel})
       : super(key: key);
+
+  final _profileRepo = Get.find<ProfileRepository>();
+  final _authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,12 @@ class CommentWidget extends StatelessWidget {
             )
           ],
         ),
+        // InkWell(
+        //     onTap: () {},
+        //     child: const Text(
+        //       '2 Responses',
+        //       style: TextStyle(color: Colors.blue),
+        //     )),
       ],
     );
   }

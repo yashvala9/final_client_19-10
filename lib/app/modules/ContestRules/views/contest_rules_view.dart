@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/colors.dart';
+
+import '../../../../models/contest_model.dart';
+import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
+import '../../ContestDates/controllers/contest_dates_controller.dart';
 import '../controllers/contest_rules_controller.dart';
 
 class ContestRulesView extends GetView<ContestRulesController> {
-  const ContestRulesView({Key? key}) : super(key: key);
+  ContestRulesView({Key? key}) : super(key: key);
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _controller = Get.put(ContestDatesController());
 
   @override
   Widget build(BuildContext context) {

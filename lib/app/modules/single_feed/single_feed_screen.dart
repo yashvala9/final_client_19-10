@@ -1,15 +1,17 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
+import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
+import 'package:reel_ro/utils/empty_widget.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
-
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -28,16 +30,16 @@ class SingleFeedScreen extends StatelessWidget {
   SingleFeedScreen(this.photos, this.reels, this.currentIndex,
       {this.openComment = false, this.isPhoto = false, Key? key})
       : super(key: key);
-  final bool isPhoto;
-  final List<ReelModel>? reels;
-  final List<PhotoModel>? photos;
-  final int currentIndex;
+  bool isPhoto;
+  List<ReelModel>? reels;
+  List<PhotoModel>? photos;
+  int currentIndex;
   bool openComment;
   final _controller = Get.put(SingleFeedController());
-  final _reelRepo = ReelRepository();
-  final _commentRepo = CommentRepository();
-  final _giveawayRepo = GiveawayRepository();
-  final _profileRepo = ProfileRepository();
+  final _reelRepo = Get.put(ReelRepository());
+  final _commentRepo = Get.put(CommentRepository());
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _profileRepo = Get.put(ProfileRepository());
   void openCommentSheet() {
     if (openComment) {
       Get.bottomSheet(
@@ -58,6 +60,7 @@ class SingleFeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
@@ -78,7 +81,7 @@ class SingleFeedScreen extends StatelessWidget {
                       child: Text(isPhoto ? "Your Photos" : "Your Rolls")),
                 ),
                 body: _controller.loading
-                    ? const Loading()
+                    ? Loading()
                     : PageView.builder(
                         allowImplicitScrolling: true,
                         itemCount: isPhoto ? photos!.length : reels!.length,
@@ -104,7 +107,7 @@ class SingleFeedScreen extends StatelessWidget {
                                             "${Base.profileBucketUrl}/${photos![index].filename}",
                                         fit: BoxFit.fitWidth,
                                         errorWidget: (c, s, e) =>
-                                            const Icon(Icons.error),
+                                            Icon(Icons.error),
                                       ),
                                     ),
                                   ),
@@ -166,7 +169,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                               photos![index]
                                                                   .owner
                                                                   .id
-                                                          ? const SizedBox()
+                                                          ? SizedBox()
                                                           : FutureBuilder<bool>(
                                                               future: _profileRepo
                                                                   .isFollowing(
@@ -184,14 +187,14 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 return TextButton(
                                                                   child: snapshot
                                                                           .data!
-                                                                      ? const Text(
+                                                                      ? Text(
                                                                           "Following",
                                                                           style: TextStyle(
                                                                               color: Colors
                                                                                   .white,
                                                                               fontSize:
                                                                                   12))
-                                                                      : const Text(
+                                                                      : Text(
                                                                           "Follow",
                                                                           style: TextStyle(
                                                                               color: Colors.white,
@@ -205,11 +208,11 @@ class SingleFeedScreen extends StatelessWidget {
                                                                               .black54,
                                                                       title: snapshot
                                                                               .data!
-                                                                          ? const Text(
+                                                                          ? Text(
                                                                               "Do you wish to unfollow?",
                                                                               style: TextStyle(color: Colors.white),
                                                                             )
-                                                                          : const Text(
+                                                                          : Text(
                                                                               "Do you wish to follow?",
                                                                               style: TextStyle(color: Colors.white),
                                                                             ),
@@ -228,10 +231,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           onPressed:
                                                                               () {
                                                                             Get.back();
-                                                                            snapshot.data != snapshot.data!
-                                                                                ? false
-                                                                                : true;
-                                                                            _controller.update();
                                                                             _controller.toggleFollowing(photos![index].owner.id);
                                                                           },
                                                                           child:
@@ -245,7 +244,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   style:
                                                                       ButtonStyle(
                                                                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                                                        side: const BorderSide(
+                                                                        side: BorderSide(
                                                                             color: Colors
                                                                                 .white,
                                                                             width:
@@ -294,8 +293,8 @@ class SingleFeedScreen extends StatelessWidget {
                                           ),
                                           Container(
                                               width: 50,
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 15),
+                                              margin:
+                                                  EdgeInsets.only(bottom: 15),
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
@@ -356,7 +355,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                           })
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 15),
+                                                  SizedBox(height: 15),
                                                   Column(
                                                     children: [
                                                       InkWell(
@@ -366,6 +365,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                     photos![index]
                                                                         .id);
                                                           },
+                                                          // _controller.likeVideo(data.id),
                                                           child: FutureBuilder<
                                                                   bool>(
                                                               future: _reelRepo
@@ -399,6 +399,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           .white,
                                                                 );
                                                               })),
+                                                      // const SizedBox(height: 7),
                                                       FutureBuilder<int>(
                                                           future: _reelRepo
                                                               .getLikeCountByPhotoId(
@@ -424,7 +425,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                           }),
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 15),
+                                                  SizedBox(height: 15),
                                                   Column(
                                                     children: [
                                                       InkWell(
@@ -475,7 +476,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                           })
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 15),
+                                                  SizedBox(height: 15),
                                                   InkWell(
                                                     onTap: () {},
                                                     child: const Icon(
@@ -621,7 +622,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                     reels![index]
                                                                         .user
                                                                         .id
-                                                                ? const SizedBox()
+                                                                ? SizedBox()
                                                                 : isReel
                                                                     ? FutureBuilder<
                                                                             bool>(
@@ -640,18 +641,18 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           }
                                                                           return TextButton(
                                                                             child: snapshot.data!
-                                                                                ? const Text("Following", style: TextStyle(color: Colors.white, fontSize: 12))
-                                                                                : const Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                                ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12))
+                                                                                : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
                                                                             onPressed:
                                                                                 () {
                                                                               Get.dialog(AlertDialog(
                                                                                 backgroundColor: Colors.black54,
                                                                                 title: snapshot.data!
-                                                                                    ? const Text(
+                                                                                    ? Text(
                                                                                         "Do you wish to unfollow?",
                                                                                         style: TextStyle(color: Colors.white),
                                                                                       )
-                                                                                    : const Text(
+                                                                                    : Text(
                                                                                         "Do you wish to follow?",
                                                                                         style: TextStyle(color: Colors.white),
                                                                                       ),
@@ -665,8 +666,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                                   MaterialButton(
                                                                                     onPressed: () {
                                                                                       Get.back();
-                                                                                      snapshot.data != snapshot.data! ? false : true;
-                                                                                      _controller.update();
                                                                                       _controller.toggleFollowing(reels![index].user.id);
                                                                                     },
                                                                                     child: const Text("Confirm"),
@@ -677,11 +676,11 @@ class SingleFeedScreen extends StatelessWidget {
                                                                             },
                                                                             style:
                                                                                 ButtonStyle(
-                                                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(side: const BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
+                                                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
                                                                             ),
                                                                           );
                                                                         })
-                                                                    : const SizedBox(),
+                                                                    : SizedBox(),
                                                           ],
                                                         )
                                                       : Column(
@@ -705,8 +704,12 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 style: style
                                                                     .titleMedium,
                                                                 onPressed: () {
+                                                                  // if (data.url !=
+                                                                  //     "") {
                                                                   Get.to(WebViewScreen(
+                                                                      // data.url
                                                                       'https://flutter.dev'));
+                                                                  // }
                                                                 },
                                                               ),
                                                             ),
@@ -743,7 +746,37 @@ class SingleFeedScreen extends StatelessWidget {
                                                             fontSize: 15,
                                                             color: Colors.blue,
                                                           ))
-                                                      : const SizedBox(),
+                                                      : SizedBox(),
+
+                                                  // Text(
+                                                  //   parser.emojify(reels![index]
+                                                  //       .video_title),
+                                                  //   style: const TextStyle(
+                                                  //     fontSize: 20,
+                                                  //     color: Colors.white,
+                                                  //     fontWeight: FontWeight.bold,
+                                                  //   ),
+                                                  // ),
+                                                  // HashTagText(
+                                                  //   onTap: (tag) {
+                                                  //     print('5151' + tag);
+                                                  //     Get.to(SearchHashTags(
+                                                  //       hashTag: tag,
+                                                  //     ));
+                                                  //   },
+                                                  //   text: parser.emojify(
+                                                  //       reels![index]
+                                                  //           .description),
+                                                  //   basicStyle: const TextStyle(
+                                                  //     fontSize: 15,
+                                                  //     color: Colors.white,
+                                                  //   ),
+                                                  //   decoratedStyle:
+                                                  //       const TextStyle(
+                                                  //     fontSize: 15,
+                                                  //     color: Colors.blue,
+                                                  //   ),
+                                                  // ),
                                                 ],
                                               ),
                                             ),
@@ -751,10 +784,8 @@ class SingleFeedScreen extends StatelessWidget {
                                           Container(
                                             width: 50,
                                             margin: isReel
-                                                ? const EdgeInsets.only(
-                                                    bottom: 15)
-                                                : const EdgeInsets.only(
-                                                    bottom: 50),
+                                                ? EdgeInsets.only(bottom: 15)
+                                                : EdgeInsets.only(bottom: 50),
                                             child: isReel
                                                 ? Column(
                                                     mainAxisAlignment:
@@ -775,6 +806,18 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   Colors.white,
                                                             ),
                                                           ),
+                                                          // Text(
+                                                          //   _controller
+                                                          //       .totalEntryPoints
+                                                          //       .value,
+                                                          //   style: style
+                                                          //       .headlineSmall!
+                                                          //       .copyWith(
+                                                          //     fontSize: 18,
+                                                          //     color: Colors
+                                                          //         .white,
+                                                          //   ),
+                                                          // ),
                                                           FutureBuilder<String>(
                                                               future: _giveawayRepo
                                                                   .getTotalEntryCountByUserId(
@@ -820,8 +863,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                               })
                                                         ],
                                                       ),
-                                                      const SizedBox(
-                                                          height: 15),
+                                                      SizedBox(height: 15),
                                                       Column(
                                                         children: [
                                                           InkWell(
@@ -834,6 +876,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                         .likeToggle(
                                                                             index);
                                                               },
+                                                              // _controller.likeVideo(data.id),
                                                               child: FutureBuilder<
                                                                       bool>(
                                                                   future: isPhoto
@@ -865,6 +908,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           : Colors.white,
                                                                     );
                                                                   })),
+                                                          // const SizedBox(height: 7),
                                                           FutureBuilder<int>(
                                                               future: isPhoto
                                                                   ? _reelRepo.getLikeCountByPhotoId(
@@ -885,6 +929,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           .data!
                                                                           .toString()
                                                                       : '0',
+                                                                  // data.likeCount.toString(),
                                                                   style: style
                                                                       .headlineSmall!
                                                                       .copyWith(
@@ -897,8 +942,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                               }),
                                                         ],
                                                       ),
-                                                      const SizedBox(
-                                                          height: 15),
+                                                      SizedBox(height: 15),
                                                       Column(
                                                         children: [
                                                           InkWell(
@@ -959,8 +1003,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                               })
                                                         ],
                                                       ),
-                                                      const SizedBox(
-                                                          height: 15),
+                                                      SizedBox(height: 15),
                                                       InkWell(
                                                         onTap: () {},
                                                         child: const Icon(
@@ -977,6 +1020,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                     children: [
                                                       InkWell(
                                                         onTap: () {
+                                                          // _changeRotation();
                                                           Get.to(
                                                               EntryCountView());
                                                         },
@@ -986,6 +1030,18 @@ class SingleFeedScreen extends StatelessWidget {
                                                           color: Colors.pink,
                                                         ),
                                                       ),
+                                                      // Text(
+                                                      //   _controller
+                                                      //       .totalEntryPoints
+                                                      //       .value,
+                                                      //   style: style
+                                                      //       .headlineSmall!
+                                                      //       .copyWith(
+                                                      //     fontSize: 18,
+                                                      //     color: Colors
+                                                      //         .white,
+                                                      //   ),
+                                                      // ),
                                                       FutureBuilder<String>(
                                                           future: _giveawayRepo
                                                               .getTotalEntryCountByUserId(
@@ -1020,6 +1076,191 @@ class SingleFeedScreen extends StatelessWidget {
                                                           })
                                                     ],
                                                   ),
+
+                                            // Column(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceEvenly,
+                                            //   children: [
+                                            //     Column(
+                                            //       children: [
+                                            //         InkWell(
+                                            //           onTap: () {
+                                            //             Get.to(EntryCountView());
+                                            //           },
+                                            //           child: const Icon(
+                                            //             Icons.card_giftcard,
+                                            //             size: 30,
+                                            //             color: Colors.white,
+                                            //           ),
+                                            //         ),
+                                            //         FutureBuilder<String>(
+                                            //             future: _giveawayRepo
+                                            //                 .getTotalEntryCountByUserId(
+                                            //                     _controller
+                                            //                         .profileId!,
+                                            //                     _controller
+                                            //                         .token!),
+                                            //             builder:
+                                            //                 (context, snapshot) {
+                                            //               if (!snapshot.hasData) {
+                                            //                 return Text(
+                                            //                   "0",
+                                            //                   style: style
+                                            //                       .headlineSmall!
+                                            //                       .copyWith(
+                                            //                     fontSize: 18,
+                                            //                     color:
+                                            //                         Colors.white,
+                                            //                   ),
+                                            //                 );
+                                            //               }
+                                            //               if (snapshot.hasError) {
+                                            //                 printInfo(
+                                            //                     info:
+                                            //                         "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                            //                 return Container();
+                                            //               }
+                                            //               return Text(
+                                            //                 snapshot.data
+                                            //                     .toString(),
+                                            //                 style: style
+                                            //                     .headlineSmall!
+                                            //                     .copyWith(
+                                            //                   fontSize: 18,
+                                            //                   color: Colors.white,
+                                            //                 ),
+                                            //               );
+                                            //             })
+                                            //       ],
+                                            //     ),
+                                            //     Column(
+                                            //       children: [
+                                            //         InkWell(
+                                            //             onTap: () {
+                                            //               _controller.likeToggle(
+                                            //                   reels![index].id);
+                                            //             },
+                                            //             // _controller.likeVideo(data.id),
+                                            //             child: FutureBuilder<
+                                            //                     bool>(
+                                            //                 future: _reelRepo
+                                            //                     .getLikeFlag(
+                                            //                         reels![index]
+                                            //                             .id,
+                                            //                         _controller
+                                            //                             .token!),
+                                            //                 builder:
+                                            //                     (context, snap) {
+                                            //                   return Icon(
+                                            //                     snap.hasData
+                                            //                         ? snap.data!
+                                            //                             ? Icons
+                                            //                                 .favorite
+                                            //                             : Icons
+                                            //                                 .favorite_border
+                                            //                         : Icons
+                                            //                             .favorite_border,
+                                            //                     size: 30,
+                                            //                     color: snap
+                                            //                             .hasData
+                                            //                         ? snap.data!
+                                            //                             ? Colors
+                                            //                                 .red
+                                            //                             : Colors
+                                            //                                 .white
+                                            //                         : Colors
+                                            //                             .white,
+                                            //                   );
+                                            //                 })),
+
+                                            //         // const SizedBox(height: 7),
+                                            //         FutureBuilder<int>(
+                                            //             future: _reelRepo
+                                            //                 .getLikeCountByReelId(
+                                            //                     reels![index].id,
+                                            //                     _controller
+                                            //                         .token!),
+                                            //             builder: (context, snap) {
+                                            //               return Text(
+                                            //                 snap.hasData
+                                            //                     ? snap.data!
+                                            //                         .toString()
+                                            //                     : '0',
+                                            //                 // data.likeCount.toString(),
+                                            //                 style: style
+                                            //                     .headlineSmall!
+                                            //                     .copyWith(
+                                            //                   fontSize: 18,
+                                            //                   color: Colors.white,
+                                            //                 ),
+                                            //               );
+                                            //             }),
+                                            //       ],
+                                            //     ),
+                                            //     Column(
+                                            //       children: [
+                                            //         InkWell(
+                                            //           onTap: () {
+                                            //             Get.bottomSheet(
+                                            //               CommentSheet(
+                                            //                 reelId:
+                                            //                     reels![index].id,
+                                            //               ),
+                                            //               backgroundColor:
+                                            //                   Colors.white,
+                                            //             );
+                                            //           },
+                                            //           child: const Icon(
+                                            //             Icons.comment,
+                                            //             size: 30,
+                                            //             color: Colors.white,
+                                            //           ),
+                                            //         ),
+                                            //         FutureBuilder<int>(
+                                            //             future: _commentRepo
+                                            //                 .getCommentCountByReelId(
+                                            //                     reels![index].id,
+                                            //                     _controller
+                                            //                         .token!),
+                                            //             builder:
+                                            //                 (context, snapshot) {
+                                            //               return Text(
+                                            //                 snapshot.hasData
+                                            //                     ? snapshot.data!
+                                            //                         .toString()
+                                            //                     : '0',
+                                            //                 style: style
+                                            //                     .headlineSmall!
+                                            //                     .copyWith(
+                                            //                   fontSize: 18,
+                                            //                   color: Colors.white,
+                                            //                 ),
+                                            //               );
+                                            //             })
+                                            //       ],
+                                            //     ),
+                                            //     Column(
+                                            //       children: [
+                                            //         InkWell(
+                                            //           onTap: () {},
+                                            //           child: const Icon(
+                                            //             Icons.reply,
+                                            //             size: 30,
+                                            //             color: Colors.white,
+                                            //           ),
+                                            //         ),
+                                            //         // const SizedBox(height: 7),
+                                            //         // Text(
+                                            //         //   '0',
+                                            //         //   style: const TextStyle(
+                                            //         //     fontSize: 20,
+                                            //         //     color: Colors.white,
+                                            //         //   ),
+                                            //         // )
+                                            //       ],
+                                            //     ),
+                                            //   ],
+                                            // ),
                                           ),
                                         ],
                                       ),

@@ -1,17 +1,16 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:path/path.dart' as path;
 
-import '../../../../utils/snackbar.dart';
-
 class CreateProfileController extends GetxController {
+  // final _authRepo = Get.put(AuthRepository());
   final _authService = Get.find<AuthService>();
-  final _profileRepo = ProfileRepository();
+  final _profileRepo = Get.put(ProfileRepository());
 
   bool _loading = false;
   bool get loading => _loading;
@@ -29,6 +28,8 @@ class CreateProfileController extends GetxController {
 
   String username = '';
   String fullname = '';
+  String country = '';
+  String state = '';
   int countryCode = 0;
   int mobileNumber = 0;
   String bio = "";
@@ -55,7 +56,7 @@ class CreateProfileController extends GetxController {
       final String _fileName =
           genFileName("Profile", path.basename(file!.path));
 
-      await _profileRepo.uploadProfileToAwsS3(
+      final s3File = await _profileRepo.uploadProfileToAwsS3(
           userID: "Profile", file: file!, fileName: _fileName);
       var profileData = {
         'fullname': fullname,
@@ -64,11 +65,13 @@ class CreateProfileController extends GetxController {
         'current_language': 'en',
         'phone_number': mobileNumber,
         'profile_img': _fileName,
+        "country": country,
+        "state": state,
       };
       await _profileRepo.createProfile(profileData, _authService.token!);
       _authService.redirectUser();
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      print("addProfileDate: $e");
     }
     loading = false;
   }

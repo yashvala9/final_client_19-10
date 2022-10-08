@@ -75,7 +75,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
       _reelRepo.updateReelHistory(
           seconds, totalSeconds, widget.videoId, token!);
     } else {
-      _reelRepo.updateAdsHistory(seconds, widget.videoId, token!);
+      _reelRepo.updateAdsHistory(seconds, totalSeconds, widget.videoId, token!);
       widget.updatePoints();
     }
     updated = seconds;
