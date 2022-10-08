@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
 class FCMService {
   static FCMService instance = FCMService();
@@ -8,7 +9,7 @@ class FCMService {
   void notificationConfig() {
     _firebaseMessaging.requestPermission();
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print("message: $message");
+      debugPrint("message: $message");
     });
   }
 }

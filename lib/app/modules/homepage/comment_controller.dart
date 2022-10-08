@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
@@ -8,16 +6,12 @@ import 'package:reel_ro/models/profile_model.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/comment_repository.dart';
-import '../../../repositories/reel_repository.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/snackbar.dart';
 
 class CommentController extends GetxController {
-  final _commentRepo = Get.put(CommentRepository());
+  final _commentRepo = CommentRepository();
   final _authService = Get.put(AuthService());
-
-  final _reelRepo = Get.put(ReelRepository());
-
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
   ProfileModel get profileModel => _authService.profileModel!;
@@ -46,11 +40,10 @@ class CommentController extends GetxController {
   Future<void> getCommentsById(int id, {bool isPhoto = false}) async {
     loading = true;
     try {
-      print('21212121');
       commentList =
           await _commentRepo.getCommentById(id, token!, isPhoto: isPhoto);
     } catch (e) {
-      print("getCommentsByReelId: $e");
+      showSnackBar(e.toString(), color: Colors.red);
     }
     loading = false;
     update();
@@ -68,13 +61,13 @@ class CommentController extends GetxController {
     update();
   }
 
-  void deleteComment(int index) async {
-    print('index ${index.toString()}');
+  void deleteComment(int index, bool isPhoto) async {
     try {
-      await _commentRepo.deleteComment(commentList[index].id, token!);
+      await _commentRepo.deleteComment(commentList[index].id, token!,
+          isPhoto: isPhoto);
       commentList.removeAt(index);
       HomePageController().update();
-      // deleteCommentLocally(commentList[index].id);
+
       update();
     } catch (e) {
       log('Delete Comment: $e');
@@ -82,7 +75,6 @@ class CommentController extends GetxController {
   }
 
   void deleteCommentLocally(int id) {
-    print('uidasdf $id');
     _commentList.removeWhere((element) => element.id == id);
     update();
   }
@@ -109,7 +101,6 @@ class CommentController extends GetxController {
       onDone();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("addComment: $e");
     }
   }
 }

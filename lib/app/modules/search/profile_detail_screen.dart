@@ -1,13 +1,9 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
@@ -17,7 +13,6 @@ import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../services/communication_services.dart';
-import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/empty_widget.dart';
@@ -26,17 +21,16 @@ import '../../../widgets/my_elevated_button.dart';
 import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
 import '../profile/profile_photo_view.dart';
-import '../profile/profile_screen.dart';
 import '../single_feed/single_feed_screen.dart';
 
 class ProfileDetail extends StatelessWidget {
   final int index;
   ProfileDetail({Key? key, required this.index}) : super(key: key);
   final _controller = Get.find<SearchController>();
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
 
   final CommunicationService _communicationService = CommunicationService.to;
-  var parser = EmojiParser();
+  final parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -226,6 +220,10 @@ class ProfileDetail extends StatelessWidget {
                                                                           onPressed:
                                                                               () {
                                                                             Get.back();
+                                                                            snapshot.data != snapshot.data!
+                                                                                ? false
+                                                                                : true;
+                                                                            _controller.update();
                                                                             _controller.toggleFollowing(index);
                                                                           },
                                                                           child:
@@ -261,9 +259,6 @@ class ProfileDetail extends StatelessWidget {
                                                                   onPressed:
                                                                       () {
                                                                     log(">>>>>>>>>>>>>>>>>>>>");
-                                                                    String
-                                                                        queryId =
-                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${_controller.searchProfiles[index].id.hashCode}';
                                                                     String
                                                                         newChannelId =
                                                                         '${_controller.searchProfiles[index].id.hashCode}${_communicationService.client.state.currentUser!.id.hashCode}';
@@ -330,40 +325,42 @@ class ProfileDetail extends StatelessWidget {
                                                                         "Follow",
                                                                     onPressed:
                                                                         () {
-                                                                      Get.dialog(
-                                                                          AlertDialog(
-                                                                        backgroundColor:
-                                                                            Colors.black54,
-                                                                        title: snapshot.data!
-                                                                            ? const Text(
-                                                                                "Do you wish to unfollow?",
-                                                                                style: TextStyle(color: Colors.white),
-                                                                              )
-                                                                            : const Text(
-                                                                                "Do you wish to follow?",
-                                                                                style: TextStyle(color: Colors.white),
-                                                                              ),
-                                                                        actionsAlignment:
-                                                                            MainAxisAlignment.spaceAround,
-                                                                        actions: [
-                                                                          TextButton(
-                                                                              onPressed: () {
-                                                                                Get.back();
-                                                                              },
-                                                                              child: const Text("Cancel")),
-                                                                          MaterialButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              Get.back();
-                                                                              _controller.toggleFollowing(index);
-                                                                            },
-                                                                            child:
-                                                                                const Text("Confirm"),
-                                                                            color:
-                                                                                AppColors.buttonColor,
-                                                                          ),
-                                                                        ],
-                                                                      ));
+                                                                      log("aaaaaaaaaaaaaaaaa");
+
+                                                                      log("State: ${_communicationService.client.state}");
+                                                                      log("CurrentUser: ${_communicationService.client.state.currentUser}");
+                                                                      String
+                                                                          newChannelId =
+                                                                          '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+
+                                                                      final Channel
+                                                                          _newChannel =
+                                                                          _communicationService
+                                                                              .client
+                                                                              .channel(
+                                                                        'messaging',
+                                                                        id: newChannelId,
+                                                                        extraData: {
+                                                                          'isGroupChat':
+                                                                              false,
+                                                                          'presence':
+                                                                              true,
+                                                                          'members':
+                                                                              [
+                                                                            profileModel.id.toString(),
+                                                                            _communicationService.client.state.currentUser!.id.toString(),
+                                                                          ],
+                                                                        },
+                                                                      );
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(builder:
+                                                                              (context) {
+                                                                        return ChannelPage(
+                                                                          channel:
+                                                                              _newChannel,
+                                                                        );
+                                                                      }));
                                                                     },
                                                                     height: 30,
                                                                     style: style
@@ -386,9 +383,6 @@ class ProfileDetail extends StatelessWidget {
 
                                                                     log("State: ${_communicationService.client.state}");
                                                                     log("CurrentUser: ${_communicationService.client.state.currentUser}");
-                                                                    String
-                                                                        queryId =
-                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
                                                                     String
                                                                         newChannelId =
                                                                         '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
@@ -463,7 +457,7 @@ class ProfileDetail extends StatelessWidget {
                                                     Center(
                                                         child: Text(
                                                       "\"${parser.emojify(profileModel.user_profile!.bio!)}\"",
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color: Colors.red,
                                                           fontSize: 18),
                                                     )),
@@ -494,7 +488,7 @@ class ProfileDetail extends StatelessWidget {
                                           },
                                           child: Material(
                                             elevation: 3,
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                             child: Hero(
                                               tag: "hero3",
                                               child: CircleAvatar(
@@ -505,15 +499,6 @@ class ProfileDetail extends StatelessWidget {
                                             ),
                                           ),
                                         )
-                                        // Material(
-                                        //   elevation: 3,
-                                        //   shape: CircleBorder(),
-                                        //   child: CircleAvatar(
-                                        //     radius: 40,
-                                        //     backgroundImage: NetworkImage(
-                                        //         "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
-                                        //   ),
-                                        // ),
                                       ],
                                     ),
                                   ),
@@ -534,7 +519,6 @@ class ProfileDetail extends StatelessWidget {
   }
 
   Widget _tabSection(BuildContext context, ProfileModel profileModel) {
-    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -597,7 +581,7 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                   onTap: () {
-                    Get.to(SingleFeedScreen([], reels, index));
+                    Get.to(SingleFeedScreen(const [], reels, index));
                   },
                   child: FutureBuilder<String>(
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),

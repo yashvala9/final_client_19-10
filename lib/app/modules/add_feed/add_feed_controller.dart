@@ -1,9 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:intl/intl.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
@@ -35,20 +34,8 @@ class AddFeedController extends GetxController {
     description = "";
   }
 
-  // Future<int> uploadVideoOrPhoto(File file) async {
-  //   try {
-  //     final url = await _reelRepo.addPhotoOrVideo(file,token!);
-  //     return url;
-  //   } catch (e) {
-  //     printInfo(info: "uploadVideoOrPhoto: $e");
-  //     showSnackBar(e.toString(), color: Colors.red);
-  //     return Future.error(e.toString());
-  //   }
-  // }
-
   void addFeed(File file, int type) async {
     if (type == 1) {
-      //photo type
       {
         List<String> splitted = description.split(" ");
         for (var item in splitted) {
@@ -69,19 +56,17 @@ class AddFeedController extends GetxController {
           "hashtags": tags
         };
         try {
-          //step 1: make entry in DB
           await _reelRepo.addPhoto(data, token!);
-          //step 2: upload file to s3
-          final s3File = ProfileRepository().uploadProfileToAwsS3(
+
+          ProfileRepository().uploadProfileToAwsS3(
               file: file, fileName: _fileName, userID: profileId!.toString());
           showSnackBar("Photo added successfully!");
-          print(s3File);
+
           clean();
           Get.back(result: true);
           Get.back(result: true);
         } catch (e) {
-          showSnackBar(e.toString(), color: Colors.red);
-          print("addFeed: $e");
+          log("addFeed: $e");
         }
         loading = false;
       }
@@ -105,27 +90,23 @@ class AddFeedController extends GetxController {
         "hashtags": tags
       };
       try {
-        //step 1: make entry in DB
         await _reelRepo.addReel(data, token!);
-        //step 2: upload file to s3
-        final s3File = await _reelRepo.uploadFileToAwsS3(
+
+        await _reelRepo.uploadFileToAwsS3(
             userID: profileId!.toString(), file: file, fileName: _fileName);
-        //step 3: make entry of upload status in db
+
         await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
         showSnackBar("Reel added successfully!");
         clean();
         Get.back(result: true);
         Get.back(result: true);
       } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
-        print("addFeed: $e");
+        log("addFeed: $e");
       }
       loading = false;
     }
   }
 
-  /// This is used to generate a unique key for a file
-  /// reels_nsharma_20220715_unique(uuid)_filename.mp4
   String genFileName(String userID, String fileName) {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final date = DateFormat('yyyyMMdd').format(DateTime.now().toUtc());

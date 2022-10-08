@@ -1,11 +1,6 @@
-import 'dart:developer';
-
-import 'package:better_player/better_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:video_player/video_player.dart';
@@ -55,14 +50,11 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     videoPlayerController = VideoPlayerController.network(
       widget.videoUrl,
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    )
-
-      // videoPlayerController = VideoPlayerController.asset("assets/V1.mp4")
-      ..initialize().then((value) {
+    )..initialize().then((value) {
         setState(() {
           loading = false;
         });
-        // videoPlayerController.play();
+
         videoPlayerController.setVolume(1);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);
@@ -90,15 +82,10 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     videoPlayerController.addListener(() async {
       if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
           videoPlayerController.value.position.inSeconds != 0 &&
           updated != videoPlayerController.value.position.inSeconds) {
-        //checking the duration and position every time Video Completed
-        print(
-            'history updated 1212121 $updated ${videoPlayerController.value.position.inSeconds}');
         updateEntryPoints(videoPlayerController.value.position.inSeconds);
       }
     });
@@ -107,9 +94,6 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
         ? const Loading()
         : SizedBox(
             width: double.infinity,
-            // decoration: const BoxDecoration(
-            //   color: Colors.black,
-            // ),
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -125,15 +109,6 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                   onTap: () {
                     if (videoPlayerController.value.isPlaying) {
                       videoPlayerController.pause();
-                      // .then((_) async {
-                      //   if (updated !=
-                      //       videoPlayerController.value.position.inSeconds) {
-                      //     print(
-                      //         'video paused 1 1212121 ${videoPlayerController.value.position.inSeconds}');
-                      //     await updateEntryPoints(
-                      //         videoPlayerController.value.position.inSeconds);
-                      //   }
-                      // });
 
                       Wakelock.disable();
                       isManualPause = true;
@@ -148,15 +123,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                     onVisibilityChanged: (VisibilityInfo info) {
                       if (info.visibleFraction == 0 && !isManualPause) {
                         videoPlayerController.pause();
-                        // .then((_) async {
-                        //   if (updated !=
-                        //       videoPlayerController.value.position.inSeconds) {
-                        //     print(
-                        //         'video paused 2 1212121 ${videoPlayerController.value.position.inSeconds}');
-                        //     await updateEntryPoints(
-                        //         videoPlayerController.value.position.inSeconds);
-                        //   }
-                        // });
+
                         Wakelock.disable();
                       } else {
                         if (!isManualPause) {
@@ -172,14 +139,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                         if (!widget.isReel)
                           CustomVideoProgressIndicator(videoPlayerController,
                               allowScrubbing: false),
-                        // VideoProgressIndicator(
-                        //   videoPlayerController,
-                        //   allowScrubbing: false,
-                        // ),
                       ],
                     ),
-
-                    // VideoPlayer(videoPlayerController),
                   ),
                 ),
                 widget.showLike
@@ -194,114 +155,3 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
           );
   }
 }
-
-// class VideoPlayerWidget extends StatefulWidget {
-//   final String url;
-//   final VoidCallback doubleTap;
-//   final bool showLike;
-//   const VideoPlayerWidget({
-//     Key? key,
-//     required this.url,
-//     required this.doubleTap,
-//     this.showLike = false,
-//   }) : super(key: key);
-
-//   @override
-//   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
-// }
-
-// class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
-//     with AutomaticKeepAliveClientMixin {
-//   late BetterPlayerController _betterPlayerController;
-
-//   final _authService = Get.find<AuthService>();
-
-//   @override
-//   bool get wantKeepAlive => true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     log("URL: ${widget.url}");
-//     _betterPlayerController = BetterPlayerController(
-//       BetterPlayerConfiguration(
-//         aspectRatio: 5.3 / 10,
-//         looping: true,
-//         autoPlay: true,
-//         deviceOrientationsOnFullScreen: [
-//           DeviceOrientation.portraitUp,
-//           DeviceOrientation.portraitDown,
-//         ],
-//         allowedScreenSleep: false,
-//         fullScreenAspectRatio: 5.3 / 10,
-//         controlsConfiguration: BetterPlayerControlsConfiguration(
-//           enableAudioTracks: false,
-//           enableMute: false,
-//           enableOverflowMenu: false,
-//           enableFullscreen: false,
-//           enablePip: false,
-//           enablePlaybackSpeed: false,
-//           enableProgressBar: false,
-//           enableProgressBarDrag: false,
-//           enableProgressText: false,
-//           enableQualities: false,
-//           enableSkips: false,
-//           enableSubtitles: false,
-//           enableRetry: true,
-//           enablePlayPause: true,
-//           controlBarColor: Colors.black.withOpacity(0.2),
-//           playIcon: Icons.play_arrow_outlined,
-//           pauseIcon: Icons.pause_circle_outline,
-//         ),
-//         autoDispose: false,
-//       ),
-//       betterPlayerDataSource: BetterPlayerDataSource(
-//         BetterPlayerDataSourceType.network,
-//         widget.url,
-//         videoFormat: BetterPlayerVideoFormat.hls,
-//         drmConfiguration: BetterPlayerDrmConfiguration(
-//           drmType: BetterPlayerDrmType.token,
-//           token: "Bearer=${_authService.token}",
-//         ),
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _betterPlayerController.dispose(forceDispose: true);
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Stack(
-//       alignment: Alignment.center,
-//       children: [
-//         InkWell(
-//           onDoubleTap: () {
-//             widget.doubleTap();
-//           },
-//           onTap: () {
-//             // if (videoPlayerController.value.isPlaying) {
-//             //   videoPlayerController.pause();
-//             // } else {
-//             //   videoPlayerController.play();
-//             // }
-//           },
-//           child: BetterPlayer(
-//             controller: _betterPlayerController,
-
-//           ),
-//         ),
-//         widget.showLike
-//             ? const Icon(
-//                 Icons.favorite,
-//                 color: Colors.red,
-//                 size: 100,
-//               )
-//             : const SizedBox(),
-//       ],
-//     );
-//   }
-// }

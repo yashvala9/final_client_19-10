@@ -10,12 +10,10 @@ import 'widgets/contestcard_widget.dart';
 
 class ContestDatesView extends GetView<ContestDatesController> {
   ContestDatesView({Key? key}) : super(key: key);
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _giveawayRepo = GiveawayRepository();
   final _controller = Get.put(ContestDatesController());
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme;
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -23,10 +21,7 @@ class ContestDatesView extends GetView<ContestDatesController> {
             style: TextStyle(fontSize: 17),
           ),
         ),
-        body:
-            // Center(
-            // child: Text('No contests are live!'),
-            FutureBuilder<List<ContestModel>>(
+        body: FutureBuilder<List<ContestModel>>(
           future: _giveawayRepo.getContests(
               _controller.profileId!, _controller.token!),
           builder: (context, snapshot) {
@@ -46,34 +41,6 @@ class ContestDatesView extends GetView<ContestDatesController> {
               },
             );
           },
-        )
-        // ),
-        );
+        ));
   }
 }
-
-                                    // FutureBuilder<String>(
-                                    //   future: _giveawayRepo
-                                    //       .getReferralsEntryCountByUserId(
-                                    //           _controller.profileId!,
-                                    //           _controller.token!),
-                                    //   builder: (context, snapshot) {
-                                    //     if (!snapshot.hasData) {
-                                    //       return const Loading();
-                                    //     }
-                                    //     if (snapshot.hasError) {
-                                    //       printInfo(
-                                    //           info:
-                                    //               "getReferralsEntryCountByUserId: ${snapshot.hasError}");
-                                    //       return Container();
-                                    //     }
-                                    //     return Padding(
-                                    //       padding: const EdgeInsets.all(8.0),
-                                    //       child: Text(
-                                    //         snapshot.data.toString(),
-                                    //         style: style.titleLarge?.copyWith(
-                                    //             color: AppColors.red),
-                                    //       ),
-                                    //     );
-                                    //   },
-                                    // ),

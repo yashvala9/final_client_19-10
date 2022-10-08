@@ -6,10 +6,6 @@ import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:path/path.dart' as path;
-import 'package:reel_ro/models/comment_model.dart';
-
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/utils/base.dart';
@@ -47,7 +43,6 @@ class ReelRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print('212121 ${ReelModel.fromMap(body)}');
       return ReelModel.fromMap(body);
     } else {
       return Future.error(body['detail']);
@@ -70,7 +65,6 @@ class ReelRepository {
         return Future.error(body['detail']);
       }
     } catch (e) {
-      // showSnackBar("Error getReelByCommentId $e");
       printInfo(info: "Error getReelByCommentId $e");
 
       return Future.error(e);
@@ -127,7 +121,6 @@ class ReelRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['is_liked'] as bool;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -144,7 +137,6 @@ class ReelRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['is_liked'] as bool;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -161,7 +153,6 @@ class ReelRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['like_count'] as int;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -178,7 +169,6 @@ class ReelRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['like_count'] as int;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -196,7 +186,6 @@ class ReelRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       return body['like_count'] as int;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -211,10 +200,8 @@ class ReelRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // return body['liked'] as bool;
       return;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -229,10 +216,8 @@ class ReelRepository {
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // return body['liked'] as bool;
       return;
     } else {
-      print(body['meesage']);
       return Future.error(body['message']);
     }
   }
@@ -320,7 +305,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print(body);
     if (response.statusCode == 200) {
       final Iterable list = body;
       return list.map((e) => ReelModel.fromMap(e)).toList();
@@ -338,7 +322,6 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    print(body);
     if (response.statusCode == 200) {
       final Iterable list = body;
       return list.map((e) => PhotoModel.fromMap(e)).toList();
@@ -371,7 +354,6 @@ class ReelRepository {
     }
   }
 
-  /// Uploads the video file to AWS VOD input bucket and saves the key to get url later
   Future<String?> uploadFileToAwsS3({
     required String userID,
     required File file,
@@ -456,13 +438,10 @@ class ReelRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
-    print('2121 ${response.statusCode}');
-    print('2121 ${response.body}');
     List<String> a = [];
     final body = json.decode(response.body);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      print('2121 ${response.body}');
       a.add(body['user_id'].toString());
       a.add(body['user']['user_profile']['fullname']);
       return a;
@@ -480,8 +459,6 @@ class ReelRepository {
   Future<void> updateAdsHistory(
       int secondsWatched, int adId, String token) async {
     try {
-      // http://13.234.159.127/ads/history/1
-
       var map = {"time_duration": secondsWatched};
       final response = await http.post(
         Uri.parse('${Base.adsHistory}$adId'),
@@ -491,7 +468,7 @@ class ReelRepository {
         },
         body: jsonEncode(map),
       );
-      // print('212121 ${response.body}');
+
       if (response.statusCode == 201) {
         return;
       } else {
@@ -499,10 +476,7 @@ class ReelRepository {
         return Future.error(body['detail']);
       }
     } catch (e) {
-      // showSnackBar("Error updateAdsHistory $e");
       printInfo(info: "updateAdsHistory.......");
-
-      return null;
     }
   }
 
@@ -518,7 +492,7 @@ class ReelRepository {
         },
         body: jsonEncode(map),
       );
-      // print('212121 ${response.body}');
+
       if (response.statusCode == 201 || response.statusCode == 200) {
         return;
       } else {
@@ -528,8 +502,6 @@ class ReelRepository {
     } catch (e) {
       showSnackBar("Error updateReelHistory $e");
       printInfo(info: "updateReelHistory.......");
-
-      return null;
     }
   }
 

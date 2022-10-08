@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
-import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
 import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
 
-import '../../inbox_screen.dart';
 import '../chat/chat_list.dart';
 import '../homepage/homepage_screen.dart';
 import 'navigation_bar_controller.dart';
@@ -14,17 +12,16 @@ class NavigationBarScreen extends StatelessWidget {
   NavigationBarScreen({Key? key}) : super(key: key);
 
   final NavigationBarController controller = Get.put(NavigationBarController());
-  var homepage = HomePageScreen();
+  final homepage = HomePageScreen();
 
   buildBottomNavigationMenu(context) {
-    // controller.changeTabIndex(0);
     return Obx(() => MediaQuery(
         data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
         child: Container(
           height: 66,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.black,
-            borderRadius: const BorderRadius.only(),
+            borderRadius: BorderRadius.only(),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -42,7 +39,6 @@ class NavigationBarScreen extends StatelessWidget {
                           homepage.moveToReel();
                         } else if (homepage.pageController.page != 0) {
                           homepage.goToFirstPage();
-                          // homepage.moveNextReel(0);
                         } else {
                           homepage.controller.getFeeds();
                           homepage.controller.update();
@@ -184,7 +180,7 @@ class NavigationBarScreen extends StatelessWidget {
                   SearchScreen(),
                   GiveawayView(),
                   ChatList(),
-                  ProfileScreen(),
+                  const ProfileScreen(),
                 ],
                 index: controller.tabIndex.value,
               ),

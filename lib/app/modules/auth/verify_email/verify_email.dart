@@ -3,7 +3,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:reel_ro/app/modules/auth/auth_controller.dart';
-import 'package:reel_ro/app/routes/app_routes.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/constants.dart';
@@ -13,21 +12,12 @@ import 'package:reel_ro/widgets/my_elevated_button.dart';
 class VerifyEmailView extends StatelessWidget {
   VerifyEmailView({Key? key}) : super(key: key);
 
-  final _formKey = GlobalKey<FormState>();
   final _authController = Get.put(AuthController());
   final _storage = GetStorage();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-
-    final _text1 = TextEditingController();
-    final _text2 = TextEditingController();
-    final _text3 = TextEditingController();
-    final _text4 = TextEditingController();
-    final _text5 = TextEditingController();
-
-    final node = FocusScope.of(context);
 
     return GetBuilder<AuthController>(
         builder: (_) => Scaffold(
@@ -75,72 +65,6 @@ class VerifyEmailView extends StatelessWidget {
                                           .withOpacity(.6),
                                     ),
                                   ),
-                                  // SizedBox(height: Get.height * 0.02),
-                                  // Form(
-                                  //   key: _formKey,
-                                  //   child: Padding(
-                                  //     padding: EdgeInsets.symmetric(
-                                  //         horizontal: Get.width * 0.08),
-                                  //     child: Row(
-                                  //       children: [
-                                  //         OTPTextField(
-                                  //           text: _text1,
-                                  //           onChanged: (value) {
-                                  //             if (value.trim().length == 1) {
-                                  //               node.nextFocus();
-                                  //             }
-                                  //           },
-                                  //         ),
-                                  //         SizedBox(width: Get.width * 0.015),
-                                  //         OTPTextField(
-                                  //           text: _text2,
-                                  //           onChanged: (value) {
-                                  //             if (value.trim().length == 1) {
-                                  //               node.nextFocus();
-                                  //             }
-                                  //           },
-                                  //         ),
-                                  //         SizedBox(width: Get.width * 0.015),
-                                  //         OTPTextField(
-                                  //           text: _text3,
-                                  //           onChanged: (value) {
-                                  //             if (value.trim().length == 1) {
-                                  //               node.nextFocus();
-                                  //             }
-                                  //           },
-                                  //         ),
-                                  //         SizedBox(width: Get.width * 0.015),
-                                  //         OTPTextField(
-                                  //           text: _text4,
-                                  //           onChanged: (value) {
-                                  //             if (value.trim().length == 1) {
-                                  //               node.nextFocus();
-                                  //             }
-                                  //           },
-                                  //         ),
-                                  //         SizedBox(width: Get.width * 0.015),
-                                  //         OTPTextField(
-                                  //           text: _text5,
-                                  //           onChanged: (value) {
-                                  //             if (value.length == 1) {
-                                  //               if (_text1.text.length == 1) {
-                                  //                 if (_text2.text.length == 1) {
-                                  //                   if (_text3.text.length == 1) {
-                                  //                     if (_text4.text.length == 1) {
-                                  //                       // String _otp =
-                                  //                       // '${_text1.text}${_text2.text}${_text3.text}${_text4.text}';
-                                  //                     }
-                                  //                   }
-                                  //                 }
-                                  //               }
-                                  //             }
-                                  //           },
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ),
-                                  // ),
-
                                   SizedBox(height: Get.height * 0.03),
                                   TextButton(
                                     onPressed: () {
@@ -162,13 +86,6 @@ class VerifyEmailView extends StatelessWidget {
                                             var email =
                                                 _storage.read(Constants.email);
                                             _authController.verifyOtp(email);
-                                            // => Get.toNamed(AppRoutes.resetPassword)
-                                            // final otp =
-                                            //     '${_text1.text}${_text2.text}${_text3.text}${_text4.text}${_text5.text}';
-                                            // data['otp'] = otp;
-                                            // print("Otp: $otp");
-                                            // print("verifyOtpData: $data");
-                                            // _authController.verifyOtp(data);
                                           },
                                         ),
                                 ],
@@ -199,7 +116,6 @@ class OTPTextField extends StatelessWidget {
         textAlign: TextAlign.center,
         controller: text,
         maxLength: 1,
-        // keyboardType: TextInputType.number,
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,

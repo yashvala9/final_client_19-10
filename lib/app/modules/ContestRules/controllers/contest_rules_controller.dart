@@ -27,11 +27,6 @@ class ContestRulesController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
   void onClose() {}
   void increment() => count.value++;
 }
