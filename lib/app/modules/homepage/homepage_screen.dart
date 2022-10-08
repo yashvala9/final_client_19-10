@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:confetti/confetti.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/base.dart';
@@ -29,6 +31,7 @@ import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
 import '../search/search_screen.dart';
+import '../single_feed/single_feed_screen.dart';
 import 'comment_screen.dart';
 
 import 'profile_detail_screen.dart';
@@ -39,6 +42,19 @@ enum ReportReason {
   impersonation,
   illegalContent,
   abusiveContent
+}
+
+class DemoClass extends StatelessWidget {
+  const DemoClass({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
 }
 
 class HomePageScreen extends StatelessWidget {
@@ -57,6 +73,26 @@ class HomePageScreen extends StatelessWidget {
   ];
   late ConfettiController _controllerCenter;
   bool isAnimationPlaying = false;
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  Future<Uri> createDynamicLink(int id) async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://reelro.page.link',
+      link: Uri.parse('https://reelro.page.link/?id=$id/reels'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.example.reel_ro',
+        minimumVersion: 1,
+      ),
+      // iosParameters: IOSParameters(
+      //   bundleId: '',
+      //   minimumVersion: 0
+      // )
+    );
+    var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
+    final Uri shortUrl = dynamicUrl.shortUrl;
+    log("link:: $shortUrl");
+    return shortUrl;
+  }
 
   void onSelect(int id, int index, String reason) {
     controller.reportReelOrComment(reason, 'reel', id, () {
@@ -92,12 +128,52 @@ class HomePageScreen extends StatelessWidget {
     controller.updateManually();
   }
 
+  Future<void> retrieveDynamicLink(BuildContext context) async {
+    try {
+      var data = await FirebaseDynamicLinks.instance.getInitialLink();
+      var deepLink = data?.link;
+
+      if (deepLink != null) {
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (context) => TestScreen()));
+      }
+      dynamicLinks.onLink.listen((event) async {
+        log("event:: $event");
+        log("event link path:: ${event.link.path}");
+        var idAndType = event.link.toString().split("=").last;
+        var id = idAndType.split('/').first;
+        var type = idAndType.split('/').last;
+        log("ReelID:: $id");
+        log("Type:: $type");
+        var reel = await _reelRepo.getSingleReel(id, controller.token!);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SingleFeedScreen(null, [reel], 0, isPhoto: false),
+            ));
+        // var index = controller.reelList
+        //     .indexWhere((element) => element.id == int.parse(id));
+
+        // pageController.jumpToPage(index);
+        // controller.updateManually();
+      });
+      // FirebaseDynamicLinks.instance.onLink(
+      //     onSuccess: (PendingDynamicLinkData dynamicLink) async {
+      //   Navigator.of(context)
+      //       .push(MaterialPageRoute(builder: (context) => TestScreen()));
+      // });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
+    retrieveDynamicLink(context);
     RxDouble turns = 0.0.obs;
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 1));
@@ -723,7 +799,16 @@ class HomePageScreen extends StatelessWidget {
                                                               SizedBox(
                                                                   height: 15),
                                                               InkWell(
-                                                                onTap: () {},
+                                                                onTap:
+                                                                    () async {
+                                                                  log("Working>>>>");
+                                                                  final dl =
+                                                                      await createDynamicLink(
+                                                                          data.id);
+                                                                  log("Dynamic Link:: $dl");
+                                                                  Share.share(dl
+                                                                      .toString());
+                                                                },
                                                                 child:
                                                                     const Icon(
                                                                   Icons.reply,

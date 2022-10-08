@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
@@ -40,6 +43,28 @@ class SingleFeedScreen extends StatelessWidget {
   final _commentRepo = Get.put(CommentRepository());
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _profileRepo = Get.put(ProfileRepository());
+
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  Future<Uri> createDynamicLink(int reelId) async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://reelro.page.link',
+      link: Uri.parse('https://reelro.page.link/?id=$reelId'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.example.reel_ro',
+        minimumVersion: 1,  
+      ),
+      // iosParameters: IOSParameters(
+      //   bundleId: '',
+      //   minimumVersion: 0
+      // )
+    );
+    var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
+    final Uri shortUrl = dynamicUrl.shortUrl;
+    log("link:: $shortUrl");
+    return shortUrl;
+  }
+
   void openCommentSheet() {
     if (openComment) {
       Get.bottomSheet(
@@ -56,7 +81,29 @@ class SingleFeedScreen extends StatelessWidget {
     }
   }
 
-  void initState() {}
+  Future<void> retrieveDynamicLink(BuildContext context) async {
+  try {
+    var data = await FirebaseDynamicLinks.instance.getInitialLink();
+    var deepLink = data?.link;
+
+    if (deepLink != null) {
+      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestScreen()));
+    }
+  dynamicLinks.onLink.listen((event) { 
+      log("Event:: $event");
+      log("link path:: ${event.link.path}");
+  });
+    // dynamicLinks.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
+    //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestScreen()));
+    // });
+
+  } catch (e) {
+    print(e.toString());
+  }
+}
+
+  void initState() {
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +111,7 @@ class SingleFeedScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
+    retrieveDynamicLink(context);
     WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
     return GetBuilder<SingleFeedController>(
         builder: (_) => SafeArea(
@@ -434,7 +482,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                   Column(
                                                     children: [
                                                       InkWell(
-                                                        onTap: () {
+                                                        onTap: () async {
                                                           Get.bottomSheet(
                                                             CommentSheet(
                                                               () {
@@ -483,7 +531,12 @@ class SingleFeedScreen extends StatelessWidget {
                                                   ),
                                                   SizedBox(height: 15),
                                                   InkWell(
-                                                    onTap: () {},
+                                                    onTap: () async {
+                                                      log("Working>>>>");
+                                                      // final dl =
+                                                      //     await createDynamicLink();
+                                                      // log("Dynamic Link:: $dl");
+                                                    },
                                                     child: const Icon(
                                                       Icons.reply,
                                                       size: 30,
