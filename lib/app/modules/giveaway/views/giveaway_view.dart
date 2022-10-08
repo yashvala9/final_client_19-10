@@ -25,12 +25,14 @@ class GiveawayView extends GetView<GiveawayController> {
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Give Away',
-            style: style.titleMedium,
+          child: Center(
+            child: Text(
+              'Give Away',
+              style: style.titleMedium,
+            ),
           ),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: Colors.grey[200],
       ),
       body: CustomScrollView(
         slivers: [
@@ -123,7 +125,7 @@ Widget listTileWidget(String filename, String text, Widget pageName) {
         ),
       ),
       title: Text(text),
-      tileColor: Colors.grey[200],
+      tileColor: Colors.white,
       onTap: () {
         Get.to(() => pageName);
       },

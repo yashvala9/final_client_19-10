@@ -18,6 +18,7 @@ import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
 
 import '../../../models/photo_model.dart';
+import '../../../repositories/reel_repository.dart';
 import '../../../utils/empty_widget.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
@@ -288,9 +289,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     children: [
                                                       Center(
                                                           child: Text(
-                                                        "\"${parser.emojify(profileModel.user_profile!.bio!)}\"",
+                                                        "${parser.emojify(profileModel.user_profile!.bio!)}",
                                                         style: const TextStyle(
-                                                            color: Colors.red,
+                                                            color: Colors.black,
                                                             fontSize: 18),
                                                       )),
                                                     ],
@@ -375,6 +376,7 @@ class ProfileReel extends StatelessWidget {
   ProfileReel({Key? key, this.profileId}) : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
+  final _reelRepo = Get.find<ReelRepository>();
 
   final _controller = Get.find<ProfileController>();
 
@@ -449,29 +451,45 @@ class ProfileReel extends StatelessWidget {
                   ],
                 ));
               },
-              child: FutureBuilder<String>(
-                future: _profileRepo.getThumbnail(reels[index].thumbnail),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const ShimmerCardAnimation();
-                  }
+              child: Stack(children: [
+                FutureBuilder<String>(
+                  future: _profileRepo.getThumbnail(reels[index].thumbnail),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const ShimmerCardAnimation();
+                    }
 
-                  return CachedNetworkImage(
-                    key: UniqueKey(),
-                    errorWidget: (_, a, b) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text("Processing..."),
-                      );
-                    },
-                    imageUrl: snapshot.data!,
-                    fit: BoxFit.cover,
-                  );
-                },
-              ),
+                    return CachedNetworkImage(
+                      key: UniqueKey(),
+                      errorWidget: (_, a, b) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Text("Processing..."),
+                        );
+                      },
+                      imageUrl: snapshot.data!,
+                      fit: BoxFit.cover,
+                    );
+                  },
+                ),
+                Positioned(
+                    bottom: 5,
+                    left: 5,
+                    child: FutureBuilder<int>(
+                      future: _reelRepo.getReelViews(
+                          reels[index].id.toString(), _controller.token!),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const ShimmerCardAnimation();
+                        }
+
+                        return Text(snapshot.data!.toString());
+                      },
+                    ))
+              ]),
             );
           },
         );

@@ -48,7 +48,7 @@ class NavigationBarScreen extends StatelessWidget {
                     icon: controller.tabIndex.value == 0
                         ? const Icon(
                             Icons.home,
-                            color: Colors.pink,
+                            color: Colors.white,
                             size: 30,
                           )
                         : const Icon(
@@ -73,7 +73,7 @@ class NavigationBarScreen extends StatelessWidget {
                     icon: controller.tabIndex.value == 1
                         ? const Icon(
                             Icons.search,
-                            color: Colors.pink,
+                            color: Colors.white,
                             size: 30,
                           )
                         : const Icon(
@@ -98,7 +98,7 @@ class NavigationBarScreen extends StatelessWidget {
                     icon: controller.tabIndex.value == 2
                         ? const Icon(
                             Icons.card_giftcard,
-                            color: Colors.pink,
+                            color: Colors.white,
                             size: 30,
                           )
                         : const Icon(
@@ -123,7 +123,7 @@ class NavigationBarScreen extends StatelessWidget {
                     icon: controller.tabIndex.value == 3
                         ? const Icon(
                             Icons.message,
-                            color: Colors.pink,
+                            color: Colors.white,
                             size: 30,
                           )
                         : const Icon(
@@ -148,7 +148,7 @@ class NavigationBarScreen extends StatelessWidget {
                     icon: controller.tabIndex.value == 4
                         ? const Icon(
                             Icons.person,
-                            color: Colors.pink,
+                            color: Colors.white,
                             size: 30,
                           )
                         : const Icon(

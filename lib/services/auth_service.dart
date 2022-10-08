@@ -32,6 +32,7 @@ class AuthService extends GetxService {
   bool get isAuthenticated => _storage.read(Constants.token);
 
   Future<void> redirectUser() async {
+    print('running redirectUser');
     final isLoggedIn = await _storage.read(Constants.token);
     debugPrint('2121 isLoggedIn != null ${isLoggedIn != null}');
     if (isLoggedIn != null) {
