@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/single_feed/single_feed_screen.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
@@ -33,6 +35,13 @@ class HomePageController extends GetxController {
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
+    update();
+  }
+
+  bool _shareLoading = false;
+  bool get shareLoading => _shareLoading;
+  set shareLoading(bool shareLoading) {
+    _shareLoading = shareLoading;
     update();
   }
 
@@ -71,6 +80,10 @@ class HomePageController extends GetxController {
     getTotalEntryPoints();
     super.onInit();
   }
+
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+ 
 
   void getFeeds() async {
     loading = true;

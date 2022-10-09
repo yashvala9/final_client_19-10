@@ -15,6 +15,7 @@ import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -44,15 +45,18 @@ class SingleFeedScreen extends StatelessWidget {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _profileRepo = Get.put(ProfileRepository());
 
+  bool shareLoading = false;
+
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
-  Future<Uri> createDynamicLink(int reelId) async {
+  Future<Uri> createDynamicLink(int id, String type) async {
+    log("Type:: $type");
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://reelro.page.link',
-      link: Uri.parse('https://reelro.page.link/?id=$reelId'),
+      link: Uri.parse('https://reelro.page.link/?id=$id/$type'),
       androidParameters: AndroidParameters(
         packageName: 'com.example.reel_ro',
-        minimumVersion: 1,  
+        minimumVersion: 1,
       ),
       // iosParameters: IOSParameters(
       //   bundleId: '',
@@ -81,37 +85,13 @@ class SingleFeedScreen extends StatelessWidget {
     }
   }
 
-  Future<void> retrieveDynamicLink(BuildContext context) async {
-  try {
-    var data = await FirebaseDynamicLinks.instance.getInitialLink();
-    var deepLink = data?.link;
-
-    if (deepLink != null) {
-      // Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestScreen()));
-    }
-  dynamicLinks.onLink.listen((event) { 
-      log("Event:: $event");
-      log("link path:: ${event.link.path}");
-  });
-    // dynamicLinks.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
-    //   Navigator.of(context).push(MaterialPageRoute(builder: (context) => TestScreen()));
-    // });
-
-  } catch (e) {
-    print(e.toString());
-  }
-}
-
-  void initState() {
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
-    retrieveDynamicLink(context);
+
     WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
     return GetBuilder<SingleFeedController>(
         builder: (_) => SafeArea(
@@ -530,19 +510,38 @@ class SingleFeedScreen extends StatelessWidget {
                                                     ],
                                                   ),
                                                   SizedBox(height: 15),
-                                                  InkWell(
-                                                    onTap: () async {
-                                                      log("Working>>>>");
-                                                      // final dl =
-                                                      //     await createDynamicLink();
-                                                      // log("Dynamic Link:: $dl");
-                                                    },
-                                                    child: const Icon(
-                                                      Icons.reply,
-                                                      size: 30,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
+                                                  StatefulBuilder(builder:
+                                                      ((context, setState) {
+                                                    return shareLoading
+                                                        ? Loading()
+                                                        : InkWell(
+                                                            onTap: () async {
+                                                              log("Working>>>>");
+                                                              setState(() {
+                                                                shareLoading =
+                                                                    true;
+                                                              });
+                                                              final dl =
+                                                                  await createDynamicLink(
+                                                                      photos![index]
+                                                                          .id,
+                                                                      'photos');
+                                                              log("Dynamic Link:: $dl");
+                                                              setState(() {
+                                                                shareLoading =
+                                                                    false;
+                                                              });
+                                                              Share.share(dl
+                                                                  .toString());
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.reply,
+                                                              size: 30,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          );
+                                                  }))
                                                 ],
                                               )),
                                         ],
@@ -1070,14 +1069,38 @@ class SingleFeedScreen extends StatelessWidget {
                                                         ],
                                                       ),
                                                       SizedBox(height: 15),
-                                                      InkWell(
-                                                        onTap: () {},
-                                                        child: const Icon(
-                                                          Icons.reply,
-                                                          size: 30,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
+                                                      StatefulBuilder(builder:
+                                                          (context, setState) {
+                                                        return shareLoading
+                                                            ? Loading()
+                                                            : InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  setState(() {
+                                                                    shareLoading =
+                                                                        true;
+                                                                  });
+                                                                  final dl = await createDynamicLink(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      'reels');
+                                                                  log("Dynamic Link:: $dl");
+                                                                  setState(() {
+                                                                    shareLoading =
+                                                                        false;
+                                                                  });
+                                                                  Share.share(dl
+                                                                      .toString());
+                                                                },
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.reply,
+                                                                  size: 30,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              );
+                                                      })
                                                     ],
                                                   )
                                                 : Column(

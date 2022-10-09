@@ -75,10 +75,12 @@ class HomePageScreen extends StatelessWidget {
   bool isAnimationPlaying = false;
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
-  Future<Uri> createDynamicLink(int id) async {
+  Future<Uri> createDynamicLink(int id, String type) async {
+    log("Type:: $type");
+    controller.shareLoading = true;
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://reelro.page.link',
-      link: Uri.parse('https://reelro.page.link/?id=$id/reels'),
+      link: Uri.parse('https://reelro.page.link/?id=$id/$type'),
       androidParameters: AndroidParameters(
         packageName: 'com.example.reel_ro',
         minimumVersion: 1,
@@ -91,6 +93,7 @@ class HomePageScreen extends StatelessWidget {
     var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
     final Uri shortUrl = dynamicUrl.shortUrl;
     log("link:: $shortUrl");
+    controller.shareLoading = false;
     return shortUrl;
   }
 
@@ -128,44 +131,7 @@ class HomePageScreen extends StatelessWidget {
     controller.updateManually();
   }
 
-  Future<void> retrieveDynamicLink(BuildContext context) async {
-    try {
-      var data = await FirebaseDynamicLinks.instance.getInitialLink();
-      var deepLink = data?.link;
-
-      if (deepLink != null) {
-        // Navigator.of(context)
-        //     .push(MaterialPageRoute(builder: (context) => TestScreen()));
-      }
-      dynamicLinks.onLink.listen((event) async {
-        log("event:: $event");
-        log("event link path:: ${event.link.path}");
-        var idAndType = event.link.toString().split("=").last;
-        var id = idAndType.split('/').first;
-        var type = idAndType.split('/').last;
-        log("ReelID:: $id");
-        log("Type:: $type");
-        var reel = await _reelRepo.getSingleReel(id, controller.token!);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => SingleFeedScreen(null, [reel], 0, isPhoto: false),
-            ));
-        // var index = controller.reelList
-        //     .indexWhere((element) => element.id == int.parse(id));
-
-        // pageController.jumpToPage(index);
-        // controller.updateManually();
-      });
-      // FirebaseDynamicLinks.instance.onLink(
-      //     onSuccess: (PendingDynamicLinkData dynamicLink) async {
-      //   Navigator.of(context)
-      //       .push(MaterialPageRoute(builder: (context) => TestScreen()));
-      // });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +139,6 @@ class HomePageScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
-    retrieveDynamicLink(context);
     RxDouble turns = 0.0.obs;
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 1));
@@ -798,25 +763,30 @@ class HomePageScreen extends StatelessWidget {
                                                               ),
                                                               SizedBox(
                                                                   height: 15),
-                                                              InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  log("Working>>>>");
-                                                                  final dl =
-                                                                      await createDynamicLink(
-                                                                          data.id);
-                                                                  log("Dynamic Link:: $dl");
-                                                                  Share.share(dl
-                                                                      .toString());
-                                                                },
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.reply,
-                                                                  size: 30,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
+                                                              controller
+                                                                      .shareLoading
+                                                                  ? Loading()
+                                                                  : InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        log("Working>>>>");
+                                                                        final dl = await createDynamicLink(
+                                                                            data.id,
+                                                                            'reels');
+                                                                        log("Dynamic Link:: $dl");
+                                                                        Share.share(
+                                                                            dl.toString());
+                                                                      },
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .reply,
+                                                                        size:
+                                                                            30,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                    ),
                                                               SizedBox(
                                                                   height: 15),
                                                               PopupMenuButton<
