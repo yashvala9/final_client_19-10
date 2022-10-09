@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:reel_ro/app/data/demo_data.dart';
 import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/utils/colors.dart';
-
-import '../../../../../widgets/loading.dart';
 
 class ContestCard extends StatelessWidget {
   final ContestModel contest;

@@ -5,17 +5,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_trimmer/video_trimmer.dart';
-
-import 'package:reel_ro/utils/colors.dart';
-import 'package:reel_ro/utils/snackbar.dart';
-
 import '../../../../widgets/my_elevated_button.dart';
 import '../add_feed_screen.dart';
 
 class VideoTrimmerView extends StatefulWidget {
   final File file;
 
-  VideoTrimmerView(this.file);
+  const VideoTrimmerView(this.file, {Key? key}) : super(key: key);
 
   @override
   VideoTrimmerViewState createState() => VideoTrimmerViewState();
@@ -32,7 +28,6 @@ class VideoTrimmerViewState extends State<VideoTrimmerView> {
 
   String finalVideoPath = '';
   Future<void> pauseVideo() async {
-    print('running pause');
     if (isPlaying.value) {
       bool playbackState = await _trimmer.videPlaybackControl(
         startValue: _startValue,
@@ -53,7 +48,6 @@ class VideoTrimmerViewState extends State<VideoTrimmerView> {
             endValue: _endValue,
             onSave: (String? outputPath) async {
               finalVideoPath = outputPath!;
-              print('finalVideoPath $finalVideoPath');
               if (isPlaying.value) {
                 bool playbackState = await _trimmer.videPlaybackControl(
                   startValue: _startValue,

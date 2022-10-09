@@ -13,7 +13,6 @@ class ResetPasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
-    
 
     final _passwordController = TextEditingController();
     final _repeatPasswordController = TextEditingController();
@@ -30,7 +29,8 @@ class ResetPasswordView extends StatelessWidget {
                 padding: EdgeInsets.only(
                   left: Get.width * 0.05,
                   right: Get.width * 0.05,
-                  top: isKeyboardVisible ? Get.height * 0.04 : Get.height * 0.35,
+                  top:
+                      isKeyboardVisible ? Get.height * 0.04 : Get.height * 0.35,
                 ),
                 child: Form(
                   key: _formKey,
@@ -76,7 +76,7 @@ class ResetPasswordView extends StatelessWidget {
                           ),
                           obscureText: !isPassWordVisible.value,
                           validator: (value) {
-                            value!.isEmpty ? 'Password is required' : '';
+                            return value!.isEmpty ? 'Password is required' : '';
                           },
                         ),
                       ),
@@ -104,7 +104,7 @@ class ResetPasswordView extends StatelessWidget {
                           ),
                           obscureText: !isPassWordVisible.value,
                           validator: (value) {
-                            value!.isEmpty ? 'Password is required' : '';
+                            return value!.isEmpty ? 'Password is required' : '';
                           },
                         ),
                       ),

@@ -11,9 +11,9 @@ import '../../../../utils/snackbar.dart';
 import 'package:path/path.dart' as path;
 
 class CreateGiveawayController extends GetxController {
-  final _giveawayRepo = Get.put(GiveawayRepository());
-  final _authService = Get.put(AuthService());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _giveawayRepo = GiveawayRepository();
+  final _authService = AuthService();
+  final _profileRepo = ProfileRepository();
 
   File? _file;
   File? get file => _file;
@@ -44,10 +44,8 @@ class CreateGiveawayController extends GetxController {
         file = await changeFileNameOnly(file!, 'prizeImage');
         _fileName = genFileName("Profile", path.basename(file!.path));
 
-        final s3File = await _profileRepo.uploadProfileToAwsS3(
+        await _profileRepo.uploadProfileToAwsS3(
             userID: "Profile", file: file!, fileName: _fileName);
-
-        print('2121' + s3File.toString());
       }
 
       var map = {
@@ -69,7 +67,6 @@ class CreateGiveawayController extends GetxController {
       Get.back();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("createGiveaway: $e");
     }
     loading = false;
   }

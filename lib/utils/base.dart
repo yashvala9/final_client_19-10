@@ -1,17 +1,16 @@
 class Base {
   static const _url = 'http://15.207.250.118';
-  // static const _url = 'http://13.234.159.127';
 
   static const register = "$_url/users/";
   static const login = '$_url/login';
   static const sendVeifyEmailLink = '$_url/users/send_activation_email';
-  // static const createProfile = '$_url/profiles';
+
   static const verifyOtp = '$_url/auth/register/verifyOTP';
   static const getProfileId = '$_url/users/me';
   static const getProfileByToken = '$_url/users/getcurrent_user';
-  // static const getProfilebyId = '$_url/user-profiles';
+
   static const getReelsbyId = '$_url/getReelsByUserId';
-  // static const createProfile = '$_url/user-profiles';
+
   static const searchUser = '$_url/search';
 
   //Forget password
@@ -102,7 +101,9 @@ class Base {
   static const togglePhotoCommentLike = '$_url/posts/likes/comments';
 
   static const deleteComment = '$_url/reels/comments';
+  static const deletePostComment = '$_url/posts/comments';
   static const nestedComment = '$_url/reels/comments';
+  static const nestedPostComment = '$_url/posts/comments';
   static const getCommentCount = '$_url/count/comments';
   static const getPostCommentCount = '$_url/count/posts/comments';
 
@@ -111,7 +112,7 @@ class Base {
   //Giveaway
   static const giveaway = '$_url/contests/';
   static const adminContest = '$_url/superadmin/contests';
-  static const CreateGiveaway = '$_url/createContest';
+  static const createGiveaway = '$_url/createContest';
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';
   static const getTotalEntryCountByUserId = '$_url/totalEntries';

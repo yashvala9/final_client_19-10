@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: unnecessary_type_check
+
 import 'dart:convert';
 
 import 'package:reel_ro/models/profile_model.dart';
@@ -47,7 +48,7 @@ class CommentModel {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'id': id});
     result.addAll({'comment': comment});
     result.addAll({'likeCount': likeCount});
@@ -56,26 +57,26 @@ class CommentModel {
     result.addAll({'reelId': reelId});
     result.addAll({'isLiked': isLiked});
     result.addAll({'createdAt': createdAt});
-  
+
     return result;
   }
 
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
-      id: map['id']?.toInt() ?? 0,
-      comment: map['comment'] ?? '',
-      likeCount: map['likes_count']?.toInt() ?? 0,
-      responseCount: map['response_count']?.toInt() ?? 0,
-      user: ProfileModel.fromMap(map['user']),
-      reelId: map['reelId'] ?? '',
-      isLiked: map['is_liked'] ?? false,
-      createdAt: DateTime.parse(map['created_at']) 
-    );
+        id: map['id']?.toInt() ?? 0,
+        comment: map['comment'] ?? '',
+        likeCount: map['likes_count']?.toInt() ?? 0,
+        responseCount: map['response_count']?.toInt() ?? 0,
+        user: ProfileModel.fromMap(map['user']),
+        reelId: map['reelId'] ?? '',
+        isLiked: map['is_liked'] ?? false,
+        createdAt: DateTime.parse(map['created_at']));
   }
 
   String toJson() => json.encode(toMap());
 
-  factory CommentModel.fromJson(String source) => CommentModel.fromMap(json.decode(source));
+  factory CommentModel.fromJson(String source) =>
+      CommentModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -85,25 +86,25 @@ class CommentModel {
   @override
   bool operator ==(covariant CommentModel other) {
     if (identical(this, other)) return true;
-  
+
     return other is CommentModel &&
-      other.id == id &&
-      other.comment == comment &&
-      other.likeCount == likeCount &&
-      other.responseCount == responseCount &&
-      other.user == user &&
-      other.reelId == reelId &&
-      other.isLiked == isLiked;
+        other.id == id &&
+        other.comment == comment &&
+        other.likeCount == likeCount &&
+        other.responseCount == responseCount &&
+        other.user == user &&
+        other.reelId == reelId &&
+        other.isLiked == isLiked;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      comment.hashCode ^
-      likeCount.hashCode ^
-      responseCount.hashCode ^
-      user.hashCode ^
-      reelId.hashCode ^
-      isLiked.hashCode;
+        comment.hashCode ^
+        likeCount.hashCode ^
+        responseCount.hashCode ^
+        user.hashCode ^
+        reelId.hashCode ^
+        isLiked.hashCode;
   }
 }

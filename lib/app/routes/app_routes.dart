@@ -1,12 +1,10 @@
-
 class AppRoutes {
   static const home = '/home';
   static const splash = '/splash';
   static const getStarted = '/get-started';
   static const dashboard = '/dashboard';
   static const login = '/login';
-  // static String login_then(String afterSuccessfulLogin) =>
-  //     '$login?then=${Uri.encodeQueryComponent(afterSuccessfulLogin)}';
+
   static const signup = '/signup';
   static const navigationBar = '/navigation_bar';
   static const signUp = '/signUp';
@@ -21,5 +19,5 @@ class AppRoutes {
   static const giveaway = '/giveaway';
   static const winners = '/winners';
   static const contestDates = '/contest-dates';
-  static const contestRules = '/contest-rules';  
+  static const contestRules = '/contest-rules';
 }

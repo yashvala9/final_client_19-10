@@ -8,7 +8,7 @@ import '../../../../services/auth_service.dart';
 
 class MyContestController extends GetxController {
   final _authService = Get.put(AuthService());
-  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _giveawayRepo = GiveawayRepository();
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 

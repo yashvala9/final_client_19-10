@@ -1,38 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:reel_ro/app/modules/splash/splash_screen.dart';
 import 'package:reel_ro/app/routes/app_page.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/services/communication_services.dart';
-import 'package:reel_ro/services/connectivity_service.dart';
 import 'package:reel_ro/services/fcm_services.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/constants.dart';
-import 'firebase_options.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart' as sc;
 
-import 'package:stream_chat_persistence/stream_chat_persistence.dart';
+import 'firebase_options.dart';
 
 late PackageInfo kPackageInfo;
 
 late sc.StreamChatClient kDefaultStreamChatClient;
-
-// sc.StreamChatClient _initStreamChatClient() {
-//   Get.put<ConnectivityService>(ConnectivityService());
-//   kDefaultStreamChatClient = sc.StreamChatClient(
-//     StreamConfig.STREAM_API_KEY,
-//     logLevel: kDebugMode ? sc.Level.INFO : sc.Level.OFF,
-//   )..chatPersistenceClient = StreamChatPersistenceClient(
-//       logLevel: kDebugMode ? sc.Level.INFO : sc.Level.OFF,
-//       connectionMode: ConnectionMode.background,
-//     );
-
-//   return kDefaultStreamChatClient;
-// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +25,7 @@ Future<void> main() async {
   );
   FCMService.instance.notificationConfig();
   kPackageInfo = await PackageInfo.fromPlatform();
-  // final sc.StreamChatClient _chatClient = _initStreamChatClient();
+
   final client = sc.StreamChatClient(
     StreamConfig.STREAM_API_KEY,
     logLevel: sc.Level.INFO,
@@ -167,9 +150,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialBinding: _RootBindings(),
       initialRoute: AppPages.initial,
-      // initialBinding: BindingsBuilder(() {
-      //   Get.lazyPut(() => AuthService());
-      // }),
     );
   }
 }
@@ -179,21 +159,5 @@ class _RootBindings extends Bindings {
   void dependencies() {
     Get.put<CommunicationService>(CommunicationService());
     Get.put<AuthService>(AuthService());
-    // Get.put<MasterDataService>(MasterDataService());
-    // Get.put<LocationService>(LocationService());
-    // Get.put<NotificationService>(NotificationService());
   }
 }
-
-/* class Root extends StatelessWidget {
-  const Root({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home page"),
-      ),
-    );
-  }
-} */

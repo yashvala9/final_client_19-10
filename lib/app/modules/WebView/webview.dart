@@ -21,13 +21,7 @@ class WebViewScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
-        body:
-            // _controller.isLoading.value
-            //     ? Center(
-            //         child: CircularProgressIndicator(),
-            //       )
-            //     :
-            WebView(
+        body: WebView(
           initialUrl: url,
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: _controller.onWebViewCreated,

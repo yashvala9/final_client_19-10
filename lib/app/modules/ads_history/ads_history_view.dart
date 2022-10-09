@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:reel_ro/models/ads_history_model.dart';
 import 'package:reel_ro/models/reel_model.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
-import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'ads_history_controller.dart';
@@ -17,8 +14,7 @@ class AdsHistoryView extends StatelessWidget {
   AdsHistoryView({Key? key}) : super(key: key);
 
   final _controller = Get.put(AdsHistoryController());
-  final authService = Get.put(AuthService());
-  final _profileRepo = Get.put(ProfileRepository());
+  final _profileRepo = ProfileRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +29,6 @@ class AdsHistoryView extends StatelessWidget {
             style: style.titleMedium,
           ),
         ),
-        // backgroundColor: AppColors.white,
       ),
       body: GetBuilder<AdsHistoryController>(
           builder: (_) => FutureBuilder<List<AdsHistoryModel>>(
@@ -44,14 +39,14 @@ class AdsHistoryView extends StatelessWidget {
                       _controller.profileId!, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Loading();
+                  return const Loading();
                 }
                 if (snapshot.hasError) {
                   printInfo(info: "profileReels: ${snapshot.error}");
                 }
                 var ads = snapshot.data!;
                 if (ads.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text("No Ads History Available"),
                   );
                 }
@@ -81,7 +76,6 @@ class AdsHistoryView extends StatelessWidget {
                                       filename: e.ads.filename,
                                       media_ext: e.ads.media_ext,
                                       thumbnail: e.ads.thumbnail,
-                                      // filepath: e.ads.filepath,
                                       user: e.ads.user))
                                   .toList(),
                               0));
@@ -91,7 +85,7 @@ class AdsHistoryView extends StatelessWidget {
                               .getThumbnail(ads[index].ads.thumbnail),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             }
@@ -101,7 +95,7 @@ class AdsHistoryView extends StatelessWidget {
                               placeholder: (context, url) {
                                 return IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.refresh_rounded));
+                                    icon: const Icon(Icons.refresh_rounded));
                               },
                               errorWidget: (_, a, b) {
                                 return Container(
@@ -109,22 +103,14 @@ class AdsHistoryView extends StatelessWidget {
                                     border: Border.all(),
                                   ),
                                   alignment: Alignment.center,
-                                  child: Loading(),
-                                  // Text("Processing..."),
+                                  child: const Loading(),
                                 );
                               },
                               imageUrl: snapshot.data!,
                               fit: BoxFit.cover,
                             );
                           },
-                        )
-
-                        // CachedNetworkImage(
-                        //   placeholder: (context, url) => Loading(),
-                        //   imageUrl: ads[index].ads.thumbnail,
-                        //   fit: BoxFit.cover,
-                        // ),
-                        );
+                        ));
                   },
                 );
               })),

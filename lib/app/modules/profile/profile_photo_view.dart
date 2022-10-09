@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePhotoView extends StatefulWidget {
-  ProfilePhotoView(this.heroTag, this.fullname, this.url, {Key? key})
+  const ProfilePhotoView(this.heroTag, this.fullname, this.url, {Key? key})
       : super(key: key);
-  String url;
-  String heroTag;
-  String fullname;
+  final String url;
+  final String heroTag;
+  final String fullname;
   @override
   State<ProfilePhotoView> createState() => _ProfilePhotoViewState();
 }
@@ -25,7 +25,7 @@ class _ProfilePhotoViewState extends State<ProfilePhotoView> {
             child: CachedNetworkImage(
           imageUrl: widget.url,
           fit: BoxFit.fitWidth,
-          errorWidget: (c, s, e) => Icon(Icons.error),
+          errorWidget: (c, s, e) => const Icon(Icons.error),
         )),
       ),
     );

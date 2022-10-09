@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -167,15 +166,10 @@ class SearchUsers extends StatelessWidget {
                       prefixIcon: Icon(Icons.search),
                       hintText: "Search here...",
                     ),
-
-                    // controller: searchTextController,
                     onChanged: (value) {
                       _debounce.run(() {
                         if (value.startsWith('#')) {
                           value.replaceAll('#', '');
-                          // Get.to(SearchHashTags(
-                          //   hashTag: value.trim(),
-                          // ));
 
                           _controller.getReelsByHashTag(value);
                         } else {

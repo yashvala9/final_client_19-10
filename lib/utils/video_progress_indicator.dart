@@ -120,7 +120,7 @@ class _CustomVideoProgressIndicatorState
       );
     }
     final Widget paddedProgressIndicator = Padding(
-        padding: EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Stack(children: [
@@ -128,7 +128,7 @@ class _CustomVideoProgressIndicatorState
               height: 25,
               child: progressIndicator,
             ),
-            Container(
+            SizedBox(
                 height: 25,
                 child: Row(
                   children: durationDiff.map((e) {

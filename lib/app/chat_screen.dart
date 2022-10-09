@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ChatScreen extends StatelessWidget {
   ChatScreen({Key? key}) : super(key: key);
 
-  var list = [
+  final list = [
     true,
     false,
     true,

@@ -10,7 +10,6 @@ import '../controllers/account_settings_controller.dart';
 class AccountSettingsView extends GetView<AccountSettingsController> {
   AccountSettingsView({Key? key}) : super(key: key);
   final _controller = Get.put(AccountSettingsController());
-  final _authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,6 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        // backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         title: const Text(
           "Account Settings",
           style: TextStyle(fontSize: 17),
@@ -42,9 +40,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           AccountTile(
             asset: Assets.accountStoke,
             title: "Manage my account",
-            onPressed: () {
-              // Get.to(EditProfileView());
-            },
+            onPressed: () {},
           ),
           AccountTile(
             asset: Assets.lock,
@@ -278,9 +274,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           AccountTile(
             asset: Assets.pen,
             title: "Report a problem",
-            onPressed: () {
-              // Get.to(() => FollowerPickerView());
-            },
+            onPressed: () {},
           ),
           AccountTile(
             asset: Assets.help,
@@ -291,7 +285,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             asset: Assets.bell,
             title: "Logout",
             onPressed: () {
-              _authService.signOut();
+              AuthService().signOut();
             },
           ),
         ],
