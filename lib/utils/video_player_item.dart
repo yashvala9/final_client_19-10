@@ -13,16 +13,20 @@ class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final int videoId;
   final VoidCallback doubleTap;
+  VoidCallback? onTap;
   final VoidCallback swipeRight;
   final VoidCallback updatePoints;
   final bool showLike;
   final bool isReel;
-  const VideoPlayerItem({
+  bool enableAudio;
+  VideoPlayerItem({
     Key? key,
     required this.videoUrl,
     required this.videoId,
     required this.doubleTap,
     required this.swipeRight,
+    this.enableAudio = true,
+    this.onTap,
     required this.updatePoints,
     required this.isReel,
     this.showLike = false,
@@ -54,8 +58,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
         setState(() {
           loading = false;
         });
-
-        videoPlayerController.setVolume(1);
+        // videoPlayerController.play();
+        videoPlayerController.setVolume(widget.enableAudio ? 1 : 0);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);
 
@@ -107,6 +111,10 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                     }
                   },
                   onTap: () {
+                    if (widget.onTap != null) {
+                      widget.onTap!();
+                      return;
+                    }
                     if (videoPlayerController.value.isPlaying) {
                       videoPlayerController.pause();
 

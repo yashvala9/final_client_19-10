@@ -1,6 +1,9 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
@@ -9,7 +12,7 @@ import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/widgets/loading.dart';
-
+import 'package:share_plus/share_plus.dart';
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -34,10 +37,35 @@ class SingleFeedScreen extends StatelessWidget {
   final int currentIndex;
   bool openComment;
   final _controller = Get.put(SingleFeedController());
-  final _reelRepo = ReelRepository();
-  final _commentRepo = CommentRepository();
-  final _giveawayRepo = GiveawayRepository();
-  final _profileRepo = ProfileRepository();
+  final _reelRepo = Get.put(ReelRepository());
+  final _commentRepo = Get.put(CommentRepository());
+  final _giveawayRepo = Get.put(GiveawayRepository());
+  final _profileRepo = Get.put(ProfileRepository());
+
+  bool shareLoading = false;
+
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  Future<Uri> createDynamicLink(int id, String type) async {
+    log("Type:: $type");
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://reelro.page.link',
+      link: Uri.parse('https://reelro.page.link/?id=$id/$type'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.example.reel_ro',
+        minimumVersion: 1,
+      ),
+      // iosParameters: IOSParameters(
+      //   bundleId: '',
+      //   minimumVersion: 0
+      // )
+    );
+    var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
+    final Uri shortUrl = dynamicUrl.shortUrl;
+    log("link:: $shortUrl");
+    return shortUrl;
+  }
+
   void openCommentSheet() {
     if (openComment) {
       Get.bottomSheet(
@@ -54,13 +82,12 @@ class SingleFeedScreen extends StatelessWidget {
     }
   }
 
-  void initState() {}
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
     return GetBuilder<SingleFeedController>(
         builder: (_) => SafeArea(
@@ -74,8 +101,6 @@ class SingleFeedScreen extends StatelessWidget {
                       onPressed: () {
                         Get.back();
                       }),
-                  title: Center(
-                      child: Text(isPhoto ? "Your Photos" : "Your Rolls")),
                 ),
                 body: _controller.loading
                     ? const Loading()
@@ -133,35 +158,43 @@ class SingleFeedScreen extends StatelessWidget {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      InkWell(
-                                                          onTap: () {
-                                                            if (_controller
-                                                                    .profileId !=
-                                                                photos![index]
-                                                                    .owner
-                                                                    .id) {
-                                                              Get.to(
-                                                                () =>
-                                                                    ProfileDetail(
-                                                                        profileModel:
-                                                                            photos![index]
-                                                                                .owner,
-                                                                        onBack:
-                                                                            () {
-                                                                          Get.back();
-                                                                        }),
-                                                              );
-                                                            }
-                                                          },
-                                                          child: Text(
-                                                            "@${photos![index].owner.username}",
-                                                            style: style
-                                                                .titleMedium!
-                                                                .copyWith(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          )),
+                                                      CircleAvatar(
+                                                        backgroundImage:
+                                                            NetworkImage(
+                                                                "${Base.profileBucketUrl}/${photos![index].owner.user_profile!.profile_img}"),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 8,
+                                                                right: 4),
+                                                        child: InkWell(
+                                                            onTap: () {
+                                                              if (_controller
+                                                                      .profileId !=
+                                                                  photos![index]
+                                                                      .owner
+                                                                      .id) {
+                                                                Get.to(
+                                                                  () => ProfileDetail(
+                                                                      profileModel: photos![index].owner,
+                                                                      onBack: () {
+                                                                        Get.back();
+                                                                      }),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Text(
+                                                              "@${photos![index].owner.username}",
+                                                              style: style
+                                                                  .titleMedium!
+                                                                  .copyWith(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            )),
+                                                      ),
                                                       _controller.profileId ==
                                                               photos![index]
                                                                   .owner
@@ -428,7 +461,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                   Column(
                                                     children: [
                                                       InkWell(
-                                                        onTap: () {
+                                                        onTap: () async {
                                                           Get.bottomSheet(
                                                             CommentSheet(
                                                               () {
@@ -475,15 +508,39 @@ class SingleFeedScreen extends StatelessWidget {
                                                           })
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 15),
-                                                  InkWell(
-                                                    onTap: () {},
-                                                    child: const Icon(
-                                                      Icons.reply,
-                                                      size: 30,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
+                                                  SizedBox(height: 15),
+                                                  StatefulBuilder(builder:
+                                                      ((context, setState) {
+                                                    return shareLoading
+                                                        ? Loading()
+                                                        : InkWell(
+                                                            onTap: () async {
+                                                              log("Working>>>>");
+                                                              setState(() {
+                                                                shareLoading =
+                                                                    true;
+                                                              });
+                                                              final dl =
+                                                                  await createDynamicLink(
+                                                                      photos![index]
+                                                                          .id,
+                                                                      'photos');
+                                                              log("Dynamic Link:: $dl");
+                                                              setState(() {
+                                                                shareLoading =
+                                                                    false;
+                                                              });
+                                                              Share.share(dl
+                                                                  .toString());
+                                                            },
+                                                            child: const Icon(
+                                                              Icons.reply,
+                                                              size: 30,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          );
+                                                  }))
                                                 ],
                                               )),
                                         ],
@@ -592,31 +649,46 @@ class SingleFeedScreen extends StatelessWidget {
                                                   isReel
                                                       ? Row(
                                                           children: [
-                                                            InkWell(
-                                                                onTap: () {
-                                                                  if (_controller
-                                                                          .profileId !=
-                                                                      reels![index]
-                                                                          .user
-                                                                          .id) {
-                                                                    Get.to(
-                                                                      () => ProfileDetail(
-                                                                          profileModel: reels![index].user,
-                                                                          onBack: () {
-                                                                            Get.back();
-                                                                          }),
-                                                                    );
-                                                                  }
-                                                                },
-                                                                child: Text(
-                                                                  "@${reels![index].user.username}",
-                                                                  style: style
-                                                                      .titleMedium!
-                                                                      .copyWith(
-                                                                    color: Colors
-                                                                        .white,
-                                                                  ),
-                                                                )),
+                                                            CircleAvatar(
+                                                              backgroundImage: isPhoto
+                                                                  ? NetworkImage(
+                                                                      "${Base.profileBucketUrl}/${photos![index].owner.user_profile!.profile_img}")
+                                                                  : NetworkImage(
+                                                                      "${Base.profileBucketUrl}/${reels![index].user.user_profile!.profile_img}"),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                left: 8,
+                                                                right: 4,
+                                                              ),
+                                                              child: InkWell(
+                                                                  onTap: () {
+                                                                    if (_controller
+                                                                            .profileId !=
+                                                                        reels![index]
+                                                                            .user
+                                                                            .id) {
+                                                                      Get.to(
+                                                                        () => ProfileDetail(
+                                                                            profileModel: reels![index].user,
+                                                                            onBack: () {
+                                                                              Get.back();
+                                                                            }),
+                                                                      );
+                                                                    }
+                                                                  },
+                                                                  child: Text(
+                                                                    "@${reels![index].user.username}",
+                                                                    style: style
+                                                                        .titleMedium!
+                                                                        .copyWith(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                  )),
+                                                            ),
                                                             _controller.profileId ==
                                                                     reels![index]
                                                                         .user
@@ -959,16 +1031,39 @@ class SingleFeedScreen extends StatelessWidget {
                                                               })
                                                         ],
                                                       ),
-                                                      const SizedBox(
-                                                          height: 15),
-                                                      InkWell(
-                                                        onTap: () {},
-                                                        child: const Icon(
-                                                          Icons.reply,
-                                                          size: 30,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
+                                                      SizedBox(height: 15),
+                                                      StatefulBuilder(builder:
+                                                          (context, setState) {
+                                                        return shareLoading
+                                                            ? Loading()
+                                                            : InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  setState(() {
+                                                                    shareLoading =
+                                                                        true;
+                                                                  });
+                                                                  final dl = await createDynamicLink(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      'reels');
+                                                                  log("Dynamic Link:: $dl");
+                                                                  setState(() {
+                                                                    shareLoading =
+                                                                        false;
+                                                                  });
+                                                                  Share.share(dl
+                                                                      .toString());
+                                                                },
+                                                                child:
+                                                                    const Icon(
+                                                                  Icons.reply,
+                                                                  size: 30,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              );
+                                                      })
                                                     ],
                                                   )
                                                 : Column(

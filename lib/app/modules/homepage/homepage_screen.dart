@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:confetti/confetti.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../utils/base.dart';
@@ -28,6 +30,7 @@ import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
 import '../search/search_screen.dart';
+import '../single_feed/single_feed_screen.dart';
 import 'comment_screen.dart';
 
 import 'profile_detail_screen.dart';
@@ -38,6 +41,19 @@ enum ReportReason {
   impersonation,
   illegalContent,
   abusiveContent
+}
+
+class DemoClass extends StatelessWidget {
+  const DemoClass({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
 }
 
 class HomePageScreen extends StatelessWidget {
@@ -54,9 +70,31 @@ class HomePageScreen extends StatelessWidget {
   final myMenuItems = <String>[
     'Report',
   ];
-  final ConfettiController _controllerCenter =
-      ConfettiController(duration: const Duration(seconds: 1));
-  final bool isAnimationPlaying = false;
+  late ConfettiController _controllerCenter;
+  bool isAnimationPlaying = false;
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  Future<Uri> createDynamicLink(int id, String type) async {
+    log("Type:: $type");
+    controller.shareLoading = true;
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://reelro.page.link',
+      link: Uri.parse('https://reelro.page.link/?id=$id/$type'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.example.reel_ro',
+        minimumVersion: 1,
+      ),
+      // iosParameters: IOSParameters(
+      //   bundleId: '',
+      //   minimumVersion: 0
+      // )
+    );
+    var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
+    final Uri shortUrl = dynamicUrl.shortUrl;
+    log("link:: $shortUrl");
+    controller.shareLoading = false;
+    return shortUrl;
+  }
 
   void onSelect(int id, int index, String reason, String type) {
     controller.reportReelOrComment(reason, type, id, () {
@@ -91,6 +129,8 @@ class HomePageScreen extends StatelessWidget {
         curve: Curves.fastOutSlowIn, duration: const Duration(seconds: 1));
     controller.updateManually();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -164,10 +204,6 @@ class HomePageScreen extends StatelessWidget {
                                       backgroundColor: Colors.transparent,
                                       elevation: 0,
                                       centerTitle: true,
-                                      title: const Center(
-                                          child: Text(
-                                        "Rolls For You",
-                                      )),
                                       actions: [
                                         IconButton(
                                             icon: const Icon(
@@ -333,31 +369,41 @@ class HomePageScreen extends StatelessWidget {
                                                           isReel
                                                               ? Row(
                                                                   children: [
-                                                                    InkWell(
-                                                                        onTap:
-                                                                            () {
-                                                                          if (controller.profileId !=
-                                                                              data.user.id) {
-                                                                            Get.to(
-                                                                              () => ProfileDetail(
-                                                                                  profileModel: data.user,
-                                                                                  onBack: () {
-                                                                                    Get.back();
-                                                                                  }),
-                                                                            );
-                                                                          }
-                                                                        },
-                                                                        child:
-                                                                            Text(
-                                                                          "@${data.user.username}",
-                                                                          style: style
-                                                                              .titleMedium!
-                                                                              .copyWith(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                        )),
-                                                                    const SizedBox(
+                                                                    CircleAvatar(
+                                                                      backgroundImage:
+                                                                          NetworkImage(
+                                                                              "${Base.profileBucketUrl}/${data.user.user_profile!.profile_img}"),
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets
+                                                                              .only(
+                                                                        left: 8,
+                                                                        right:
+                                                                            4,
+                                                                      ),
+                                                                      child: InkWell(
+                                                                          onTap: () {
+                                                                            if (controller.profileId !=
+                                                                                data.user.id) {
+                                                                              Get.to(
+                                                                                () => ProfileDetail(
+                                                                                    profileModel: data.user,
+                                                                                    onBack: () {
+                                                                                      Get.back();
+                                                                                    }),
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                          child: Text(
+                                                                            "${data.user.username}",
+                                                                            style:
+                                                                                style.titleMedium!.copyWith(
+                                                                              color: Colors.white,
+                                                                            ),
+                                                                          )),
+                                                                    ),
+                                                                    SizedBox(
                                                                       width: 10,
                                                                     ),
                                                                     isMe
@@ -685,17 +731,31 @@ class HomePageScreen extends StatelessWidget {
                                                               ),
                                                               const SizedBox(
                                                                   height: 15),
-                                                              InkWell(
-                                                                onTap: () {},
-                                                                child:
-                                                                    const Icon(
-                                                                  Icons.reply,
-                                                                  size: 30,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
+                                                              controller
+                                                                      .shareLoading
+                                                                  ? Loading()
+                                                                  : InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        log("Working>>>>");
+                                                                        final dl = await createDynamicLink(
+                                                                            data.id,
+                                                                            'reels');
+                                                                        log("Dynamic Link:: $dl");
+                                                                        Share.share(
+                                                                            dl.toString());
+                                                                      },
+                                                                      child:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .reply,
+                                                                        size:
+                                                                            30,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                    ),
+                                                              SizedBox(
                                                                   height: 15),
                                                               PopupMenuButton<
                                                                       String>(

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,15 +12,20 @@ import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
+import 'package:reel_ro/repositories/reel_repository.dart';
+import 'package:reel_ro/repositories/user_repository.dart';
 import 'package:reel_ro/services/communication_services.dart';
 
 import '../app/modules/navigation_bar/navigation_bar_screen.dart';
+import '../app/modules/single_feed/single_feed_screen.dart';
 import '../utils/constants.dart';
 import '../utils/snackbar.dart';
 
 class AuthService extends GetxService {
   final _authRepo = Get.put(AuthRepository());
-  final _profileRepo = ProfileRepository();
+  final _userRepo = Get.put(UserRepository());
+  final _profileRepo = Get.put(ProfileRepository());
+  final _reelRepo = ReelRepository();
   final _storage = GetStorage();
   UserModel? userModel;
   ProfileModel? profileModel;

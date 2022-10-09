@@ -89,6 +89,66 @@ class ReelRepository {
     }
   }
 
+  Future<List<ReelModel>> getReelsWithoutAd(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
+    final response = await http.get(
+      Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => ReelModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<PhotoModel> getPhotosById(
+    String id,
+    String token,
+  ) async {
+    log("PhotoId:: $id");
+    final response = await http.get(
+      Uri.parse('${Base.posts}$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    log("SinglePhotoBody:: $body");
+    if (response.statusCode == 200) {
+      log("Body:: $body");
+      var photo = PhotoModel.fromMap(body);
+      log("Photo:: $photo");
+      return photo;
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<PhotoModel>> getPhotosWithoutAds(int profileId, String token,
+      {int limit = 10, int skip = 0}) async {
+    final response = await http.get(
+      Uri.parse('${Base.posts}?limit=$limit&skip=$skip'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body;
+      return list.map((e) => PhotoModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<List<ReelModel>> getReelsByHashTag(
       String hashTag, int profileId, String token,
       {int limit = 10, int skip = 0}) async {
@@ -313,7 +373,8 @@ class ReelRepository {
     }
   }
 
-  Future<List<PhotoModel>> getPhotosById(int profileId, String token) async {
+  Future<List<PhotoModel>> getPhotosByUserId(
+      int profileId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getPhotosByUserId}?currentUserId=14"),
       headers: <String, String>{
