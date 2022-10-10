@@ -13,10 +13,10 @@ import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
 
 class HomePageController extends GetxController {
-  final _profileRepo = ProfileRepository();
-  final _reelRepo = ReelRepository();
-  final _authService = AuthService();
-  final _giveawayRepo = GiveawayRepository();
+  final _profileRepo = Get.put(ProfileRepository());
+  final _reelRepo = Get.put(ReelRepository());
+  final _authService = Get.put(AuthService());
+  final _giveawayRepo = Get.put(GiveawayRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -46,7 +46,7 @@ class HomePageController extends GetxController {
   }
 
   bool _loadingPoints = false;
-  bool get loadingPoints => _loadingPoints;
+  bool get loadingPoints => _loading;
   set loadingPoints(bool loadingPoints) {
     _loadingPoints = loadingPoints;
     update();
@@ -91,6 +91,7 @@ class HomePageController extends GetxController {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
     }
     loading = false;
     _loadMore = true;
@@ -103,6 +104,7 @@ class HomePageController extends GetxController {
           await _giveawayRepo.getTotalEntryCountByUserId(profileId!, token!);
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
     }
     update();
     loadingPoints = false;
@@ -122,6 +124,7 @@ class HomePageController extends GetxController {
         update();
       } catch (e) {
         showSnackBar(e.toString(), color: Colors.red);
+        print("getFeeds: $e");
       }
     }
     loadingMore = false;
@@ -179,6 +182,8 @@ class HomePageController extends GetxController {
     try {
       await _reelRepo.reportReelOrComment(type, reason, id, token!);
       onDone();
+      // showSnackBar('This reel has been reported to the Admin!');
+      // update();
     } catch (e) {
       log("reportReelOrComment: $e");
     }

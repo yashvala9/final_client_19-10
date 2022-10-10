@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:reel_ro/app/data/demo_data.dart';
 import 'package:reel_ro/app/modules/ContestDates/views/contest_dates_view.dart';
 import 'package:reel_ro/app/modules/ContestRules/views/contest_rules_view.dart';
 import 'package:reel_ro/app/modules/entry_count/views/entry_count_view.dart';
@@ -8,14 +9,13 @@ import 'package:reel_ro/app/modules/referrals/views/referrals_view.dart';
 import 'package:reel_ro/utils/colors.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
+import '../../../../widgets/loading.dart';
 import '../../winners/views/winners_view.dart';
 import '../controllers/giveaway_controller.dart';
 
 class GiveawayView extends GetView<GiveawayController> {
-  final _giveawayRepo = GiveawayRepository();
+  final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(GiveawayController());
-
-  GiveawayView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -25,35 +25,29 @@ class GiveawayView extends GetView<GiveawayController> {
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Give Away',
-            style: style.titleMedium,
+          child: Center(
+            child: Text(
+              'Give Away',
+              style: style.titleMedium,
+            ),
           ),
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: Colors.grey[200],
       ),
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Column(
               children: [
-                Container(
-                  height: Get.height * 0.2,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 20,
-                  ),
-                  padding: const EdgeInsets.only(
-                    bottom: 20,
-                  ),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffEA4359),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(16),
+                Stack(children: [
+                  SizedBox(
+                    height: Get.height * 0.2,
+                    width: Get.width,
+                    child: Image.asset(
+                      'assets/Bg.png',
                     ),
                   ),
-                  child: Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -93,13 +87,12 @@ class GiveawayView extends GetView<GiveawayController> {
                       ),
                     ],
                   ),
-                ),
+                ]),
                 listTileWidget('enter 1', 'Entry Count', EntryCountView()),
                 listTileWidget('referral', 'Referrals', ReferralsView()),
                 listTileWidget('trophy', 'Winners', WinnersView()),
                 listTileWidget('badge', 'Contest Dates', ContestDatesView()),
-                listTileWidget(
-                    'book', 'Contest Rules', const ContestRulesView()),
+                listTileWidget('book', 'Contest Rules', ContestRulesView()),
               ],
             ),
           ),
@@ -123,7 +116,7 @@ Widget listTileWidget(String filename, String text, Widget pageName) {
         ),
       ),
       title: Text(text),
-      tileColor: Colors.grey[200],
+      tileColor: Colors.white,
       onTap: () {
         Get.to(() => pageName);
       },

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 
 import '../../../utils/assets.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/snackbar.dart';
 import '../../../widgets/loading.dart';
 import '../../../widgets/my_elevated_button.dart';
 import '../auth/auth_controller.dart';
@@ -14,6 +17,7 @@ class AddReferralScreen extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(AuthController());
+  final _authService = Get.find<AuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +93,9 @@ class AddReferralScreen extends StatelessWidget {
                                     _formKey.currentState!.save();
                                     _controller.addReferral(
                                         _controller.referrerId,
-                                        AuthService()
-                                            .profileModel!
-                                            .id
+                                        _authService.profileModel!.id
                                             .toString(),
-                                        AuthService().token!);
+                                        _authService.token!);
                                   },
                                 ),
                         ],
@@ -105,10 +107,10 @@ class AddReferralScreen extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           _controller.setReferralStatus(
-                              AuthService().profileModel!.id.toString(),
-                              AuthService().token!);
+                              _authService.profileModel!.id.toString(),
+                              _authService.token!);
                         },
-                        child: const Text("SKIP"),
+                        child: Text("SKIP"),
                       ),
                     ),
                   ],

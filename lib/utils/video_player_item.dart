@@ -74,11 +74,12 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     videoPlayerController.dispose();
   }
 
-  void updateEntryPoints(int seconds) {
+  void updateEntryPoints(int seconds, int totalSeconds) {
     if (widget.isReel) {
-      _reelRepo.updateReelHistory(seconds, widget.videoId, token!);
+      _reelRepo.updateReelHistory(
+          seconds, totalSeconds, widget.videoId, token!);
     } else {
-      _reelRepo.updateAdsHistory(seconds, widget.videoId, token!);
+      _reelRepo.updateAdsHistory(seconds, totalSeconds, widget.videoId, token!);
       widget.updatePoints();
     }
     updated = seconds;
@@ -90,7 +91,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
       if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
           videoPlayerController.value.position.inSeconds != 0 &&
           updated != videoPlayerController.value.position.inSeconds) {
-        updateEntryPoints(videoPlayerController.value.position.inSeconds);
+        updateEntryPoints(videoPlayerController.value.position.inSeconds,
+            videoPlayerController.value.duration.inSeconds);
       }
     });
 

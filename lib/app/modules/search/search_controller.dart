@@ -1,22 +1,25 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
+import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../repositories/reel_repository.dart';
+import '../../../utils/constants.dart';
 import '../../../utils/snackbar.dart';
 
 class SearchController extends GetxController {
   SearchController();
 
-  final _profileRepo = ProfileRepository();
+  final _profileRepo = Get.put(ProfileRepository());
   final _authService = Get.put(AuthService());
 
-  final _reelRepo = ReelRepository();
+  final _reelRepo = Get.put(ReelRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
@@ -84,7 +87,8 @@ class SearchController extends GetxController {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!,
           limit: 10, skip: 0);
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
     }
     loading = false;
     _loadMoreReels = true;
@@ -117,7 +121,8 @@ class SearchController extends GetxController {
         }
         update();
       } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
+        // showSnackBar(e.toString(), color: Colors.red);
+        print("getMoreFeed: $e");
       }
     }
     loadingMore = false;
@@ -145,12 +150,14 @@ class SearchController extends GetxController {
   }
 
   void searchUser(String username) async {
+    print("username: $username");
     loading = true;
     try {
       searchProfiles = await _profileRepo.searchByUserName(username, token!);
       log("searchResult: $searchProfiles");
     } catch (e) {
-      log("searchUser: $e");
+      // showSnackBar(e.toString(), color: Colors.red);
+      print("searchUser: $e");
     }
     loading = false;
   }
@@ -161,12 +168,21 @@ class SearchController extends GetxController {
       searchReels = await _reelRepo
           .getReelsByHashTag(hashTag, profileId!, token!, limit: 500, skip: 0);
     } catch (e) {
-      log("getReelsByHashTag: $e");
+      // showSnackBar(e.toString(), color: Colors.red);
+      print("getFeeds: $e");
     }
     loading = false;
   }
 
   void toggleFollowing(int index) async {
+    // searchProfiles[index].isFollowing = !searchProfiles[index].isFollowing!;
+    // if (searchProfiles[index].isFollowing!) {
+    //   searchProfiles[index].followerCount++;
+    //   _profileControllere.profileModel.followingCount++;
+    // } else {
+    //   searchProfiles[index].followerCount--;
+    //   _profileControllere.profileModel.followingCount--;
+    // }
     try {
       _profileRepo.toggleFollow(searchProfiles[index].id, token!);
       update();

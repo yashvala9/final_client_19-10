@@ -49,6 +49,25 @@ class ReelRepository {
     }
   }
 
+  Future<int> getReelViews(
+    String reelId,
+    String token,
+  ) async {
+    final response = await http.get(
+      Uri.parse('${Base.reelHistory}$reelId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return body['data']['total_views'];
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<ReelModel> getReelByCommentId(String commentId, String token) async {
     try {
       final response = await http.get(
@@ -518,9 +537,9 @@ class ReelRepository {
   }
 
   Future<void> updateAdsHistory(
-      int secondsWatched, int adId, String token) async {
+      int secondsWatched, int totalLength, int adId, String token) async {
     try {
-      var map = {"time_duration": secondsWatched};
+      var map = {"time_duration": secondsWatched, "reel_length": totalLength};
       final response = await http.post(
         Uri.parse('${Base.adsHistory}$adId'),
         headers: <String, String>{
@@ -542,9 +561,9 @@ class ReelRepository {
   }
 
   Future<void> updateReelHistory(
-      int secondsWatched, int reelId, String token) async {
+      int secondsWatched, int totalSeconds, int reelId, String token) async {
     try {
-      var map = {"time_duration": secondsWatched};
+      var map = {"time_duration": secondsWatched, "reel_length": totalSeconds};
       final response = await http.post(
         Uri.parse('${Base.reelHistory}$reelId'),
         headers: <String, String>{
@@ -562,7 +581,7 @@ class ReelRepository {
       }
     } catch (e) {
       showSnackBar("Error updateReelHistory $e");
-      printInfo(info: "updateReelHistory.......");
+      printInfo(info: "updateReelHistory.......$e");
     }
   }
 

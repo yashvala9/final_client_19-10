@@ -13,12 +13,10 @@ import '../../../../widgets/loading.dart';
 import '../controllers/referrals_controller.dart';
 
 class ReferralsView extends GetView<ReferralsController> {
-  final _giveawayRepo = GiveawayRepository();
+  final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(ReferralsController());
   final _notificationRepo = Get.put(NotificationRepository());
-  final _reelRepo = ReelRepository();
-
-  ReferralsView({Key? key}) : super(key: key);
+  final _reelRepo = Get.put(ReelRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +32,7 @@ class ReferralsView extends GetView<ReferralsController> {
             style: TextStyle(fontSize: 17),
           ),
         ),
+        // backgroundColor: AppColors.white,
       ),
       body: CustomScrollView(
         slivers: [
@@ -45,7 +44,7 @@ class ReferralsView extends GetView<ReferralsController> {
                       _controller.profileId!, _controller.token!),
                   builder: (context, snapshot) {
                     return Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(16.0),
                       child: Container(
                         height: Get.height * 0.13,
                         decoration: BoxDecoration(
@@ -172,9 +171,9 @@ class ReferralsView extends GetView<ReferralsController> {
                           _controller.referrals.isNotEmpty
                               ? DataTable(
                                   headingRowColor: MaterialStateProperty.all(
-                                      const Color(0xffF6DC9D)),
+                                      Color(0xffF6DC9D)),
                                   dataRowColor: MaterialStateProperty.all(
-                                      const Color(0xffFFF3D2)),
+                                      Color(0xffFFF3D2)),
                                   columnSpacing: 10,
                                   dataRowHeight: 80,
                                   columns: const [
@@ -199,7 +198,8 @@ class ReferralsView extends GetView<ReferralsController> {
                                           textAlign: TextAlign.center),
                                     )
                                   ],
-                                  rows: _controller.referrals
+                                  rows: _controller
+                                      .referrals // Loops through dataColumnText, each iteration assigning the value to element
                                       .map(
                                         ((element) => DataRow(
                                               cells: <DataCell>[
@@ -214,7 +214,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                                           backgroundImage: element
                                                                       .user_profile ==
                                                                   null
-                                                              ? const NetworkImage(
+                                                              ? NetworkImage(
                                                                   'assets/Ellipse_1.png')
                                                               : NetworkImage(
                                                                   "${Base.profileBucketUrl}/${element.user_profile!.profile_img}",
@@ -285,7 +285,10 @@ class ReferralsView extends GetView<ReferralsController> {
                                                         return Container();
                                                       }
                                                       return Text(
+                                                        //TODO
                                                         '1',
+                                                        // snapshot.data
+                                                        //     .toString(),
                                                         style: style
                                                             .headlineSmall
                                                             ?.copyWith(
@@ -364,7 +367,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                       )
                                       .toList(),
                                 )
-                              : const SizedBox()
+                              : SizedBox()
                         ],
                       )),
                 ),
@@ -382,7 +385,7 @@ class ReferralsView extends GetView<ReferralsController> {
                           ),
                         ),
                       )
-                    : const SizedBox(),
+                    : SizedBox(),
               ],
             ),
           ),
@@ -401,7 +404,8 @@ Widget pokebtn() {
           begin: FractionalOffset.topCenter,
           end: FractionalOffset.bottomCenter,
         )),
-    child: const Icon(Icons.arrow_right),
+    child: Icon(Icons.arrow_right),
+    // const Center(child: Text("Poke")),
     width: Get.width * 0.15,
     height: Get.height * 0.04,
   );
@@ -421,6 +425,7 @@ Widget disabledPokeButton() {
         Icons.arrow_right,
         color: Colors.grey,
       ),
+      // child: Text("Poke", style: TextStyle(color: Colors.grey)),
     ),
     width: Get.width * 0.15,
     height: Get.height * 0.04,

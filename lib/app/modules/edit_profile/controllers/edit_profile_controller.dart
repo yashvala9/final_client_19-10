@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -9,11 +8,9 @@ import '../../../../repositories/profile_repository.dart';
 import '../../../../services/auth_service.dart';
 import 'package:path/path.dart' as path;
 
-import '../../../../utils/snackbar.dart';
-
 class EditProfileController extends GetxController {
-  final _authService = AuthService();
-  final _profileRepo = ProfileRepository();
+  final _authService = Get.find<AuthService>();
+  final _profileRepo = Get.put(ProfileRepository());
 
   ProfileModel get profileModel => _authService.profileModel!;
   bool _loading = false;
@@ -32,8 +29,10 @@ class EditProfileController extends GetxController {
 
   String username = '';
   String fullname = '';
-  int phonePin = 0;
-  int phoneNumber = 0;
+  String country = '';
+  String state = '';
+  int phone_pin = 0;
+  int phone_number = 0;
   String bio = "";
 
   Future<File> changeFileNameOnly(File file, String newFileName) {
@@ -60,7 +59,7 @@ class EditProfileController extends GetxController {
         file = await changeFileNameOnly(file!, 'image');
         _fileName = genFileName("Profile", path.basename(file!.path));
 
-        await _profileRepo.uploadProfileToAwsS3(
+        final s3File = await _profileRepo.uploadProfileToAwsS3(
             userID: "Profile", file: file!, fileName: _fileName);
       }
 
@@ -71,17 +70,20 @@ class EditProfileController extends GetxController {
         "profile_img": _fileName == ''
             ? profileModel.user_profile!.profile_img!
             : _fileName,
-        "phone_pin": phonePin == 0
+        "phone_pin": phone_pin == 0
             ? profileModel.user_profile!.phone_pin!
-            : phonePin.toString(),
-        "phone_number": phoneNumber == 0
+            : phone_pin.toString(),
+        "phone_number": phone_number == 0
             ? profileModel.user_profile!.phone_number!
-            : phoneNumber.toString(),
-        "current_language": "en"
+            : phone_number.toString(),
+        "current_language": "en",
+        "country":
+            country == '' ? profileModel.user_profile!.country! : country,
+        "state": state == '' ? profileModel.user_profile!.state! : state
       };
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _fileName = '';
-
+      // await _authService.redirectUser();
       final profile = await _profileRepo.getCurrentUsesr(_authService.token!);
       if (profile.user_profile != null) {
         _authService.profileModel = profile;
@@ -89,7 +91,7 @@ class EditProfileController extends GetxController {
       update();
       Get.back();
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      print("updateProfile: $e");
     }
     loading = false;
   }

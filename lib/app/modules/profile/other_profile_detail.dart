@@ -8,14 +8,11 @@ import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
-import '../../../services/communication_services.dart';
 import '../../../utils/assets.dart';
 import '../../../utils/colors.dart';
 import '../../../widgets/my_elevated_button.dart';
-import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
 import '../single_feed/single_feed_screen.dart';
 
@@ -29,11 +26,11 @@ class OtherProfileDetail extends StatefulWidget {
 }
 
 class _OtherProfileDetailState extends State<OtherProfileDetail> {
-  final _profileRepo = ProfileRepository();
+  final _profileRepo = Get.put(ProfileRepository());
   final _authService = Get.find<AuthService>();
   var parser = EmojiParser();
 
-  final CommunicationService _communicationService = CommunicationService.to;
+  // final _authService = Get.put(AuthService());
 
   void toggleFollowing(int profileId, String token) async {
     try {
@@ -193,12 +190,6 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                             MaterialButton(
                                                               onPressed: () {
                                                                 Get.back();
-                                                                snapshot.data !=
-                                                                        snapshot
-                                                                            .data!
-                                                                    ? false
-                                                                    : true;
-
                                                                 toggleFollowing(
                                                                     widget
                                                                         .profileModel
@@ -269,10 +260,6 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                                       onPressed:
                                                                           () {
                                                                         Get.back();
-                                                                        snapshot.data !=
-                                                                                snapshot.data!
-                                                                            ? false
-                                                                            : true;
                                                                         toggleFollowing(
                                                                             widget.profileModel.id,
                                                                             _authService.token!);
@@ -298,51 +285,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                                   .all(8.0),
                                                           child: OutlinedButton(
                                                             onPressed: () {
-                                                              log("aaaaaaaaaaaaaaaaa");
-
-                                                              log("State: ${_communicationService.client.state}");
-                                                              log("CurrentUser: ${_communicationService.client.state.currentUser}");
-
-                                                              String
-                                                                  newChannelId =
-                                                                  '${widget.profileModel.id}${_communicationService.client.state.currentUser!.id}';
-
-                                                              final Channel
-                                                                  _newChannel =
-                                                                  _communicationService
-                                                                      .client
-                                                                      .channel(
-                                                                'messaging',
-                                                                id: newChannelId,
-                                                                extraData: {
-                                                                  'isGroupChat':
-                                                                      false,
-                                                                  'presence':
-                                                                      true,
-                                                                  'members': [
-                                                                    widget
-                                                                        .profileModel
-                                                                        .id
-                                                                        .toString(),
-                                                                    _communicationService
-                                                                        .client
-                                                                        .state
-                                                                        .currentUser!
-                                                                        .id
-                                                                        .toString(),
-                                                                  ],
-                                                                },
-                                                              );
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) {
-                                                                return ChannelPage(
-                                                                  channel:
-                                                                      _newChannel,
-                                                                );
-                                                              }));
+                                                              log("KKKkkkkkkkkkkkkkk");
                                                             },
                                                             style: OutlinedButton
                                                                 .styleFrom(
@@ -377,8 +320,11 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                             children: [
                                               Center(
                                                   child: Text(
-                                                "\"${parser.emojify(widget.profileModel.user_profile!.bio!)}\"",
-                                                style: const TextStyle(
+                                                parser.emojify(widget
+                                                    .profileModel
+                                                    .user_profile!
+                                                    .bio!),
+                                                style: TextStyle(
                                                     color: Colors.red,
                                                     fontSize: 18),
                                               )),
@@ -427,6 +373,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
 
   Widget _tabSection(
       BuildContext context, ProfileModel profileModel, String token) {
+    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[

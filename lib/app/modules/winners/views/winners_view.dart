@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:reel_ro/models/winner_model.dart';
 import 'package:reel_ro/utils/assets.dart';
+import 'package:reel_ro/utils/colors.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
 import '../../../../widgets/loading.dart';
+import '../../../data/demo_data.dart';
 import '../controllers/winners_controller.dart';
 import 'widgets/winnercard_widget.dart';
 import 'widgets/winnerheaderimage_widget.dart';
 
 class WinnersView extends GetView<WinnersController> {
   WinnersView({Key? key}) : super(key: key);
-  final _giveawayRepo = GiveawayRepository();
+  final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(WinnersController());
 
   @override
@@ -39,6 +43,16 @@ class WinnersView extends GetView<WinnersController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const WinnerHeaderImage(),
+            // Expanded(
+            //   child: ListView.builder(
+            //           itemCount: controller.winnerList.length,
+            //           itemBuilder: (context, index) {
+            //             return WinnerCardWidget(
+            //                 winner: controller.winnerList[index]);
+            //           },
+            //         )
+            //       ,
+            // ),
             FutureBuilder<List<WinnerModel>>(
               future: _giveawayRepo.getWinners(
                   _controller.profileId!, _controller.token!),

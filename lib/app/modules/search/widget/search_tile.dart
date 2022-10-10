@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/profile/other_profile_detail.dart';
 import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
@@ -12,7 +13,7 @@ class SearchTile extends StatelessWidget {
   SearchTile({Key? key, required this.index}) : super(key: key);
 
   final _controller = Get.find<SearchController>();
-  final _profileRepo = ProfileRepository();
+  final _profileRepo = Get.put(ProfileRepository());
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -76,8 +77,6 @@ class SearchTile extends StatelessWidget {
                         MaterialButton(
                           onPressed: () {
                             Get.back();
-                            snap.data != snap.data! ? false : true;
-                            _controller.update();
                             _controller.toggleFollowing(index);
                           },
                           child: const Text("Confirm"),

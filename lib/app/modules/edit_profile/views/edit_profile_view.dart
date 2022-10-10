@@ -8,8 +8,9 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
+import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/utils/assets.dart';
-
 import '../../../../utils/base.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/snackbar.dart';
@@ -25,7 +26,7 @@ class EditProfileView extends GetView<EditProfileController> {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(EditProfileController());
   final _picker = ImagePicker();
-  final parser = EmojiParser();
+  var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -115,14 +116,20 @@ class EditProfileView extends GetView<EditProfileController> {
                                             CropAspectRatioPreset.ratio4x3,
                                             CropAspectRatioPreset.ratio16x9
                                           ],
+                                          /*   androidUiSettings:
+                                              const AndroidUiSettings(
+                                            activeControlsWidgetColor:
+                                                Utils.brandColor,
+                                            statusBarColor: Colors.transparent,
+                                          ), */
                                         );
                                         if (croppedFile != null) {
                                           _controller.file = croppedFile;
+                                          // Navigator.pop(context);
                                         }
                                       }
                                     } catch (e) {
-                                      showSnackBar(e.toString(),
-                                          color: Colors.red);
+                                      print("selectSourcePage Gallery: $e");
                                     }
                                   }
                                 },
@@ -150,6 +157,32 @@ class EditProfileView extends GetView<EditProfileController> {
                                             ),
                                 ),
                               ),
+                              // Positioned(
+                              //   bottom: 0,
+                              //   child: GestureDetector(
+                              //     onTap: () {},
+                              //     child: Container(
+                              //       width: Get.width * 0.1,
+                              //       height: Get.width * 0.1,
+                              //       decoration: BoxDecoration(
+                              //         boxShadow: [
+                              //           BoxShadow(
+                              //             color: Colors.black.withOpacity(.1),
+                              //             offset: const Offset(0, 5),
+                              //             blurRadius: 3,
+                              //           ),
+                              //         ],
+                              //         borderRadius: BorderRadius.circular(
+                              //             Get.width * 0.1),
+                              //         color: Colors.white,
+                              //       ),
+                              //       child: const Icon(
+                              //         Icons.add,
+                              //         color: AppColors.yellowOrange,
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           SizedBox(height: Get.height * 0.02),
@@ -159,6 +192,7 @@ class EditProfileView extends GetView<EditProfileController> {
                           SizedBox(height: Get.height * 0.01),
                           TextFormField(
                             enabled: false,
+                            //  !_controller.loading,
                             decoration: InputDecoration(
                               hintText: _controller.profileModel.username,
                               prefixIcon: Icon(
@@ -171,6 +205,13 @@ class EditProfileView extends GetView<EditProfileController> {
                                   RegExp('[a-zA-Z0-9]')),
                             ],
                             keyboardType: TextInputType.name,
+                            // validator: (value) {
+                            //   return value!.isEmpty
+                            //       ? 'Username is required'
+                            //       : value.length > 12
+                            //           ? "Username cannot be greater than 12 characters"
+                            //           : null;
+                            // },
                             onChanged: (v) => _controller.username = v,
                           ),
                           SizedBox(height: Get.height * 0.02),
@@ -185,6 +226,8 @@ class EditProfileView extends GetView<EditProfileController> {
                                   .profileModel.user_profile!.fullname,
                             ),
                             keyboardType: TextInputType.name,
+                            // validator: (value) =>
+                            //     value!.isEmpty ? 'Name is required' : null,
                             onChanged: (v) => _controller.fullname = v,
                           ),
                           SizedBox(height: Get.height * 0.02),
@@ -215,7 +258,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                             ? "Country code must be 2 digits"
                                             : null,
                                     onChanged: (v) =>
-                                        _controller.phonePin = int.parse(v)),
+                                        _controller.phone_pin = int.parse(v)),
                               ),
                               SizedBox(
                                 width: Get.width * 0.03,
@@ -237,6 +280,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                   ],
+                                  // maxLength: 10,
                                   validator: (value) {
                                     return value!.isNotEmpty &&
                                             value.length != 10
@@ -244,10 +288,42 @@ class EditProfileView extends GetView<EditProfileController> {
                                         : null;
                                   },
                                   onChanged: (v) =>
-                                      _controller.phoneNumber = int.parse(v),
+                                      _controller.phone_number = int.parse(v),
                                 ),
                               ),
                             ],
+                          ),
+                          SizedBox(height: Get.height * 0.02),
+                          Text('Country',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge),
+                          SizedBox(height: Get.height * 0.01),
+                          TextFormField(
+                            enabled: !_controller.loading,
+                            decoration: InputDecoration(
+                              hintText: _controller
+                                  .profileModel.user_profile!.country,
+                            ),
+                            keyboardType: TextInputType.name,
+                            // validator: (value) =>
+                            //     value!.isEmpty ? 'Name is required' : null,
+                            onChanged: (v) => _controller.country = v,
+                          ),
+                          SizedBox(height: Get.height * 0.02),
+                          Text('State',
+                              textScaleFactor: Get.textScaleFactor,
+                              style: style.labelLarge),
+                          SizedBox(height: Get.height * 0.01),
+                          TextFormField(
+                            enabled: !_controller.loading,
+                            decoration: InputDecoration(
+                              hintText:
+                                  _controller.profileModel.user_profile!.state,
+                            ),
+                            keyboardType: TextInputType.name,
+                            // validator: (value) =>
+                            //     value!.isEmpty ? 'Name is required' : null,
+                            onChanged: (v) => _controller.state = v,
                           ),
                           SizedBox(height: Get.height * 0.02),
                           Text(
@@ -260,12 +336,16 @@ class EditProfileView extends GetView<EditProfileController> {
                           SizedBox(height: Get.height * 0.01),
                           TextFormField(
                             enabled: !_controller.loading,
-                            maxLines: 3,
+                            maxLines: 5,
                             decoration: InputDecoration(
                               hintText: parser.emojify(
                                   _controller.profileModel.user_profile!.bio!),
                             ),
-                            keyboardType: TextInputType.text,
+                            initialValue: parser.emojify(
+                                _controller.profileModel.user_profile!.bio!),
+                            keyboardType: TextInputType.multiline,
+                            // validator: (v) =>
+                            //     v!.isEmpty ? "About is required" : null,
                             onChanged: (v) =>
                                 _controller.bio = parser.unemojify(v),
                           ),
@@ -293,5 +373,183 @@ class EditProfileView extends GetView<EditProfileController> {
         ),
       ),
     );
+    // Scaffold(
+    //   appBar: AppBar(
+    //     backgroundColor: Colors.transparent,
+    //     elevation: 0,
+    //     leading: IconButton(
+    //         icon: const Icon(Icons.arrow_back_ios),
+    //         onPressed: () {
+    //           Get.back();
+    //         }),
+    //     title: const Center(child: Text("Edit Profille")),
+    //   ),
+    //   backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+    //   body: Column(
+    //     children: [
+    //       SizedBox(
+    //         height: Get.height * 0.03,
+    //       ),
+    //       const Center(
+    //         child: CircleAvatar(
+    //           backgroundColor: Color.fromRGBO(0, 0, 0, 0.6),
+    //           backgroundImage: AssetImage(Assets.profile),
+    //           radius: 45,
+    //         ),
+    //       ),
+    //       SizedBox(
+    //         height: Get.height * 0.01,
+    //       ),
+    //       Text(
+    //         "Change photo",
+    //         style: style.titleMedium,
+    //       ),
+    //       SizedBox(
+    //         height: Get.height * 0.06,
+    //       ),
+    //       Row(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.only(left: 8.0),
+    //             child: Text(
+    //               "Name",
+    //               style: style.titleMedium,
+    //             ),
+    //           ),
+    //           const Spacer(),
+    //           Text(
+    //             profileModel.user_profile!.fullname!,
+    //             style: style.titleMedium,
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Image.asset(
+    //               "assets/Right Arrow Icon.png",
+    //               height: 10.5,
+    //               width: 5.79,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       Row(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.only(left: 8.0),
+    //             child: Text(
+    //               "Username",
+    //               style: style.titleMedium,
+    //             ),
+    //           ),
+    //           const Spacer(),
+    //           Text(
+    //             profileModel.username!,
+    //             style: style.titleMedium,
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Image.asset(
+    //               "assets/Right Arrow Icon.png",
+    //               height: 10.5,
+    //               width: 5.79,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       Row(
+    //         children: [
+    //           const Spacer(),
+    //           Text(
+    //             "reelro.com@" + profileModel.username!,
+    //             style: style.titleMedium,
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Image.asset(
+    //               "assets/Clipboard Stroke Icon.png",
+    //               height: 13,
+    //               width: 12.5,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       Row(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.only(left: 8.0),
+    //             child: Text(
+    //               "Bio",
+    //               style: style.titleMedium,
+    //             ),
+    //           ),
+    //           const Spacer(),
+    //           Text(
+    //             profileModel.user_profile!.bio!,
+    //             style: style.titleMedium,
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Image.asset(
+    //               "assets/Right Arrow Icon.png",
+    //               height: 10.5,
+    //               width: 5.79,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       const Divider(
+    //         color: Color.fromRGBO(208, 209, 211, 1),
+    //         thickness: 0.33,
+    //       ),
+    //       Row(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.only(left: 8.0),
+    //             child: Text(
+    //               "Email",
+    //               style: style.titleMedium,
+    //             ),
+    //           ),
+    //           const Spacer(),
+    //           Text(
+    //             profileModel.email!,
+    //             style: style.titleMedium,
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Image.asset(
+    //               "assets/Right Arrow Icon.png",
+    //               height: 10.5,
+    //               width: 5.79,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       Row(
+    //         children: [
+    //           Padding(
+    //             padding: const EdgeInsets.only(left: 8.0),
+    //             child: Text(
+    //               "Phone",
+    //               style: style.titleMedium,
+    //             ),
+    //           ),
+    //           const Spacer(),
+    //           Text(
+    //             profileModel.user_profile!.phone_number.toString(),
+    //             style: style.titleMedium,
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Image.asset(
+    //               "assets/Right Arrow Icon.png",
+    //               height: 10.5,
+    //               width: 5.79,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

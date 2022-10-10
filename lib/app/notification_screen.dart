@@ -22,11 +22,11 @@ import '../utils/colors.dart';
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({Key? key}) : super(key: key);
 
-  final _notificationRepo = NotificationRepository();
-  final _controller = NotificationController();
-  final _profileRepo = ProfileRepository();
-  final _reelRepo = ReelRepository();
-  final token = AuthService().token;
+  final _notificationRepo = Get.put(NotificationRepository());
+  final _controller = Get.put(NotificationController());
+  final _profileRepo = Get.find<ProfileRepository>();
+  final _reelRepo = Get.find<ReelRepository>();
+  final token = Get.find<AuthService>().token;
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +212,8 @@ class NotificationScreen extends StatelessWidget {
                                   future: _reelRepo.getReelByCommentId(
                                       e.data.entityId, token!),
                                   builder: (context, s) {
+                                    print(
+                                        '212121 comment response ${s.hasData}');
                                     if (!s.hasData) {
                                       log("single feed error: ${s.error}");
                                       return const SizedBox();
@@ -235,7 +237,7 @@ class NotificationScreen extends StatelessWidget {
                                               .getThumbnail(reel.thumbnail),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
-                                              return const CircularProgressIndicator();
+                                              return CircularProgressIndicator();
                                             }
 
                                             return CachedNetworkImage(
@@ -243,7 +245,7 @@ class NotificationScreen extends StatelessWidget {
                                               placeholder: (context, url) {
                                                 return IconButton(
                                                     onPressed: () {},
-                                                    icon: const Icon(
+                                                    icon: Icon(
                                                         Icons.refresh_rounded));
                                               },
                                               errorWidget: (_, a, b) {
@@ -252,14 +254,20 @@ class NotificationScreen extends StatelessWidget {
                                                     border: Border.all(),
                                                   ),
                                                   alignment: Alignment.center,
-                                                  child: const Loading(),
+                                                  child: Loading(),
+                                                  // Text("Processing..."),
                                                 );
                                               },
                                               imageUrl: snapshot.data!,
                                               fit: BoxFit.cover,
                                             );
                                           },
-                                        ),
+                                        )
+
+                                        //  Image.network(
+                                        //   reel.thumbnail,
+                                        // )
+                                        ,
                                       ),
                                     );
                                   },
@@ -295,7 +303,7 @@ class NotificationScreen extends StatelessWidget {
                                                 .getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
-                                                return const CircularProgressIndicator();
+                                                return CircularProgressIndicator();
                                               }
 
                                               return CachedNetworkImage(
@@ -303,7 +311,7 @@ class NotificationScreen extends StatelessWidget {
                                                 placeholder: (context, url) {
                                                   return IconButton(
                                                       onPressed: () {},
-                                                      icon: const Icon(Icons
+                                                      icon: Icon(Icons
                                                           .refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
@@ -312,14 +320,20 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: const Loading(),
+                                                    child: Loading(),
+                                                    // Text("Processing..."),
                                                   );
                                                 },
                                                 imageUrl: snapshot.data!,
                                                 fit: BoxFit.cover,
                                               );
                                             },
-                                          ),
+                                          )
+
+                                          //  Image.network(
+                                          //   reel.thumbnail,
+                                          // )
+                                          ,
                                         ),
                                       );
                                     },
@@ -358,7 +372,7 @@ class NotificationScreen extends StatelessWidget {
                                                 .getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
-                                                return const CircularProgressIndicator();
+                                                return CircularProgressIndicator();
                                               }
 
                                               return CachedNetworkImage(
@@ -366,7 +380,7 @@ class NotificationScreen extends StatelessWidget {
                                                 placeholder: (context, url) {
                                                   return IconButton(
                                                       onPressed: () {},
-                                                      icon: const Icon(Icons
+                                                      icon: Icon(Icons
                                                           .refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
@@ -375,18 +389,32 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: const Loading(),
+                                                    child: Loading(),
+                                                    // Text("Processing..."),
                                                   );
                                                 },
                                                 imageUrl: snapshot.data!,
                                                 fit: BoxFit.cover,
                                               );
                                             },
-                                          ),
+                                          )
+
+                                          //  Image.network(
+                                          //   reel.thumbnail,
+                                          // )
+                                          ,
                                         ),
                                       );
                                     },
-                                  ));
+                                  )
+
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.circular(5),
+                                  //   child: Image.network(
+                                  //     "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                                  //   ),
+                                  // )
+                                  );
                             } else {
                               return NotificationTile(
                                   userId: e.data.userId,
@@ -402,6 +430,116 @@ class NotificationScreen extends StatelessWidget {
                           },
                         ).toList(),
                       );
+                // :  Padding(
+                //     padding: const EdgeInsets.all(16.0),
+                //     child: SingleChildScrollView(
+                //       child: Column(
+                //         crossAxisAlignment: CrossAxisAlignment.start,
+                //         children: [
+                //           Text(
+                //             "Today",
+                //             style: style.titleLarge!
+                //                 .copyWith(fontWeight: FontWeight.w600),
+                //           ),
+                //           NotificationTile(
+                //             title: "Sabrina Wah",
+                //             subTile: "Started following you.",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //               title: "Nenek Gahol",
+                //               subTile:
+                //                   "Commented, nenek masakin lepeut buat cucu tersayang uhuyy",
+                //               traiing: ClipRRect(
+                //                 borderRadius: BorderRadius.circular(5),
+                //                 child: Image.network(
+                //                   "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                //                 ),
+                //               )),
+                //           NotificationTile(
+                //             title: "Suami Orangs",
+                //             subTile:
+                //                 "Skuy atuh rada nonton ayena ka moviplek wkwk :)",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //             title: "Komandan Asep",
+                //             subTile:
+                //                 "Kumaha cenah eh di read hungkul hm ah slek we",
+                //             traiing: OutlinedButton(
+                //               onPressed: () {},
+                //               child: Text(
+                //                 "Folowing",
+                //                 style: style.titleSmall,
+                //               ),
+                //             ),
+                //           ),
+                //           Padding(
+                //             padding:
+                //                 const EdgeInsets.symmetric(vertical: 12),
+                //             child: Text(
+                //               "Yesterday",
+                //               style: style.titleLarge!
+                //                   .copyWith(fontWeight: FontWeight.w600),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //             title: "Sabrina Wah",
+                //             subTile: "Started following you.",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //               title: "Nenek Gahol",
+                //               subTile:
+                //                   "Commented, nenek masakin lepeut buat cucu tersayang uhuyy",
+                //               traiing: ClipRRect(
+                //                 borderRadius: BorderRadius.circular(5),
+                //                 child: Image.network(
+                //                   "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+                //                 ),
+                //               )),
+                //           NotificationTile(
+                //             title: "Suami Orangs",
+                //             subTile:
+                //                 "Skuy atuh rada nonton ayena ka moviplek wkwk :)",
+                //             traiing: MaterialButton(
+                //               onPressed: () {},
+                //               color: colorSchema.primary,
+                //               shape: const StadiumBorder(),
+                //               child: const Text("Folow"),
+                //             ),
+                //           ),
+                //           NotificationTile(
+                //             title: "Komandan Asep",
+                //             subTile:
+                //                 "Kumaha cenah eh di read hungkul hm ah slek we",
+                //             traiing: OutlinedButton(
+                //               onPressed: () {},
+                //               child: Text(
+                //                 "Folowing",
+                //                 style: style.titleSmall,
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   );
               })),
     );
   }
@@ -430,6 +568,13 @@ class NotificationTile extends StatelessWidget {
     final colorSchema = theme.colorScheme;
     return ListTile(
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        // leading: CircleAvatar(
+        //   radius: 25,
+        //   backgroundColor: colorSchema.primary,
+        //   backgroundImage: const NetworkImage(
+        //     "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80",
+        //   ),
+        // ),
         leading: FutureBuilder<ProfileModel>(
             future: _profileRepo.getProfileById(userId, token),
             builder: (context, s) {
