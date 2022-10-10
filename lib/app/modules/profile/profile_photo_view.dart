@@ -23,6 +23,7 @@ class _ProfilePhotoViewState extends State<ProfilePhotoView> {
         tag: widget.heroTag,
         child: Center(
             child: CachedNetworkImage(
+          placeholder: (context, url) => const CircularProgressIndicator(),
           imageUrl: widget.url,
           fit: BoxFit.fitWidth,
           errorWidget: (c, s, e) => const Icon(Icons.error),

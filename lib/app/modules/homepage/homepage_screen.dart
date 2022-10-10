@@ -138,6 +138,7 @@ class HomePageScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
+    var isLiked = false;
     RxDouble turns = 0.0.obs;
     _controllerCenter =
         ConfettiController(duration: const Duration(seconds: 1));
@@ -296,6 +297,7 @@ class HomePageScreen extends StatelessWidget {
                                                   Center(
                                                     child: InkWell(
                                                       onDoubleTap: () {
+                                                        isLiked = !isLiked;
                                                         controller.likeToggle(
                                                             index,
                                                             isPhoto: isPhoto);
@@ -334,6 +336,7 @@ class HomePageScreen extends StatelessWidget {
                                                 },
                                                 doubleTap: () {
                                                   if (isReel) {
+                                                    isLiked = !isLiked;
                                                     controller
                                                         .likeToggle(index);
                                                   }
@@ -636,35 +639,50 @@ class HomePageScreen extends StatelessWidget {
                                                                   height: 15),
                                                               Column(
                                                                 children: [
-                                                                  InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        controller.likeToggle(
-                                                                            index,
-                                                                            isPhoto:
-                                                                                isPhoto);
-                                                                      },
-                                                                      // _controller.likeVideo(data.id),
-                                                                      child: FutureBuilder<
-                                                                              bool>(
-                                                                          future: isPhoto
-                                                                              ? _reelRepo.getPhotosLikeFlag(data.id, controller.token!)
-                                                                              : _reelRepo.getLikeFlag(data.id, controller.token!),
-                                                                          builder: (context, snap) {
-                                                                            return Icon(
-                                                                              snap.hasData
-                                                                                  ? snap.data!
-                                                                                      ? Icons.favorite
-                                                                                      : Icons.favorite_border
-                                                                                  : Icons.favorite_border,
-                                                                              size: 30,
-                                                                              color: snap.hasData
-                                                                                  ? snap.data!
-                                                                                      ? Colors.red
-                                                                                      : Colors.white
-                                                                                  : Colors.white,
-                                                                            );
-                                                                          })),
+                                                                  // _controller.likeVideo(data.id),
+                                                                  FutureBuilder<
+                                                                      bool>(
+                                                                    future: isPhoto
+                                                                        ? _reelRepo.getPhotosLikeFlag(
+                                                                            data
+                                                                                .id,
+                                                                            controller
+                                                                                .token!)
+                                                                        : _reelRepo.getLikeFlag(
+                                                                            data.id,
+                                                                            controller.token!),
+                                                                    builder:
+                                                                        (context,
+                                                                            snap) {
+                                                                      isLiked = snap
+                                                                              .hasData
+                                                                          ? snap.data!
+                                                                              ? true
+                                                                              : false
+                                                                          : false;
+                                                                      return InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          isLiked =
+                                                                              !isLiked;
+                                                                          controller.likeToggle(
+                                                                              index,
+                                                                              isPhoto: isPhoto);
+                                                                        },
+                                                                        child:
+                                                                            Icon(
+                                                                          isLiked
+                                                                              ? Icons.favorite
+                                                                              : Icons.favorite_border,
+                                                                          size:
+                                                                              30,
+                                                                          color: isLiked
+                                                                              ? Colors.red
+                                                                              : Colors.white,
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
                                                                   // const SizedBox(height: 7),
                                                                   FutureBuilder<
                                                                           int>(

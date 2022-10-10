@@ -64,20 +64,23 @@ class SearchScreen extends StatelessWidget {
                           () => SearchUsers(username: ""),
                         );
                       },
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey.shade600,
-                            enabled: false,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 4,
-                            ),
-                            prefixIcon:
-                                const Icon(Icons.search, color: Colors.white),
-                            hintText: "Search here...",
-                            hintStyle: const TextStyle(
-                              color: Colors.white,
-                            )),
+                      child: SizedBox(
+                        height: 35,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey.shade600,
+                              enabled: false,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                              ),
+                              prefixIcon:
+                                  const Icon(Icons.search, color: Colors.white),
+                              hintText: "Search here...",
+                              hintStyle: const TextStyle(
+                                color: Colors.white,
+                              )),
+                        ),
                       ),
                     ),
                   ),
@@ -532,7 +535,7 @@ class PhotosTab extends StatelessWidget {
                                 return GestureDetector(
                                     onTap: () {
                                       Get.to(SingleFeedScreen(
-                                        _controller.photosList,
+                                        [_controller.photosList[index]],
                                         null,
                                         index,
                                         isPhoto: true,

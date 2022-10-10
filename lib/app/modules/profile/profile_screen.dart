@@ -650,6 +650,7 @@ class PhotoSection extends StatelessWidget {
                                 Get.back();
                                 _controller.deletePost(photos[index].id);
                                 photos.removeAt(index);
+                                _controller.update();
                               },
                               child: const Text("YES"),
                               color: Colors.red,

@@ -8,11 +8,14 @@ import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
+import '../../../services/communication_services.dart';
 import '../../../utils/assets.dart';
 import '../../../utils/colors.dart';
 import '../../../widgets/my_elevated_button.dart';
+import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
 import '../single_feed/single_feed_screen.dart';
 
@@ -46,6 +49,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
+    final CommunicationService _communicationService = CommunicationService.to;
     return DefaultTabController(
       length: widget.profileModel.status == 'VERIFIED' ? 3 : 2,
       child: Scaffold(
@@ -285,7 +289,52 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                                   .all(8.0),
                                                           child: OutlinedButton(
                                                             onPressed: () {
-                                                              log("KKKkkkkkkkkkkkkkk");
+                                                              log("aaaaaaaaaaaaaaaaa");
+
+                                                              log("State: ${_communicationService.client.state}");
+                                                              log("CurrentUser: ${_communicationService.client.state.currentUser}");
+                                                              String queryId =
+                                                                  '${_communicationService.client.state.currentUser!.id.hashCode}${widget.profileModel.id.hashCode}';
+                                                              String
+                                                                  newChannelId =
+                                                                  '${widget.profileModel.id}${_communicationService.client.state.currentUser!.id}';
+
+                                                              final Channel
+                                                                  _newChannel =
+                                                                  _communicationService
+                                                                      .client
+                                                                      .channel(
+                                                                'messaging',
+                                                                id: newChannelId,
+                                                                extraData: {
+                                                                  'isGroupChat':
+                                                                      false,
+                                                                  'presence':
+                                                                      true,
+                                                                  'members': [
+                                                                    widget
+                                                                        .profileModel
+                                                                        .id
+                                                                        .toString(),
+                                                                    _communicationService
+                                                                        .client
+                                                                        .state
+                                                                        .currentUser!
+                                                                        .id
+                                                                        .toString(),
+                                                                  ],
+                                                                },
+                                                              );
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) {
+                                                                return ChannelPage(
+                                                                  channel:
+                                                                      _newChannel,
+                                                                );
+                                                              }));
                                                             },
                                                             style: OutlinedButton
                                                                 .styleFrom(
@@ -325,7 +374,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                     .user_profile!
                                                     .bio!),
                                                 style: TextStyle(
-                                                    color: Colors.red,
+                                                    color: Colors.black,
                                                     fontSize: 18),
                                               )),
                                             ],

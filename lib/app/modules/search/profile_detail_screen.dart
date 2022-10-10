@@ -261,13 +261,17 @@ class ProfileDetail extends StatelessWidget {
                                                                     OutlinedButton(
                                                                   onPressed:
                                                                       () {
-                                                                    log(">>>>>>>>>>>>>>>>>>>>");
+                                                                    log("aaaaaaaaaaaaaaaaa");
+
+                                                                    log("State: ${_communicationService.client.state}");
+                                                                    log("CurrentUser: ${_communicationService.client.state.currentUser}");
                                                                     String
                                                                         queryId =
-                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${_controller.searchProfiles[index].id.hashCode}';
+                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
                                                                     String
                                                                         newChannelId =
-                                                                        '${_controller.searchProfiles[index].id.hashCode}${_communicationService.client.state.currentUser!.id.hashCode}';
+                                                                        '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+
                                                                     final Channel
                                                                         _newChannel =
                                                                         _communicationService
@@ -282,22 +286,27 @@ class ProfileDetail extends StatelessWidget {
                                                                             true,
                                                                         'members':
                                                                             [
-                                                                          _controller
-                                                                              .searchProfiles[index]
-                                                                              .id,
+                                                                          profileModel
+                                                                              .id
+                                                                              .toString(),
                                                                           _communicationService
                                                                               .client
                                                                               .state
                                                                               .currentUser!
-                                                                              .id,
+                                                                              .id
+                                                                              .toString(),
                                                                         ],
                                                                       },
                                                                     );
-                                                                    ChatView
-                                                                        .open(
-                                                                      channel:
-                                                                          _newChannel,
-                                                                    );
+                                                                    Navigator.push(
+                                                                        context,
+                                                                        MaterialPageRoute(builder:
+                                                                            (context) {
+                                                                      return ChannelPage(
+                                                                        channel:
+                                                                            _newChannel,
+                                                                      );
+                                                                    }));
                                                                   },
                                                                   style: OutlinedButton.styleFrom(
                                                                       minimumSize:
@@ -468,7 +477,7 @@ class ProfileDetail extends StatelessWidget {
                                                               .user_profile!
                                                               .bio!),
                                                       style: TextStyle(
-                                                          color: Colors.red,
+                                                          color: Colors.black,
                                                           fontSize: 18),
                                                     )),
                                                   ],

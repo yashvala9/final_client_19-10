@@ -91,6 +91,7 @@ class SingleFeedScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
+    var isLiked = false;
 
     WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());
     return GetBuilder<SingleFeedController>(
@@ -122,6 +123,7 @@ class SingleFeedScreen extends StatelessWidget {
                               children: [
                                 InkWell(
                                   onDoubleTap: () {
+                                    isLiked = !isLiked;
                                     _controller
                                         .phototLikeToggle(photos![index].id);
                                   },
@@ -394,6 +396,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                     children: [
                                                       InkWell(
                                                           onTap: () {
+                                                            isLiked = !isLiked;
                                                             _controller
                                                                 .phototLikeToggle(
                                                                     photos![index]
@@ -585,6 +588,7 @@ class SingleFeedScreen extends StatelessWidget {
                                               color: Colors.black,
                                               child: InkWell(
                                                 onDoubleTap: () {
+                                                  isLiked = !isLiked;
                                                   isPhoto
                                                       ? _controller
                                                           .phototLikeToggle(
@@ -620,6 +624,7 @@ class SingleFeedScreen extends StatelessWidget {
                                         isReel: true,
                                         updatePoints: () {},
                                         doubleTap: () {
+                                          isLiked = !isLiked;
                                           _controller
                                               .likeToggle(reels![index].id);
                                         },
@@ -939,48 +944,50 @@ class SingleFeedScreen extends StatelessWidget {
                                                       SizedBox(height: 15),
                                                       Column(
                                                         children: [
-                                                          InkWell(
-                                                              onTap: () {
-                                                                isPhoto
-                                                                    ? _controller
-                                                                        .phototLikeToggle(
-                                                                            index)
-                                                                    : _controller
-                                                                        .likeToggle(
-                                                                            index);
-                                                              },
-                                                              // _controller.likeVideo(data.id),
-                                                              child: FutureBuilder<
-                                                                      bool>(
-                                                                  future: isPhoto
-                                                                      ? _reelRepo.getPhotosLikeFlag(
-                                                                          reels![index]
-                                                                              .id,
-                                                                          _controller
-                                                                              .token!)
-                                                                      : _reelRepo.getLikeFlag(
-                                                                          reels![index]
-                                                                              .id,
-                                                                          _controller
-                                                                              .token!),
-                                                                  builder:
-                                                                      (context,
-                                                                          snap) {
-                                                                    return Icon(
-                                                                      snap.hasData
-                                                                          ? snap.data!
-                                                                              ? Icons.favorite
-                                                                              : Icons.favorite_border
-                                                                          : Icons.favorite_border,
-                                                                      size: 30,
-                                                                      color: snap
-                                                                              .hasData
-                                                                          ? snap.data!
-                                                                              ? Colors.red
-                                                                              : Colors.white
-                                                                          : Colors.white,
-                                                                    );
-                                                                  })),
+                                                          FutureBuilder<bool>(
+                                                              future: isPhoto
+                                                                  ? _reelRepo.getPhotosLikeFlag(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      _controller
+                                                                          .token!)
+                                                                  : _reelRepo.getLikeFlag(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      _controller
+                                                                          .token!),
+                                                              builder: (context,
+                                                                  snap) {
+                                                                isLiked = snap
+                                                                        .hasData
+                                                                    ? snap.data!
+                                                                        ? true
+                                                                        : false
+                                                                    : false;
+                                                                return InkWell(
+                                                                  onTap: () {
+                                                                    isLiked =
+                                                                        !isLiked;
+                                                                    _controller.likeToggle(
+                                                                        index,
+                                                                        isPhoto:
+                                                                            isPhoto);
+                                                                  },
+                                                                  child: Icon(
+                                                                    isLiked
+                                                                        ? Icons
+                                                                            .favorite
+                                                                        : Icons
+                                                                            .favorite_border,
+                                                                    size: 30,
+                                                                    color: isLiked
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .white,
+                                                                  ),
+                                                                );
+                                                              }),
                                                           // const SizedBox(height: 7),
                                                           FutureBuilder<int>(
                                                               future: isPhoto
