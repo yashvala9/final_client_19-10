@@ -263,7 +263,7 @@ class SignupScreen extends StatelessWidget {
                                       ),
                                       children: [
                                         TextSpan(
-                                          text: 'Sign in',
+                                          text: ' Sign in',
                                           style: style.bodyMedium?.copyWith(
                                             color: AppColors.lightOrange,
                                           ),

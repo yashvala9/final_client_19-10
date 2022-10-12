@@ -63,19 +63,30 @@ class ChatList extends StatelessWidget {
                     controller: state.individualChannelsListController,
                     itemBuilder: (BuildContext context, List<Channel> items,
                         int index, StreamChannelListTile defaultWidget) {
+                      print('2121 ${items.length}');
                       Member? _member = items[index]
                           .state!
                           .members
                           .firstWhereOrNull((element) =>
                               element.user!.id !=
                               items[index].client.state.currentUser!.id);
-                      var lastMessage =
-                          items[index].state?.messages.reversed.firstWhere(
-                                (message) => !message.isDeleted,
-                              );
-                      final subtitle = lastMessage == null
-                          ? 'nothing yet'
-                          : lastMessage.text!;
+                      print('2121 ${_member}');
+                      var lastMessage = items[index]
+                          .state
+                          ?.messages
+                          .reversed
+                          .firstWhere((message) => !message.isDeleted,
+                              orElse: () => Message(id: "0", text: ''));
+                      final subtitle = lastMessage!.text;
+                      // orElse: () => 'No matching color found');
+                      // var subtitle =
+                      //     items[index].state?.messages.reversed.first.text
+                      //         '';
+
+                      // print('2121 ${subtitle.toString()}');
+                      // final subtitle = lastMessage == null
+                      //     ? 'nothing yet'
+                      //     : lastMessage.text!;
                       var profileUrl = _member?.user?.extraData['profilePic'];
                       return defaultWidget.copyWith(
                         leading: CircleAvatar(
@@ -98,7 +109,7 @@ class ChatList extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          subtitle,
+                          subtitle!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -110,9 +121,25 @@ class ChatList extends StatelessWidget {
                         const EmptyWidget("No Communication"),
                     loadingBuilder: (context) => const Loading(),
                     errorBuilder:
-                        (BuildContext context, StreamChatError error) => Center(
-                      child: Text("Error: ${error.message}"),
-                    ),
+                        (BuildContext context, StreamChatError error) {
+                      if (error.message.contains('does not exist')) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text('Initializing..',
+                                style: TextStyle(fontSize: 16)),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(child: CircularProgressIndicator()),
+                          ],
+                        );
+                      } else {
+                        return Center(
+                          child: Text("Error: ${error.message}"),
+                        );
+                      }
+                    },
                     onChannelTap: (channel) {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {

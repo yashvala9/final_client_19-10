@@ -90,7 +90,7 @@ class HomePageController extends GetxController {
     try {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
     }
     loading = false;
@@ -103,7 +103,7 @@ class HomePageController extends GetxController {
       totalEntryPoints.value =
           await _giveawayRepo.getTotalEntryCountByUserId(profileId!, token!);
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
     }
     update();
@@ -123,7 +123,7 @@ class HomePageController extends GetxController {
         }
         update();
       } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
+        // showSnackBar(e.toString(), color: Colors.red);
         print("getFeeds: $e");
       }
     }

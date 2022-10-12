@@ -100,7 +100,7 @@ class SearchController extends GetxController {
       photosList = await _reelRepo.getPhotosWithoutAds(profileId!, token!,
           limit: 10, skip: 0);
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
       print("getFeeds: $e");
     }
     loading = false;
@@ -142,7 +142,7 @@ class SearchController extends GetxController {
         }
         update();
       } catch (e) {
-        showSnackBar(e.toString(), color: Colors.red);
+        // showSnackBar(e.toString(), color: Colors.red);
         print("getFeeds: $e");
       }
     }

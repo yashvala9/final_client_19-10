@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class EmptyWidget extends StatelessWidget {
   final String text;
   final Color color;
-  const EmptyWidget(this.text, {Key? key, this.color = Colors.white})
+  const EmptyWidget(this.text, {Key? key, this.color = Colors.black})
       : super(key: key);
 
   @override

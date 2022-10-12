@@ -183,7 +183,7 @@ class CommentController extends GetxController {
       final message = await _commentRepo.addCommentToById(token!, map, reelId);
       print("addCommentSuccess: $message");
     } catch (e) {
-      showSnackBar(e.toString(), color: Colors.red);
+      // showSnackBar(e.toString(), color: Colors.red);
       print("addComment: $e");
     }
   }
