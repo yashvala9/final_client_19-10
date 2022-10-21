@@ -19,9 +19,7 @@ class ContestRulesController extends GetxController {
     contestRulesList.clear();
     isLoading(true);
     await Future.delayed(1000.milliseconds, () async {
-      DemoData.demoContestRules.forEach((element) {
-        contestRulesList.add(element);
-      });
+      contestRulesList.addAll(DemoData.demoContestRules);
     });
     isLoading(false);
   }

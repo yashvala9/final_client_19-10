@@ -237,7 +237,7 @@ class NotificationScreen extends StatelessWidget {
                                               .getThumbnail(reel.thumbnail),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
-                                              return CircularProgressIndicator();
+                                              return const CircularProgressIndicator();
                                             }
 
                                             return CachedNetworkImage(
@@ -245,7 +245,7 @@ class NotificationScreen extends StatelessWidget {
                                               placeholder: (context, url) {
                                                 return IconButton(
                                                     onPressed: () {},
-                                                    icon: Icon(
+                                                    icon: const Icon(
                                                         Icons.refresh_rounded));
                                               },
                                               errorWidget: (_, a, b) {
@@ -254,7 +254,7 @@ class NotificationScreen extends StatelessWidget {
                                                     border: Border.all(),
                                                   ),
                                                   alignment: Alignment.center,
-                                                  child: Loading(),
+                                                  child: const Loading(),
                                                 );
                                               },
                                               imageUrl: snapshot.data!,
@@ -297,7 +297,7 @@ class NotificationScreen extends StatelessWidget {
                                                 .getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
-                                                return CircularProgressIndicator();
+                                                return const CircularProgressIndicator();
                                               }
 
                                               return CachedNetworkImage(
@@ -305,7 +305,7 @@ class NotificationScreen extends StatelessWidget {
                                                 placeholder: (context, url) {
                                                   return IconButton(
                                                       onPressed: () {},
-                                                      icon: Icon(Icons
+                                                      icon: const Icon(Icons
                                                           .refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
@@ -314,7 +314,7 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: Loading(),
+                                                    child: const Loading(),
                                                   );
                                                 },
                                                 imageUrl: snapshot.data!,
@@ -360,7 +360,7 @@ class NotificationScreen extends StatelessWidget {
                                                 .getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
-                                                return CircularProgressIndicator();
+                                                return const CircularProgressIndicator();
                                               }
 
                                               return CachedNetworkImage(
@@ -368,7 +368,7 @@ class NotificationScreen extends StatelessWidget {
                                                 placeholder: (context, url) {
                                                   return IconButton(
                                                       onPressed: () {},
-                                                      icon: Icon(Icons
+                                                      icon: const Icon(Icons
                                                           .refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
@@ -377,7 +377,7 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: Loading(),
+                                                    child: const Loading(),
                                                   );
                                                 },
                                                 imageUrl: snapshot.data!,

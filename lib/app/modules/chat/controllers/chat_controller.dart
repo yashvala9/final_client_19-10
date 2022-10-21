@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
-import '../../../../services/communication_services.dart';
 import '../chat_state/chat_state.dart';
 
 class ChatController extends GetxController with StateMixin<ChatState> {
   final Channel channel;
   ChatController({required this.channel});
-  final CommunicationService _communicationService = CommunicationService.to;
 
   final ScrollController scrollController = ScrollController();
 

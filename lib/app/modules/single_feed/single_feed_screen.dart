@@ -8,14 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
-import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
+import 'package:share_plus/share_plus.dart';
+
 import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
-import 'package:reel_ro/utils/empty_widget.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
-import 'package:share_plus/share_plus.dart';
+
 import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -34,10 +33,10 @@ class SingleFeedScreen extends StatelessWidget {
   SingleFeedScreen(this.photos, this.reels, this.currentIndex,
       {this.openComment = false, this.isPhoto = false, Key? key})
       : super(key: key);
-  bool isPhoto;
-  List<ReelModel>? reels;
-  List<PhotoModel>? photos;
-  int currentIndex;
+  final bool isPhoto;
+  final List<ReelModel>? reels;
+  final List<PhotoModel>? photos;
+  final int currentIndex;
   bool openComment;
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
@@ -83,7 +82,6 @@ class SingleFeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = Get.mediaQuery.size;
     final theme = Get.theme;
     final style = theme.textTheme;
     var parser = EmojiParser();

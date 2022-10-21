@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../../../../repositories/giveaway_repository.dart';
 import '../../../../widgets/loading.dart';
 import '../controllers/send_invite_controller.dart';
@@ -15,6 +14,8 @@ class SendInviteView extends GetView<SendInviteController> {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(SendInviteController());
   final FlutterShareMe flutterShareMe = FlutterShareMe();
+
+  SendInviteView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;
@@ -61,7 +62,7 @@ class SendInviteView extends GetView<SendInviteController> {
                 width: Get.width * 0.9,
                 height: Get.height * 0.3,
                 decoration: BoxDecoration(
-                    color: Color(0xffFFF3D2),
+                    color: const Color(0xffFFF3D2),
                     borderRadius: BorderRadius.circular(15)),
                 child: Column(
                   children: [
@@ -100,12 +101,12 @@ class SendInviteView extends GetView<SendInviteController> {
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.copy),
-                                const SizedBox(
+                              children: const [
+                                Icon(Icons.copy),
+                                SizedBox(
                                   width: 10,
                                 ),
-                                const Text("Copy Link")
+                                Text("Copy Link")
                               ],
                             )),
                       ),

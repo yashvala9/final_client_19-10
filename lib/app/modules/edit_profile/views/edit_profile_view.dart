@@ -216,7 +216,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                             ? "Country code must be 2 digits"
                                             : null,
                                     onChanged: (v) =>
-                                        _controller.phone_pin = int.parse(v)),
+                                        _controller.phonePin = int.parse(v)),
                               ),
                               SizedBox(
                                 width: Get.width * 0.03,
@@ -245,7 +245,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                         : null;
                                   },
                                   onChanged: (v) =>
-                                      _controller.phone_number = int.parse(v),
+                                      _controller.phoneNumber = int.parse(v),
                                 ),
                               ),
                             ],

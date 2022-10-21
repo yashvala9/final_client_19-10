@@ -32,8 +32,8 @@ class EditProfileController extends GetxController {
   String fullname = '';
   String country = '';
   String state = '';
-  int phone_pin = 0;
-  int phone_number = 0;
+  int phonePin = 0;
+  int phoneNumber = 0;
   String bio = "";
 
   Future<File> changeFileNameOnly(File file, String newFileName) {
@@ -60,7 +60,7 @@ class EditProfileController extends GetxController {
         file = await changeFileNameOnly(file!, 'image');
         _fileName = genFileName("Profile", path.basename(file!.path));
 
-        final s3File = await _profileRepo.uploadProfileToAwsS3(
+        await _profileRepo.uploadProfileToAwsS3(
             userID: "Profile", file: file!, fileName: _fileName);
       }
 
@@ -71,12 +71,12 @@ class EditProfileController extends GetxController {
         "profile_img": _fileName == ''
             ? profileModel.user_profile!.profile_img!
             : _fileName,
-        "phone_pin": phone_pin == 0
+        "phone_pin": phonePin == 0
             ? profileModel.user_profile!.phone_pin!
-            : phone_pin.toString(),
-        "phone_number": phone_number == 0
+            : phonePin.toString(),
+        "phone_number": phoneNumber == 0
             ? profileModel.user_profile!.phone_number!
-            : phone_number.toString(),
+            : phoneNumber.toString(),
         "current_language": "en",
         "country":
             country == '' ? profileModel.user_profile!.country! : country,

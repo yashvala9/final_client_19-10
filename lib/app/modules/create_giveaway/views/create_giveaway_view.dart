@@ -6,21 +6,16 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:reel_ro/app/modules/my_contest/views/my_contest_view.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import '../../../../repositories/giveaway_repository.dart';
 import '../../../../utils/assets.dart';
 import '../../../../utils/colors.dart';
-import '../../../../widgets/loading.dart';
-import '../../account_settings/views/account_settings_view.dart';
-import '../../add_feed/add_feed_screen.dart';
 import '../controllers/create_giveaway_controller.dart';
 
 class CreateGiveawayView extends GetView<CreateGiveawayController> {
   CreateGiveawayView({Key? key}) : super(key: key);
-  final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(CreateGiveawayController());
-  TextEditingController dateInput = TextEditingController();
+  final TextEditingController dateInput = TextEditingController();
   final _picker = ImagePicker();
 
   @override
