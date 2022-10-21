@@ -48,9 +48,7 @@ class MyContestController extends GetxController {
     loading = true;
     try {
       await Future.delayed(1000.milliseconds, () async {
-        for (var element in DemoData.demoContestDatesList) {
-          contestDatesList.add(element);
-        }
+        contestDatesList.addAll(DemoData.demoContestDatesList);
       });
     } catch (e) {
       log("getContestDatesError: $e");

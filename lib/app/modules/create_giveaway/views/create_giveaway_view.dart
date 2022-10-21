@@ -110,12 +110,12 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                               if (croppedFile != null) {
                                 // _controller.updateFile(croppedFile);
                                 _controller.file = croppedFile;
-                                print('ola ola');
+                                debugPrint('ola ola');
                               }
                               _controller.update();
                             }
                           } catch (e) {
-                            print("selectSourcePage Gallery: $e");
+                            debugPrint("selectSourcePage Gallery: $e");
                           }
                         }
                       },
@@ -225,11 +225,11 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
                         lastDate: DateTime(2100));
 
                     if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                      debugPrint(pickedDate
+                          .toString()); //pickedDate output format => 2021-03-10 00:00:00.000
                       String formattedDate =
                           DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
+                      debugPrint(
                           formattedDate); //formatted date output using intl package =>  2021-03-16
 
                       _controller.endDate = DateTime.parse(formattedDate);

@@ -83,15 +83,13 @@ class HomePageController extends GetxController {
 
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
- 
-
   void getFeeds() async {
     loading = true;
     try {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
+      debugPrint("getFeeds: $e");
     }
     loading = false;
     _loadMore = true;
@@ -104,7 +102,7 @@ class HomePageController extends GetxController {
           await _giveawayRepo.getTotalEntryCountByUserId(profileId!, token!);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
+      debugPrint("getFeeds: $e");
     }
     update();
     loadingPoints = false;
@@ -124,7 +122,7 @@ class HomePageController extends GetxController {
         update();
       } catch (e) {
         // showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
+        debugPrint("getFeeds: $e");
       }
     }
     loadingMore = false;

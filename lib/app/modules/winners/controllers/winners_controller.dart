@@ -24,9 +24,7 @@ class WinnersController extends GetxController {
     winnerList.clear();
     isLoading(true);
     await Future.delayed(1000.milliseconds, () async {
-      for (var element in DemoData.demoWinnerList) {
-        winnerList.add(element);
-      }
+      winnerList.addAll(DemoData.demoWinnerList);
     });
     isLoading(false);
   }

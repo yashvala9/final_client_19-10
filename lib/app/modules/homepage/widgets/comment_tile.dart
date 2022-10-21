@@ -149,7 +149,7 @@ class CommentWidget extends StatelessWidget {
 
                                       increaseNestedCountCallBack();
                                     } catch (e) {
-                                      print("nestedComment: $e");
+                                      debugPrint("nestedComment: $e");
                                     }
                                   }
                                 },

@@ -17,7 +17,7 @@ class NavigationBarScreen extends StatelessWidget {
 
   buildBottomNavigationMenu(context) {
     return Obx(() => MediaQuery(
-        data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+        data: Get.mediaQuery.copyWith(textScaleFactor: 1.0),
         child: Container(
           height: 66,
           decoration: const BoxDecoration(

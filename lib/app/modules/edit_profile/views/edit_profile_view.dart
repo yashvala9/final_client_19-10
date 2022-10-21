@@ -129,7 +129,8 @@ class EditProfileView extends GetView<EditProfileController> {
                                         }
                                       }
                                     } catch (e) {
-                                      print("selectSourcePage Gallery: $e");
+                                      debugPrint(
+                                          "selectSourcePage Gallery: $e");
                                     }
                                   }
                                 },

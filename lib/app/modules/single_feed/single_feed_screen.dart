@@ -87,7 +87,7 @@ class SingleFeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = Get.mediaQuery.size;
     final theme = Theme.of(context);
     final style = theme.textTheme;
     var parser = EmojiParser();
@@ -837,7 +837,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                   // ),
                                                   // HashTagText(
                                                   //   onTap: (tag) {
-                                                  //     print('5151' + tag);
+                                                  //     debugPrint('5151' + tag);
                                                   //     Get.to(SearchHashTags(
                                                   //       hashTag: tag,
                                                   //     ));

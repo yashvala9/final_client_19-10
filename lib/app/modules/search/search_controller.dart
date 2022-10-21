@@ -88,7 +88,7 @@ class SearchController extends GetxController {
           limit: 10, skip: 0);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
+      debugPrint("getFeeds: $e");
     }
     loading = false;
     _loadMoreReels = true;
@@ -101,7 +101,7 @@ class SearchController extends GetxController {
           limit: 10, skip: 0);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
+      debugPrint("getFeeds: $e");
     }
     loading = false;
     _loadMorePhotos = true;
@@ -122,7 +122,7 @@ class SearchController extends GetxController {
         update();
       } catch (e) {
         // showSnackBar(e.toString(), color: Colors.red);
-        print("getMoreFeed: $e");
+        debugPrint("getMoreFeed: $e");
       }
     }
     loadingMore = false;
@@ -143,21 +143,21 @@ class SearchController extends GetxController {
         update();
       } catch (e) {
         // showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
+        debugPrint("getFeeds: $e");
       }
     }
     loadingMore = false;
   }
 
   void searchUser(String username) async {
-    print("username: $username");
+    debugPrint("username: $username");
     loading = true;
     try {
       searchProfiles = await _profileRepo.searchByUserName(username, token!);
       log("searchResult: $searchProfiles");
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("searchUser: $e");
+      debugPrint("searchUser: $e");
     }
     loading = false;
   }
@@ -169,7 +169,7 @@ class SearchController extends GetxController {
           .getReelsByHashTag(hashTag, profileId!, token!, limit: 500, skip: 0);
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("getFeeds: $e");
+      debugPrint("getFeeds: $e");
     }
     loading = false;
   }

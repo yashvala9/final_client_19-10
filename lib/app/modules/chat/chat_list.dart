@@ -63,14 +63,14 @@ class ChatList extends StatelessWidget {
                     controller: state.individualChannelsListController,
                     itemBuilder: (BuildContext context, List<Channel> items,
                         int index, StreamChannelListTile defaultWidget) {
-                      print('2121 ${items.length}');
+                      debugPrint('2121 ${items.length}');
                       Member? _member = items[index]
                           .state!
                           .members
                           .firstWhereOrNull((element) =>
                               element.user!.id !=
                               items[index].client.state.currentUser!.id);
-                      print('2121 ${_member}');
+                      debugPrint('2121 ${_member}');
                       var lastMessage = items[index]
                           .state
                           ?.messages
@@ -83,7 +83,7 @@ class ChatList extends StatelessWidget {
                       //     items[index].state?.messages.reversed.first.text
                       //         '';
 
-                      // print('2121 ${subtitle.toString()}');
+                      // debugPrint('2121 ${subtitle.toString()}');
                       // final subtitle = lastMessage == null
                       //     ? 'nothing yet'
                       //     : lastMessage.text!;

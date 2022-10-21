@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
@@ -71,7 +72,7 @@ class CreateProfileController extends GetxController {
       await _profileRepo.createProfile(profileData, _authService.token!);
       _authService.redirectUser();
     } catch (e) {
-      print("addProfileDate: $e");
+      debugPrint("addProfileDate: $e");
     }
     loading = false;
   }

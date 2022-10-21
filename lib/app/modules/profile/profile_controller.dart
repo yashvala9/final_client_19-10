@@ -52,7 +52,7 @@ class ProfileController extends GetxController {
         }
       } catch (e) {
         showSnackBar(e.toString(), color: Colors.red);
-        print("getFeeds: $e");
+        debugPrint("getFeeds: $e");
       }
     }
     loadingMore = false;
@@ -63,7 +63,7 @@ class ProfileController extends GetxController {
   //     profileModel = await _profileRepo.getProfileById(profileId!, token!);
   //   } catch (e) {
   //     showSnackBar(e.toString(), color: Colors.red);
-  //     print("getProfile: $e");
+  //     debugPrint("getProfile: $e");
   //   }
   //   loading = false;
   // }
@@ -72,7 +72,7 @@ class ProfileController extends GetxController {
   //   try {
 
   //   } catch (e) {
-  //     print("getReelsById: $e");
+  //     debugPrint("getReelsById: $e");
   //   }
   // }
 
@@ -85,7 +85,7 @@ class ProfileController extends GetxController {
       await _reelRepo.deleteReel(reelId, token!);
       update();
     } catch (e) {
-      print('delteReel: $e');
+      debugPrint('delteReel: $e');
     }
   }
 
@@ -95,7 +95,7 @@ class ProfileController extends GetxController {
       update();
       onInit();
     } catch (e) {
-      print('deletePost: $e');
+      debugPrint('deletePost: $e');
     }
   }
 }

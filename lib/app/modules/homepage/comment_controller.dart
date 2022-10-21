@@ -46,11 +46,11 @@ class CommentController extends GetxController {
   Future<void> getCommentsById(int id, {bool isPhoto = false}) async {
     loading = true;
     try {
-      print('21212121');
+      debugPrint('21212121');
       commentList =
           await _commentRepo.getCommentById(id, token!, isPhoto: isPhoto);
     } catch (e) {
-      print("getCommentsByReelId: $e");
+      debugPrint("getCommentsByReelId: $e");
     }
     loading = false;
     update();
@@ -69,7 +69,7 @@ class CommentController extends GetxController {
   }
 
   void deleteComment(int index, bool isPhoto) async {
-    print('index ${index.toString()}');
+    debugPrint('index ${index.toString()}');
     try {
       await _commentRepo.deleteComment(commentList[index].id, token!,
           isPhoto: isPhoto);
@@ -83,7 +83,7 @@ class CommentController extends GetxController {
   }
 
   void deleteCommentLocally(int id) {
-    print('uidasdf $id');
+    debugPrint('uidasdf $id');
     _commentList.removeWhere((element) => element.id == id);
     update();
   }
@@ -110,7 +110,7 @@ class CommentController extends GetxController {
       onDone();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("addComment: $e");
+      debugPrint("addComment: $e");
     }
   }
 }

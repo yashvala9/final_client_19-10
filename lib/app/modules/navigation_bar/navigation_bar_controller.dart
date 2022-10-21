@@ -16,7 +16,6 @@ import 'package:reel_ro/services/auth_service.dart';
 import '../../../utils/video_player_item.dart';
 import '../single_feed/single_feed_screen.dart';
 
-
 class NavigationBarController extends GetxController {
   var tabIndex = 0.obs;
 
@@ -52,7 +51,7 @@ class NavigationBarController extends GetxController {
         // }
       });
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 

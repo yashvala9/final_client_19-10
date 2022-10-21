@@ -86,7 +86,7 @@ class SingleFeedController extends GetxController {
       }
       update();
     } catch (e) {
-      print("TogglelikeError: $e");
+      debugPrint("TogglelikeError: $e");
     }
     update();
   }
@@ -147,9 +147,9 @@ class CommentController extends GetxController {
     loading = true;
     try {
       commentList = await _commentRepo.getCommentById(reelId, token!);
-      print("commentList: $commentList");
+      debugPrint("commentList: $commentList");
     } catch (e) {
-      print("getCommentsByReelId: $e");
+      debugPrint("getCommentsByReelId: $e");
     }
     loading = false;
   }
@@ -181,10 +181,10 @@ class CommentController extends GetxController {
     addCommentLocally(map);
     try {
       final message = await _commentRepo.addCommentToById(token!, map, reelId);
-      print("addCommentSuccess: $message");
+      debugPrint("addCommentSuccess: $message");
     } catch (e) {
       // showSnackBar(e.toString(), color: Colors.red);
-      print("addComment: $e");
+      debugPrint("addComment: $e");
     }
   }
 }

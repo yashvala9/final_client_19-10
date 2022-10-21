@@ -25,9 +25,9 @@ class ContestDatesController extends GetxController {
     contestDatesList.clear();
     isLoading(true);
     await Future.delayed(1000.milliseconds, () async {
-      for (var element in DemoData.demoContestDatesList) {
+      DemoData.demoContestDatesList.forEach((element) {
         contestDatesList.add(element);
-      }
+      });
     });
     isLoading(false);
   }

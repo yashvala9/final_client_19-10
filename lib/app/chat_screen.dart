@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   ChatScreen({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class ChatScreen extends StatelessWidget {
     final style = theme.textTheme;
     final colorSchem = theme.colorScheme;
 
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
+    final bottom = Get.mediaQuery.viewInsets.bottom;
     return Scaffold(
       backgroundColor: const Color(0xffE5E5E5),
       appBar: AppBar(

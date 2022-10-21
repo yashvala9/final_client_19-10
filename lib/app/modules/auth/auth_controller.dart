@@ -67,7 +67,7 @@ class AuthController extends GetxController {
     };
     try {
       final message = await _authRepo.signIn(email: email, password: password);
-      print("LoginSuccess: $message");
+      debugPrint("LoginSuccess: $message");
       if (message == Constants.unverified) {
         await _storage.write(Constants.email, email);
         await _storage.write(Constants.password, password);
@@ -77,7 +77,7 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("login: $e");
+      debugPrint("login: $e");
     }
     loading = false;
   }
@@ -87,7 +87,7 @@ class AuthController extends GetxController {
 
     try {
       final message = await _authRepo.signIn(email: e, password: p);
-      print("LoginSuccess: $message");
+      debugPrint("LoginSuccess: $message");
       if (message == Constants.unverified) {
         Get.offAll(() => VerifyEmailView());
       } else {
@@ -95,7 +95,7 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("login: $e");
+      debugPrint("login: $e");
     }
     loading = false;
   }
@@ -129,7 +129,7 @@ class AuthController extends GetxController {
       // _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("login: $e");
+      debugPrint("login: $e");
     }
     loading = false;
   }
@@ -142,7 +142,7 @@ class AuthController extends GetxController {
       _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Color.fromARGB(255, 92, 90, 90));
-      print("login: $e");
+      debugPrint("login: $e");
     }
     loading = false;
   }
@@ -152,7 +152,7 @@ class AuthController extends GetxController {
       await _authRepo.signInWithGoogle();
       Get.offAllNamed(AppRoutes.home);
     } on FirebaseAuthException catch (e) {
-      print("googleSignIn: $e");
+      debugPrint("googleSignIn: $e");
     }
   }
 
@@ -166,7 +166,7 @@ class AuthController extends GetxController {
           ));
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("forgetPassword: $e");
+      debugPrint("forgetPassword: $e");
     }
     loading = false;
   }
@@ -179,7 +179,7 @@ class AuthController extends GetxController {
       Get.off(() => SetForgetPassword(email: email, token: token));
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("forgetPassword: $e");
+      debugPrint("forgetPassword: $e");
     }
     loading = false;
   }
@@ -192,7 +192,7 @@ class AuthController extends GetxController {
       Get.offAll(() => LoginScreen());
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("forgetPassword: $e");
+      debugPrint("forgetPassword: $e");
     }
     loading = false;
   }
@@ -205,7 +205,7 @@ class AuthController extends GetxController {
       await _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("addReferral: $e");
+      debugPrint("addReferral: $e");
     }
   }
 
@@ -215,7 +215,7 @@ class AuthController extends GetxController {
       _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
-      print("setReferralstatus: $e");
+      debugPrint("setReferralstatus: $e");
     }
   }
 }

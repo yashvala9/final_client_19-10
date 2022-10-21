@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:reel_ro/app/modules/add_referral/add_referral_screen.dart';
@@ -48,7 +49,7 @@ class AuthService extends GetxService {
     //   Get.toNamed(AppRoutes.home);
     // }
     final isLoggedIn = await _storage.read(Constants.token);
-    print('2121 isLoggedIn != null ${isLoggedIn != null}');
+    debugPrint('2121 isLoggedIn != null ${isLoggedIn != null}');
     if (isLoggedIn != null) {
       final profile = await _profileRepo.getCurrentUsesr(token!);
       if (profile.user_profile != null) {
@@ -78,7 +79,7 @@ class AuthService extends GetxService {
       await _authRepo.signOut(fcmToken!, token!);
       redirectUser();
     } catch (e) {
-      print("signOut: $e");
+      debugPrint("signOut: $e");
     }
   }
 }

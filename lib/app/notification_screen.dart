@@ -212,7 +212,7 @@ class NotificationScreen extends StatelessWidget {
                                   future: _reelRepo.getReelByCommentId(
                                       e.data.entityId, token!),
                                   builder: (context, s) {
-                                    print(
+                                    debugPrint(
                                         '212121 comment response ${s.hasData}');
                                     if (!s.hasData) {
                                       log("single feed error: ${s.error}");

@@ -22,7 +22,7 @@ class ChatController extends GetxController with StateMixin<ChatState> {
     // QueryUsersResponse _streamUserData = await CommunicationService.to.client
     //       .queryUsers(filter: Filter.equal('id', chatWith));
     // final streamUserDetails = _streamUserData.users.firstWhereOrNull((element) => element.id == chatWith);
-    
+
     change(state);
     log(channel.toString());
     _init();
@@ -43,15 +43,14 @@ class ChatController extends GetxController with StateMixin<ChatState> {
     //   },
     // );
     try {
- await value!.currentChannel.watch();
-    // await value!.currentChannel.markRead();
-    change(
-      value!.copyWith(currentChannel: value!.currentChannel),
-      status: RxStatus.success(),
-    );
-
-    }catch(e) {
-      print(e);
+      await value!.currentChannel.watch();
+      // await value!.currentChannel.markRead();
+      change(
+        value!.copyWith(currentChannel: value!.currentChannel),
+        status: RxStatus.success(),
+      );
+    } catch (e) {
+      debugPrint(e.toString());
     }
-     }
+  }
 }
