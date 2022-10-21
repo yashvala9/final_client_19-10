@@ -13,13 +13,13 @@ class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final int videoId;
   final VoidCallback doubleTap;
-  VoidCallback? onTap;
+  final VoidCallback? onTap;
   final VoidCallback swipeRight;
   final VoidCallback updatePoints;
   final bool showLike;
   final bool isReel;
-  bool enableAudio;
-  VideoPlayerItem({
+  final bool enableAudio;
+  const VideoPlayerItem({
     Key? key,
     required this.videoUrl,
     required this.videoId,
