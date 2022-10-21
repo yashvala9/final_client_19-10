@@ -15,12 +15,11 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
   @override
   Widget build(BuildContext context) {
     _controller.getContestByUser();
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        // backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
         title: const Text(
           "Account Settings",
           style: TextStyle(fontSize: 17),
@@ -42,9 +41,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           AccountTile(
             asset: Assets.accountStoke,
             title: "Manage my account",
-            onPressed: () {
-              // Get.to(EditProfileView());
-            },
+            onPressed: () {},
           ),
           AccountTile(
             asset: Assets.lock,
@@ -278,9 +275,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
           AccountTile(
             asset: Assets.pen,
             title: "Report a problem",
-            onPressed: () {
-              // Get.to(() => FollowerPickerView());
-            },
+            onPressed: () {},
           ),
           AccountTile(
             asset: Assets.help,
@@ -313,7 +308,7 @@ class AccountTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return InkWell(
       onTap: onPressed,

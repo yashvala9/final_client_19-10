@@ -46,7 +46,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     final CommunicationService _communicationService = CommunicationService.to;

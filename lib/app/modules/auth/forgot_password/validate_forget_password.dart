@@ -18,7 +18,7 @@ class ValidateForgetPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
 
     return GetBuilder<AuthController>(
@@ -72,29 +72,32 @@ class ValidateForgetPassword extends StatelessWidget {
                           maxLength: 7,
                           keyboardType: TextInputType.emailAddress,
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]'))
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[a-zA-Z0-9]'))
                           ],
                           validator: (value) => value!.isEmpty
                               ? 'Token is required'
                               : value.length != 7
                                   ? "Token must be 7 character"
                                   : null,
-                          onSaved: (v) =>
-                              _controller.forgetPassworedToken = v!.trim().toUpperCase(),
+                          onSaved: (v) => _controller.forgetPassworedToken =
+                              v!.trim().toUpperCase(),
                         ),
                       ),
                       SizedBox(height: Get.height * 0.03),
-                     _controller.loading? const Loading(): MyElevatedButton(
-                        buttonText: 'Submit',
-                        onPressed: () {
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
-                          _formKey.currentState!.save();
-                          _controller.validateForgetPassword(
-                              email, _controller.forgetPassworedToken);
-                        },
-                      ),
+                      _controller.loading
+                          ? const Loading()
+                          : MyElevatedButton(
+                              buttonText: 'Submit',
+                              onPressed: () {
+                                if (!_formKey.currentState!.validate()) {
+                                  return;
+                                }
+                                _formKey.currentState!.save();
+                                _controller.validateForgetPassword(
+                                    email, _controller.forgetPassworedToken);
+                              },
+                            ),
                     ],
                   ),
                 ),

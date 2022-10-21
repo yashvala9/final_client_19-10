@@ -38,7 +38,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     var parser = EmojiParser();
     return SafeArea(

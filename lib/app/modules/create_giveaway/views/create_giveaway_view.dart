@@ -25,7 +25,7 @@ class CreateGiveawayView extends GetView<CreateGiveawayController> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return GetBuilder<CreateGiveawayController>(
       init: CreateGiveawayController(),

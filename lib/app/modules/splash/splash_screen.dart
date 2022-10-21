@@ -26,8 +26,8 @@ class SplashScreen extends StatelessWidget {
             //   "Version : ${_controller.packageInfo.version}",
             //   textScaleFactor: Get.textScaleFactor,
             //   textAlign: TextAlign.center,
-            //   style: Theme.of(context).textTheme.subtitle2?.copyWith(
-            //         color: Theme.of(context).disabledColor,
+            //   style:  Get.theme.textTheme.subtitle2?.copyWith(
+            //         color:  Get.theme.disabledColor,
             //       ),
             // ),
           ],

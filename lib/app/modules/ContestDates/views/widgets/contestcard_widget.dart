@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:reel_ro/models/contest_model.dart';
 import 'package:reel_ro/utils/colors.dart';
@@ -9,7 +10,7 @@ class ContestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return Container(
       margin: const EdgeInsets.all(10),

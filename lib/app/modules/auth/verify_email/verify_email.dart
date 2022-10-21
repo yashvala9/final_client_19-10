@@ -16,7 +16,7 @@ class VerifyEmailView extends StatelessWidget {
   final _storage = GetStorage();
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
 
     return GetBuilder<AuthController>(

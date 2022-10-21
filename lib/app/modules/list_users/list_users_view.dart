@@ -34,7 +34,7 @@ class ListUsersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return GetBuilder<ListUsersController>(
@@ -53,7 +53,7 @@ class ListUsersView extends StatelessWidget {
   }
 
   Widget _tabSection(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return Column(

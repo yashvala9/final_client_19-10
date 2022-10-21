@@ -23,8 +23,8 @@ class VideoTrimmerViewState extends State<VideoTrimmerView> {
   double _startValue = 0.0;
   double _endValue = 0.0;
 
-  RxBool isPlaying = false.obs;
-  RxBool _progressVisibility = false.obs;
+  final RxBool isPlaying = false.obs;
+  final RxBool _progressVisibility = false.obs;
 
   String finalVideoPath = '';
   Future<void> pauseVideo() async {

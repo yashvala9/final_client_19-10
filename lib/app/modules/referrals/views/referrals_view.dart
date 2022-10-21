@@ -21,7 +21,7 @@ class ReferralsView extends GetView<ReferralsController> {
   @override
   Widget build(BuildContext context) {
     _controller.getReferralList();
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return Scaffold(
       appBar: AppBar(

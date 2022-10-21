@@ -38,7 +38,7 @@ class CommentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),

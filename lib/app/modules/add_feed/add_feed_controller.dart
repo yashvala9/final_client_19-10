@@ -20,7 +20,7 @@ class AddFeedController extends GetxController {
 
   String title = "";
   String description = "";
-  List<String?> tags = [];
+  List<String> tags = [];
 
   bool _loading = false;
   bool get loading => _loading;

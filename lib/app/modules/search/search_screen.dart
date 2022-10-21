@@ -39,7 +39,7 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return DefaultTabController(
       length: 2,
@@ -131,7 +131,7 @@ class SearchUsers extends StatelessWidget {
       : Get.put(SearchController());
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return WillPopScope(
       onWillPop: () async {
@@ -225,7 +225,7 @@ class SearchHashTags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     _controller.getReelsByHashTag(hashTag);
     return GetBuilder<SearchController>(

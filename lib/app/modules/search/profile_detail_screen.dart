@@ -40,7 +40,7 @@ class ProfileDetail extends StatelessWidget {
   var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     final colorScheme = theme.colorScheme;
     return DefaultTabController(

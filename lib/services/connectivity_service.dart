@@ -6,7 +6,7 @@ class ConnectivityService extends GetxService {
 
   final Connectivity _connectivity = Connectivity();
 
-  Rx<ConnectivityResult> connectionStatus = Rx<ConnectivityResult>(
+  final Rx<ConnectivityResult> connectionStatus = Rx<ConnectivityResult>(
     ConnectivityResult.none,
   );
 

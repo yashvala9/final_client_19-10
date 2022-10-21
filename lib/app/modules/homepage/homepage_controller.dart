@@ -72,7 +72,7 @@ class HomePageController extends GetxController {
 
   List<int> reportList = [];
 
-  RxString totalEntryPoints = "0".obs;
+  RxnString totalEntryPoints = RxnString("0");
 
   @override
   void onInit() {

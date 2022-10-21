@@ -29,8 +29,8 @@ class CreateGiveawayController extends GetxController {
   String prizeName = '';
   DateTime endDate = DateTime.parse("2022-08-11").toUtc();
   int photoId = 0;
-  RxString photoUrl = ''.obs;
-  RxBool photoLoading = false.obs;
+  RxnString photoUrl = RxnString();
+  final RxBool photoLoading = false.obs;
 
   Future<void> createGiveaway() async {
     if (file == null) {

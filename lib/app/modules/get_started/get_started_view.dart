@@ -10,7 +10,7 @@ class GetStarted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return CustomScrollView(
       slivers: [
@@ -37,7 +37,7 @@ class GetStarted extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Button(
-                        onTap: (){},
+                        onTap: () {},
                         style: style,
                         color: Colors.white,
                         text: 'Continue with Facebook',
@@ -46,7 +46,7 @@ class GetStarted extends StatelessWidget {
                       ),
                       const Divider(),
                       Button(
-                        onTap: (){},
+                        onTap: () {},
                         style: style,
                         color: Colors.white,
                         text: 'Continue with Google',
@@ -73,5 +73,3 @@ class GetStarted extends StatelessWidget {
     );
   }
 }
-
-

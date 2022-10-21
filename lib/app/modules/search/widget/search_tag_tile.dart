@@ -15,7 +15,7 @@ class SearchTagTile extends StatelessWidget {
   final _profileRepo = Get.put(ProfileRepository());
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     final colorSchem = theme.colorScheme;
     var parser = EmojiParser();

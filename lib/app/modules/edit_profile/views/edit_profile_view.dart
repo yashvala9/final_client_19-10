@@ -29,7 +29,7 @@ class EditProfileView extends GetView<EditProfileController> {
   var parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return GetBuilder<EditProfileController>(
       init: EditProfileController(),

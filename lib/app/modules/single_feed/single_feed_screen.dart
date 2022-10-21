@@ -88,7 +88,7 @@ class SingleFeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = Get.mediaQuery.size;
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     var parser = EmojiParser();
     var isLiked = false;

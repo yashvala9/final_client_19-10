@@ -17,7 +17,7 @@ class SendInviteView extends GetView<SendInviteController> {
   final FlutterShareMe flutterShareMe = FlutterShareMe();
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Get.theme;
     final style = theme.textTheme;
     return Scaffold(
         backgroundColor: const Color(0xffFFEAB4),

@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebController extends GetxController {
-  RxBool isLoading = true.obs;
+  final RxBool isLoading = true.obs;
 
   late WebViewController _rootwebViewController;
 
   final Completer<WebViewController> _webViewController =
       Completer<WebViewController>();
 
-  final RxString webViewUrl = ''.obs;
+  final RxnString webViewUrl = RxnString();
 
   void onWebViewCreated(WebViewController _controller) async {
     _webViewController.future.then(
