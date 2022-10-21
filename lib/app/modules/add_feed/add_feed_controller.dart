@@ -38,11 +38,11 @@ class AddFeedController extends GetxController {
     if (type == 1) {
       {
         List<String> splitted = description.split(" ");
-        splitted.forEach((element) {
+        for (var element in splitted) {
           if (element.startsWith("#")) {
             tags.add(element);
           }
-        });
+        }
         loading = true;
         log("File: $file");
         file = await changeFileNameOnly(file, 'photo-$profileId');
@@ -72,11 +72,11 @@ class AddFeedController extends GetxController {
       }
     } else {
       List<String> splitted = description.split(" ");
-      splitted.forEach((item) {
+      for (var item in splitted) {
         if (item.startsWith("#")) {
           tags.add(item);
         }
-      });
+      }
       loading = true;
       log("File: $file");
       file = await changeFileNameOnly(file, 'video-$profileId');

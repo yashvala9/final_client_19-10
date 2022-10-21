@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,15 +7,12 @@ import 'package:reel_ro/models/profile_model.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/comment_repository.dart';
-import '../../../repositories/reel_repository.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/snackbar.dart';
 
 class CommentController extends GetxController {
   final _commentRepo = Get.put(CommentRepository());
   final _authService = Get.put(AuthService());
-
-  final _reelRepo = Get.put(ReelRepository());
 
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;

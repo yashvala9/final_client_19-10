@@ -31,7 +31,7 @@ class OtherProfileDetail extends StatefulWidget {
 class _OtherProfileDetailState extends State<OtherProfileDetail> {
   final _profileRepo = Get.put(ProfileRepository());
   final _authService = Get.find<AuthService>();
-  var parser = EmojiParser();
+  final parser = EmojiParser();
 
   void toggleFollowing(int profileId, String token) async {
     try {

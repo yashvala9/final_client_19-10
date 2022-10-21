@@ -5,7 +5,6 @@ import 'package:reel_ro/models/comment_model.dart';
 import 'package:reel_ro/models/nessted_comment_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
-import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/datetime_extension.dart';
 import 'package:reel_ro/widgets/loading.dart';
@@ -29,15 +28,13 @@ class CommentWidget extends StatelessWidget {
       required this.profileModel})
       : super(key: key);
 
-  final _profileRepo = Get.find<ProfileRepository>();
   final _authService = Get.find<AuthService>();
   final _commentRepo = Get.find<CommentRepository>();
-  var parser = EmojiParser();
-
-  bool showNestedComment = false;
+  final parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
+    bool showNestedComment = false;
     final theme = Get.theme;
     final style = theme.textTheme;
     return Padding(

@@ -40,7 +40,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
   Widget build(BuildContext context) {
     final theme = Get.theme;
     final style = theme.textTheme;
-    var parser = EmojiParser();
+    final parser = EmojiParser();
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(

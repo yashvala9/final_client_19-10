@@ -63,7 +63,7 @@ class ActionsToolbar extends StatelessWidget {
         child: Column(children: [
           Icon(icon, size: 35.0, color: Colors.grey[300]),
           Padding(
-            padding: EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: Text(title,
                 style: const TextStyle(
                     color: Colors.white,

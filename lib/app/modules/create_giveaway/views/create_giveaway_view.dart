@@ -7,7 +7,6 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
-import '../../../../repositories/giveaway_repository.dart';
 import '../../../../utils/assets.dart';
 import '../../../../utils/colors.dart';
 import '../controllers/create_giveaway_controller.dart';

@@ -8,7 +8,6 @@ import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 
 class SingleFeedController extends GetxController {
@@ -37,10 +36,6 @@ class SingleFeedController extends GetxController {
   final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
   void toggleLikeShow() async {
     showLike = true;

@@ -6,7 +6,6 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 
@@ -38,7 +37,7 @@ class ProfileDetail extends StatelessWidget {
 
   final CommunicationService _communicationService = CommunicationService.to;
 
-  var parser = EmojiParser();
+  final parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;
@@ -272,9 +271,6 @@ class ProfileDetail extends StatelessWidget {
                                                                       log("State: ${_communicationService.client.state}");
                                                                       log("CurrentUser: ${_communicationService.client.state.currentUser}");
                                                                       String
-                                                                          queryId =
-                                                                          '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
-                                                                      String
                                                                           newChannelId =
                                                                           '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
@@ -393,9 +389,6 @@ class ProfileDetail extends StatelessWidget {
                                                                       log("State: ${_communicationService.client.state}");
                                                                       log("CurrentUser: ${_communicationService.client.state.currentUser}");
                                                                       String
-                                                                          queryId =
-                                                                          '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
-                                                                      String
                                                                           newChannelId =
                                                                           '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
@@ -467,7 +460,7 @@ class ProfileDetail extends StatelessWidget {
                                                                 .bio!),
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 18),
                                                       )),
@@ -494,7 +487,7 @@ class ProfileDetail extends StatelessWidget {
                                           },
                                           child: Material(
                                             elevation: 3,
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                             child: Hero(
                                               tag: "hero1",
                                               child: CircleAvatar(
@@ -523,7 +516,6 @@ class ProfileDetail extends StatelessWidget {
   }
 
   Widget _tabSection(BuildContext context, ProfileModel profileModel) {
-    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -597,7 +589,7 @@ class ProfileReel extends StatelessWidget {
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return ShimmerCardAnimation();
+                        return const ShimmerCardAnimation();
                       }
 
                       return SizedBox(
@@ -610,7 +602,8 @@ class ProfileReel extends StatelessWidget {
                                 border: Border.all(),
                               ),
                               alignment: Alignment.center,
-                              child: Center(child: CircularProgressIndicator()),
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
                             );
                           },
                           imageUrl: snapshot.data!,
@@ -624,7 +617,7 @@ class ProfileReel extends StatelessWidget {
                         reels[index].id.toString(), _controller.token!),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return ShimmerCardAnimation();
+                        return const ShimmerCardAnimation();
                       }
 
                       return Positioned(
@@ -632,10 +625,10 @@ class ProfileReel extends StatelessWidget {
                           left: 5,
                           child: Row(
                             children: [
-                              Icon(Icons.play_arrow, color: Colors.white),
+                              const Icon(Icons.play_arrow, color: Colors.white),
                               Text(
                                 snapshot.data.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16),
@@ -662,6 +655,7 @@ class PhotoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final _controller = Get.find<HomePageController>();
     return FutureBuilder<List<PhotoModel>>(
         future: _profileRepo.getPhotosByProfileId(id, token),

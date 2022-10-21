@@ -3,10 +3,8 @@ import 'dart:developer';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/single_feed/single_feed_screen.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import '../../../models/comment_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -45,10 +43,8 @@ class HomePageController extends GetxController {
     update();
   }
 
-  bool _loadingPoints = false;
   bool get loadingPoints => _loading;
   set loadingPoints(bool loadingPoints) {
-    _loadingPoints = loadingPoints;
     update();
   }
 

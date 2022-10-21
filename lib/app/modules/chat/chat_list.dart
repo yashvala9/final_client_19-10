@@ -70,7 +70,7 @@ class ChatList extends StatelessWidget {
                           .firstWhereOrNull((element) =>
                               element.user!.id !=
                               items[index].client.state.currentUser!.id);
-                      debugPrint('2121 ${_member}');
+                      debugPrint('2121 $_member');
                       var lastMessage = items[index]
                           .state
                           ?.messages

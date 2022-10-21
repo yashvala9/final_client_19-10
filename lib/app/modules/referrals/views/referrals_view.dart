@@ -287,6 +287,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                                         return Container();
                                                       }
                                                       return Text(
+                                                        // ignore: todo
                                                         //TODO
                                                         '1',
                                                         // snapshot.data

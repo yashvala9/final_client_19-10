@@ -17,7 +17,6 @@ import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -31,7 +30,6 @@ import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
 import '../search/search_screen.dart';
-import '../single_feed/single_feed_screen.dart';
 import 'comment_screen.dart';
 
 import 'profile_detail_screen.dart';
@@ -57,6 +55,7 @@ class DemoClass extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class HomePageScreen extends StatelessWidget {
   HomePageScreen({Key? key}) : super(key: key);
 
@@ -68,11 +67,11 @@ class HomePageScreen extends StatelessWidget {
   final _profileController = Get.isRegistered<ProfileController>()
       ? Get.find<ProfileController>()
       : Get.put(ProfileController());
-  var myMenuItems = <String>[
+  final myMenuItems = <String>[
     'Report',
   ];
   late ConfettiController _controllerCenter;
-  bool isAnimationPlaying = false;
+  final bool isAnimationPlaying = false;
 
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
@@ -130,10 +129,9 @@ class HomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = Get.mediaQuery.size;
     final theme = Get.theme;
     final style = theme.textTheme;
-    var parser = EmojiParser();
+    final parser = EmojiParser();
     var isLiked = false;
     RxDouble turns = 0.0.obs;
     _controllerCenter =

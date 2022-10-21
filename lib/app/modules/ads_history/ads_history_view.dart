@@ -41,14 +41,14 @@ class AdsHistoryView extends StatelessWidget {
                       _controller.profileId!, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Loading();
+                  return const Loading();
                 }
                 if (snapshot.hasError) {
                   printInfo(info: "profileReels: ${snapshot.error}");
                 }
                 var ads = snapshot.data!;
                 if (ads.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text("No Ads History Available"),
                   );
                 }
@@ -87,7 +87,7 @@ class AdsHistoryView extends StatelessWidget {
                               .getThumbnail(ads[index].ads.thumbnail),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             }
@@ -97,7 +97,7 @@ class AdsHistoryView extends StatelessWidget {
                               placeholder: (context, url) {
                                 return IconButton(
                                     onPressed: () {},
-                                    icon: Icon(Icons.refresh_rounded));
+                                    icon: const Icon(Icons.refresh_rounded));
                               },
                               errorWidget: (_, a, b) {
                                 return Container(
@@ -105,7 +105,7 @@ class AdsHistoryView extends StatelessWidget {
                                     border: Border.all(),
                                   ),
                                   alignment: Alignment.center,
-                                  child: Loading(),
+                                  child: const Loading(),
                                 );
                               },
                               imageUrl: snapshot.data!,

@@ -8,12 +8,9 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
-import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/utils/assets.dart';
 import '../../../../utils/base.dart';
 import '../../../../utils/colors.dart';
-import '../../../../utils/snackbar.dart';
 import '../../../../widgets/loading.dart';
 import '../../../../widgets/my_elevated_button.dart';
 import '../controllers/edit_profile_controller.dart';
@@ -26,7 +23,7 @@ class EditProfileView extends GetView<EditProfileController> {
   final _formKey = GlobalKey<FormState>();
   final _controller = Get.put(EditProfileController());
   final _picker = ImagePicker();
-  var parser = EmojiParser();
+  final parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;

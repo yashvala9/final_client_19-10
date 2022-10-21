@@ -61,7 +61,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.profile,
-      page: () => ProfileScreen(),
+      page: () => const ProfileScreen(),
     ),
     GetPage(
       name: AppRoutes.entryCount,
@@ -89,7 +89,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.contestRules,
-      page: () => ContestRulesView(),
+      page: () => const ContestRulesView(),
     ),
   ];
 }

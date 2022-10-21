@@ -5,12 +5,13 @@ import 'package:reel_ro/app/modules/ads_history/ads_history_view.dart';
 import 'package:reel_ro/utils/colors.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
-import '../../../../widgets/loading.dart';
 import '../controllers/entry_count_controller.dart';
 
 class EntryCountView extends GetView<EntryCountController> {
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _controller = Get.put(EntryCountController());
+
+  EntryCountView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;

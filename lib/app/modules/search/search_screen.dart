@@ -32,6 +32,7 @@ class Debouncer {
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
 
+  // ignore: unused_field
   final _controller = Get.put(SearchController());
 
   @override

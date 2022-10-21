@@ -6,16 +6,11 @@ import 'package:reel_ro/app/modules/auth/forgot_password/set_forget_password.dar
 import 'package:reel_ro/app/modules/auth/forgot_password/validate_forget_password.dart';
 import 'package:reel_ro/app/modules/auth/login/login_screen.dart';
 import 'package:reel_ro/app/modules/auth/verify_email/verify_email.dart';
-import 'package:reel_ro/app/modules/homepage/homepage_screen.dart';
 import 'package:reel_ro/app/routes/app_routes.dart';
-import 'package:reel_ro/models/user_model.dart';
 import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/constants.dart';
 import 'package:reel_ro/utils/snackbar.dart';
-
-import '../../../services/communication_services.dart';
-import '../navigation_bar/navigation_bar_screen.dart';
 
 class AuthController extends GetxController {
   final _authRepo = Get.put(AuthRepository());
@@ -61,10 +56,6 @@ class AuthController extends GetxController {
 
   void login() async {
     loading = true;
-    var data = {
-      'email': email.trim(),
-      'password': password.trim(),
-    };
     try {
       final message = await _authRepo.signIn(email: email, password: password);
       debugPrint("LoginSuccess: $message");
@@ -138,7 +129,7 @@ class AuthController extends GetxController {
       _storage.write(Constants.token, tokenId);
       _authService.redirectUser();
     } catch (e) {
-      showSnackBar(e.toString(), color: Color.fromARGB(255, 92, 90, 90));
+      showSnackBar(e.toString(), color: const Color.fromARGB(255, 92, 90, 90));
       debugPrint("login: $e");
     }
     loading = false;

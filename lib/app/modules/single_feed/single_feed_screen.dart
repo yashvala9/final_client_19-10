@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, must_be_immutable
 
 import 'dart:developer';
 
@@ -84,7 +84,7 @@ class SingleFeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Get.theme;
     final style = theme.textTheme;
-    var parser = EmojiParser();
+    final parser = EmojiParser();
     var isLiked = false;
 
     WidgetsBinding.instance.addPostFrameCallback((_) => openCommentSheet());

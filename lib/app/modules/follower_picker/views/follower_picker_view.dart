@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 import '../../../../models/contest_model.dart';
-import '../../account_settings/views/account_settings_view.dart';
 import '../controllers/follower_picker_controller.dart';
 
 class FollowerPickerView extends GetView<FollowerPickerController> {
   FollowerPickerView(this.contestModel, {Key? key}) : super(key: key);
 
-  ContestModel contestModel;
+  final ContestModel contestModel;
 
   final _controller = Get.put(FollowerPickerController());
 
@@ -96,7 +95,7 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                         Get.off(FollowerPickerWinnerView(v));
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color.fromRGBO(234, 67, 89, 1),
+                        backgroundColor: const Color.fromRGBO(234, 67, 89, 1),
                       ),
                       child: Text(
                         "Start",
@@ -118,9 +117,9 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
 }
 
 class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
-  FollowerPickerWinnerView(this.winnerName, {Key? key}) : super(key: key);
+  const FollowerPickerWinnerView(this.winnerName, {Key? key}) : super(key: key);
 
-  String winnerName;
+  final String winnerName;
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +183,7 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                       ),
                       Text(
                         "Winner Name: $winnerName",
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Color.fromRGBO(119, 79, 0, 1),
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
@@ -197,7 +196,8 @@ class FollowerPickerWinnerView extends GetView<FollowerPickerController> {
                             showSnackBar('Winner has been Informed!');
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: const Color.fromRGBO(234, 67, 89, 1),
+                            backgroundColor:
+                                const Color.fromRGBO(234, 67, 89, 1),
                           ),
                           child: const Text(
                             "Inform Winner",

@@ -111,7 +111,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                                     width: 100,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: const Color.fromRGBO(
+                                        backgroundColor: const Color.fromRGBO(
                                             253, 196, 64, 1),
                                         elevation: 9,
                                       ),
@@ -137,7 +137,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                                     width: 100,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        primary: const Color.fromRGBO(
+                                        backgroundColor: const Color.fromRGBO(
                                             217, 217, 217, 1),
                                         elevation: 8,
                                       ),
@@ -208,7 +208,8 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                             width: 100,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: const Color.fromRGBO(253, 196, 64, 1),
+                                backgroundColor:
+                                    const Color.fromRGBO(253, 196, 64, 1),
                                 elevation: 9,
                               ),
                               onPressed: () {
@@ -233,7 +234,8 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
                             width: 100,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary: const Color.fromRGBO(217, 217, 217, 1),
+                                backgroundColor:
+                                    const Color.fromRGBO(217, 217, 217, 1),
                                 elevation: 8,
                               ),
                               onPressed: () {

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
-import 'package:reel_ro/utils/snackbar.dart';
 
 import '../../../models/comment_model.dart';
 import '../../../repositories/comment_repository.dart';
-import '../../../repositories/reel_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
@@ -33,11 +31,10 @@ class CommentSheet extends StatelessWidget {
     );
   }
 
-  final _reelRepo = Get.put(ReelRepository());
   final _formKey = GlobalKey<FormState>();
   final _commentTextController = TextEditingController();
   final _scrollController = ScrollController();
-  var parser = EmojiParser();
+  final parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {

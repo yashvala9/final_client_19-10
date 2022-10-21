@@ -1,19 +1,13 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/foundation/key.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:reel_ro/app/modules/add_feed/widgets/video_trimmer_view.dart';
-import 'package:reel_ro/app/routes/app_routes.dart';
-import 'package:reel_ro/repositories/auth_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 
-import '../../../utils/video_player_item.dart';
 import '../single_feed/single_feed_screen.dart';
 
 class NavigationBarController extends GetxController {
@@ -30,6 +24,7 @@ class NavigationBarController extends GetxController {
       var initialLink = await dynamicLinks.getInitialLink();
       if (initialLink != null) {
         var deepLink = initialLink.link;
+        // ignore: unnecessary_null_comparison
         if (deepLink != null) {
           _handleDynamicLink(initialLink);
         } else {

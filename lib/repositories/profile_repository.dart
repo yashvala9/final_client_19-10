@@ -11,7 +11,6 @@ import 'package:reel_ro/models/profile_model.dart';
 
 import '../models/reel_model.dart';
 import '../utils/base.dart';
-import '../utils/snackbar.dart';
 
 class ProfileRepository {
   Future<ProfileModel> getCurrentUsesr(String token) async {

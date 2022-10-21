@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_screen.dart';

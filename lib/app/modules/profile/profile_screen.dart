@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final authService = Get.put(AuthService());
 
   final _profileRepo = Get.put(ProfileRepository());
-  var parser = EmojiParser();
+  final parser = EmojiParser();
 
   @override
   Widget build(BuildContext context) {
