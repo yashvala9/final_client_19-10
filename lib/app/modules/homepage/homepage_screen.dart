@@ -86,10 +86,6 @@ class HomePageScreen extends StatelessWidget {
         packageName: 'com.example.reel_ro',
         minimumVersion: 1,
       ),
-      // iosParameters: IOSParameters(
-      //   bundleId: '',
-      //   minimumVersion: 0
-      // )
     );
     var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
     final Uri shortUrl = dynamicUrl.shortUrl;
@@ -341,19 +337,7 @@ class HomePageScreen extends StatelessWidget {
                                                         .likeToggle(index);
                                                   }
                                                 },
-                                                swipeRight: () {
-                                                  // if (isReel) {
-                                                  //   if (controller
-                                                  //           .profileId !=
-                                                  //       data.user.id) {
-                                                  //     Get.to(
-                                                  //       () => ProfileDetail(
-                                                  //           profileModel:
-                                                  //               data.user),
-                                                  //     );
-                                                  //   }
-                                                  // }
-                                                },
+                                                swipeRight: () {},
                                                 showLike: controller.showLike,
                                               ),
                                         Column(
@@ -496,12 +480,8 @@ class HomePageScreen extends StatelessWidget {
                                                                             .titleMedium,
                                                                         onPressed:
                                                                             () {
-                                                                          // if (data.url !=
-                                                                          //     "") {
-                                                                          Get.to(WebViewScreen(
-                                                                              // data.url
-                                                                              'https://flutter.dev'));
-                                                                          // }
+                                                                          Get.to(
+                                                                              WebViewScreen('https://flutter.dev'));
                                                                         },
                                                                       ),
                                                                     ),
@@ -580,18 +560,6 @@ class HomePageScreen extends StatelessWidget {
                                                                           .white,
                                                                     ),
                                                                   ),
-                                                                  // Text(
-                                                                  //   _controller
-                                                                  //       .totalEntryPoints
-                                                                  //       .value,
-                                                                  //   style: style
-                                                                  //       .headlineSmall!
-                                                                  //       .copyWith(
-                                                                  //     fontSize: 18,
-                                                                  //     color: Colors
-                                                                  //         .white,
-                                                                  //   ),
-                                                                  // ),
                                                                   FutureBuilder<
                                                                           String>(
                                                                       future: _giveawayRepo.getTotalEntryCountByUserId(
@@ -639,7 +607,6 @@ class HomePageScreen extends StatelessWidget {
                                                                   height: 15),
                                                               Column(
                                                                 children: [
-                                                                  // _controller.likeVideo(data.id),
                                                                   FutureBuilder<
                                                                       bool>(
                                                                     future: isPhoto
@@ -683,7 +650,6 @@ class HomePageScreen extends StatelessWidget {
                                                                       );
                                                                     },
                                                                   ),
-                                                                  // const SizedBox(height: 7),
                                                                   FutureBuilder<
                                                                           int>(
                                                                       future: isPhoto
@@ -704,7 +670,6 @@ class HomePageScreen extends StatelessWidget {
                                                                           snap.hasData
                                                                               ? snap.data!.toString()
                                                                               : '0',
-                                                                          // data.likeCount.toString(),
                                                                           style: style
                                                                               .headlineSmall!
                                                                               .copyWith(
@@ -928,21 +893,19 @@ class HomePageScreen extends StatelessWidget {
                                                                     _controllerCenter,
                                                                 blastDirectionality:
                                                                     BlastDirectionality
-                                                                        .explosive, // don't specify a direction, blast randomly
+                                                                        .explosive,
                                                                 shouldLoop:
-                                                                    false, // start again as soon as the animation is finished
+                                                                    false,
                                                                 colors: const [
                                                                   Colors.green,
                                                                   Colors.blue,
                                                                   Colors.pink,
                                                                   Colors.orange,
                                                                   Colors.purple
-                                                                ], // manually specify the colors to be used
-                                                                // createParticlePath: drawStar, // define a custom shape/path.
+                                                                ],
                                                               ),
                                                               InkWell(
                                                                 onTap: () {
-                                                                  // _changeRotation();
                                                                   Get.to(
                                                                       EntryCountView());
                                                                 },
@@ -964,18 +927,6 @@ class HomePageScreen extends StatelessWidget {
                                                                       ),
                                                                     )),
                                                               ),
-                                                              // Text(
-                                                              //   _controller
-                                                              //       .totalEntryPoints
-                                                              //       .value,
-                                                              //   style: style
-                                                              //       .headlineSmall!
-                                                              //       .copyWith(
-                                                              //     fontSize: 18,
-                                                              //     color: Colors
-                                                              //         .white,
-                                                              //   ),
-                                                              // ),
                                                               FutureBuilder<
                                                                       String>(
                                                                   future: _giveawayRepo.getTotalEntryCountByUserId(

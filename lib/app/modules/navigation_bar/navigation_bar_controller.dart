@@ -41,14 +41,6 @@ class NavigationBarController extends GetxController {
 
       dynamicLinks.onLink.listen((event) async {
         _handleDynamicLink(event);
-        // Get.to(() => Demo());
-        // if (type == 'reels') {
-        //   var reel = await _reelRepo.getSingleReel(id, _authService.token!);
-        //   Get.to(() => SingleFeedScreen(null, [reel], 0, isPhoto: false));
-        // } else {
-        //   var photo = await _reelRepo.getPhotosById(id, _authService.token!);
-        //   Get.to(() => SingleFeedScreen([photo], null, 0, isPhoto: true));
-        // }
       });
     } catch (e) {
       debugPrint(e.toString());

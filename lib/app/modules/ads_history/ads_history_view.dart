@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -33,7 +31,6 @@ class AdsHistoryView extends StatelessWidget {
             style: style.titleMedium,
           ),
         ),
-        // backgroundColor: AppColors.white,
       ),
       body: GetBuilder<AdsHistoryController>(
           builder: (_) => FutureBuilder<List<AdsHistoryModel>>(
@@ -81,7 +78,6 @@ class AdsHistoryView extends StatelessWidget {
                                       filename: e.ads.filename,
                                       media_ext: e.ads.media_ext,
                                       thumbnail: e.ads.thumbnail,
-                                      // filepath: e.ads.filepath,
                                       user: e.ads.user))
                                   .toList(),
                               0));
@@ -110,21 +106,13 @@ class AdsHistoryView extends StatelessWidget {
                                   ),
                                   alignment: Alignment.center,
                                   child: Loading(),
-                                  // Text("Processing..."),
                                 );
                               },
                               imageUrl: snapshot.data!,
                               fit: BoxFit.cover,
                             );
                           },
-                        )
-
-                        // CachedNetworkImage(
-                        //   placeholder: (context, url) => Loading(),
-                        //   imageUrl: ads[index].ads.thumbnail,
-                        //   fit: BoxFit.cover,
-                        // ),
-                        );
+                        ));
                   },
                 );
               })),

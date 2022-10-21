@@ -34,21 +34,11 @@ class SingleFeedController extends GetxController {
     update();
   }
 
-  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([
-    // Comment(
-    //     username: "yashvala9",
-    //     comment: "comment",
-    //     datePublished: "datePublished",
-    //     likes: [],
-    //     profilePhoto: "profilePhoto",
-    //     uid: "1",
-    //     id: "1")
-  ]);
+  final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
 
   @override
   void onInit() {
-    // getFeeds();
     super.onInit();
   }
 
@@ -183,7 +173,6 @@ class CommentController extends GetxController {
       final message = await _commentRepo.addCommentToById(token!, map, reelId);
       debugPrint("addCommentSuccess: $message");
     } catch (e) {
-      // showSnackBar(e.toString(), color: Colors.red);
       debugPrint("addComment: $e");
     }
   }

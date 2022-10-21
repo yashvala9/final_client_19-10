@@ -184,7 +184,7 @@ class NavigationBarScreen extends StatelessWidget {
                   SearchScreen(),
                   GiveawayView(),
                   ChatList(),
-                  ProfileScreen(),
+                  const ProfileScreen(),
                 ],
                 index: controller.tabIndex.value,
               ),

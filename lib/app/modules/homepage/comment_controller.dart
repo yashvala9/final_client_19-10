@@ -75,7 +75,7 @@ class CommentController extends GetxController {
           isPhoto: isPhoto);
       commentList.removeAt(index);
       HomePageController().update();
-      // deleteCommentLocally(commentList[index].id);
+
       update();
     } catch (e) {
       log('Delete Comment: $e');

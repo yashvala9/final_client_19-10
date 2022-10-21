@@ -17,9 +17,7 @@ class ContestDatesController extends GetxController {
     super.onInit();
   }
 
-  _fetch() async {
-    // await getContestDates();
-  }
+  _fetch() async {}
 
   Future<void> getContestDates() async {
     contestDatesList.clear();

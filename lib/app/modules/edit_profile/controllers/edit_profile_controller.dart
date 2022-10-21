@@ -84,7 +84,7 @@ class EditProfileController extends GetxController {
       };
       await _profileRepo.updateProfile(profileData, _authService.token!);
       _fileName = '';
-      // await _authService.redirectUser();
+
       final profile = await _profileRepo.getCurrentUsesr(_authService.token!);
       if (profile.user_profile != null) {
         _authService.profileModel = profile;

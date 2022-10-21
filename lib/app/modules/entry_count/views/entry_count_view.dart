@@ -25,7 +25,6 @@ class EntryCountView extends GetView<EntryCountController> {
             style: TextStyle(fontSize: 17),
           ),
         ),
-        // backgroundColor: AppColors.white,
       ),
       body: SingleChildScrollView(
         child: Column(

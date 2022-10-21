@@ -16,9 +16,7 @@ class WinnersController extends GetxController {
     super.onInit();
   }
 
-  _fetch() async {
-    // await getWinnerList();
-  }
+  _fetch() async {}
 
   Future<void> getWinnerList() async {
     winnerList.clear();

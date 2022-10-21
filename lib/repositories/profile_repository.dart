@@ -114,7 +114,6 @@ class ProfileRepository {
       log("UploadProfiletoS3: $response");
       return "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/$fileName";
     } catch (e) {
-      // showSnackBar("Error Uploading File");
       printInfo(info: "File Uploading error.......");
       return null;
     }

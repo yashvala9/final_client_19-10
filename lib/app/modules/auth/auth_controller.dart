@@ -19,7 +19,7 @@ import '../navigation_bar/navigation_bar_screen.dart';
 
 class AuthController extends GetxController {
   final _authRepo = Get.put(AuthRepository());
-  // final _userRepo = Get.put(UserRepository());
+
   final _authService = Get.find<AuthService>();
 
   final _storage = GetStorage();
@@ -124,9 +124,6 @@ class AuthController extends GetxController {
       Get.off(
         () => VerifyEmailView(),
       );
-      // _storage.write(Constants.token, token);
-      // await _userRepo.createProfile(userModel);
-      // _authService.redirectUser();
     } catch (e) {
       showSnackBar(e.toString(), color: Colors.red);
       debugPrint("login: $e");

@@ -1,13 +1,9 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/models/profile_model.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
@@ -18,7 +14,6 @@ import '../../../models/photo_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/profile_repository.dart';
 import '../../../services/communication_services.dart';
-import '../../../utils/assets.dart';
 import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/empty_widget.dart';
@@ -27,7 +22,6 @@ import '../../../widgets/my_elevated_button.dart';
 import '../chat/chat_view.dart';
 import '../list_users/list_users_view.dart';
 import '../profile/profile_photo_view.dart';
-import '../profile/profile_screen.dart';
 import '../single_feed/single_feed_screen.dart';
 
 class ProfileDetail extends StatelessWidget {
@@ -37,7 +31,7 @@ class ProfileDetail extends StatelessWidget {
   final _profileRepo = Get.put(ProfileRepository());
 
   final CommunicationService _communicationService = CommunicationService.to;
-  var parser = EmojiParser();
+  final parser = EmojiParser();
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;
@@ -266,9 +260,6 @@ class ProfileDetail extends StatelessWidget {
                                                                     log("State: ${_communicationService.client.state}");
                                                                     log("CurrentUser: ${_communicationService.client.state.currentUser}");
                                                                     String
-                                                                        queryId =
-                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
-                                                                    String
                                                                         newChannelId =
                                                                         '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
@@ -397,9 +388,6 @@ class ProfileDetail extends StatelessWidget {
                                                                     log("State: ${_communicationService.client.state}");
                                                                     log("CurrentUser: ${_communicationService.client.state.currentUser}");
                                                                     String
-                                                                        queryId =
-                                                                        '${_communicationService.client.state.currentUser!.id.hashCode}${profileModel.id.hashCode}';
-                                                                    String
                                                                         newChannelId =
                                                                         '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
@@ -476,7 +464,7 @@ class ProfileDetail extends StatelessWidget {
                                                           profileModel
                                                               .user_profile!
                                                               .bio!),
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                           color: Colors.black,
                                                           fontSize: 18),
                                                     )),
@@ -507,7 +495,7 @@ class ProfileDetail extends StatelessWidget {
                                           },
                                           child: Material(
                                             elevation: 3,
-                                            shape: CircleBorder(),
+                                            shape: const CircleBorder(),
                                             child: Hero(
                                               tag: "hero3",
                                               child: CircleAvatar(
@@ -518,15 +506,6 @@ class ProfileDetail extends StatelessWidget {
                                             ),
                                           ),
                                         )
-                                        // Material(
-                                        //   elevation: 3,
-                                        //   shape: CircleBorder(),
-                                        //   child: CircleAvatar(
-                                        //     radius: 40,
-                                        //     backgroundImage: NetworkImage(
-                                        //         "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
-                                        //   ),
-                                        // ),
                                       ],
                                     ),
                                   ),
@@ -547,7 +526,6 @@ class ProfileDetail extends StatelessWidget {
   }
 
   Widget _tabSection(BuildContext context, ProfileModel profileModel) {
-    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -611,14 +589,14 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(SingleFeedScreen([], reels, index));
+                  Get.to(SingleFeedScreen(const [], reels, index));
                 },
                 child: Stack(children: [
                   FutureBuilder<String>(
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return ShimmerCardAnimation();
+                        return const ShimmerCardAnimation();
                       }
 
                       return SizedBox(
@@ -631,7 +609,8 @@ class ProfileReel extends StatelessWidget {
                                 border: Border.all(),
                               ),
                               alignment: Alignment.center,
-                              child: Center(child: CircularProgressIndicator()),
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
                             );
                           },
                           imageUrl: snapshot.data!,
@@ -645,7 +624,7 @@ class ProfileReel extends StatelessWidget {
                         reels[index].id.toString(), _controller.token!),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return ShimmerCardAnimation();
+                        return const ShimmerCardAnimation();
                       }
 
                       return Positioned(
@@ -653,10 +632,10 @@ class ProfileReel extends StatelessWidget {
                           left: 5,
                           child: Row(
                             children: [
-                              Icon(Icons.play_arrow, color: Colors.white),
+                              const Icon(Icons.play_arrow, color: Colors.white),
                               Text(
                                 snapshot.data.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16),

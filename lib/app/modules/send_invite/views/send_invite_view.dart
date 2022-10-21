@@ -29,7 +29,6 @@ class SendInviteView extends GetView<SendInviteController> {
               style: style.titleMedium,
             ),
           ),
-          // backgroundColor: AppColors.white,
         ),
         body: Center(
           child: Column(

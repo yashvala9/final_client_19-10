@@ -33,8 +33,6 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
   final _authService = Get.find<AuthService>();
   var parser = EmojiParser();
 
-  // final _authService = Get.put(AuthService());
-
   void toggleFollowing(int profileId, String token) async {
     try {
       _profileRepo.toggleFollow(profileId, token);
@@ -293,8 +291,6 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
 
                                                               log("State: ${_communicationService.client.state}");
                                                               log("CurrentUser: ${_communicationService.client.state.currentUser}");
-                                                              String queryId =
-                                                                  '${_communicationService.client.state.currentUser!.id.hashCode}${widget.profileModel.id.hashCode}';
                                                               String
                                                                   newChannelId =
                                                                   '${widget.profileModel.id}${_communicationService.client.state.currentUser!.id}';
@@ -373,7 +369,7 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
                                                     .profileModel
                                                     .user_profile!
                                                     .bio!),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 18),
                                               )),
@@ -422,7 +418,6 @@ class _OtherProfileDetailState extends State<OtherProfileDetail> {
 
   Widget _tabSection(
       BuildContext context, ProfileModel profileModel, String token) {
-    final _profileRepo = Get.find<ProfileRepository>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[

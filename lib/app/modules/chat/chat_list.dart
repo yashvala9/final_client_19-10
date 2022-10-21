@@ -78,15 +78,6 @@ class ChatList extends StatelessWidget {
                           .firstWhere((message) => !message.isDeleted,
                               orElse: () => Message(id: "0", text: ''));
                       final subtitle = lastMessage!.text;
-                      // orElse: () => 'No matching color found');
-                      // var subtitle =
-                      //     items[index].state?.messages.reversed.first.text
-                      //         '';
-
-                      // debugPrint('2121 ${subtitle.toString()}');
-                      // final subtitle = lastMessage == null
-                      //     ? 'nothing yet'
-                      //     : lastMessage.text!;
                       var profileUrl = _member?.user?.extraData['profilePic'];
                       return defaultWidget.copyWith(
                         leading: CircleAvatar(

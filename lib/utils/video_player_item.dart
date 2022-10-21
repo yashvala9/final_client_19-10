@@ -58,7 +58,6 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
         setState(() {
           loading = false;
         });
-        // videoPlayerController.play();
         videoPlayerController.setVolume(widget.enableAudio ? 1 : 0);
         videoPlayerController.dataSource;
         videoPlayerController.setLooping(true);

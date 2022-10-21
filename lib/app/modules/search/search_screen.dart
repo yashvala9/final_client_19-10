@@ -3,8 +3,6 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
@@ -34,13 +32,10 @@ class Debouncer {
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
 
-  final _profileRepo = Get.find<ProfileRepository>();
   final _controller = Get.put(SearchController());
 
   @override
   Widget build(BuildContext context) {
-    final theme = Get.theme;
-    final style = theme.textTheme;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -345,16 +340,6 @@ class ReelsTab extends StatelessWidget {
                                     isPhoto: false,
                                   ));
                                 },
-                                // child: isPhoto
-                                //     ? CachedNetworkImage(
-                                //         imageUrl:
-                                //             "${Base.profileBucketUrl}/${_controller.reelList[index].filename}",
-                                //         fit: BoxFit.cover,
-                                //         errorWidget: (c, s, e) =>
-                                //             const Icon(
-                                //                 Icons.error),
-                                //       )
-                                //     :
                                 child: (index % 10 == 1 || index % 10 == 8)
                                     ? VideoPlayerItem(
                                         videoUrl: videoUrl,
@@ -399,87 +384,6 @@ class ReelsTab extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // child: CustomScrollView(
-                    //   shrinkWrap: true,
-                    //   slivers: [
-
-                    //     // SliverGrid(
-                    //     //   gridDelegate:
-                    //     //       const SliverGridDelegateWithFixedCrossAxisCount(
-                    //     //     crossAxisCount: 3,
-                    //     //     childAspectRatio: 1,
-                    //     //     crossAxisSpacing: 2,
-                    //     //     mainAxisSpacing: 2,
-                    //     //   ),
-                    //     //   delegate: SliverChildBuilderDelegate(
-                    //     //     (context, index) {
-                    //     //       var isPhoto = _controller
-                    //     //               .reelList[index]
-                    //     //               .media_ext !=
-                    //     //           'mp4';
-                    //     //       return GestureDetector(
-                    //     //           onTap: () {
-                    //     //             Get.to(SingleFeedScreen(
-                    //     //               null,
-                    //     //               _controller.reelList,
-                    //     //               index,
-                    //     //             ));
-                    //     //           },
-                    //     //           child: isPhoto
-                    //     //               ? CachedNetworkImage(
-                    //     //                   imageUrl:
-                    //     //                       "${Base.profileBucketUrl}/${_controller.reelList[index].filename}",
-                    //     //                   fit: BoxFit.cover,
-                    //     //                   errorWidget: (c, s,
-                    //     //                           e) =>
-                    //     //                       const Icon(
-                    //     //                           Icons.error),
-                    //     //                 )
-                    //     //               : FutureBuilder<String>(
-                    //     //                   future: _profileRepo
-                    //     //                       .getThumbnail(
-                    //     //                           _controller
-                    //     //                               .reelList[
-                    //     //                                   index]
-                    //     //                               .thumbnail),
-                    //     //                   builder: (context,
-                    //     //                       snapshot) {
-                    //     //                     if (!snapshot
-                    //     //                         .hasData) {
-                    //     //                       return const ShimmerCardAnimation();
-                    //     //                     }
-
-                    //     //                     return CachedNetworkImage(
-                    //     //                       key: UniqueKey(),
-                    //     //                       placeholder:
-                    //     //                           (context,
-                    //     //                               url) {
-                    //     //                         return const ShimmerCardAnimation();
-                    //     //                       },
-                    //     //                       errorWidget:
-                    //     //                           (_, a, b) {
-                    //     //                         return const ShimmerCardAnimation();
-                    //     //                       },
-                    //     //                       imageUrl: snapshot
-                    //     //                           .data!,
-                    //     //                       fit: BoxFit.cover,
-                    //     //                     );
-                    //     //                   },
-                    //     //                 ));
-                    //     //     },
-                    //     //     childCount:
-                    //     //         _controller.reelList.length,
-                    //     //   ),
-                    //     // ),
-                    //     SliverToBoxAdapter(
-                    //       child: Center(
-                    //         child: _controller.loadingMore
-                    //             ? const Loading()
-                    //             : const SizedBox(),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ),
       ],
     );
@@ -490,7 +394,6 @@ class PhotosTab extends StatelessWidget {
   PhotosTab({Key? key}) : super(key: key);
 
   final _controller = Get.find<SearchController>();
-  final _profileRepo = ProfileRepository();
 
   @override
   Widget build(BuildContext context) {

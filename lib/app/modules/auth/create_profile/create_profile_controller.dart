@@ -9,7 +9,6 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:path/path.dart' as path;
 
 class CreateProfileController extends GetxController {
-  // final _authRepo = Get.put(AuthRepository());
   final _authService = Get.find<AuthService>();
   final _profileRepo = Get.put(ProfileRepository());
 

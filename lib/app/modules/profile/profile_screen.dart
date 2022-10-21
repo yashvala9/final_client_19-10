@@ -9,7 +9,6 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reel_ro/app/modules/account_settings/views/account_settings_view.dart';
-import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/list_users/list_users_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_photo_view.dart';
 import 'package:reel_ro/models/profile_model.dart';
@@ -19,20 +18,17 @@ import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/shimmer_animation.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../../models/photo_model.dart';
 import '../../../repositories/reel_repository.dart';
 import '../../../utils/empty_widget.dart';
-import '../../../utils/snackbar.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../edit_profile/views/edit_profile_view.dart';
-import '../list_users/list_users_controller.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -76,65 +72,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.black54,
                   ),
                   onPressed: () async {
-                    // final val = await showDialog(
-                    //   context: context,
-                    //   builder: (_) => Dialog(
-                    //       child: Column(
-                    //     mainAxisSize: MainAxisSize.min,
-                    //     children: [
-                    //       ListTile(
-                    //         onTap: () {
-                    //           Navigator.pop(context, true);
-                    //         },
-                    //         leading: Icon(Icons.video_camera_back),
-                    //         title: Text("Video"),
-                    //       ),
-                    //       ListTile(
-                    //         onTap: () {
-                    //           Navigator.pop(context, false);
-                    //         },
-                    //         leading: Icon(Icons.photo),
-                    //         title: Text("Photo"),
-                    //       ),
-                    //     ],
-                    //   )),
-                    // );
-                    // if (val != null) {
-                    //   if (val) {
-                    //     var video = await ImagePicker()
-                    //         .pickVideo(source: ImageSource.gallery);
-                    //     if (video != null) {
-                    //       Navigator.of(context).push(
-                    //         MaterialPageRoute(builder: (context) {
-                    //           return VideoTrimmerView(File(video.path));
-                    //         }),
-                    //       );
-                    //     }
-                    //     // var video = await ImagePicker()
-                    //     //     .pickVideo(source: ImageSource.gallery);
-                    //     // if (video != null) {
-                    //     //   Get.to(
-                    //     //     () => AddFeedScreen(
-                    //     //       file: File(video.path),
-                    //     //       type: 0,
-                    //     //     ),
-                    //     //   );
-                    //     // }
-                    //   } else {
-                    //     var photo = await ImagePicker()
-                    //         .pickImage(source: ImageSource.gallery);
-                    //     if (photo != null) {
-                    //       Get.to(
-                    //         () => AddFeedScreen(
-                    //           file: File(photo.path),
-                    //           type: 1,
-                    //         ),
-                    //       );
-                    //     }
-                    //   }
-                    //   _controller.update();
-                    // }
-
                     final val = await showDialog(
                       context: context,
                       builder: (_) => Dialog(
@@ -186,18 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         }
                       }
                     }
-                    // var video = await ImagePicker()
-                    //     .pickVideo(source: ImageSource.gallery);
-                    // if (video != null) {
-                    //   final val = await Navigator.of(context).push(
-                    //     MaterialPageRoute(builder: (context) {
-                    //       return VideoTrimmerView(File(video.path));
-                    //     }),
-                    //   );
-                    //   if (val != null) {
-                    //     setState(() {});
-                    //   }
-                    // }
                   },
                 ),
               ],
@@ -345,8 +270,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              // if (profileModel.status ==
-                                              //     "VERIFIED")
                                               Container(
                                                 width: Get.width * 0.9,
                                                 decoration: BoxDecoration(
@@ -507,7 +430,6 @@ class ProfileReel extends StatelessWidget {
                 _controller.update();
               }
             }
-            var tumb = reels[index].thumbnail;
 
             return InkWell(
               onTap: () {
@@ -630,10 +552,6 @@ class PhotoSection extends StatelessWidget {
                     crossAxisSpacing: 5,
                   ),
                   itemBuilder: (context, index) {
-                    // String thumbnail = photos[index].videoId.url;
-                    // printInfo(
-                    //     info: "ProfileId: ${_controller.profileId}");
-                    // printInfo(info: "tumbnail: $thumbnail");
                     return InkWell(
                       onLongPress: () {
                         Get.dialog(AlertDialog(

@@ -67,36 +67,8 @@ class NestedCommentWidget extends StatelessWidget {
                   parser.emojify(nestedCommentModel.response),
                 ),
                 Container(),
-                // Row(
-                //   children: [
-                //     IconButton(
-                //         onPressed: () {
-                //           log("CommentId: $nestedCommentModel");
-                //           likeToggle();
-                //         },
-                //         icon: const Icon(
-                //           Icons.favorite,
-                //           color: Colors.red,
-                //         )),
-                //     Text(nest.likeCount.toString()),
-                //   ],
-                // )
               ],
             ),
-            // StatefulBuilder(builder: (context, setState) {
-            //   if (!showNestedComment) {
-            //     return InkWell(
-            //         onTap: () {},
-            //         child: Text(
-            //           '${commentModel.responseCount} Responses',
-            //           style: const TextStyle(color: Colors.blue),
-            //         ));
-            //   } else {
-            //     return FutureBuilder(builder: (context, snapshot) {
-            //       return Container();
-            //     });
-            //   }
-            // }),
           ],
         ),
       ),

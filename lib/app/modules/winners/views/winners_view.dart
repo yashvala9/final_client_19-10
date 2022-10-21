@@ -43,16 +43,6 @@ class WinnersView extends GetView<WinnersController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const WinnerHeaderImage(),
-            // Expanded(
-            //   child: ListView.builder(
-            //           itemCount: controller.winnerList.length,
-            //           itemBuilder: (context, index) {
-            //             return WinnerCardWidget(
-            //                 winner: controller.winnerList[index]);
-            //           },
-            //         )
-            //       ,
-            // ),
             FutureBuilder<List<WinnerModel>>(
               future: _giveawayRepo.getWinners(
                   _controller.profileId!, _controller.token!),

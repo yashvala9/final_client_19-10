@@ -58,10 +58,6 @@ class SingleFeedScreen extends StatelessWidget {
         packageName: 'com.example.reel_ro',
         minimumVersion: 1,
       ),
-      // iosParameters: IOSParameters(
-      //   bundleId: '',
-      //   minimumVersion: 0
-      // )
     );
     var dynamicUrl = await dynamicLinks.buildShortLink(parameters);
     final Uri shortUrl = dynamicUrl.shortUrl;
@@ -402,7 +398,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                     photos![index]
                                                                         .id);
                                                           },
-                                                          // _controller.likeVideo(data.id),
                                                           child: FutureBuilder<
                                                                   bool>(
                                                               future: _reelRepo
@@ -436,7 +431,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           .white,
                                                                 );
                                                               })),
-                                                      // const SizedBox(height: 7),
                                                       FutureBuilder<int>(
                                                           future: _reelRepo
                                                               .getLikeCountByPhotoId(
@@ -782,12 +776,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 style: style
                                                                     .titleMedium,
                                                                 onPressed: () {
-                                                                  // if (data.url !=
-                                                                  //     "") {
                                                                   Get.to(WebViewScreen(
-                                                                      // data.url
                                                                       'https://flutter.dev'));
-                                                                  // }
                                                                 },
                                                               ),
                                                             ),
@@ -825,36 +815,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                             color: Colors.blue,
                                                           ))
                                                       : SizedBox(),
-
-                                                  // Text(
-                                                  //   parser.emojify(reels![index]
-                                                  //       .video_title),
-                                                  //   style: const TextStyle(
-                                                  //     fontSize: 20,
-                                                  //     color: Colors.white,
-                                                  //     fontWeight: FontWeight.bold,
-                                                  //   ),
-                                                  // ),
-                                                  // HashTagText(
-                                                  //   onTap: (tag) {
-                                                  //     debugPrint('5151' + tag);
-                                                  //     Get.to(SearchHashTags(
-                                                  //       hashTag: tag,
-                                                  //     ));
-                                                  //   },
-                                                  //   text: parser.emojify(
-                                                  //       reels![index]
-                                                  //           .description),
-                                                  //   basicStyle: const TextStyle(
-                                                  //     fontSize: 15,
-                                                  //     color: Colors.white,
-                                                  //   ),
-                                                  //   decoratedStyle:
-                                                  //       const TextStyle(
-                                                  //     fontSize: 15,
-                                                  //     color: Colors.blue,
-                                                  //   ),
-                                                  // ),
                                                 ],
                                               ),
                                             ),
@@ -884,18 +844,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   Colors.white,
                                                             ),
                                                           ),
-                                                          // Text(
-                                                          //   _controller
-                                                          //       .totalEntryPoints
-                                                          //       .value,
-                                                          //   style: style
-                                                          //       .headlineSmall!
-                                                          //       .copyWith(
-                                                          //     fontSize: 18,
-                                                          //     color: Colors
-                                                          //         .white,
-                                                          //   ),
-                                                          // ),
                                                           FutureBuilder<String>(
                                                               future: _giveawayRepo
                                                                   .getTotalEntryCountByUserId(
@@ -988,7 +936,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   ),
                                                                 );
                                                               }),
-                                                          // const SizedBox(height: 7),
                                                           FutureBuilder<int>(
                                                               future: isPhoto
                                                                   ? _reelRepo.getLikeCountByPhotoId(
@@ -1009,7 +956,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           .data!
                                                                           .toString()
                                                                       : '0',
-                                                                  // data.likeCount.toString(),
                                                                   style: style
                                                                       .headlineSmall!
                                                                       .copyWith(
@@ -1124,7 +1070,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                     children: [
                                                       InkWell(
                                                         onTap: () {
-                                                          // _changeRotation();
                                                           Get.to(
                                                               EntryCountView());
                                                         },
@@ -1134,18 +1079,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                           color: Colors.pink,
                                                         ),
                                                       ),
-                                                      // Text(
-                                                      //   _controller
-                                                      //       .totalEntryPoints
-                                                      //       .value,
-                                                      //   style: style
-                                                      //       .headlineSmall!
-                                                      //       .copyWith(
-                                                      //     fontSize: 18,
-                                                      //     color: Colors
-                                                      //         .white,
-                                                      //   ),
-                                                      // ),
                                                       FutureBuilder<String>(
                                                           future: _giveawayRepo
                                                               .getTotalEntryCountByUserId(
@@ -1180,191 +1113,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                           })
                                                     ],
                                                   ),
-
-                                            // Column(
-                                            //   mainAxisAlignment:
-                                            //       MainAxisAlignment.spaceEvenly,
-                                            //   children: [
-                                            //     Column(
-                                            //       children: [
-                                            //         InkWell(
-                                            //           onTap: () {
-                                            //             Get.to(EntryCountView());
-                                            //           },
-                                            //           child: const Icon(
-                                            //             Icons.card_giftcard,
-                                            //             size: 30,
-                                            //             color: Colors.white,
-                                            //           ),
-                                            //         ),
-                                            //         FutureBuilder<String>(
-                                            //             future: _giveawayRepo
-                                            //                 .getTotalEntryCountByUserId(
-                                            //                     _controller
-                                            //                         .profileId!,
-                                            //                     _controller
-                                            //                         .token!),
-                                            //             builder:
-                                            //                 (context, snapshot) {
-                                            //               if (!snapshot.hasData) {
-                                            //                 return Text(
-                                            //                   "0",
-                                            //                   style: style
-                                            //                       .headlineSmall!
-                                            //                       .copyWith(
-                                            //                     fontSize: 18,
-                                            //                     color:
-                                            //                         Colors.white,
-                                            //                   ),
-                                            //                 );
-                                            //               }
-                                            //               if (snapshot.hasError) {
-                                            //                 printInfo(
-                                            //                     info:
-                                            //                         "getTotalEntryCountByUserId: ${snapshot.hasError}");
-                                            //                 return Container();
-                                            //               }
-                                            //               return Text(
-                                            //                 snapshot.data
-                                            //                     .toString(),
-                                            //                 style: style
-                                            //                     .headlineSmall!
-                                            //                     .copyWith(
-                                            //                   fontSize: 18,
-                                            //                   color: Colors.white,
-                                            //                 ),
-                                            //               );
-                                            //             })
-                                            //       ],
-                                            //     ),
-                                            //     Column(
-                                            //       children: [
-                                            //         InkWell(
-                                            //             onTap: () {
-                                            //               _controller.likeToggle(
-                                            //                   reels![index].id);
-                                            //             },
-                                            //             // _controller.likeVideo(data.id),
-                                            //             child: FutureBuilder<
-                                            //                     bool>(
-                                            //                 future: _reelRepo
-                                            //                     .getLikeFlag(
-                                            //                         reels![index]
-                                            //                             .id,
-                                            //                         _controller
-                                            //                             .token!),
-                                            //                 builder:
-                                            //                     (context, snap) {
-                                            //                   return Icon(
-                                            //                     snap.hasData
-                                            //                         ? snap.data!
-                                            //                             ? Icons
-                                            //                                 .favorite
-                                            //                             : Icons
-                                            //                                 .favorite_border
-                                            //                         : Icons
-                                            //                             .favorite_border,
-                                            //                     size: 30,
-                                            //                     color: snap
-                                            //                             .hasData
-                                            //                         ? snap.data!
-                                            //                             ? Colors
-                                            //                                 .red
-                                            //                             : Colors
-                                            //                                 .white
-                                            //                         : Colors
-                                            //                             .white,
-                                            //                   );
-                                            //                 })),
-
-                                            //         // const SizedBox(height: 7),
-                                            //         FutureBuilder<int>(
-                                            //             future: _reelRepo
-                                            //                 .getLikeCountByReelId(
-                                            //                     reels![index].id,
-                                            //                     _controller
-                                            //                         .token!),
-                                            //             builder: (context, snap) {
-                                            //               return Text(
-                                            //                 snap.hasData
-                                            //                     ? snap.data!
-                                            //                         .toString()
-                                            //                     : '0',
-                                            //                 // data.likeCount.toString(),
-                                            //                 style: style
-                                            //                     .headlineSmall!
-                                            //                     .copyWith(
-                                            //                   fontSize: 18,
-                                            //                   color: Colors.white,
-                                            //                 ),
-                                            //               );
-                                            //             }),
-                                            //       ],
-                                            //     ),
-                                            //     Column(
-                                            //       children: [
-                                            //         InkWell(
-                                            //           onTap: () {
-                                            //             Get.bottomSheet(
-                                            //               CommentSheet(
-                                            //                 reelId:
-                                            //                     reels![index].id,
-                                            //               ),
-                                            //               backgroundColor:
-                                            //                   Colors.white,
-                                            //             );
-                                            //           },
-                                            //           child: const Icon(
-                                            //             Icons.comment,
-                                            //             size: 30,
-                                            //             color: Colors.white,
-                                            //           ),
-                                            //         ),
-                                            //         FutureBuilder<int>(
-                                            //             future: _commentRepo
-                                            //                 .getCommentCountByReelId(
-                                            //                     reels![index].id,
-                                            //                     _controller
-                                            //                         .token!),
-                                            //             builder:
-                                            //                 (context, snapshot) {
-                                            //               return Text(
-                                            //                 snapshot.hasData
-                                            //                     ? snapshot.data!
-                                            //                         .toString()
-                                            //                     : '0',
-                                            //                 style: style
-                                            //                     .headlineSmall!
-                                            //                     .copyWith(
-                                            //                   fontSize: 18,
-                                            //                   color: Colors.white,
-                                            //                 ),
-                                            //               );
-                                            //             })
-                                            //       ],
-                                            //     ),
-                                            //     Column(
-                                            //       children: [
-                                            //         InkWell(
-                                            //           onTap: () {},
-                                            //           child: const Icon(
-                                            //             Icons.reply,
-                                            //             size: 30,
-                                            //             color: Colors.white,
-                                            //           ),
-                                            //         ),
-                                            //         // const SizedBox(height: 7),
-                                            //         // Text(
-                                            //         //   '0',
-                                            //         //   style: const TextStyle(
-                                            //         //     fontSize: 20,
-                                            //         //     color: Colors.white,
-                                            //         //   ),
-                                            //         // )
-                                            //       ],
-                                            //     ),
-                                            //   ],
-                                            // ),
                                           ),
                                         ],
                                       ),

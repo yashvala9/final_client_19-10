@@ -442,8 +442,6 @@ class ProfileDetail extends StatelessWidget {
                                                             ),
                                                           );
                                                   }),
-                                              // profileModel.status == 'VERIFIED'
-                                              //     ?
                                               Container(
                                                 width: Get.width * 0.9,
                                                 decoration: BoxDecoration(
@@ -506,18 +504,7 @@ class ProfileDetail extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                        )
-
-                                        // Material(
-                                        //   elevation: 3,
-                                        //   shape: CircleBorder(),
-                                        //   child: CircleAvatar(
-                                        //     radius: 40,
-                                        //     backgroundImage: NetworkImage(
-                                        //         "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"),
-                                        //   ),
-                                        // ),
-                                        ),
+                                        )),
                                   ],
                                 )
                               ],
@@ -603,7 +590,6 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  // showSnackBar(index.toString());
                   Get.to(SingleFeedScreen(null, reels, index));
                 },
                 child: Stack(children: [
@@ -659,15 +645,6 @@ class ProfileReel extends StatelessWidget {
                     },
                   ),
                 ]),
-
-                //  CachedNetworkImage(
-                //   imageUrl: reels[index].thumbnail,
-                //   errorWidget: (context, a, b) => const Icon(
-                //     Icons.error,
-                //     color: Colors.red,
-                //   ),
-                //   fit: BoxFit.cover,
-                // ),
               );
             },
           );
@@ -710,10 +687,6 @@ class PhotoSection extends StatelessWidget {
                     crossAxisSpacing: 5,
                   ),
                   itemBuilder: (context, index) {
-                    // String thumbnail = photos[index].videoId.url;
-                    // printInfo(
-                    //     info: "ProfileId: ${_controller.profileId}");
-                    // printInfo(info: "tumbnail: $thumbnail");
                     return GestureDetector(
                       onTap: () {
                         Get.to(SingleFeedScreen(
