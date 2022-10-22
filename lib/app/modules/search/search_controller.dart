@@ -80,7 +80,7 @@ class SearchController extends GetxController {
   void getFeeds() async {
     loading = true;
     try {
-      reelList = await _reelRepo.getFeedsWithAds(profileId!, token!,
+      reelList = await _reelRepo.getReelsWithoutAd(profileId!, token!,
           limit: 10, skip: 0);
     } catch (e) {
       debugPrint("getFeeds: $e");
@@ -105,7 +105,7 @@ class SearchController extends GetxController {
     loadingMore = true;
     if (_loadMoreReels) {
       try {
-        var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
+        var newList = await _reelRepo.getReelsWithoutAd(profileId!, token!,
             limit: 10, skip: currentLength);
         if (newList.isEmpty) {
           loadingMore = false;
