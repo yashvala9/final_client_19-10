@@ -29,7 +29,7 @@ class ListUsersView extends StatelessWidget {
               child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
-                  title: Text('@' + profileModel.username!),
+                  title: Text(profileModel.user_profile!.fullname!),
                   elevation: 0,
                 ),
                 body: _tabSection(context),
