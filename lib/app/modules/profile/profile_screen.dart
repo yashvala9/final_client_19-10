@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             backgroundColor: Colors.white,
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
+              backgroundColor: colorScheme.primaryContainer,
               elevation: 0,
               actions: [
                 IconButton(
