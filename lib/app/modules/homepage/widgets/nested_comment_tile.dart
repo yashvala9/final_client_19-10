@@ -54,8 +54,10 @@ class NestedCommentWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  parser.emojify(nestedCommentModel.response),
+                Expanded(
+                  child: Text(
+                    parser.emojify(nestedCommentModel.response),
+                  ),
                 ),
                 Container(),
               ],

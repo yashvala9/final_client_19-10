@@ -66,8 +66,10 @@ class CommentWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    parser.emojify(commentModel.comment),
+                  Expanded(
+                    child: Text(
+                      parser.emojify(commentModel.comment),
+                    ),
                   ),
                   Row(
                     children: [

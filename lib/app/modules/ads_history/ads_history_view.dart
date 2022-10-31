@@ -80,7 +80,7 @@ class AdsHistoryView extends StatelessWidget {
                                       thumbnail: e.ads.thumbnail,
                                       user: e.ads.user))
                                   .toList(),
-                              0));
+                              index));
                         },
                         child: FutureBuilder<String>(
                           future: _profileRepo
