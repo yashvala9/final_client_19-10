@@ -70,14 +70,17 @@ class ListUsersView extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       onTap: () {
-                        Get.to(
-                          ProfileDetail(
-                            profileModel: snapshot.data![index],
-                            onBack: () {
-                              Get.back();
-                            },
-                          ),
-                        );
+                        if (snapshot.data![index].id !=
+                            _controller.profileModel.id) {
+                          Get.to(
+                            ProfileDetail(
+                              profileModel: snapshot.data![index],
+                              onBack: () {
+                                Get.back();
+                              },
+                            ),
+                          );
+                        }
                       },
                       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       leading: CircleAvatar(
@@ -180,14 +183,17 @@ class ListUsersView extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       onTap: () {
-                        Get.to(
-                          ProfileDetail(
-                            profileModel: snapshot.data![index],
-                            onBack: () {
-                              Get.back();
-                            },
-                          ),
-                        );
+                        if (snapshot.data![index].id !=
+                            _controller.profileModel.id) {
+                          Get.to(
+                            ProfileDetail(
+                              profileModel: snapshot.data![index],
+                              onBack: () {
+                                Get.back();
+                              },
+                            ),
+                          );
+                        }
                       },
                       contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                       leading: CircleAvatar(

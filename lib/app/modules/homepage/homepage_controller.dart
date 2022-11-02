@@ -55,13 +55,14 @@ class HomePageController extends GetxController {
     update();
   }
 
-  List<ReelModel> _reelList = [];
-  List<ReelModel> get reelList =>
-      _reelList.where((element) => !reportList.contains(element.id)).toList();
-  set reelList(List<ReelModel> reelList) {
-    _reelList = reelList;
-    update();
-  }
+  Rx<List<ReelModel>> reelList = Rx<List<ReelModel>>([]);
+  // List<ReelModel> get reelList => _reelList.value
+  //     .where((element) => !reportList.contains(element.id))
+  //     .toList();
+  // set reelList(List<ReelModel> reelList) {
+  //   _reelList.value = reelList;
+  //   update();
+  // }
 
   final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
@@ -82,7 +83,7 @@ class HomePageController extends GetxController {
   void getFeeds() async {
     loading = true;
     try {
-      reelList = await _reelRepo.getFeedsWithAds(profileId!, token!);
+      reelList.value = await _reelRepo.getFeedsWithAds(profileId!, token!);
     } catch (e) {
       debugPrint("getFeeds: $e");
     }
@@ -107,11 +108,11 @@ class HomePageController extends GetxController {
     if (_loadMore) {
       try {
         var newList = await _reelRepo.getFeedsWithAds(profileId!, token!,
-            limit: 10, skip: reelList.length);
+            limit: 10, skip: reelList.value.length);
         if (newList.isEmpty) {
           _loadMore = false;
         } else {
-          reelList.addAll(newList);
+          reelList.value.addAll(newList);
         }
         update();
       } catch (e) {
@@ -131,11 +132,12 @@ class HomePageController extends GetxController {
     try {
       bool isLiked = false;
       if (isPhoto) {
-        await _reelRepo.photoToggleLike(reelList[index].id, token!);
-        isLiked = await _reelRepo.getPhotosLikeFlag(reelList[index].id, token!);
+        await _reelRepo.photoToggleLike(reelList.value[index].id, token!);
+        isLiked =
+            await _reelRepo.getPhotosLikeFlag(reelList.value[index].id, token!);
       } else {
-        await _reelRepo.toggleLike(reelList[index].id, token!);
-        isLiked = await _reelRepo.getLikeFlag(reelList[index].id, token!);
+        await _reelRepo.toggleLike(reelList.value[index].id, token!);
+        isLiked = await _reelRepo.getLikeFlag(reelList.value[index].id, token!);
       }
       if (isLiked) {
         toggleLikeShow();
@@ -164,7 +166,9 @@ class HomePageController extends GetxController {
   }
 
   void removeReel(int index) {
-    _reelList.removeAt(index);
+    reelList.value.removeAt(index);
+    // reelList.value.removeAt(index);
+
     update();
   }
 
