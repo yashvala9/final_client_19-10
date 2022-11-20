@@ -40,7 +40,7 @@ class SearchScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.black87,
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
         body: GetBuilder<SearchController>(
           builder: (_) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,17 +63,17 @@ class SearchScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 35,
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               filled: true,
-                              fillColor: Colors.grey.shade600,
+                              fillColor: Color.fromARGB(255, 54, 54, 54),
                               enabled: false,
-                              contentPadding: const EdgeInsets.symmetric(
+                              contentPadding: EdgeInsets.symmetric(
                                 vertical: 4,
                               ),
                               prefixIcon:
-                                  const Icon(Icons.search, color: Colors.white),
+                                  Icon(Icons.search, color: Colors.white),
                               hintText: "Search here...",
-                              hintStyle: const TextStyle(
+                              hintStyle: TextStyle(
                                 color: Colors.white,
                               )),
                         ),

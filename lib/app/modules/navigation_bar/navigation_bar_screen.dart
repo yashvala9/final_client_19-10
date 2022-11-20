@@ -26,7 +26,8 @@ class NavigationBarScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Column(
+              Stack(
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                     enableFeedback: false,
@@ -57,13 +58,17 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  const Text(
-                    'Home',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  const Positioned(
+                    top: 34,
+                    right: 9,
+                    child: Text(
+                      'Home',
+                      style: TextStyle(fontSize: 9, color: Colors.grey),
+                    ),
                   ),
                 ],
               ),
-              Column(
+              Stack(
                 children: [
                   IconButton(
                     enableFeedback: false,
@@ -82,13 +87,17 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  const Text(
-                    'Search',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  const Positioned(
+                    top: 34,
+                    right: 7,
+                    child: Text(
+                      'Search',
+                      style: TextStyle(fontSize: 9, color: Colors.grey),
+                    ),
+                  )
                 ],
               ),
-              Column(
+              Stack(
                 children: [
                   IconButton(
                     enableFeedback: false,
@@ -107,13 +116,17 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  const Text(
-                    'Giveaway',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  const Positioned(
+                    top: 35,
+                    left: 2,
+                    child: Text(
+                      'Giveaway',
+                      style: TextStyle(fontSize: 9, color: Colors.grey),
+                    ),
+                  )
                 ],
               ),
-              Column(
+              Stack(
                 children: [
                   IconButton(
                     enableFeedback: false,
@@ -132,13 +145,17 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  const Text(
-                    'Inbox',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  const Positioned(
+                    top: 34,
+                    right: 10,
+                    child: Text(
+                      'Inbox',
+                      style: TextStyle(fontSize: 9, color: Colors.grey),
+                    ),
+                  )
                 ],
               ),
-              Column(
+              Stack(
                 children: [
                   IconButton(
                     enableFeedback: false,
@@ -157,10 +174,14 @@ class NavigationBarScreen extends StatelessWidget {
                             size: 28,
                           ),
                   ),
-                  const Text(
-                    'Profile',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
+                  const Positioned(
+                    top: 34,
+                    right: 9,
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(fontSize: 9, color: Colors.grey),
+                    ),
+                  )
                 ],
               ),
             ],

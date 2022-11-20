@@ -392,91 +392,92 @@ class HomePageScreen extends StatelessWidget {
                                                                   .start,
                                                           children: [
                                                             isReel
-                                                                ? Row(
-                                                                    children: [
-                                                                      CircleAvatar(
-                                                                        backgroundImage:
-                                                                            NetworkImage("${Base.profileBucketUrl}/${data.user.user_profile!.profile_img}"),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.only(
-                                                                          left:
-                                                                              8,
-                                                                          right:
-                                                                              4,
+                                                                ? InkWell(
+                                                                    onTap: () {
+                                                                      if (controller
+                                                                              .profileId !=
+                                                                          data.user
+                                                                              .id) {
+                                                                        Get.to(
+                                                                          () => ProfileDetail(
+                                                                              profileModel: data.user,
+                                                                              onBack: () {
+                                                                                Get.back();
+                                                                              }),
+                                                                        );
+                                                                      }
+                                                                    },
+                                                                    child: Row(
+                                                                      children: [
+                                                                        CircleAvatar(
+                                                                          backgroundImage:
+                                                                              NetworkImage("${Base.profileBucketUrl}/${data.user.user_profile!.profile_img}"),
                                                                         ),
-                                                                        child: InkWell(
-                                                                            onTap: () {
-                                                                              if (controller.profileId != data.user.id) {
-                                                                                Get.to(
-                                                                                  () => ProfileDetail(
-                                                                                      profileModel: data.user,
-                                                                                      onBack: () {
-                                                                                        Get.back();
-                                                                                      }),
-                                                                                );
-                                                                              }
-                                                                            },
+                                                                        Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(
+                                                                              left: 8,
+                                                                              right: 4,
+                                                                            ),
                                                                             child: Text(
                                                                               "${data.user.username}",
                                                                               style: style.titleMedium!.copyWith(
                                                                                 color: Colors.white,
                                                                               ),
                                                                             )),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            10,
-                                                                      ),
-                                                                      isMe
-                                                                          ? SizedBox()
-                                                                          : isReel
-                                                                              ? FutureBuilder<bool>(
-                                                                                  future: _profileRepo.isFollowing(data.user.id, controller.token!),
-                                                                                  builder: (context, snapshot) {
-                                                                                    if (!snapshot.hasData) {
-                                                                                      return Container();
-                                                                                    }
-                                                                                    return TextButton(
-                                                                                      child: snapshot.data! ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12)) : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
-                                                                                      onPressed: () {
-                                                                                        Get.dialog(AlertDialog(
-                                                                                          backgroundColor: Colors.black54,
-                                                                                          title: snapshot.data!
-                                                                                              ? Text(
-                                                                                                  "Do you wish to unfollow?",
-                                                                                                  style: TextStyle(color: Colors.white),
-                                                                                                )
-                                                                                              : Text(
-                                                                                                  "Do you wish to follow?",
-                                                                                                  style: TextStyle(color: Colors.white),
-                                                                                                ),
-                                                                                          actionsAlignment: MainAxisAlignment.spaceAround,
-                                                                                          actions: [
-                                                                                            TextButton(
+                                                                        SizedBox(
+                                                                          width:
+                                                                              10,
+                                                                        ),
+                                                                        isMe
+                                                                            ? SizedBox()
+                                                                            : isReel
+                                                                                ? FutureBuilder<bool>(
+                                                                                    future: _profileRepo.isFollowing(data.user.id, controller.token!),
+                                                                                    builder: (context, snapshot) {
+                                                                                      if (!snapshot.hasData) {
+                                                                                        return Container();
+                                                                                      }
+                                                                                      return TextButton(
+                                                                                        child: snapshot.data! ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12)) : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                                        onPressed: () {
+                                                                                          Get.dialog(AlertDialog(
+                                                                                            backgroundColor: Colors.black54,
+                                                                                            title: snapshot.data!
+                                                                                                ? Text(
+                                                                                                    "Do you wish to unfollow?",
+                                                                                                    style: TextStyle(color: Colors.white),
+                                                                                                  )
+                                                                                                : Text(
+                                                                                                    "Do you wish to follow?",
+                                                                                                    style: TextStyle(color: Colors.white),
+                                                                                                  ),
+                                                                                            actionsAlignment: MainAxisAlignment.spaceAround,
+                                                                                            actions: [
+                                                                                              TextButton(
+                                                                                                  onPressed: () {
+                                                                                                    Get.back();
+                                                                                                  },
+                                                                                                  child: const Text("Cancel")),
+                                                                                              MaterialButton(
                                                                                                 onPressed: () {
                                                                                                   Get.back();
+                                                                                                  controller.toggleFollowing(data.user.id);
                                                                                                 },
-                                                                                                child: const Text("Cancel")),
-                                                                                            MaterialButton(
-                                                                                              onPressed: () {
-                                                                                                Get.back();
-                                                                                                controller.toggleFollowing(data.user.id);
-                                                                                              },
-                                                                                              child: const Text("Confirm"),
-                                                                                              color: AppColors.buttonColor,
-                                                                                            ),
-                                                                                          ],
-                                                                                        ));
-                                                                                      },
-                                                                                      style: ButtonStyle(
-                                                                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
-                                                                                      ),
-                                                                                    );
-                                                                                  })
-                                                                              : SizedBox(),
-                                                                    ],
+                                                                                                child: const Text("Confirm"),
+                                                                                                color: AppColors.buttonColor,
+                                                                                              ),
+                                                                                            ],
+                                                                                          ));
+                                                                                        },
+                                                                                        style: ButtonStyle(
+                                                                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
+                                                                                        ),
+                                                                                      );
+                                                                                    })
+                                                                                : SizedBox(),
+                                                                      ],
+                                                                    ),
                                                                   )
                                                                 : Row(
                                                                     children: [
@@ -507,46 +508,50 @@ class HomePageScreen extends StatelessWidget {
                                                                           )),
                                                                     ],
                                                                   ),
-                                                            Text(
-                                                              parser.emojify(data
-                                                                  .video_title),
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                            if (data.video_title ==
+                                                                '')
+                                                              Text(
+                                                                parser.emojify(data
+                                                                    .video_title),
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
                                                               ),
-                                                            ),
                                                             isReel
-                                                                ? HashTagText(
-                                                                    onTap:
-                                                                        (tag) {
-                                                                      Get.to(
-                                                                          SearchHashTags(
-                                                                        hashTag:
-                                                                            tag,
-                                                                      ));
-                                                                    },
-                                                                    text: parser
-                                                                        .emojify(data
+                                                                ? (data.description ==
+                                                                        '')
+                                                                    ? HashTagText(
+                                                                        onTap:
+                                                                            (tag) {
+                                                                          Get.to(
+                                                                              SearchHashTags(
+                                                                            hashTag:
+                                                                                tag,
+                                                                          ));
+                                                                        },
+                                                                        text: parser.emojify(data
                                                                             .description),
-                                                                    basicStyle:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          15,
-                                                                      color: Colors
-                                                                          .white,
-                                                                    ),
-                                                                    decoratedStyle:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          15,
-                                                                      color: Colors
-                                                                          .blue,
-                                                                    ))
+                                                                        basicStyle:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                        decoratedStyle:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                        ))
+                                                                    : SizedBox()
                                                                 : SizedBox(),
                                                           ],
                                                         ),

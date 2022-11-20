@@ -528,7 +528,7 @@ class ProfileDetail extends StatelessWidget {
           height: 8,
         ),
         Expanded(
-          child: TabBarView(children: [
+          child: TabBarView(physics: NeverScrollableScrollPhysics(), children: [
             ProfileReel(profileId: profileModel.id),
             PhotoSection(id: profileModel.id, token: _controller.token!),
             if (profileModel.status == 'VERIFIED')

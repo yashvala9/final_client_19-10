@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
+import 'package:smooth_video_progress/smooth_video_progress.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
@@ -37,7 +38,7 @@ class VideoPlayerItem extends StatefulWidget {
 }
 
 class VideoPlayerItemState extends State<VideoPlayerItem> {
-  late VideoPlayerController videoPlayerController;
+  late VideoPlayerController controller;
   final _authService = Get.find<AuthService>();
   final _reelRepo = Get.find<ReelRepository>();
   int updated = 0;
@@ -51,16 +52,16 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     super.initState();
     Wakelock.enable();
-    videoPlayerController = VideoPlayerController.network(
+    controller = VideoPlayerController.network(
       widget.videoUrl,
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     )..initialize().then((value) {
         setState(() {
           loading = false;
         });
-        videoPlayerController.setVolume(widget.enableAudio ? 1 : 0);
-        videoPlayerController.dataSource;
-        videoPlayerController.setLooping(true);
+        controller.setVolume(widget.enableAudio ? 1 : 0);
+        controller.dataSource;
+        controller.setLooping(true);
 
         Wakelock.enable();
       });
@@ -70,7 +71,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   void dispose() {
     super.dispose();
     Wakelock.disable();
-    videoPlayerController.dispose();
+    controller.dispose();
   }
 
   void updateEntryPoints(int seconds, int totalSeconds) {
@@ -86,18 +87,18 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
 
   @override
   Widget build(BuildContext context) {
-    videoPlayerController.addListener(() async {
-      if (videoPlayerController.value.position.inSeconds ==
-              (videoPlayerController.value.duration.inSeconds - 1) &&
+    controller.addListener(() async {
+      if (controller.value.position.inSeconds ==
+              (controller.value.duration.inSeconds - 1) &&
           // (videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
-          videoPlayerController.value.position.inSeconds != 0 &&
-          updated != videoPlayerController.value.position.inSeconds) {
-        updateEntryPoints(videoPlayerController.value.position.inSeconds,
-            videoPlayerController.value.duration.inSeconds);
+          controller.value.position.inSeconds != 0 &&
+          updated != controller.value.position.inSeconds) {
+        updateEntryPoints(controller.value.position.inSeconds,
+            controller.value.duration.inSeconds);
       }
     });
 
-    return videoPlayerController.value.isBuffering || loading
+    return controller.value.isBuffering || loading
         ? const Loading()
         : SizedBox(
             width: double.infinity,
@@ -118,13 +119,13 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                       widget.onTap!();
                       return;
                     }
-                    if (videoPlayerController.value.isPlaying) {
-                      videoPlayerController.pause();
+                    if (controller.value.isPlaying) {
+                      controller.pause();
 
                       Wakelock.disable();
                       isManualPause = true;
                     } else {
-                      videoPlayerController.play();
+                      controller.play();
                       Wakelock.enable();
                       isManualPause = false;
                     }
@@ -133,12 +134,12 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                     key: Key(DateTime.now().toString()),
                     onVisibilityChanged: (VisibilityInfo info) {
                       if (info.visibleFraction == 0 && !isManualPause) {
-                        videoPlayerController.pause();
+                        controller.pause();
 
                         Wakelock.disable();
                       } else {
                         if (!isManualPause) {
-                          videoPlayerController.play();
+                          controller.play();
                           Wakelock.enable();
                         }
                       }
@@ -150,13 +151,12 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                             child: FittedBox(
                                 fit: BoxFit.cover,
                                 child: SizedBox(
-                                  width: videoPlayerController.value.size.width,
-                                  height:
-                                      videoPlayerController.value.size.height,
-                                  child: VideoPlayer(videoPlayerController),
+                                  width: controller.value.size.width,
+                                  height: controller.value.size.height,
+                                  child: VideoPlayer(controller),
                                 ))),
                         if (!widget.isReel)
-                          CustomVideoProgressIndicator(videoPlayerController,
+                          CustomVideoProgressIndicator(controller,
                               allowScrubbing: false),
                       ],
                     ),

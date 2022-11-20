@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_video_progress/smooth_video_progress.dart';
 import 'package:video_player/video_player.dart';
 
 /// Displays the play/buffering status of the video controlled by [controller].
@@ -80,11 +81,6 @@ class _CustomVideoProgressIndicatorState
 
   @override
   Widget build(BuildContext context) {
-    List<int> durationDiff = [];
-    for (int i = 0; i < controller.value.duration.inSeconds / 5; i++) {
-      durationDiff.add(i);
-    }
-
     Widget progressIndicator;
     if (controller.value.isInitialized) {
       final int duration = controller.value.duration.inMilliseconds;
@@ -101,16 +97,51 @@ class _CustomVideoProgressIndicatorState
       progressIndicator = Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
-          LinearProgressIndicator(
-            value: maxBuffering / duration,
-            valueColor: AlwaysStoppedAnimation<Color>(colors.bufferedColor),
-            backgroundColor: colors.backgroundColor,
+          SmoothVideoProgress(
+            controller: controller,
+            builder: (context, position, duration, _) => _VideoProgressSlider(
+              position: position,
+              duration: duration,
+              controller: controller,
+              swatch: Colors.greenAccent,
+            ),
           ),
-          LinearProgressIndicator(
-            value: position / duration,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
-            backgroundColor: Colors.transparent,
-          ),
+          // LinearProgressIndicator(
+          //   value: maxBuffering / duration,
+          //   valueColor: AlwaysStoppedAnimation<Color>(colors.bufferedColor),
+          //   backgroundColor: colors.backgroundColor,
+          // ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width * position / duration,
+          //   decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //       colors: [
+          //         Color.fromARGB(255, 231, 32, 58),
+          //         Color.fromARGB(255, 237, 7, 7)
+          //       ],
+          //       stops: [
+          //         0.1,
+          //         0.5,
+          //       ],
+          //     ),
+          //   ),
+          //   child: SizedBox(
+          //     height: 20.0,
+          //   ),
+          // ),
+          // Container(
+          //   decoration: const BoxDecoration(
+          //     gradient: LinearGradient(
+          //         begin: Alignment.topCenter,
+          //         end: Alignment.bottomCenter,
+          //         colors: <Color>[Colors.black, Colors.blue]),
+          //   ),
+          //   child: LinearProgressIndicator(
+          //     value: position / duration,
+          //     valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
+          //     backgroundColor: Colors.transparent,
+          //   ),
+          // ),
         ],
       );
     } else {
@@ -123,29 +154,10 @@ class _CustomVideoProgressIndicatorState
         padding: const EdgeInsets.all(5.0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: Stack(children: [
-            SizedBox(
-              height: 25,
-              child: progressIndicator,
-            ),
-            // SizedBox(
-            //     height: 25,
-            //     child: Row(
-            //       children: durationDiff.map((e) {
-            //         return Expanded(
-            //             flex: 5,
-            //             child: Align(
-            //               alignment: Alignment.bottomLeft,
-            //               child: Container(
-            //                 height: double.infinity,
-            //                 width: 2,
-            //                 color:
-            //                     e == 0 ? Colors.pink.shade400 : Colors.white70,
-            //               ),
-            //             ));
-            //       }).toList(),
-            //     )),
-          ]),
+          child: SizedBox(
+            height: 25,
+            child: progressIndicator,
+          ),
         ));
     if (widget.allowScrubbing) {
       return _VideoScrubber(
@@ -216,6 +228,56 @@ class _VideoScrubberState extends State<_VideoScrubber> {
         }
         seekToRelativePosition(details.globalPosition);
       },
+    );
+  }
+}
+
+class _VideoProgressSlider extends StatelessWidget {
+  const _VideoProgressSlider({
+    required this.position,
+    required this.duration,
+    required this.controller,
+    required this.swatch,
+  });
+
+  final Duration position;
+  final Duration duration;
+  final VideoPlayerController controller;
+  final Color swatch;
+
+  @override
+  Widget build(BuildContext context) {
+    final max = duration.inMilliseconds.toDouble();
+    final value = position.inMilliseconds.clamp(0, max).toDouble();
+    return Theme(
+      data: ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(seedColor: swatch),
+        useMaterial3: true,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * value / max,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.pink[200]!, Colors.pink[600]!],
+                stops: const [0.1, 0.5],
+              ),
+            ),
+            //   child:
+            // child: Slider(
+            //   min: 0,
+            //   max: max,
+            //   value: value,
+            //   onChanged: (value) =>
+            //       controller.seekTo(Duration(milliseconds: value.toInt())),
+            //   onChangeStart: (_) => controller.pause(),
+            //   onChangeEnd: (_) => controller.play(),
+            // ),
+          ),
+        ],
+      ),
     );
   }
 }
