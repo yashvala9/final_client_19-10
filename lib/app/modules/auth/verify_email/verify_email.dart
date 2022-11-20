@@ -31,7 +31,7 @@ class VerifyEmailView extends StatelessWidget {
                           vertical: Get.height * 0.12,
                         ),
                         child: _authController.loading
-                            ? const Loading()
+                            ? Loading()
                             : Column(
                                 children: [
                                   SizedBox(
@@ -79,7 +79,7 @@ class VerifyEmailView extends StatelessWidget {
                                   ),
                                   SizedBox(height: Get.height * 0.03),
                                   _authController.loading
-                                      ? const Loading()
+                                      ? Loading()
                                       : MyElevatedButton(
                                           buttonText: 'Send Verification Link',
                                           onPressed: () {

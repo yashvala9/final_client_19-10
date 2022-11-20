@@ -99,7 +99,9 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     });
 
     return controller.value.isBuffering || loading
-        ? const Loading()
+        ? Loading(
+            isWhite: true,
+          )
         : SizedBox(
             width: double.infinity,
             child: Stack(

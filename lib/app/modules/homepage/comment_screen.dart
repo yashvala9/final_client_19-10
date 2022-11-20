@@ -50,7 +50,7 @@ class CommentSheet extends StatelessWidget {
               isPhoto: isPhoto),
           builder: (context, snapshot) {
             if (_controller.loading) {
-              return const Loading();
+              return Loading();
             }
 
             return Column(

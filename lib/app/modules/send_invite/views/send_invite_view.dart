@@ -129,7 +129,7 @@ class SendInviteView extends GetView<SendInviteController> {
                                     _controller.profileId!, _controller.token!),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
-                                return const Loading();
+                                return Loading();
                               }
                               if (snapshot.hasError) {
                                 printInfo(

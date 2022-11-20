@@ -103,7 +103,7 @@ class ChatView extends GetView<ChatController> {
       },
       onLoading: Scaffold(
         appBar: AppBar(),
-        body: const Loading(),
+        body: Loading(),
       ),
       onError: (error) => EmptyWidget(
         error!,

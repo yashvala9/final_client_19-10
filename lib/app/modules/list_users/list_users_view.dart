@@ -57,7 +57,7 @@ class ListUsersView extends StatelessWidget {
                   profileModel.id, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Loading();
+                  return Loading();
                 }
                 if (snapshot.hasError) {
                   printInfo(info: "getFollowersByUserId: ${snapshot.hasError}");
@@ -169,7 +169,7 @@ class ListUsersView extends StatelessWidget {
                   profileModel.id, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Loading();
+                  return Loading();
                 }
                 if (snapshot.hasError) {
                   printInfo(

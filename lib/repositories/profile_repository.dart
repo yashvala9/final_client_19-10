@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:reel_ro/models/ads_history_model.dart';
@@ -174,16 +175,21 @@ class ProfileRepository {
   }
 
   Future<String> getThumbnail(String url) async {
-    final response = await http.get(
-      Uri.parse(url.replaceAll("0000000", "0000001")),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(url.replaceAll("0000000", "0000001")),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return url.replaceAll("0000000", "0000001");
-    } else {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return url.replaceAll("0000000", "0000001");
+      } else {
+        return url;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
       return url;
     }
   }

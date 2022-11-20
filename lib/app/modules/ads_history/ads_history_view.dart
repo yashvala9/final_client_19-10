@@ -41,7 +41,7 @@ class AdsHistoryView extends StatelessWidget {
                       _controller.profileId!, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Loading();
+                  return Loading();
                 }
                 if (snapshot.hasError) {
                   printInfo(info: "profileReels: ${snapshot.error}");
@@ -106,7 +106,7 @@ class AdsHistoryView extends StatelessWidget {
                                     border: Border.all(),
                                   ),
                                   alignment: Alignment.center,
-                                  child: const Loading(),
+                                  child: Loading(),
                                 );
                               },
                               imageUrl: snapshot.data!,

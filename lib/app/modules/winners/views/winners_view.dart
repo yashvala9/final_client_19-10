@@ -45,7 +45,7 @@ class WinnersView extends GetView<WinnersController> {
                   _controller.profileId!, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Loading();
+                  return Loading();
                 }
                 if (snapshot.hasError) {
                   printInfo(info: "getWinners: ${snapshot.hasError}");

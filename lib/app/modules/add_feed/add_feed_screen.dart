@@ -108,7 +108,7 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                       height: 20,
                     ),
                     controller.loading
-                        ? const Loading()
+                        ? Loading()
                         : MyElevatedButton(
                             buttonText: "Add",
                             onPressed: () {

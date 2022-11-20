@@ -62,7 +62,7 @@ class NotificationScreen extends StatelessWidget {
               future: _notificationRepo.getNotificationList(token!),
               builder: (context, snap) {
                 if (!snap.hasData) {
-                  return const Loading();
+                  return Loading();
                 }
                 var notifications = snap.data!;
                 log("Notification: $notifications");
@@ -254,7 +254,7 @@ class NotificationScreen extends StatelessWidget {
                                                     border: Border.all(),
                                                   ),
                                                   alignment: Alignment.center,
-                                                  child: const Loading(),
+                                                  child: Loading(),
                                                 );
                                               },
                                               imageUrl: snapshot.data!,
@@ -314,7 +314,7 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: const Loading(),
+                                                    child: Loading(),
                                                   );
                                                 },
                                                 imageUrl: snapshot.data!,
@@ -377,7 +377,7 @@ class NotificationScreen extends StatelessWidget {
                                                       border: Border.all(),
                                                     ),
                                                     alignment: Alignment.center,
-                                                    child: const Loading(),
+                                                    child: Loading(),
                                                   );
                                                 },
                                                 imageUrl: snapshot.data!,

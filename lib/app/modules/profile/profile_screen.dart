@@ -469,13 +469,7 @@ class ProfileReel extends StatelessWidget {
                       child: CachedNetworkImage(
                         key: UniqueKey(),
                         errorWidget: (_, a, b) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(),
-                            ),
-                            alignment: Alignment.center,
-                            child: Center(child: CircularProgressIndicator()),
-                          );
+                          return ShimmerCardAnimation();
                         },
                         imageUrl: snapshot.data!,
                         fit: BoxFit.cover,
@@ -532,7 +526,7 @@ class PhotoSection extends StatelessWidget {
         future: _profileRepo.getPhotosByProfileId(id, token),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Loading();
+            return Loading();
           }
           if (snapshot.hasError) {
             printInfo(info: "getCurrentUserPhoto: ${snapshot.hasError}");

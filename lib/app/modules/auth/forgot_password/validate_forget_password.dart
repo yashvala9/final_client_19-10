@@ -86,7 +86,7 @@ class ValidateForgetPassword extends StatelessWidget {
                       ),
                       SizedBox(height: Get.height * 0.03),
                       _controller.loading
-                          ? const Loading()
+                          ? Loading()
                           : MyElevatedButton(
                               buttonText: 'Submit',
                               onPressed: () {

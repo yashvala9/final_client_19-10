@@ -176,7 +176,7 @@ class CommentWidget extends StatelessWidget {
                         commentModel.id, _authService.token!, isPhoto),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return const Loading();
+                        return Loading();
                       }
                       var nestedComments = snapshot.data!;
                       return Column(

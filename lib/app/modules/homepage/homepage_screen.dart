@@ -24,7 +24,6 @@ import '../../../repositories/profile_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/video_player_item.dart';
-import '../../../widgets/my_elevated_button.dart';
 import '../../notification_screen.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
@@ -934,7 +933,7 @@ class HomePageScreen extends StatelessWidget {
                                                                             snapshot) {
                                                                       if (!snapshot
                                                                           .hasData) {
-                                                                        return const Loading();
+                                                                        return Loading();
                                                                       }
                                                                       if (snapshot
                                                                           .hasError) {

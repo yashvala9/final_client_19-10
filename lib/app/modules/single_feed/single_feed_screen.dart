@@ -1088,7 +1088,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                               snapshot) {
                                                             if (!snapshot
                                                                 .hasData) {
-                                                              return const Loading();
+                                                              return Loading();
                                                             }
                                                             if (snapshot
                                                                 .hasError) {

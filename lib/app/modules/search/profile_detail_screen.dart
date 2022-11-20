@@ -67,7 +67,7 @@ class ProfileDetail extends StatelessWidget {
                             _controller.token!),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return const Loading();
+                            return Loading();
                           }
                           var profileModel = snapshot.data!;
                           return Stack(
@@ -564,7 +564,7 @@ class ProfileReel extends StatelessWidget {
                 _controller.profileId!, _controller.token!),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Loading();
+            return Loading();
           }
           if (snapshot.hasError) {
             printInfo(info: "profileReels: ${snapshot.error}");
@@ -596,7 +596,7 @@ class ProfileReel extends StatelessWidget {
                     future: _profileRepo.getThumbnail(reels[index].thumbnail),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return const ShimmerCardAnimation();
+                        return ShimmerCardAnimation();
                       }
 
                       return SizedBox(
@@ -624,7 +624,7 @@ class ProfileReel extends StatelessWidget {
                         reels[index].id.toString(), _controller.token!),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return const ShimmerCardAnimation();
+                        return ShimmerCardAnimation();
                       }
 
                       return Positioned(
@@ -666,7 +666,7 @@ class PhotoSection extends StatelessWidget {
         future: _profileRepo.getPhotosByProfileId(id, token),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Loading();
+            return Loading();
           }
           if (snapshot.hasError) {
             printInfo(info: "getCurrentUserPhoto: ${snapshot.hasError}");

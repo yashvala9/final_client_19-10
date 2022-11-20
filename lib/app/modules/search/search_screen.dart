@@ -82,9 +82,6 @@ class SearchScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 8,
-              ),
               const TabBar(labelColor: Colors.white, tabs: [
                 Tab(
                   text: "Rolls",
@@ -191,7 +188,7 @@ class SearchUsers extends StatelessWidget {
               GetBuilder<SearchController>(
                 builder: (_) => Expanded(
                   child: _controller.loading
-                      ? const Loading()
+                      ? Loading()
                       : _controller.searchProfiles.isEmpty
                           ? const EmptyWidget("No details found")
                           : ListView(
@@ -254,7 +251,7 @@ class SearchHashTags extends StatelessWidget {
               ),
               Expanded(
                 child: _controller.loading
-                    ? const Loading()
+                    ? Loading()
                     : _controller.searchReels.isEmpty
                         ? const EmptyWidget("No details found")
                         : ListView(
@@ -285,7 +282,7 @@ class ReelsTab extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _controller.loading
-            ? const Expanded(
+            ? Expanded(
                 child: Loading(),
               )
             : _controller.reelList.isEmpty
@@ -313,8 +310,10 @@ class ReelsTab extends StatelessWidget {
                           repeatPattern: QuiltedGridRepeatPattern.inverted,
                           pattern: const [
                             QuiltedGridTile(1, 1),
+                            QuiltedGridTile(3, 2),
                             QuiltedGridTile(1, 1),
-                            QuiltedGridTile(2, 1),
+                            QuiltedGridTile(1, 1),
+                            QuiltedGridTile(1, 1),
                             QuiltedGridTile(1, 1),
                             QuiltedGridTile(1, 1),
                           ],
@@ -341,7 +340,7 @@ class ReelsTab extends StatelessWidget {
                                     isPhoto: false,
                                   ));
                                 },
-                                child: (index % 10 == 2 || index % 10 == 5)
+                                child: (index % 14 == 1 || index % 14 == 10)
                                     ? VideoPlayerItem(
                                         videoUrl: videoUrl,
                                         videoId: _controller.reelList[index].id,
@@ -364,16 +363,19 @@ class ReelsTab extends StatelessWidget {
                                                 .reelList[index].thumbnail),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData) {
-                                            return const ShimmerCardAnimation();
+                                            return ShimmerCardAnimation(
+                                                isBlack: true);
                                           }
 
                                           return CachedNetworkImage(
                                             key: UniqueKey(),
                                             placeholder: (context, url) {
-                                              return const ShimmerCardAnimation();
+                                              return ShimmerCardAnimation(
+                                                  isBlack: true);
                                             },
                                             errorWidget: (_, a, b) {
-                                              return const ShimmerCardAnimation();
+                                              return ShimmerCardAnimation(
+                                                  isBlack: true);
                                             },
                                             imageUrl: snapshot.data!,
                                             fit: BoxFit.cover,
@@ -402,7 +404,7 @@ class PhotosTab extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _controller.loading
-            ? const Expanded(
+            ? Expanded(
                 child: Loading(),
               )
             : _controller.photosList.isEmpty
@@ -450,7 +452,7 @@ class PhotosTab extends StatelessWidget {
                                           "${Base.profileBucketUrl}/${_controller.photosList[index].filename}",
                                       fit: BoxFit.cover,
                                       placeholder: (context, url) {
-                                        return const ShimmerCardAnimation();
+                                        return ShimmerCardAnimation();
                                       },
                                       errorWidget: (c, s, e) =>
                                           const Icon(Icons.error),
@@ -462,7 +464,7 @@ class PhotosTab extends StatelessWidget {
                           SliverToBoxAdapter(
                             child: Center(
                               child: _controller.loadingMore
-                                  ? const Loading()
+                                  ? Loading()
                                   : const SizedBox(),
                             ),
                           ),

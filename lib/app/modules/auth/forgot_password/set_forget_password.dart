@@ -119,7 +119,7 @@ class SetForgetPassword extends StatelessWidget {
                           )),
                       SizedBox(height: Get.height * 0.03),
                       _controller.loading
-                          ? const Loading()
+                          ? Loading()
                           : MyElevatedButton(
                               buttonText: 'Change',
                               onPressed: () {

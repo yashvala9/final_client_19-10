@@ -131,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                               SizedBox(height: Get.height * 0.02),
                               _controller.loading
-                                  ? const Loading()
+                                  ? Loading()
                                   : MyElevatedButton(
                                       buttonText: 'Login',
                                       onPressed: () {

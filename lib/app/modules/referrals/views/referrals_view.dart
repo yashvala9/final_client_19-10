@@ -83,7 +83,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                       style.titleMedium?.copyWith(fontSize: 14),
                                 ),
                                 (!snapshot.hasData)
-                                    ? const Loading()
+                                    ? Loading()
                                     : Text(
                                         snapshot.data![1].toString(),
                                         style: style.titleSmall
@@ -134,7 +134,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                               _controller.token!),
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData) {
-                                          return const Loading();
+                                          return Loading();
                                         }
                                         if (snapshot.hasError) {
                                           printInfo(
@@ -248,7 +248,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                                     builder:
                                                         (context, snapshot) {
                                                       if (!snapshot.hasData) {
-                                                        return const Loading();
+                                                        return Loading();
                                                       }
                                                       if (snapshot.hasError) {
                                                         printInfo(
@@ -278,7 +278,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                                     builder:
                                                         (context, snapshot) {
                                                       if (!snapshot.hasData) {
-                                                        return const Loading();
+                                                        return Loading();
                                                       }
                                                       if (snapshot.hasError) {
                                                         printInfo(
@@ -311,7 +311,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                                       builder:
                                                           (context, snapshot) {
                                                         if (!snapshot.hasData) {
-                                                          return const Loading();
+                                                          return Loading();
                                                         }
                                                         if (snapshot.hasError) {
                                                           printInfo(
@@ -338,7 +338,7 @@ class ReferralsView extends GetView<ReferralsController> {
                                                     builder:
                                                         (context, snapshot) {
                                                       if (!snapshot.hasData) {
-                                                        return const Loading();
+                                                        return Loading();
                                                       }
                                                       if (snapshot.hasError) {
                                                         printInfo(

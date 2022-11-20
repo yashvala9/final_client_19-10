@@ -110,7 +110,7 @@ class ChatList extends StatelessWidget {
                     },
                     emptyBuilder: (context) =>
                         const EmptyWidget("No Communication"),
-                    loadingBuilder: (context) => const Loading(),
+                    loadingBuilder: (context) => Loading(),
                     errorBuilder:
                         (BuildContext context, StreamChatError error) {
                       if (error.message.contains('does not exist')) {
