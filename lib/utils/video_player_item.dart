@@ -144,7 +144,15 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                     child: Stack(
                       alignment: Alignment.bottomCenter,
                       children: <Widget>[
-                        VideoPlayer(videoPlayerController),
+                        SizedBox.expand(
+                            child: FittedBox(
+                                fit: BoxFit.cover,
+                                child: SizedBox(
+                                  width: videoPlayerController.value.size.width,
+                                  height:
+                                      videoPlayerController.value.size.height,
+                                  child: VideoPlayer(videoPlayerController),
+                                ))),
                         if (!widget.isReel)
                           CustomVideoProgressIndicator(videoPlayerController,
                               allowScrubbing: false),

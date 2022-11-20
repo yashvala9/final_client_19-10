@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
@@ -9,6 +10,7 @@ class ReelModel {
   final String video_title;
   final String description;
   final String filename;
+  final String filepath;
   final String media_ext;
   final String thumbnail;
   final ProfileModel user;
@@ -18,6 +20,7 @@ class ReelModel {
     required this.video_title,
     required this.description,
     required this.filename,
+    required this.filepath,
     required this.media_ext,
     required this.thumbnail,
     required this.user,
@@ -28,6 +31,7 @@ class ReelModel {
     String? video_title,
     String? description,
     String? filename,
+    String? filepath,
     String? media_ext,
     String? thumbnail,
     ProfileModel? user,
@@ -37,6 +41,7 @@ class ReelModel {
       video_title: video_title ?? this.video_title,
       description: description ?? this.description,
       filename: filename ?? this.filename,
+      filepath: filepath ?? this.filepath,
       media_ext: media_ext ?? this.media_ext,
       thumbnail: thumbnail ?? this.thumbnail,
       user: user ?? this.user,
@@ -49,6 +54,7 @@ class ReelModel {
       'video_title': video_title,
       'description': description,
       'filename': filename,
+      'filepath': filepath,
       'media_ext': media_ext,
       'thumbnail': thumbnail,
       'user': user.toMap(),
@@ -61,6 +67,7 @@ class ReelModel {
       video_title: ((map['video_title'] ?? map['title']) ?? '') as String,
       description: ((map['description'] ?? map['content']) ?? '') as String,
       filename: map['filename'] as String,
+      filepath: map['filepath'] as String,
       media_ext: (map['media_ext'] ?? '') as String,
       thumbnail: (map['thumbnail'] ?? '') as String,
       user: ProfileModel.fromMap(
@@ -75,7 +82,7 @@ class ReelModel {
 
   @override
   String toString() {
-    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, media_ext: $media_ext, thumbnail: $thumbnail, user: $user)';
+    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, filepath: $filepath, media_ext: $media_ext, thumbnail: $thumbnail, user: $user)';
   }
 
   @override
@@ -86,6 +93,7 @@ class ReelModel {
         other.video_title == video_title &&
         other.description == description &&
         other.filename == filename &&
+        other.filepath == filepath &&
         other.media_ext == media_ext &&
         other.thumbnail == thumbnail &&
         other.user == user;
@@ -97,6 +105,7 @@ class ReelModel {
         video_title.hashCode ^
         description.hashCode ^
         filename.hashCode ^
+        filepath.hashCode ^
         media_ext.hashCode ^
         thumbnail.hashCode ^
         user.hashCode;

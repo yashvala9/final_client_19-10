@@ -563,8 +563,8 @@ class SingleFeedScreen extends StatelessWidget {
                             var videoUrl = '';
                             if (!isPhoto) {
                               videoSplit = reels![index].filename.split("_");
-                              videoUrl =
-                                  "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reels![index].filename}/MP4/${reels![index].filename}";
+                              videoUrl = reels![index].filepath;
+                              // "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reels![index].filename}/MP4/${reels![index].filename}";
                               if (videoSplit[0].contains('ads')) {
                                 isReel = false;
                               }

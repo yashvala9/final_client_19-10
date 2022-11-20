@@ -38,11 +38,11 @@ class InboxScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    hintText: "Search messages..."),
-              ),
+              // TextFormField(
+              //   decoration: const InputDecoration(
+              //       prefixIcon: Icon(Icons.search),
+              //       hintText: "Search messages..."),
+              // ),
               const SizedBox(
                 height: 8,
               ),

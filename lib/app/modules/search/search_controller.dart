@@ -81,7 +81,7 @@ class SearchController extends GetxController {
     loading = true;
     try {
       reelList = await _reelRepo.getReelsWithoutAd(profileId!, token!,
-          limit: 10, skip: 0);
+          limit: 13, skip: 0);
     } catch (e) {
       debugPrint("getFeeds: $e");
     }
@@ -93,7 +93,7 @@ class SearchController extends GetxController {
     loading = true;
     try {
       photosList = await _reelRepo.getPhotosWithoutAds(profileId!, token!,
-          limit: 10, skip: 0);
+          limit: 15, skip: 0);
     } catch (e) {
       debugPrint("getFeeds: $e");
     }
@@ -106,7 +106,7 @@ class SearchController extends GetxController {
     if (_loadMoreReels) {
       try {
         var newList = await _reelRepo.getReelsWithoutAd(profileId!, token!,
-            limit: 10, skip: currentLength);
+            limit: 13, skip: currentLength);
         if (newList.isEmpty) {
           loadingMore = false;
           _loadMoreReels = false;
@@ -126,7 +126,7 @@ class SearchController extends GetxController {
     if (_loadMorePhotos) {
       try {
         var newList = await _reelRepo.getPhotosWithoutAds(profileId!, token!,
-            limit: 10, skip: currentLength);
+            limit: 15, skip: currentLength);
         if (newList.isEmpty) {
           loadingMore = false;
           _loadMorePhotos = false;

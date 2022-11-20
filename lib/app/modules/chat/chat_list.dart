@@ -47,14 +47,14 @@ class ChatList extends StatelessWidget {
                   ),
                 ),
                 const Divider(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        hintText: "Search messages..."),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 4),
+                //   child: TextFormField(
+                //     decoration: const InputDecoration(
+                //         prefixIcon: Icon(Icons.search),
+                //         hintText: "Search messages..."),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 8,
                 ),

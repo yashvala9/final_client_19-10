@@ -151,7 +151,7 @@ class ReelRepository {
   }
 
   Future<List<PhotoModel>> getPhotosWithoutAds(int profileId, String token,
-      {int limit = 10, int skip = 0}) async {
+      {int limit = 15, int skip = 0}) async {
     final response = await http.get(
       Uri.parse('${Base.posts}?limit=$limit&skip=$skip'),
       headers: <String, String>{

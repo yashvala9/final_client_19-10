@@ -179,8 +179,9 @@ class HomePageScreen extends StatelessWidget {
                             var isPhoto = data.media_ext != 'mp4';
                             if (!isPhoto) {
                               videoSplit = data.filename.split("_");
-                              videoUrl =
-                                  "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}";
+                              videoUrl = 
+                              data.filepath;
+                              // "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}";
                               if (videoSplit[0].contains('ads')) {
                                 isReel = false;
                               }

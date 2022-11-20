@@ -76,6 +76,7 @@ class AdsHistoryView extends StatelessWidget {
                                       video_title: e.ads.video_title,
                                       description: e.ads.description,
                                       filename: e.ads.filename,
+                                      filepath: e.ads.filepath,
                                       media_ext: e.ads.media_ext,
                                       thumbnail: e.ads.thumbnail,
                                       user: e.ads.user))

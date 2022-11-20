@@ -312,9 +312,9 @@ class ReelsTab extends StatelessWidget {
                           crossAxisSpacing: 4,
                           repeatPattern: QuiltedGridRepeatPattern.inverted,
                           pattern: const [
-                            QuiltedGridTile(2, 1),
-                            QuiltedGridTile(2, 2),
                             QuiltedGridTile(1, 1),
+                            QuiltedGridTile(1, 1),
+                            QuiltedGridTile(2, 1),
                             QuiltedGridTile(1, 1),
                             QuiltedGridTile(1, 1),
                           ],
@@ -329,8 +329,8 @@ class ReelsTab extends StatelessWidget {
                             if (!isPhoto) {
                               videoSplit = _controller.reelList[index].filename
                                   .split("_");
-                              videoUrl =
-                                  "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel.filename}/MP4/${reel.filename}";
+                              videoUrl = _controller.reelList[index].filepath;
+                              // "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel.filename}/MP4/${reel.filename}";
                             }
                             return GestureDetector(
                                 onTap: () {
@@ -341,7 +341,7 @@ class ReelsTab extends StatelessWidget {
                                     isPhoto: false,
                                   ));
                                 },
-                                child: (index % 10 == 1 || index % 10 == 8)
+                                child: (index % 10 == 2 || index % 10 == 5)
                                     ? VideoPlayerItem(
                                         videoUrl: videoUrl,
                                         videoId: _controller.reelList[index].id,
