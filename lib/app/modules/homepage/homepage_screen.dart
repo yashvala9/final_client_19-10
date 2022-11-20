@@ -156,7 +156,7 @@ class HomePageScreen extends StatelessWidget {
                     },
                     child: Obx(
                       () => PageView.builder(
-                          // allowImplicitScrolling: true,
+                          allowImplicitScrolling: true,
                           itemCount: reels.value.length,
                           controller: pageController,
                           physics: controller.secondPageIndex > 0
@@ -179,8 +179,7 @@ class HomePageScreen extends StatelessWidget {
                             var isPhoto = data.media_ext != 'mp4';
                             if (!isPhoto) {
                               videoSplit = data.filename.split("_");
-                              videoUrl = 
-                              data.filepath;
+                              videoUrl = data.filepath;
                               // "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${data.filename}/MP4/${data.filename}";
                               if (videoSplit[0].contains('ads')) {
                                 isReel = false;
@@ -203,94 +202,108 @@ class HomePageScreen extends StatelessWidget {
                                       backgroundColor: Colors.black,
                                       extendBodyBehindAppBar: true,
                                       appBar: AppBar(
+                                        leading: !isReel
+                                            ? Text('    Ad')
+                                            : SizedBox(),
                                         backgroundColor: Colors.transparent,
                                         elevation: 0,
                                         centerTitle: true,
                                         actions: [
-                                          IconButton(
-                                              icon: const Icon(
-                                                Icons.notifications_none,
-                                              ),
-                                              onPressed: () {
-                                                Get.to(NotificationScreen());
-                                              }),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.add_box_outlined,
-                                            ),
-                                            onPressed: () async {
-                                              final val = await showDialog(
-                                                context: context,
-                                                builder: (_) => Dialog(
-                                                    child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    ListTile(
-                                                      onTap: () {
-                                                        Navigator.pop(
-                                                            context, true);
-                                                      },
-                                                      leading: Icon(
-                                                          Icons.video_call),
-                                                      title: Text("Video"),
-                                                    ),
-                                                    ListTile(
-                                                      onTap: () {
-                                                        Navigator.pop(
-                                                            context, false);
-                                                      },
-                                                      leading:
-                                                          Icon(Icons.photo),
-                                                      title: Text("Photo"),
-                                                    ),
-                                                  ],
-                                                )),
-                                              );
-                                              if (val != null) {
-                                                if (val) {
-                                                  var video =
-                                                      await ImagePicker()
-                                                          .pickVideo(
-                                                              source:
-                                                                  ImageSource
-                                                                      .gallery);
-                                                  if (video != null) {
+                                          isReel
+                                              ? IconButton(
+                                                  icon: const Icon(
+                                                    Icons.notifications_none,
+                                                  ),
+                                                  onPressed: () {
+                                                    Get.to(
+                                                        NotificationScreen());
+                                                  })
+                                              : SizedBox(),
+                                          isReel
+                                              ? IconButton(
+                                                  icon: const Icon(
+                                                    Icons.add_box_outlined,
+                                                  ),
+                                                  onPressed: () async {
                                                     final val =
-                                                        await Navigator.of(
-                                                                context)
-                                                            .push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) {
-                                                        return VideoTrimmerView(
-                                                            File(video.path));
-                                                      }),
+                                                        await showDialog(
+                                                      context: context,
+                                                      builder: (_) => Dialog(
+                                                          child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          ListTile(
+                                                            onTap: () {
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  true);
+                                                            },
+                                                            leading: Icon(Icons
+                                                                .video_call),
+                                                            title:
+                                                                Text("Video"),
+                                                          ),
+                                                          ListTile(
+                                                            onTap: () {
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  false);
+                                                            },
+                                                            leading: Icon(
+                                                                Icons.photo),
+                                                            title:
+                                                                Text("Photo"),
+                                                          ),
+                                                        ],
+                                                      )),
                                                     );
                                                     if (val != null) {
-                                                      log("VideoAdded: $val");
-                                                      _profileController
-                                                          .updateManually();
+                                                      if (val) {
+                                                        var video = await ImagePicker()
+                                                            .pickVideo(
+                                                                source:
+                                                                    ImageSource
+                                                                        .gallery);
+                                                        if (video != null) {
+                                                          final val =
+                                                              await Navigator.of(
+                                                                      context)
+                                                                  .push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                              return VideoTrimmerView(
+                                                                  File(video
+                                                                      .path));
+                                                            }),
+                                                          );
+                                                          if (val != null) {
+                                                            log("VideoAdded: $val");
+                                                            _profileController
+                                                                .updateManually();
+                                                          }
+                                                        }
+                                                      } else {
+                                                        var photo = await ImagePicker()
+                                                            .pickImage(
+                                                                source:
+                                                                    ImageSource
+                                                                        .gallery);
+                                                        if (photo != null) {
+                                                          Get.to(
+                                                            () => AddFeedScreen(
+                                                              file: File(
+                                                                  photo.path),
+                                                              type: 1,
+                                                            ),
+                                                          );
+                                                        }
+                                                      }
                                                     }
-                                                  }
-                                                } else {
-                                                  var photo =
-                                                      await ImagePicker()
-                                                          .pickImage(
-                                                              source:
-                                                                  ImageSource
-                                                                      .gallery);
-                                                  if (photo != null) {
-                                                    Get.to(
-                                                      () => AddFeedScreen(
-                                                        file: File(photo.path),
-                                                        type: 1,
-                                                      ),
-                                                    );
-                                                  }
-                                                }
-                                              }
-                                            },
-                                          ),
+                                                  },
+                                                )
+                                              : SizedBox(),
                                         ],
                                       ),
                                       body: Stack(
@@ -465,34 +478,33 @@ class HomePageScreen extends StatelessWidget {
                                                                               : SizedBox(),
                                                                     ],
                                                                   )
-                                                                : Column(
+                                                                : Row(
                                                                     children: [
                                                                       Text(
-                                                                        "@sponsored",
+                                                                        "@sponsored  ",
                                                                         style: style
-                                                                            .titleLarge!
+                                                                            .titleMedium!
                                                                             .copyWith(
                                                                           color:
-                                                                              Colors.pink,
+                                                                              Colors.white,
                                                                         ),
                                                                       ),
                                                                       SizedBox(
-                                                                        width:
-                                                                            150,
-                                                                        child:
-                                                                            MyElevatedButton(
-                                                                          buttonText:
-                                                                              "Click Here",
-                                                                          height:
-                                                                              30,
-                                                                          style:
-                                                                              style.titleMedium,
-                                                                          onPressed:
-                                                                              () {
-                                                                            Get.to(WebViewScreen('https://flutter.dev'));
-                                                                          },
-                                                                        ),
-                                                                      ),
+                                                                          width:
+                                                                              150,
+                                                                          child:
+                                                                              TextButton(
+                                                                            child:
+                                                                                Text("Click Here", style: TextStyle(color: Colors.white, fontSize: 12)),
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.to(WebViewScreen('https://flutter.dev'));
+                                                                            },
+                                                                            style:
+                                                                                ButtonStyle(
+                                                                              shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
+                                                                            ),
+                                                                          )),
                                                                     ],
                                                                   ),
                                                             Text(

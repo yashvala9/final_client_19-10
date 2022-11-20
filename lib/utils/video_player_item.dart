@@ -87,7 +87,9 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   Widget build(BuildContext context) {
     videoPlayerController.addListener(() async {
-      if ((videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
+      if (videoPlayerController.value.position.inSeconds ==
+              (videoPlayerController.value.duration.inSeconds - 1) &&
+          // (videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
           videoPlayerController.value.position.inSeconds != 0 &&
           updated != videoPlayerController.value.position.inSeconds) {
         updateEntryPoints(videoPlayerController.value.position.inSeconds,

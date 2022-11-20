@@ -128,23 +128,23 @@ class _CustomVideoProgressIndicatorState
               height: 25,
               child: progressIndicator,
             ),
-            SizedBox(
-                height: 25,
-                child: Row(
-                  children: durationDiff.map((e) {
-                    return Expanded(
-                        flex: 5,
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            height: double.infinity,
-                            width: 2,
-                            color:
-                                e == 0 ? Colors.pink.shade400 : Colors.white70,
-                          ),
-                        ));
-                  }).toList(),
-                )),
+            // SizedBox(
+            //     height: 25,
+            //     child: Row(
+            //       children: durationDiff.map((e) {
+            //         return Expanded(
+            //             flex: 5,
+            //             child: Align(
+            //               alignment: Alignment.bottomLeft,
+            //               child: Container(
+            //                 height: double.infinity,
+            //                 width: 2,
+            //                 color:
+            //                     e == 0 ? Colors.pink.shade400 : Colors.white70,
+            //               ),
+            //             ));
+            //       }).toList(),
+            //     )),
           ]),
         ));
     if (widget.allowScrubbing) {
