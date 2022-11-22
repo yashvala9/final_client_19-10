@@ -11,8 +11,10 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:readmore/readmore.dart';
 import 'package:reel_ro/app/modules/WebView/webview.dart';
 import 'package:reel_ro/app/modules/homepage/homepage_controller.dart';
+import 'package:reel_ro/app/modules/homepage/widgets/coin_animation.dart';
 import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:reel_ro/repositories/comment_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
@@ -303,6 +305,7 @@ class HomePageScreen extends StatelessWidget {
                                                   },
                                                 )
                                               : SizedBox(),
+                                          // CoinAnimation(5),
                                         ],
                                       ),
                                       body: Stack(
@@ -522,6 +525,46 @@ class HomePageScreen extends StatelessWidget {
                                                                           .bold,
                                                                 ),
                                                               ),
+                                                            ReadMoreText(
+                                                              parser.emojify(data
+                                                                  .video_title),
+                                                              trimLength: 20,
+                                                              colorClickableText:
+                                                                  Colors.pink,
+                                                              trimMode: TrimMode
+                                                                  .Length,
+                                                              trimCollapsedText:
+                                                                  '(...)',
+                                                              trimExpandedText:
+                                                                  ' (Show less)',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 15,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                              lessStyle:
+                                                                  const TextStyle(
+                                                                fontSize: 15,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                              moreStyle:
+                                                                  const TextStyle(
+                                                                fontSize: 15,
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
                                                             isReel
                                                                 ? (data.description ==
                                                                         '')
@@ -904,22 +947,22 @@ class HomePageScreen extends StatelessWidget {
                                                                     Get.to(
                                                                         EntryCountView());
                                                                   },
-                                                                  child: Obx(() =>
-                                                                      AnimatedRotation(
-                                                                        turns: turns
-                                                                            .value,
-                                                                        duration:
-                                                                            const Duration(seconds: 1),
-                                                                        child:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .card_giftcard,
-                                                                          size:
-                                                                              30,
-                                                                          color:
-                                                                              Colors.pink,
-                                                                        ),
-                                                                      )),
+                                                                  child:
+                                                                      // Obx(() =>
+                                                                      // AnimatedRotation(
+                                                                      //   turns: turns
+                                                                      //       .value,
+                                                                      //   duration:
+                                                                      //       const Duration(seconds: 1),
+                                                                      //   child:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .card_giftcard,
+                                                                    size: 30,
+                                                                    color: Colors
+                                                                        .pink,
+                                                                  ),
+                                                                  // )),
                                                                 ),
                                                                 FutureBuilder<
                                                                         String>(

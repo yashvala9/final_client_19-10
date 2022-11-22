@@ -52,11 +52,11 @@ class NavigationBarController extends GetxController {
     log("Type:: $type");
     if (type == 'reels') {
       var reel = await _reelRepo.getSingleReel(id, _authService.token!);
-      Get.to(() => SingleFeedScreen(null, [reel], 0, isPhoto: false));
+      Get.to(() => SingleFeedScreen(null, [reel], 0, () {}, isPhoto: false));
     } else {
       log("Navigate Photo");
       var photo = await _reelRepo.getPhotosById(id, _authService.token!);
-      Get.to(() => SingleFeedScreen([photo], null, 0, isPhoto: true));
+      Get.to(() => SingleFeedScreen([photo], null, 0, () {}, isPhoto: true));
     }
   }
 

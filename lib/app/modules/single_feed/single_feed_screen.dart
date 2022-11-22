@@ -30,13 +30,14 @@ import '../homepage/profile_detail_screen.dart';
 import '../search/search_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
-  SingleFeedScreen(this.photos, this.reels, this.currentIndex,
+  SingleFeedScreen(this.photos, this.reels, this.currentIndex, this.delete,
       {this.openComment = false, this.isPhoto = false, Key? key})
       : super(key: key);
   final bool isPhoto;
   final List<ReelModel>? reels;
   final List<PhotoModel>? photos;
   final int currentIndex;
+  final VoidCallback delete;
   bool openComment;
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
@@ -100,6 +101,83 @@ class SingleFeedScreen extends StatelessWidget {
                       onPressed: () {
                         Get.back();
                       }),
+                  actions: [
+                    IconButton(
+                        onPressed: () {
+                          Get.bottomSheet(
+                            Container(
+                              height: Get.height * 0.15,
+                              color: Colors.white,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(fontSize: 17),
+                                        )),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          isPhoto
+                                              ? Get.dialog(AlertDialog(
+                                                  title: const Text(
+                                                      "Are you sure you want to delete this post?"),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Get.back();
+                                                        },
+                                                        child:
+                                                            const Text("NO")),
+                                                    MaterialButton(
+                                                      onPressed: () {
+                                                        Get.back();
+                                                        Get.back();
+                                                        delete;
+                                                      },
+                                                      child: const Text("YES"),
+                                                      color: Colors.red,
+                                                    ),
+                                                  ],
+                                                ))
+                                              : Get.dialog(AlertDialog(
+                                                  title: const Text(
+                                                      "Are you sure you want to delete this roll?"),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Get.back();
+                                                        },
+                                                        child:
+                                                            const Text("NO")),
+                                                    MaterialButton(
+                                                      onPressed: () {
+                                                        Get.back();
+                                                        Get.back();
+                                                        _controller.deleteReel(
+                                                            reels![currentIndex]
+                                                                .id);
+                                                        reels!.removeAt(
+                                                            currentIndex);
+                                                        _controller.update();
+                                                      },
+                                                      child: const Text("YES"),
+                                                      color: Colors.red,
+                                                    ),
+                                                  ],
+                                                ));
+                                        },
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(fontSize: 17),
+                                        ))
+                                  ]),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.more_vert))
+                  ],
                 ),
                 body: _controller.loading
                     ? Loading()

@@ -337,6 +337,7 @@ class ReelsTab extends StatelessWidget {
                                     null,
                                     _controller.reelList,
                                     index,
+                                    () {},
                                     isPhoto: false,
                                   ));
                                 },
@@ -349,6 +350,7 @@ class ReelsTab extends StatelessWidget {
                                             null,
                                             _controller.reelList,
                                             index,
+                                            () {},
                                             isPhoto: false,
                                           ));
                                         },
@@ -444,6 +446,7 @@ class PhotosTab extends StatelessWidget {
                                         [_controller.photosList[index]],
                                         null,
                                         index,
+                                        () {},
                                         isPhoto: true,
                                       ));
                                     },

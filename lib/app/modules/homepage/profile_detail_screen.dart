@@ -584,7 +584,7 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(SingleFeedScreen(null, reels, index));
+                  Get.to(SingleFeedScreen(null, reels, index, () {}));
                 },
                 child: Stack(children: [
                   FutureBuilder<String>(
@@ -689,6 +689,7 @@ class PhotoSection extends StatelessWidget {
                           photos,
                           null,
                           index,
+                          () {},
                           isPhoto: true,
                         ));
                       },

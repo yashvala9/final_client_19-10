@@ -32,4 +32,6 @@ class Assets {
   static const trophy = 'assets/trophy.png';
   static const referral = 'assets/referral.png';
   static const addReferral = 'assets/Frame2.png';
+  static const coin1 = 'assets/coin1.png';
+  static const coin2 = 'assets/coin2.png';
 }

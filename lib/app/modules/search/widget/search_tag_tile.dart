@@ -21,7 +21,7 @@ class SearchTagTile extends StatelessWidget {
       var reelModel = _controller.searchReels[index];
       return ListTile(
         onTap: () => Get.to(
-          () => SingleFeedScreen(null, _controller.searchReels, index),
+          () => SingleFeedScreen(null, _controller.searchReels, index, () {}),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         leading: FutureBuilder<String>(

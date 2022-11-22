@@ -568,7 +568,27 @@ class ProfileReel extends StatelessWidget {
 
             return InkWell(
               onTap: () {
-                Get.to(SingleFeedScreen(null, reels, index));
+                Get.to(SingleFeedScreen(null, reels, index, () {
+                  Get.dialog(AlertDialog(
+                    title: const Text(
+                        "Are you sure you want to delete this roll?"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text("NO")),
+                      MaterialButton(
+                        onPressed: () {
+                          Get.back();
+                          _controller.deleteReel(reels[index].id);
+                        },
+                        child: const Text("YES"),
+                        color: Colors.red,
+                      ),
+                    ],
+                  ));
+                }));
               },
               onLongPress: () {
                 Get.dialog(AlertDialog(
@@ -710,6 +730,12 @@ class PhotoSection extends StatelessWidget {
                           photos,
                           null,
                           index,
+                          () {
+                            _controller.deletePost(photos[index].id);
+                            photos.removeAt(index);
+                            _controller.update();
+                            
+                          },
                           isPhoto: true,
                         ));
                       },

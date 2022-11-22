@@ -37,7 +37,7 @@ class WinnerCardWidget extends StatelessWidget {
           children: [
             Text(
               winner.contestName,
-              style: style.subtitle1,
+              style: style.headlineSmall,
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -49,15 +49,20 @@ class WinnerCardWidget extends StatelessWidget {
                 ),
                 color: Color.fromRGBO(255, 238, 194, 0.9),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
                     backgroundImage: NetworkImage(
                         "${Base.profileBucketUrl}/${winner.userImage}"),
                     radius: 25,
                   ),
-                  Text(winner.userName, style: style.subtitle1),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(winner.userName,
+                      style: style.subtitle1!
+                          .copyWith(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/widgets/coin_animation.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
@@ -160,6 +161,15 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                         if (!widget.isReel)
                           CustomVideoProgressIndicator(controller,
                               allowScrubbing: false),
+                        if (!widget.isReel)
+                          Positioned(
+                              top: 15,
+                              right: 15,
+                              child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CoinAnimation(
+                                      controller.value.duration.inSeconds)))
                       ],
                     ),
                   ),

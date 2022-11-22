@@ -16,10 +16,19 @@ class ContestDatesView extends GetView<ContestDatesController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(Icons.arrow_back),
+            color: Colors.black,
+          ),
+          backgroundColor: Color.fromARGB(255, 255, 229, 84),
           title: const Text(
             'Contest Dates',
-            style: TextStyle(fontSize: 17),
+            style: TextStyle(fontSize: 17, color: Colors.black),
           ),
+          elevation: 2,
         ),
         body: FutureBuilder<List<ContestModel>>(
           future: _giveawayRepo.getContests(

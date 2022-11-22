@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/nested_comment_tile.dart';
 import 'package:reel_ro/models/comment_model.dart';
 import 'package:reel_ro/models/nessted_comment_model.dart';
@@ -51,9 +52,22 @@ class CommentWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    '@${profileModel.username}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  InkWell(
+                    onTap: () {
+                      if (_authService.profileModel!.id != profileModel.id) {
+                        Get.to(
+                          () => ProfileDetail(
+                              profileModel: profileModel,
+                              onBack: () {
+                                Get.back();
+                              }),
+                        );
+                      }
+                    },
+                    child: Text(
+                      '@${profileModel.username}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   const SizedBox(
                     width: 10,

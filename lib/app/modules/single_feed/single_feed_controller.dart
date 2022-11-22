@@ -36,7 +36,6 @@ class SingleFeedController extends GetxController {
   final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
 
-
   void toggleLikeShow() async {
     showLike = true;
     await Future.delayed(
@@ -82,6 +81,25 @@ class SingleFeedController extends GetxController {
       update();
     } catch (e) {
       log("toggleFollowingError: $e");
+    }
+  }
+
+  void deleteReel(int reelId) async {
+    try {
+      await _reelRepo.deleteReel(reelId, token!);
+      update();
+    } catch (e) {
+      debugPrint('delteReel: $e');
+    }
+  }
+
+  void deletePost(int postId) async {
+    try {
+      await _reelRepo.deletePost(postId, token!);
+      update();
+      onInit();
+    } catch (e) {
+      debugPrint('deletePost: $e');
     }
   }
 }

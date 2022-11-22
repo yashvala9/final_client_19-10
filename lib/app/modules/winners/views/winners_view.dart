@@ -20,21 +20,29 @@ class WinnersView extends GetView<WinnersController> {
     final theme = Get.theme;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black,
+        ),
+        backgroundColor: Color.fromARGB(255, 255, 229, 84),
         title: const Text(
           'Winners',
-          style: TextStyle(fontSize: 17),
+          style: TextStyle(fontSize: 17, color: Colors.black),
         ),
         elevation: 2,
       ),
       backgroundColor: theme.colorScheme.primary,
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(
-                Assets.winnerScreenBackground,
-              ),
-              fit: BoxFit.cover),
-        ),
+        decoration: BoxDecoration(color: Colors.grey[200]!
+            // image: DecorationImage(
+            //     image: AssetImage(
+            //       Assets.winnerScreenBackground,
+            //     ),
+            //     fit: BoxFit.cover),
+            ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

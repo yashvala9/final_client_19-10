@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/models/nessted_comment_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/datetime_extension.dart';
@@ -39,9 +40,23 @@ class NestedCommentWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(
-                  '@${nestedCommentModel.owner.username}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                InkWell(
+                  onTap: () {
+                    if (_authService.profileModel!.id !=
+                        nestedCommentModel.owner.id) {
+                      Get.to(
+                        () => ProfileDetail(
+                            profileModel: nestedCommentModel.owner,
+                            onBack: () {
+                              Get.back();
+                            }),
+                      );
+                    }
+                  },
+                  child: Text(
+                    '@${nestedCommentModel.owner.username}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(
                   width: 10,

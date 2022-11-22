@@ -19,13 +19,19 @@ class EntryCountView extends GetView<EntryCountController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Entry Count',
-            style: TextStyle(fontSize: 17),
-          ),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black,
         ),
+        backgroundColor: Color.fromARGB(255, 255, 229, 84),
+        title: const Text(
+          'Entry Count',
+          style: TextStyle(fontSize: 17, color: Colors.black),
+        ),
+        elevation: 2,
       ),
       body: SingleChildScrollView(
         child: Column(

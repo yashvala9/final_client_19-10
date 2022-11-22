@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/comment_tile.dart';
 
 import '../../../models/comment_model.dart';
@@ -77,8 +78,23 @@ class CommentSheet extends StatelessWidget {
                           ...List.generate(
                             _controller.commentList.length,
                             (index) => ListTile(
-                              leading: buildProfile(
-                                  "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}"),
+                              leading: InkWell(
+                                  onTap: () {
+                                    if (_controller.profileId !=
+                                        _controller
+                                            .commentList[index].user.id) {
+                                      Get.to(
+                                        () => ProfileDetail(
+                                            profileModel: _controller
+                                                .commentList[index].user,
+                                            onBack: () {
+                                              Get.back();
+                                            }),
+                                      );
+                                    }
+                                  },
+                                  child: buildProfile(
+                                      "${Base.profileBucketUrl}/${_controller.commentList[index].user.user_profile!.profile_img}")),
                               title: CommentWidget(
                                 isPhoto: isPhoto,
                                 commentModel: _controller.commentList[index],

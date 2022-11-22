@@ -27,14 +27,19 @@ class ReferralsView extends GetView<ReferralsController> {
     final style = theme.textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Referrals',
-            style: TextStyle(fontSize: 17),
-          ),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black,
         ),
-        // backgroundColor: AppColors.white,
+        backgroundColor: Color.fromARGB(255, 255, 229, 84),
+        title: const Text(
+          'Referrals',
+          style: TextStyle(fontSize: 17, color: Colors.black),
+        ),
+        elevation: 2,
       ),
       body: CustomScrollView(
         slivers: [
