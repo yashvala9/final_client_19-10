@@ -61,7 +61,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.profile,
-      page: () => const ProfileScreen(),
+      page: () => ProfileScreen(),
     ),
     GetPage(
       name: AppRoutes.entryCount,

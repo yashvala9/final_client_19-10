@@ -168,7 +168,7 @@ class ProfileRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
+      return list.map((e) => ReelModel.fromMap(e)).toList().reversed.toList();
     } else {
       return Future.error(body['detail']);
     }
@@ -242,7 +242,7 @@ class ProfileRepository {
     final body = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final Iterable list = body;
-      return list.map((e) => PhotoModel.fromMap(e)).toList();
+      return list.map((e) => PhotoModel.fromMap(e)).toList().reversed.toList();
     } else {
       return Future.error(body['detail']);
     }

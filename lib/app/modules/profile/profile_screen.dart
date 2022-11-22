@@ -27,20 +27,26 @@ import '../edit_profile/views/edit_profile_view.dart';
 import '../single_feed/single_feed_screen.dart';
 import 'profile_controller.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatelessWidget {
+  ProfileScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   final _controller = Get.put(ProfileController());
 
   final authService = Get.put(AuthService());
 
   final _profileRepo = Get.put(ProfileRepository());
+
   final parser = EmojiParser();
+
+  ScrollController scrollController = ScrollController();
+
+  void resetTop() {
+    scrollController.animateTo(
+      scrollController.position.minScrollExtent,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 500),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,81 +57,81 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (_) => DefaultTabController(
         length: _controller.profileModel.status == "VERIFIED" ? 3 : 2,
         child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.black,
             extendBodyBehindAppBar: true,
             appBar: AppBar(
-              backgroundColor: colorScheme.primaryContainer,
+              backgroundColor: Colors.transparent,
               elevation: 0,
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.settings,
-                    color: Colors.black54,
-                  ),
-                  onPressed: () async {
-                    Get.to(AccountSettingsView());
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.add_box_outlined,
-                    color: Colors.black54,
-                  ),
-                  onPressed: () async {
-                    final val = await showDialog(
-                      context: context,
-                      builder: (_) => Dialog(
-                          child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ListTile(
-                            onTap: () {
-                              Navigator.pop(context, true);
-                            },
-                            leading: Icon(Icons.video_call),
-                            title: Text("Video"),
-                          ),
-                          ListTile(
-                            onTap: () {
-                              Navigator.pop(context, false);
-                            },
-                            leading: Icon(Icons.photo),
-                            title: Text("Photo"),
-                          ),
-                        ],
-                      )),
-                    );
-                    if (val != null) {
-                      if (val) {
-                        var video = await ImagePicker()
-                            .pickVideo(source: ImageSource.gallery);
-                        if (video != null) {
-                          final val = await Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) {
-                              return VideoTrimmerView(File(video.path));
-                            }),
-                          );
-                          if (val != null) {
-                            log("VideoAdded: $val");
-                            _controller.updateManually();
-                          }
-                        }
-                      } else {
-                        var photo = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
-                        if (photo != null) {
-                          Get.to(
-                            () => AddFeedScreen(
-                              file: File(photo.path),
-                              type: 1,
-                            ),
-                          );
-                        }
-                      }
-                    }
-                  },
-                ),
-              ],
+              // actions: [
+              //   IconButton(
+              //     icon: const Icon(
+              //       Icons.settings,
+              //       color: Colors.white60,
+              //     ),
+              //     onPressed: () async {
+              //       Get.to(AccountSettingsView());
+              //     },
+              //   ),
+              //   IconButton(
+              //     icon: const Icon(
+              //       Icons.add_box_outlined,
+              //       color: Colors.white60,
+              //     ),
+              //     onPressed: () async {
+              //       final val = await showDialog(
+              //         context: context,
+              //         builder: (_) => Dialog(
+              //             child: Column(
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //             ListTile(
+              //               onTap: () {
+              //                 Navigator.pop(context, true);
+              //               },
+              //               leading: Icon(Icons.video_call),
+              //               title: Text("Video"),
+              //             ),
+              //             ListTile(
+              //               onTap: () {
+              //                 Navigator.pop(context, false);
+              //               },
+              //               leading: Icon(Icons.photo),
+              //               title: Text("Photo"),
+              //             ),
+              //           ],
+              //         )),
+              //       );
+              //       if (val != null) {
+              //         if (val) {
+              //           var video = await ImagePicker()
+              //               .pickVideo(source: ImageSource.gallery);
+              //           if (video != null) {
+              //             final val = await Navigator.of(context).push(
+              //               MaterialPageRoute(builder: (context) {
+              //                 return VideoTrimmerView(File(video.path));
+              //               }),
+              //             );
+              //             if (val != null) {
+              //               log("VideoAdded: $val");
+              //               _controller.updateManually();
+              //             }
+              //           }
+              //         } else {
+              //           var photo = await ImagePicker()
+              //               .pickImage(source: ImageSource.gallery);
+              //           if (photo != null) {
+              //             Get.to(
+              //               () => AddFeedScreen(
+              //                 file: File(photo.path),
+              //                 type: 1,
+              //               ),
+              //             );
+              //           }
+              //         }
+              //       }
+              //     },
+              //   ),
+              // ],
             ),
             body: StatefulBuilder(builder: (context, setState) {
               return FutureBuilder<ProfileModel>(
@@ -136,6 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
                   var profileModel = snapshot.data!;
                   return NestedScrollView(
+                    controller: scrollController,
                     headerSliverBuilder: (context, _) {
                       return [
                         SliverList(
@@ -144,7 +151,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               children: [
                                 Container(
                                   height: Get.height * 0.2,
-                                  color: colorScheme.primaryContainer,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Colors.grey[500]!,
+                                        Colors.grey[800]!,
+                                      ],
+                                    ),
+                                  ),
+                                  // colorScheme.primaryContainer,
                                 ),
                                 Stack(
                                   alignment: Alignment.topCenter,
@@ -162,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           topRight: Radius.circular(50),
                                         ),
                                         child: Material(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           child: Column(
                                             children: [
                                               SizedBox(
@@ -171,11 +188,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               Text(
                                                 profileModel
                                                     .user_profile!.fullname!,
-                                                style: style.headline5,
+                                                style: style.headline5!
+                                                    .copyWith(
+                                                        color: Colors.white),
                                               ),
                                               Text(
                                                 "@${profileModel.username!}",
-                                                style: style.titleMedium,
+                                                style: style.titleMedium!
+                                                    .copyWith(
+                                                        color: Colors.white),
                                               ),
                                               SizedBox(
                                                 height: 80,
@@ -186,18 +207,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     Expanded(
                                                         child: ListTile(
                                                       title: Text(
-                                                          profileModel.reelCount
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                        profileModel.reelCount
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style.headline6!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
+                                                      ),
                                                       subtitle: Text(
                                                         "Rolls",
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style:
-                                                            style.titleMedium,
+                                                        style: style
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
                                                       ),
                                                     )),
                                                     Expanded(
@@ -207,19 +234,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             0, profileModel));
                                                       },
                                                       title: Text(
-                                                          profileModel
-                                                              .followerCount
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                        profileModel
+                                                            .followerCount
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style.headline6!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
+                                                      ),
                                                       subtitle: Text(
-                                                          "Followers",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: style
-                                                              .titleMedium),
+                                                        "Followers",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
+                                                      ),
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
@@ -228,19 +262,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             1, profileModel));
                                                       },
                                                       title: Text(
-                                                          profileModel
-                                                              .followingCount
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                        profileModel
+                                                            .followingCount
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style.headline6!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
+                                                      ),
                                                       subtitle: Text(
-                                                          "Following",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: style
-                                                              .titleMedium),
+                                                        "Following",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: style
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
+                                                      ),
                                                     )),
                                                   ],
                                                 ),
@@ -251,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   horizontal: 20,
                                                   vertical: 8,
                                                 ),
-                                                child: OutlinedButton(
+                                                child: ElevatedButton(
                                                   onPressed: () {
                                                     Get.to(EditProfileView(
                                                       profileEditCalBack: () {
@@ -260,21 +301,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     ));
                                                   },
                                                   style:
-                                                      OutlinedButton.styleFrom(
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.grey[700],
                                                     minimumSize:
                                                         Size.fromHeight(40),
                                                   ),
                                                   child: Text(
                                                     "Edit Profile",
-                                                    style: style.titleMedium,
+                                                    style: style.titleMedium!
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.white),
                                                   ),
                                                 ),
                                               ),
                                               Container(
                                                 width: Get.width * 0.9,
                                                 decoration: BoxDecoration(
-                                                    color: Color.fromRGBO(
-                                                        255, 240, 218, 1),
+                                                    color: Colors.grey[850],
+                                                    //  Color.fromRGBO(
+                                                    //     255, 240, 218, 1),
                                                     border: Border.all(
                                                       color: Colors.transparent,
                                                     ),
@@ -296,7 +343,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
-                                                            color: Colors.black,
+                                                            color: Colors.white,
                                                             fontSize: 18),
                                                       )),
                                                     ],
@@ -335,7 +382,95 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                   ],
-                                )
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.settings,
+                                          color: Colors.white60,
+                                        ),
+                                        onPressed: () async {
+                                          Get.to(AccountSettingsView());
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.add_box_outlined,
+                                          color: Colors.white60,
+                                        ),
+                                        onPressed: () async {
+                                          final val = await showDialog(
+                                            context: context,
+                                            builder: (_) => Dialog(
+                                                child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  onTap: () {
+                                                    Navigator.pop(
+                                                        context, true);
+                                                  },
+                                                  leading:
+                                                      Icon(Icons.video_call),
+                                                  title: Text("Video"),
+                                                ),
+                                                ListTile(
+                                                  onTap: () {
+                                                    Navigator.pop(
+                                                        context, false);
+                                                  },
+                                                  leading: Icon(Icons.photo),
+                                                  title: Text("Photo"),
+                                                ),
+                                              ],
+                                            )),
+                                          );
+                                          if (val != null) {
+                                            if (val) {
+                                              var video = await ImagePicker()
+                                                  .pickVideo(
+                                                      source:
+                                                          ImageSource.gallery);
+                                              if (video != null) {
+                                                final val =
+                                                    await Navigator.of(context)
+                                                        .push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                    return VideoTrimmerView(
+                                                        File(video.path));
+                                                  }),
+                                                );
+                                                if (val != null) {
+                                                  log("VideoAdded: $val");
+                                                  _controller.updateManually();
+                                                }
+                                              }
+                                            } else {
+                                              var photo = await ImagePicker()
+                                                  .pickImage(
+                                                      source:
+                                                          ImageSource.gallery);
+                                              if (photo != null) {
+                                                Get.to(
+                                                  () => AddFeedScreen(
+                                                    file: File(photo.path),
+                                                    type: 1,
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             )
                           ]),
@@ -355,10 +490,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: <Widget>[
         TabBar(tabs: [
-          Tab(text: "Rolls"),
-          Tab(text: "Photos"),
+          Tab(child: Text("Rolls", style: TextStyle(color: Colors.white))),
+          Tab(child: Text("Photos", style: TextStyle(color: Colors.white))),
           if (_controller.profileModel.status == 'VERIFIED')
-            Tab(text: "Giveaway"),
+            Tab(child: Text("Giveaway", style: TextStyle(color: Colors.white))),
         ]),
         Expanded(
           child: TabBarView(children: [
