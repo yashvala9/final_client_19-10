@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
+import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:reel_ro/app/modules/single_feed/single_feed_controller.dart';
@@ -16,6 +17,7 @@ import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/widgets/loading.dart';
 
 import '../../../models/photo_model.dart';
+import '../../../models/profile_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
 import '../../../repositories/profile_repository.dart';
@@ -30,14 +32,15 @@ import '../homepage/profile_detail_screen.dart';
 import '../search/search_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
-  SingleFeedScreen(this.photos, this.reels, this.currentIndex, this.delete,
+  SingleFeedScreen(
+      this.photos, this.reels, this.currentIndex, this.profileController,
       {this.openComment = false, this.isPhoto = false, Key? key})
       : super(key: key);
   final bool isPhoto;
   final List<ReelModel>? reels;
   final List<PhotoModel>? photos;
-  final int currentIndex;
-  final VoidCallback delete;
+  int currentIndex;
+  final ProfileController? profileController;
   bool openComment;
   final _controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
@@ -112,7 +115,55 @@ class SingleFeedScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          String caption = '';
+                                          Get.back();
+                                          Get.dialog(AlertDialog(
+                                            title: const Text("Edit Caption"),
+                                            content: TextFormField(
+                                              decoration: InputDecoration(
+                                                hintText: parser.emojify(isPhoto
+                                                    ? photos![currentIndex]
+                                                        .content
+                                                    : reels![currentIndex]
+                                                        .description),
+                                                counterText: '',
+                                              ),
+                                              keyboardType: TextInputType.text,
+                                              // validator: (v) =>
+                                              //     v!.isNotEmpty && v.length != 2 ? "Country code must be 2 digits" : null,
+                                              onChanged: (v) => caption = (v),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  },
+                                                  child: const Text("Cancel")),
+                                              MaterialButton(
+                                                onPressed: () async {
+                                                  Get.back();
+                                                  if (caption != '') {
+                                                    Get.back();
+                                                    await _controller.updateCaption(
+                                                        isPhoto
+                                                            ? photos![
+                                                                    currentIndex]
+                                                                .id
+                                                            : reels![
+                                                                    currentIndex]
+                                                                .id,
+                                                        isPhoto,
+                                                        caption);
+                                                    profileController!.onInit();
+                                                  }
+                                                },
+                                                child: const Text("Save"),
+                                                color: Colors.red,
+                                              ),
+                                            ],
+                                          ));
+                                        },
                                         child: Text(
                                           'Edit',
                                           style: TextStyle(fontSize: 17),
@@ -134,7 +185,11 @@ class SingleFeedScreen extends StatelessWidget {
                                                       onPressed: () {
                                                         Get.back();
                                                         Get.back();
-                                                        delete;
+                                                        Get.back();
+                                                        profileController!
+                                                            .deletePost(photos![
+                                                                    currentIndex]
+                                                                .id);
                                                       },
                                                       child: const Text("YES"),
                                                       color: Colors.red,
@@ -155,12 +210,11 @@ class SingleFeedScreen extends StatelessWidget {
                                                       onPressed: () {
                                                         Get.back();
                                                         Get.back();
-                                                        _controller.deleteReel(
-                                                            reels![currentIndex]
+                                                        Get.back();
+                                                        profileController!
+                                                            .deleteReel(reels![
+                                                                    currentIndex]
                                                                 .id);
-                                                        reels!.removeAt(
-                                                            currentIndex);
-                                                        _controller.update();
                                                       },
                                                       child: const Text("YES"),
                                                       color: Colors.red,
@@ -190,6 +244,8 @@ class SingleFeedScreen extends StatelessWidget {
                         ),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
+                          currentIndex = index;
+
                           if (isPhoto) {
                             return Stack(
                               children: [
@@ -474,6 +530,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                     photos![index]
                                                                         .id);
                                                           },
+                                                          onLongPress: () {},
                                                           child: FutureBuilder<
                                                                   bool>(
                                                               future: _reelRepo
@@ -989,6 +1046,92 @@ class SingleFeedScreen extends StatelessWidget {
                                                                         : false
                                                                     : false;
                                                                 return InkWell(
+                                                                  onLongPress:
+                                                                      () {
+                                                                    Get.dialog(
+                                                                        AlertDialog(
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(20),
+                                                                      ),
+                                                                      title:
+                                                                          const Text(
+                                                                        "Liked By",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color: Color.fromRGBO(
+                                                                              22,
+                                                                              22,
+                                                                              22,
+                                                                              1),
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      content: FutureBuilder<
+                                                                              List<
+                                                                                  ProfileModel>>(
+                                                                          future: ProfileRepository().getUserLikesByReel(
+                                                                              reels![index].id.toString(),
+                                                                              _controller.token!),
+                                                                          builder: (context, snapshot) {
+                                                                            if (!snapshot.hasData) {
+                                                                              return Loading();
+                                                                            }
+                                                                            if (snapshot.hasError) {
+                                                                              printInfo(info: "getFollowersByUserId: ${snapshot.hasError}");
+                                                                              return Container();
+                                                                            }
+                                                                            return Material(
+                                                                              child: ListView.builder(
+                                                                                shrinkWrap: true,
+                                                                                physics: const ClampingScrollPhysics(),
+                                                                                itemCount: snapshot.data!.length,
+                                                                                itemBuilder: (BuildContext context, int index) {
+                                                                                  return ListTile(
+                                                                                    onTap: () {
+                                                                                      if (snapshot.data![index].id != _controller.profileId) {
+                                                                                        Get.to(
+                                                                                          ProfileDetail(
+                                                                                            profileModel: snapshot.data![index],
+                                                                                            onBack: () {
+                                                                                              Get.back();
+                                                                                            },
+                                                                                          ),
+                                                                                        );
+                                                                                      }
+                                                                                    },
+                                                                                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                                                                                    leading: CircleAvatar(
+                                                                                      radius: 25,
+                                                                                      backgroundColor: theme.colorScheme.primary,
+                                                                                      backgroundImage: NetworkImage(
+                                                                                        snapshot.data![index].user_profile != null ? "${Base.profileBucketUrl}/${snapshot.data![index].user_profile!.profile_img}" : "",
+                                                                                      ),
+                                                                                    ),
+                                                                                    title: Text(
+                                                                                      snapshot.data![index].user_profile!.fullname!,
+                                                                                      style: style.titleMedium!.copyWith(
+                                                                                        fontWeight: FontWeight.w600,
+                                                                                      ),
+                                                                                    ),
+                                                                                    subtitle: Text(
+                                                                                      snapshot.data![index].username!,
+                                                                                      maxLines: 2,
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                    ),
+                                                                                  );
+                                                                                },
+                                                                              ),
+                                                                            );
+                                                                          }),
+                                                                    ));
+                                                                  },
                                                                   onTap: () {
                                                                     isLiked =
                                                                         !isLiked;
