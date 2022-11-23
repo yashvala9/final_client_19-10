@@ -447,6 +447,7 @@ class ProfileScreen extends StatelessWidget {
                                                   }),
                                                 );
                                                 if (val != null) {
+                                                  await _controller.onInit();
                                                   log("VideoAdded: $val");
                                                   _controller.updateManually();
                                                 }
@@ -457,12 +458,13 @@ class ProfileScreen extends StatelessWidget {
                                                       source:
                                                           ImageSource.gallery);
                                               if (photo != null) {
-                                                Get.to(
+                                                await Get.to(
                                                   () => AddFeedScreen(
                                                     file: File(photo.path),
                                                     type: 1,
                                                   ),
                                                 );
+                                                await _controller.onInit();
                                               }
                                             }
                                           }

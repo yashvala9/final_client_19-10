@@ -111,10 +111,11 @@ class _AddFeedScreenState extends State<AddFeedScreen> {
                         ? Loading()
                         : MyElevatedButton(
                             buttonText: "Add",
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                controller.addFeed(widget.file, widget.type);
+                                await controller.addFeed(
+                                    widget.file, widget.type);
                               }
                             },
                           ),

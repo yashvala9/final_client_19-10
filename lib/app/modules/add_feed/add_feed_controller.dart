@@ -34,7 +34,7 @@ class AddFeedController extends GetxController {
     description = "";
   }
 
-  void addFeed(File file, int type) async {
+  Future<void> addFeed(File file, int type) async {
     if (type == 1) {
       {
         List<String> splitted = description.split(" ");
@@ -97,6 +97,7 @@ class AddFeedController extends GetxController {
 
         await _reelRepo.updateStatus(_fileName, "UPLOADED", token!);
         showSnackBar("Reel added successfully!");
+
         clean();
         Get.back(result: true);
         Get.back(result: true);
