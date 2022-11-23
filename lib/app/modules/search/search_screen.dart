@@ -70,8 +70,7 @@ class SearchScreen extends StatelessWidget {
                               contentPadding: EdgeInsets.symmetric(
                                 vertical: 4,
                               ),
-                              prefixIcon:
-                                  Icon(Icons.search, color: Colors.white),
+                              prefixIcon: Icon(Icons.search, color: Colors.white),
                               hintText: "Search here...",
                               hintStyle: TextStyle(
                                 color: Colors.white,
@@ -119,9 +118,7 @@ class SearchUsers extends StatelessWidget {
   SearchUsers({Key? key, required this.username}) : super(key: key);
   final _debounce = Debouncer(milliseconds: 500);
 
-  final _controller = Get.isRegistered<SearchController>()
-      ? Get.find<SearchController>()
-      : Get.put(SearchController());
+  final _controller = Get.isRegistered<SearchController>() ? Get.find<SearchController>() : Get.put(SearchController());
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;
@@ -212,9 +209,7 @@ class SearchHashTags extends StatelessWidget {
   final String hashTag;
   SearchHashTags({Key? key, required this.hashTag}) : super(key: key);
 
-  final _controller = Get.isRegistered<SearchController>()
-      ? Get.find<SearchController>()
-      : Get.put(SearchController());
+  final _controller = Get.isRegistered<SearchController>() ? Get.find<SearchController>() : Get.put(SearchController());
 
   @override
   Widget build(BuildContext context) {
@@ -295,8 +290,7 @@ class ReelsTab extends StatelessWidget {
                     child: NotificationListener<ScrollNotification>(
                       onNotification: (notification) {
                         if (!_controller.loadingMore &&
-                            notification.metrics.pixels ==
-                                notification.metrics.maxScrollExtent) {
+                            notification.metrics.pixels == notification.metrics.maxScrollExtent) {
                           log("Loading...");
                           _controller.getMoreFeed(_controller.reelList.length);
                         }
@@ -320,14 +314,12 @@ class ReelsTab extends StatelessWidget {
                         ),
                         childrenDelegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            var isPhoto =
-                                _controller.reelList[index].media_ext != 'mp4';
+                            var isPhoto = _controller.reelList[index].media_ext != 'mp4';
                             var reel = _controller.reelList[index];
                             var videoSplit = [''];
                             var videoUrl = '';
                             if (!isPhoto) {
-                              videoSplit = _controller.reelList[index].filename
-                                  .split("_");
+                              videoSplit = _controller.reelList[index].filename.split("_");
                               videoUrl = _controller.reelList[index].filepath;
                               // "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel.filename}/MP4/${reel.filename}";
                             }
@@ -337,7 +329,7 @@ class ReelsTab extends StatelessWidget {
                                     null,
                                     _controller.reelList,
                                     index,
-                                    () {},
+                                    null,
                                     isPhoto: false,
                                   ));
                                 },
@@ -350,7 +342,7 @@ class ReelsTab extends StatelessWidget {
                                             null,
                                             _controller.reelList,
                                             index,
-                                            () {},
+                                            null,
                                             isPhoto: false,
                                           ));
                                         },
@@ -360,24 +352,19 @@ class ReelsTab extends StatelessWidget {
                                         updatePoints: () {},
                                         isReel: true)
                                     : FutureBuilder<String>(
-                                        future: _profileRepo.getThumbnail(
-                                            _controller
-                                                .reelList[index].thumbnail),
+                                        future: _profileRepo.getThumbnail(_controller.reelList[index].thumbnail),
                                         builder: (context, snapshot) {
                                           if (!snapshot.hasData) {
-                                            return ShimmerCardAnimation(
-                                                isBlack: true);
+                                            return ShimmerCardAnimation(isBlack: true);
                                           }
 
                                           return CachedNetworkImage(
                                             key: UniqueKey(),
                                             placeholder: (context, url) {
-                                              return ShimmerCardAnimation(
-                                                  isBlack: true);
+                                              return ShimmerCardAnimation(isBlack: true);
                                             },
                                             errorWidget: (_, a, b) {
-                                              return ShimmerCardAnimation(
-                                                  isBlack: true);
+                                              return ShimmerCardAnimation(isBlack: true);
                                             },
                                             imageUrl: snapshot.data!,
                                             fit: BoxFit.cover,
@@ -419,11 +406,9 @@ class PhotosTab extends StatelessWidget {
                     child: NotificationListener<ScrollNotification>(
                       onNotification: (notification) {
                         if (!_controller.loadingMore &&
-                            notification.metrics.pixels ==
-                                notification.metrics.maxScrollExtent) {
+                            notification.metrics.pixels == notification.metrics.maxScrollExtent) {
                           log("Loading...");
-                          _controller
-                              .getMorePhotos(_controller.photosList.length);
+                          _controller.getMorePhotos(_controller.photosList.length);
                         }
                         return true;
                       },
@@ -431,8 +416,7 @@ class PhotosTab extends StatelessWidget {
                         shrinkWrap: true,
                         slivers: [
                           SliverGrid(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               childAspectRatio: 1,
                               crossAxisSpacing: 2,
@@ -446,19 +430,17 @@ class PhotosTab extends StatelessWidget {
                                         [_controller.photosList[index]],
                                         null,
                                         index,
-                                        () {},
+                                        null,
                                         isPhoto: true,
                                       ));
                                     },
                                     child: CachedNetworkImage(
-                                      imageUrl:
-                                          "${Base.profileBucketUrl}/${_controller.photosList[index].filename}",
+                                      imageUrl: "${Base.profileBucketUrl}/${_controller.photosList[index].filename}",
                                       fit: BoxFit.cover,
                                       placeholder: (context, url) {
                                         return ShimmerCardAnimation();
                                       },
-                                      errorWidget: (c, s, e) =>
-                                          const Icon(Icons.error),
+                                      errorWidget: (c, s, e) => const Icon(Icons.error),
                                     ));
                               },
                               childCount: _controller.photosList.length,
@@ -466,9 +448,7 @@ class PhotosTab extends StatelessWidget {
                           ),
                           SliverToBoxAdapter(
                             child: Center(
-                              child: _controller.loadingMore
-                                  ? Loading()
-                                  : const SizedBox(),
+                              child: _controller.loadingMore ? Loading() : const SizedBox(),
                             ),
                           ),
                         ],

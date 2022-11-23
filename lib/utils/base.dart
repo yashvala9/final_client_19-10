@@ -14,10 +14,8 @@ class Base {
   static const searchUser = '$_url/search';
 
   //Forget password
-  static const generateForgetPasswordToken =
-      '$_url/forgot_password/generate_token';
-  static const validateForgetPasswordtoken =
-      '$_url/forgot_password/validate_token';
+  static const generateForgetPasswordToken = '$_url/forgot_password/generate_token';
+  static const validateForgetPasswordtoken = '$_url/forgot_password/validate_token';
   static const setForgetPassword = '$_url/forgot_password';
 
   //logout
@@ -80,8 +78,7 @@ class Base {
   static const uploadVideo = '$_url/upload';
 
   //Profile Bucket base url
-  static const profileBucketUrl =
-      'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
+  static const profileBucketUrl = 'https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs';
 
   //Like
   static const toggleLike = '$_url/reels/likes';

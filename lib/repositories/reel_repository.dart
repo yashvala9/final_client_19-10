@@ -12,8 +12,7 @@ import 'package:reel_ro/utils/base.dart';
 import 'package:reel_ro/utils/snackbar.dart';
 
 class ReelRepository {
-  Future<List<ReelModel>> getFeeds(int profileId, String token,
-      {int limit = 10, int skip = 0}) async {
+  Future<List<ReelModel>> getFeeds(int profileId, String token, {int limit = 10, int skip = 0}) async {
     final response = await http.get(
       Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
       headers: <String, String>{
@@ -90,8 +89,7 @@ class ReelRepository {
     }
   }
 
-  Future<List<ReelModel>> getFeedsWithAds(int profileId, String token,
-      {int limit = 10, int skip = 0}) async {
+  Future<List<ReelModel>> getFeedsWithAds(int profileId, String token, {int limit = 10, int skip = 0}) async {
     final response = await http.get(
       Uri.parse('${Base.reelsWithAds}?limit=$limit&skip=$skip'),
       headers: <String, String>{
@@ -108,8 +106,7 @@ class ReelRepository {
     }
   }
 
-  Future<List<ReelModel>> getReelsWithoutAd(int profileId, String token,
-      {int limit = 10, int skip = 0}) async {
+  Future<List<ReelModel>> getReelsWithoutAd(int profileId, String token, {int limit = 10, int skip = 0}) async {
     final response = await http.get(
       Uri.parse('${Base.reels}?limit=$limit&skip=$skip'),
       headers: <String, String>{
@@ -150,8 +147,7 @@ class ReelRepository {
     }
   }
 
-  Future<List<PhotoModel>> getPhotosWithoutAds(int profileId, String token,
-      {int limit = 15, int skip = 0}) async {
+  Future<List<PhotoModel>> getPhotosWithoutAds(int profileId, String token, {int limit = 15, int skip = 0}) async {
     final response = await http.get(
       Uri.parse('${Base.posts}?limit=$limit&skip=$skip'),
       headers: <String, String>{
@@ -168,8 +164,7 @@ class ReelRepository {
     }
   }
 
-  Future<List<ReelModel>> getReelsByHashTag(
-      String hashTag, int profileId, String token,
+  Future<List<ReelModel>> getReelsByHashTag(String hashTag, int profileId, String token,
       {int limit = 10, int skip = 0}) async {
     hashTag = hashTag.replaceAll(RegExp('[#]'), '');
     final response = await http.get(
@@ -252,8 +247,7 @@ class ReelRepository {
     }
   }
 
-  Future<int> getCommentLikeCountByCommentId(
-      int commentId, String token) async {
+  Future<int> getCommentLikeCountByCommentId(int commentId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getCommentLikeCount}/$commentId"),
       headers: <String, String>{
@@ -292,6 +286,23 @@ class ReelRepository {
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body['message']);
+    }
+  }
+
+  Future<void> updateReelCaption(int reelId, String token, String caption) async {
+    final response = await http.put(
+      Uri.parse("${Base.reels}$reelId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: json.encode({"description": caption}),
     );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -352,8 +363,7 @@ class ReelRepository {
     }
   }
 
-  Future<void> reportReelOrComment(
-      String type, String reason, int id, String token) async {
+  Future<void> reportReelOrComment(String type, String reason, int id, String token) async {
     final response = await http.post(
       Uri.parse("${Base.report}/$type/$id"),
       headers: <String, String>{
@@ -392,8 +402,7 @@ class ReelRepository {
     }
   }
 
-  Future<List<PhotoModel>> getPhotosByUserId(
-      int profileId, String token) async {
+  Future<List<PhotoModel>> getPhotosByUserId(int profileId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getPhotosByUserId}?currentUserId=14"),
       headers: <String, String>{
@@ -458,8 +467,7 @@ class ReelRepository {
     }
   }
 
-  Future<void> updateStatus(
-      String fileName, String status, String token) async {
+  Future<void> updateStatus(String fileName, String status, String token) async {
     final response = await http.put(
       Uri.parse('${Base.updateStatus}$fileName/$status'),
       headers: <String, String>{
@@ -500,9 +508,7 @@ class ReelRepository {
       },
     );
     final body = jsonDecode(response.body);
-    if (response.statusCode == 200 ||
-        response.statusCode == 201 ||
-        response.statusCode == 204) {
+    if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204) {
       return;
     } else {
       return Future.error(body['detail']);
@@ -535,8 +541,7 @@ class ReelRepository {
     }
   }
 
-  Future<void> updateAdsHistory(
-      int secondsWatched, int totalLength, int adId, String token) async {
+  Future<void> updateAdsHistory(int secondsWatched, int totalLength, int adId, String token) async {
     try {
       var map = {"time_duration": secondsWatched, "reel_length": totalLength};
       final response = await http.post(
@@ -559,8 +564,7 @@ class ReelRepository {
     }
   }
 
-  Future<void> updateReelHistory(
-      int secondsWatched, int totalSeconds, int reelId, String token) async {
+  Future<void> updateReelHistory(int secondsWatched, int totalSeconds, int reelId, String token) async {
     try {
       var map = {"time_duration": secondsWatched, "reel_length": totalSeconds};
       final response = await http.post(

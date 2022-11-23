@@ -59,80 +59,80 @@ class ProfileScreen extends StatelessWidget {
         child: Scaffold(
             backgroundColor: Colors.black,
             extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              // actions: [
-              //   IconButton(
-              //     icon: const Icon(
-              //       Icons.settings,
-              //       color: Colors.white60,
-              //     ),
-              //     onPressed: () async {
-              //       Get.to(AccountSettingsView());
-              //     },
-              //   ),
-              //   IconButton(
-              //     icon: const Icon(
-              //       Icons.add_box_outlined,
-              //       color: Colors.white60,
-              //     ),
-              //     onPressed: () async {
-              //       final val = await showDialog(
-              //         context: context,
-              //         builder: (_) => Dialog(
-              //             child: Column(
-              //           mainAxisSize: MainAxisSize.min,
-              //           children: [
-              //             ListTile(
-              //               onTap: () {
-              //                 Navigator.pop(context, true);
-              //               },
-              //               leading: Icon(Icons.video_call),
-              //               title: Text("Video"),
-              //             ),
-              //             ListTile(
-              //               onTap: () {
-              //                 Navigator.pop(context, false);
-              //               },
-              //               leading: Icon(Icons.photo),
-              //               title: Text("Photo"),
-              //             ),
-              //           ],
-              //         )),
-              //       );
-              //       if (val != null) {
-              //         if (val) {
-              //           var video = await ImagePicker()
-              //               .pickVideo(source: ImageSource.gallery);
-              //           if (video != null) {
-              //             final val = await Navigator.of(context).push(
-              //               MaterialPageRoute(builder: (context) {
-              //                 return VideoTrimmerView(File(video.path));
-              //               }),
-              //             );
-              //             if (val != null) {
-              //               log("VideoAdded: $val");
-              //               _controller.updateManually();
-              //             }
-              //           }
-              //         } else {
-              //           var photo = await ImagePicker()
-              //               .pickImage(source: ImageSource.gallery);
-              //           if (photo != null) {
-              //             Get.to(
-              //               () => AddFeedScreen(
-              //                 file: File(photo.path),
-              //                 type: 1,
-              //               ),
-              //             );
-              //           }
-              //         }
-              //       }
-              //     },
-              //   ),
-              // ],
-            ),
+            // appBar: AppBar(
+            //   backgroundColor: Colors.transparent,
+            //   elevation: 0,
+            // actions: [
+            //   IconButton(
+            //     icon: const Icon(
+            //       Icons.settings,
+            //       color: Colors.white60,
+            //     ),
+            //     onPressed: () async {
+            //       Get.to(AccountSettingsView());
+            //     },
+            //   ),
+            //   IconButton(
+            //     icon: const Icon(
+            //       Icons.add_box_outlined,
+            //       color: Colors.white60,
+            //     ),
+            //     onPressed: () async {
+            //       final val = await showDialog(
+            //         context: context,
+            //         builder: (_) => Dialog(
+            //             child: Column(
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             ListTile(
+            //               onTap: () {
+            //                 Navigator.pop(context, true);
+            //               },
+            //               leading: Icon(Icons.video_call),
+            //               title: Text("Video"),
+            //             ),
+            //             ListTile(
+            //               onTap: () {
+            //                 Navigator.pop(context, false);
+            //               },
+            //               leading: Icon(Icons.photo),
+            //               title: Text("Photo"),
+            //             ),
+            //           ],
+            //         )),
+            //       );
+            //       if (val != null) {
+            //         if (val) {
+            //           var video = await ImagePicker()
+            //               .pickVideo(source: ImageSource.gallery);
+            //           if (video != null) {
+            //             final val = await Navigator.of(context).push(
+            //               MaterialPageRoute(builder: (context) {
+            //                 return VideoTrimmerView(File(video.path));
+            //               }),
+            //             );
+            //             if (val != null) {
+            //               log("VideoAdded: $val");
+            //               _controller.updateManually();
+            //             }
+            //           }
+            //         } else {
+            //           var photo = await ImagePicker()
+            //               .pickImage(source: ImageSource.gallery);
+            //           if (photo != null) {
+            //             Get.to(
+            //               () => AddFeedScreen(
+            //                 file: File(photo.path),
+            //                 type: 1,
+            //               ),
+            //             );
+            //           }
+            //         }
+            //       }
+            //     },
+            //   ),
+            // ],
+            // ),
             body: StatefulBuilder(builder: (context, setState) {
               return FutureBuilder<ProfileModel>(
                 future: _profileRepo.getUserProfile(_controller.token!),
@@ -167,12 +167,10 @@ class ProfileScreen extends StatelessWidget {
                                   alignment: Alignment.topCenter,
                                   children: [
                                     Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 100, bottom: 10),
+                                      margin: const EdgeInsets.only(top: 100, bottom: 10),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(40),
-                                              topRight: Radius.circular(40))),
+                                              topLeft: Radius.circular(40), topRight: Radius.circular(40))),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(50),
@@ -186,109 +184,68 @@ class ProfileScreen extends StatelessWidget {
                                                 height: Get.height * 0.08,
                                               ),
                                               Text(
-                                                profileModel
-                                                    .user_profile!.fullname!,
-                                                style: style.headline5!
-                                                    .copyWith(
-                                                        color: Colors.white),
+                                                profileModel.user_profile!.fullname!,
+                                                style: style.headline5!.copyWith(color: Colors.white),
                                               ),
                                               Text(
                                                 "@${profileModel.username!}",
-                                                style: style.titleMedium!
-                                                    .copyWith(
-                                                        color: Colors.white),
+                                                style: style.titleMedium!.copyWith(color: Colors.white),
                                               ),
                                               SizedBox(
                                                 height: 80,
                                                 child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Expanded(
                                                         child: ListTile(
                                                       title: Text(
-                                                        profileModel.reelCount
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style.headline6!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white),
+                                                        profileModel.reelCount.toString(),
+                                                        textAlign: TextAlign.center,
+                                                        style: style.headline6!.copyWith(color: Colors.white),
                                                       ),
                                                       subtitle: Text(
                                                         "Rolls",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style
-                                                            .titleMedium!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white),
+                                                        textAlign: TextAlign.center,
+                                                        style: style.titleMedium!.copyWith(color: Colors.white),
                                                       ),
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(ListUsersView(
-                                                            0, profileModel));
+                                                        Get.to(ListUsersView(0, profileModel));
                                                       },
                                                       title: Text(
-                                                        profileModel
-                                                            .followerCount
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style.headline6!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white),
+                                                        profileModel.followerCount.toString(),
+                                                        textAlign: TextAlign.center,
+                                                        style: style.headline6!.copyWith(color: Colors.white),
                                                       ),
                                                       subtitle: Text(
                                                         "Followers",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style
-                                                            .titleMedium!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white),
+                                                        textAlign: TextAlign.center,
+                                                        style: style.titleMedium!.copyWith(color: Colors.white),
                                                       ),
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(ListUsersView(
-                                                            1, profileModel));
+                                                        Get.to(ListUsersView(1, profileModel));
                                                       },
                                                       title: Text(
-                                                        profileModel
-                                                            .followingCount
-                                                            .toString(),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style.headline6!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white),
+                                                        profileModel.followingCount.toString(),
+                                                        textAlign: TextAlign.center,
+                                                        style: style.headline6!.copyWith(color: Colors.white),
                                                       ),
                                                       subtitle: Text(
                                                         "Following",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: style
-                                                            .titleMedium!
-                                                            .copyWith(
-                                                                color: Colors
-                                                                    .white),
+                                                        textAlign: TextAlign.center,
+                                                        style: style.titleMedium!.copyWith(color: Colors.white),
                                                       ),
                                                     )),
                                                   ],
                                                 ),
                                               ),
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
+                                                padding: const EdgeInsets.symmetric(
                                                   horizontal: 20,
                                                   vertical: 8,
                                                 ),
@@ -300,19 +257,13 @@ class ProfileScreen extends StatelessWidget {
                                                       },
                                                     ));
                                                   },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.grey[700],
-                                                    minimumSize:
-                                                        Size.fromHeight(40),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.grey[700],
+                                                    minimumSize: Size.fromHeight(40),
                                                   ),
                                                   child: Text(
                                                     "Edit Profile",
-                                                    style: style.titleMedium!
-                                                        .copyWith(
-                                                            color:
-                                                                Colors.white),
+                                                    style: style.titleMedium!.copyWith(color: Colors.white),
                                                   ),
                                                 ),
                                               ),
@@ -325,26 +276,16 @@ class ProfileScreen extends StatelessWidget {
                                                     border: Border.all(
                                                       color: Colors.transparent,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20))),
+                                                    borderRadius: BorderRadius.all(Radius.circular(20))),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
+                                                  padding: const EdgeInsets.all(16.0),
                                                   child: Column(
                                                     children: [
                                                       Center(
                                                           child: Text(
-                                                        parser.emojify(
-                                                            profileModel
-                                                                .user_profile!
-                                                                .bio!),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18),
+                                                        parser.emojify(profileModel.user_profile!.bio!),
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(color: Colors.white, fontSize: 18),
                                                       )),
                                                     ],
                                                   ),
@@ -361,10 +302,7 @@ class ProfileScreen extends StatelessWidget {
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          Get.to(ProfilePhotoView(
-                                              'hero2',
-                                              profileModel
-                                                  .user_profile!.fullname!,
+                                          Get.to(ProfilePhotoView('hero2', profileModel.user_profile!.fullname!,
                                               "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"));
                                         },
                                         child: Material(
@@ -412,17 +350,14 @@ class ProfileScreen extends StatelessWidget {
                                               children: [
                                                 ListTile(
                                                   onTap: () {
-                                                    Navigator.pop(
-                                                        context, true);
+                                                    Navigator.pop(context, true);
                                                   },
-                                                  leading:
-                                                      Icon(Icons.video_call),
+                                                  leading: Icon(Icons.video_call),
                                                   title: Text("Video"),
                                                 ),
                                                 ListTile(
                                                   onTap: () {
-                                                    Navigator.pop(
-                                                        context, false);
+                                                    Navigator.pop(context, false);
                                                   },
                                                   leading: Icon(Icons.photo),
                                                   title: Text("Photo"),
@@ -432,18 +367,11 @@ class ProfileScreen extends StatelessWidget {
                                           );
                                           if (val != null) {
                                             if (val) {
-                                              var video = await ImagePicker()
-                                                  .pickVideo(
-                                                      source:
-                                                          ImageSource.gallery);
+                                              var video = await ImagePicker().pickVideo(source: ImageSource.gallery);
                                               if (video != null) {
-                                                final val =
-                                                    await Navigator.of(context)
-                                                        .push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                    return VideoTrimmerView(
-                                                        File(video.path));
+                                                final val = await Navigator.of(context).push(
+                                                  MaterialPageRoute(builder: (context) {
+                                                    return VideoTrimmerView(File(video.path));
                                                   }),
                                                 );
                                                 if (val != null) {
@@ -452,10 +380,7 @@ class ProfileScreen extends StatelessWidget {
                                                 }
                                               }
                                             } else {
-                                              var photo = await ImagePicker()
-                                                  .pickImage(
-                                                      source:
-                                                          ImageSource.gallery);
+                                              var photo = await ImagePicker().pickImage(source: ImageSource.gallery);
                                               if (photo != null) {
                                                 Get.to(
                                                   () => AddFeedScreen(
@@ -500,10 +425,8 @@ class ProfileScreen extends StatelessWidget {
             ProfileReel(
               key: UniqueKey(),
             ),
-            PhotoSection(
-                id: _controller.profileModel.id, token: _controller.token!),
-            if (_controller.profileModel.status == 'VERIFIED')
-              Center(child: Text("Giveaway")),
+            PhotoSection(id: _controller.profileModel.id, token: _controller.token!),
+            if (_controller.profileModel.status == 'VERIFIED') Center(child: Text("Giveaway")),
           ]),
         ),
       ],
@@ -512,8 +435,7 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class ProfileReel extends StatelessWidget {
-  final int? profileId;
-  ProfileReel({Key? key, this.profileId}) : super(key: key);
+  ProfileReel({Key? key}) : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();
   final _reelRepo = Get.find<ReelRepository>();
@@ -523,12 +445,7 @@ class ProfileReel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ReelModel>>(
-      future: profileId != null
-          ? _profileRepo.getReelByProfileId(profileId!, _controller.token!,
-              limit: 50, skip: 0)
-          : _profileRepo.getReelByProfileId(
-              _controller.profileId!, _controller.token!,
-              limit: 50, skip: 0),
+      future: _controller.getReelFuture(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -568,32 +485,11 @@ class ProfileReel extends StatelessWidget {
 
             return InkWell(
               onTap: () {
-                Get.to(SingleFeedScreen(null, reels, index, () {
-                  Get.dialog(AlertDialog(
-                    title: const Text(
-                        "Are you sure you want to delete this roll?"),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          child: const Text("NO")),
-                      MaterialButton(
-                        onPressed: () {
-                          Get.back();
-                          _controller.deleteReel(reels[index].id);
-                        },
-                        child: const Text("YES"),
-                        color: Colors.red,
-                      ),
-                    ],
-                  ));
-                }));
+                Get.to(SingleFeedScreen(null, reels, index, _controller));
               },
               onLongPress: () {
                 Get.dialog(AlertDialog(
-                  title:
-                      const Text("Are you sure you want to delete this roll?"),
+                  title: const Text("Are you sure you want to delete this roll?"),
                   actions: [
                     TextButton(
                         onPressed: () {
@@ -633,8 +529,7 @@ class ProfileReel extends StatelessWidget {
                   },
                 ),
                 FutureBuilder<int>(
-                  future: _reelRepo.getReelViews(
-                      reels[index].id.toString(), _controller.token!),
+                  future: _reelRepo.getReelViews(reels[index].id.toString(), _controller.token!),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return ShimmerCardAnimation();
@@ -648,10 +543,7 @@ class ProfileReel extends StatelessWidget {
                             Icon(Icons.play_arrow, color: Colors.white),
                             Text(
                               snapshot.data.toString(),
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ],
                         ));
@@ -669,8 +561,7 @@ class ProfileReel extends StatelessWidget {
 class PhotoSection extends StatelessWidget {
   final int id;
   final String token;
-  PhotoSection({Key? key, required this.id, required this.token})
-      : super(key: key);
+  PhotoSection({Key? key, required this.id, required this.token}) : super(key: key);
 
   final _profileRepo = ProfileRepository();
 
@@ -678,7 +569,7 @@ class PhotoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final _controller = Get.find<ProfileController>();
     return FutureBuilder<List<PhotoModel>>(
-        future: _profileRepo.getPhotosByProfileId(id, token),
+        future: _controller.getPhotoFuture(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Loading();
@@ -704,8 +595,7 @@ class PhotoSection extends StatelessWidget {
                     return InkWell(
                       onLongPress: () {
                         Get.dialog(AlertDialog(
-                          title: const Text(
-                              "Are you sure you want to delete this post?"),
+                          title: const Text("Are you sure you want to delete this post?"),
                           actions: [
                             TextButton(
                                 onPressed: () {
@@ -730,18 +620,12 @@ class PhotoSection extends StatelessWidget {
                           photos,
                           null,
                           index,
-                          () {
-                            _controller.deletePost(photos[index].id);
-                            photos.removeAt(index);
-                            _controller.update();
-                            
-                          },
+                          _controller,
                           isPhoto: true,
                         ));
                       },
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "${Base.profileBucketUrl}/${photos[index].filename}",
+                        imageUrl: "${Base.profileBucketUrl}/${photos[index].filename}",
                         fit: BoxFit.cover,
                         errorWidget: (c, s, e) => const Icon(Icons.error),
                       ),

@@ -35,10 +35,8 @@ class AdsHistoryView extends StatelessWidget {
       body: GetBuilder<AdsHistoryController>(
           builder: (_) => FutureBuilder<List<AdsHistoryModel>>(
               future: _controller.profileId != null
-                  ? _profileRepo.getAdsHistoryByProfileId(
-                      _controller.profileId!, _controller.token!)
-                  : _profileRepo.getAdsHistoryByProfileId(
-                      _controller.profileId!, _controller.token!),
+                  ? _profileRepo.getAdsHistoryByProfileId(_controller.profileId!, _controller.token!)
+                  : _profileRepo.getAdsHistoryByProfileId(_controller.profileId!, _controller.token!),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Loading();
@@ -82,11 +80,10 @@ class AdsHistoryView extends StatelessWidget {
                                       user: e.ads.user))
                                   .toList(),
                               index,
-                              () {}));
+                              null));
                         },
                         child: FutureBuilder<String>(
-                          future: _profileRepo
-                              .getThumbnail(ads[index].ads.thumbnail),
+                          future: _profileRepo.getThumbnail(ads[index].ads.thumbnail),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Center(
@@ -97,9 +94,7 @@ class AdsHistoryView extends StatelessWidget {
                             return CachedNetworkImage(
                               key: UniqueKey(),
                               placeholder: (context, url) {
-                                return IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.refresh_rounded));
+                                return IconButton(onPressed: () {}, icon: const Icon(Icons.refresh_rounded));
                               },
                               errorWidget: (_, a, b) {
                                 return Container(

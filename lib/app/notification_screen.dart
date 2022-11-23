@@ -73,147 +73,104 @@ class NotificationScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16.0),
                         children: notifications.map(
                           (e) {
-                            if (e.data.notificationType ==
-                                NotificationType.follow) {
+                            if (e.data.notificationType == NotificationType.follow) {
                               return GetBuilder<NotificationController>(
                                   builder: (_) => NotificationTile(
                                         userId: e.data.userId,
                                         title: e.title,
                                         subTile: e.body,
                                         traiing: FutureBuilder<bool>(
-                                          future: _profileRepo.isFollowing(
-                                              e.data.userId, token!),
+                                          future: _profileRepo.isFollowing(e.data.userId, token!),
                                           builder: (context, snap) {
                                             return snap.hasData
                                                 ? snap.data!
                                                     ? OutlinedButton(
-                                                        style: OutlinedButton
-                                                            .styleFrom(
-                                                          backgroundColor:
-                                                              Colors.white54,
+                                                        style: OutlinedButton.styleFrom(
+                                                          backgroundColor: Colors.white54,
                                                         ),
                                                         onPressed: () {
-                                                          Get.dialog(
-                                                              AlertDialog(
-                                                            backgroundColor:
-                                                                Colors.black54,
+                                                          Get.dialog(AlertDialog(
+                                                            backgroundColor: Colors.black54,
                                                             title: snap.data!
                                                                 ? const Text(
                                                                     "Do you wish to unfollow?",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white),
+                                                                    style: TextStyle(color: Colors.white),
                                                                   )
                                                                 : const Text(
                                                                     "Do you wish to follow?",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white),
+                                                                    style: TextStyle(color: Colors.white),
                                                                   ),
-                                                            actionsAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
+                                                            actionsAlignment: MainAxisAlignment.spaceAround,
                                                             actions: [
                                                               TextButton(
-                                                                  onPressed:
-                                                                      () {
+                                                                  onPressed: () {
                                                                     Get.back();
                                                                   },
-                                                                  child: const Text(
-                                                                      "Cancel")),
+                                                                  child: const Text("Cancel")),
                                                               MaterialButton(
                                                                 onPressed: () {
                                                                   Get.back();
-                                                                  _controller
-                                                                      .toggleFollowing(e
-                                                                          .data
-                                                                          .userId);
+                                                                  _controller.toggleFollowing(e.data.userId);
                                                                 },
-                                                                child: const Text(
-                                                                    "Confirm"),
-                                                                color: AppColors
-                                                                    .buttonColor,
+                                                                child: const Text("Confirm"),
+                                                                color: AppColors.buttonColor,
                                                               ),
                                                             ],
                                                           ));
                                                         },
                                                         child: Text(
                                                           "Following",
-                                                          style: style.caption!
-                                                              .copyWith(
-                                                                  color: Colors
-                                                                      .white),
+                                                          style: style.caption!.copyWith(color: Colors.white),
                                                         ),
                                                       )
                                                     : MaterialButton(
                                                         onPressed: () {
-                                                          Get.dialog(
-                                                              AlertDialog(
-                                                            backgroundColor:
-                                                                Colors.black54,
+                                                          Get.dialog(AlertDialog(
+                                                            backgroundColor: Colors.black54,
                                                             title: snap.data!
                                                                 ? const Text(
                                                                     "Do you wish to unfollow?",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white),
+                                                                    style: TextStyle(color: Colors.white),
                                                                   )
                                                                 : const Text(
                                                                     "Do you wish to follow?",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white),
+                                                                    style: TextStyle(color: Colors.white),
                                                                   ),
-                                                            actionsAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
+                                                            actionsAlignment: MainAxisAlignment.spaceAround,
                                                             actions: [
                                                               TextButton(
-                                                                  onPressed:
-                                                                      () {
+                                                                  onPressed: () {
                                                                     Get.back();
                                                                   },
-                                                                  child: const Text(
-                                                                      "Cancel")),
+                                                                  child: const Text("Cancel")),
                                                               MaterialButton(
                                                                 onPressed: () {
                                                                   Get.back();
-                                                                  _controller
-                                                                      .toggleFollowing(e
-                                                                          .data
-                                                                          .userId);
+                                                                  _controller.toggleFollowing(e.data.userId);
                                                                 },
-                                                                child: const Text(
-                                                                    "Confirm"),
-                                                                color: AppColors
-                                                                    .buttonColor,
+                                                                child: const Text("Confirm"),
+                                                                color: AppColors.buttonColor,
                                                               ),
                                                             ],
                                                           ));
                                                         },
-                                                        color:
-                                                            colorSchema.primary,
-                                                        shape:
-                                                            const StadiumBorder(),
-                                                        child: const Text(
-                                                            "Follow"),
+                                                        color: colorSchema.primary,
+                                                        shape: const StadiumBorder(),
+                                                        child: const Text("Follow"),
                                                       )
                                                 : const SizedBox();
                                           },
                                         ),
                                       ));
-                            } else if (e.data.notificationType ==
-                                NotificationType.response) {
+                            } else if (e.data.notificationType == NotificationType.response) {
                               return NotificationTile(
                                 title: e.title,
                                 subTile: e.body,
                                 userId: e.data.userId,
                                 traiing: FutureBuilder<ReelModel>(
-                                  future: _reelRepo.getReelByCommentId(
-                                      e.data.entityId, token!),
+                                  future: _reelRepo.getReelByCommentId(e.data.entityId, token!),
                                   builder: (context, s) {
-                                    debugPrint(
-                                        '212121 comment response ${s.hasData}');
+                                    debugPrint('212121 comment response ${s.hasData}');
                                     if (!s.hasData) {
                                       log("single feed error: ${s.error}");
                                       return const SizedBox();
@@ -227,15 +184,14 @@ class NotificationScreen extends StatelessWidget {
                                               null,
                                               [reel],
                                               0,
-                                              () {},
+                                              null,
                                               openComment: true,
                                             ));
                                       },
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(5),
                                         child: FutureBuilder<String>(
-                                          future: _profileRepo
-                                              .getThumbnail(reel.thumbnail),
+                                          future: _profileRepo.getThumbnail(reel.thumbnail),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
                                               return const CircularProgressIndicator();
@@ -245,9 +201,7 @@ class NotificationScreen extends StatelessWidget {
                                               key: UniqueKey(),
                                               placeholder: (context, url) {
                                                 return IconButton(
-                                                    onPressed: () {},
-                                                    icon: const Icon(
-                                                        Icons.refresh_rounded));
+                                                    onPressed: () {}, icon: const Icon(Icons.refresh_rounded));
                                               },
                                               errorWidget: (_, a, b) {
                                                 return Container(
@@ -268,15 +222,13 @@ class NotificationScreen extends StatelessWidget {
                                   },
                                 ),
                               );
-                            } else if (e.data.notificationType ==
-                                NotificationType.like) {
+                            } else if (e.data.notificationType == NotificationType.like) {
                               return NotificationTile(
                                   title: e.title,
                                   subTile: e.body,
                                   userId: e.data.userId,
                                   traiing: FutureBuilder<ReelModel>(
-                                    future: _reelRepo.getSingleReel(
-                                        e.data.entityId, token!),
+                                    future: _reelRepo.getSingleReel(e.data.entityId, token!),
                                     builder: (context, s) {
                                       if (!s.hasData) {
                                         log("single feed error: ${s.error}");
@@ -291,15 +243,13 @@ class NotificationScreen extends StatelessWidget {
                                                 null,
                                                 [reel],
                                                 0,
-                                                () {},
+                                                null,
                                               ));
                                         },
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
+                                          borderRadius: BorderRadius.circular(5),
                                           child: FutureBuilder<String>(
-                                            future: _profileRepo
-                                                .getThumbnail(reel.thumbnail),
+                                            future: _profileRepo.getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return const CircularProgressIndicator();
@@ -309,9 +259,7 @@ class NotificationScreen extends StatelessWidget {
                                                 key: UniqueKey(),
                                                 placeholder: (context, url) {
                                                   return IconButton(
-                                                      onPressed: () {},
-                                                      icon: const Icon(Icons
-                                                          .refresh_rounded));
+                                                      onPressed: () {}, icon: const Icon(Icons.refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
                                                   return Container(
@@ -331,15 +279,13 @@ class NotificationScreen extends StatelessWidget {
                                       );
                                     },
                                   ));
-                            } else if (e.data.notificationType ==
-                                NotificationType.comment) {
+                            } else if (e.data.notificationType == NotificationType.comment) {
                               return NotificationTile(
                                   title: e.title,
                                   subTile: e.body,
                                   userId: e.data.userId,
                                   traiing: FutureBuilder<ReelModel>(
-                                    future: _reelRepo.getSingleReel(
-                                        e.data.entityId, token!),
+                                    future: _reelRepo.getSingleReel(e.data.entityId, token!),
                                     builder: (context, s) {
                                       if (!s.hasData) {
                                         log("single feed error: ${s.error}");
@@ -354,16 +300,14 @@ class NotificationScreen extends StatelessWidget {
                                                 null,
                                                 [reel],
                                                 0,
-                                                () {},
+                                                null,
                                                 openComment: true,
                                               ));
                                         },
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
+                                          borderRadius: BorderRadius.circular(5),
                                           child: FutureBuilder<String>(
-                                            future: _profileRepo
-                                                .getThumbnail(reel.thumbnail),
+                                            future: _profileRepo.getThumbnail(reel.thumbnail),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return const CircularProgressIndicator();
@@ -373,9 +317,7 @@ class NotificationScreen extends StatelessWidget {
                                                 key: UniqueKey(),
                                                 placeholder: (context, url) {
                                                   return IconButton(
-                                                      onPressed: () {},
-                                                      icon: const Icon(Icons
-                                                          .refresh_rounded));
+                                                      onPressed: () {}, icon: const Icon(Icons.refresh_rounded));
                                                 },
                                                 errorWidget: (_, a, b) {
                                                   return Container(
@@ -420,12 +362,7 @@ class NotificationTile extends StatelessWidget {
   final String title;
   final String subTile;
   final int userId;
-  NotificationTile(
-      {Key? key,
-      required this.traiing,
-      required this.title,
-      required this.userId,
-      required this.subTile})
+  NotificationTile({Key? key, required this.traiing, required this.title, required this.userId, required this.subTile})
       : super(key: key);
 
   final _profileRepo = Get.find<ProfileRepository>();

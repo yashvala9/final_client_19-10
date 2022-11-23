@@ -78,10 +78,26 @@ class ProfileRepository {
     }
   }
 
-  Future<List<ProfileModel>> searchByUserName(
-      String userName, String token) async {
+  Future<List<ProfileModel>> searchByUserName(String userName, String token) async {
     final response = await http.get(
       Uri.parse("${Base.searchUser}/$userName"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<ProfileModel>> getUserLikesByReel(String reelId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.reels}$reelId/likes"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         HttpHeaders.authorizationHeader: "Bearer $token",
@@ -119,8 +135,7 @@ class ProfileRepository {
     }
   }
 
-  Future<void> createProfile(
-      Map<String, dynamic> profileData, String token) async {
+  Future<void> createProfile(Map<String, dynamic> profileData, String token) async {
     final response = await http.post(
       Uri.parse(Base.createProfile),
       headers: <String, String>{
@@ -137,8 +152,7 @@ class ProfileRepository {
     }
   }
 
-  Future<void> updateProfile(
-      Map<String, dynamic> profileData, String token) async {
+  Future<void> updateProfile(Map<String, dynamic> profileData, String token) async {
     final response = await http.put(
       Uri.parse(Base.updateProfile),
       headers: <String, String>{
@@ -155,8 +169,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<ReelModel>> getReelByProfileId(int profileId, String token,
-      {int limit = 15, skip = 0}) async {
+  Future<List<ReelModel>> getReelByProfileId(int profileId, String token, {int limit = 15, skip = 0}) async {
     final response = await http.get(
       Uri.parse("${Base.getReelsByUserId}/$profileId?limit=$limit&skip=$skip"),
       headers: <String, String>{
@@ -194,8 +207,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<AdsHistoryModel>> getAdsHistoryByProfileId(
-      int profileId, String token,
+  Future<List<AdsHistoryModel>> getAdsHistoryByProfileId(int profileId, String token,
       {int limit = 15, skip = 0}) async {
     final response = await http.get(
       Uri.parse("${Base.adsHistoryByProfileId}?limit=$limit&skip=$skip"),
@@ -230,8 +242,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<PhotoModel>> getPhotosByProfileId(
-      int profileId, String token) async {
+  Future<List<PhotoModel>> getPhotosByProfileId(int profileId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.getPhotosByUserId}$profileId?limit=500&skip=0"),
       headers: <String, String>{
@@ -268,8 +279,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<ProfileModel>> getFollowersByUserId(
-      int userId, String token) async {
+  Future<List<ProfileModel>> getFollowersByUserId(int userId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.register}$userId/followers/?limit=1000&skip=0"),
       headers: <String, String>{
@@ -286,8 +296,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<ProfileModel>> getFollowingsByUserId(
-      int userId, String token) async {
+  Future<List<ProfileModel>> getFollowingsByUserId(int userId, String token) async {
     final response = await http.get(
       Uri.parse("${Base.register}$userId/following/?limit=1000&skip=0"),
       headers: <String, String>{

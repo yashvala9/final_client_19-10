@@ -21,12 +21,11 @@ class SearchTagTile extends StatelessWidget {
       var reelModel = _controller.searchReels[index];
       return ListTile(
         onTap: () => Get.to(
-          () => SingleFeedScreen(null, _controller.searchReels, index, () {}),
+          () => SingleFeedScreen(null, _controller.searchReels, index, null),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         leading: FutureBuilder<String>(
-          future: _profileRepo
-              .getThumbnail(_controller.searchReels[index].thumbnail),
+          future: _profileRepo.getThumbnail(_controller.searchReels[index].thumbnail),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox(

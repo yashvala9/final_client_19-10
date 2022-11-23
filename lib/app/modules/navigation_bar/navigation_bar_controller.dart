@@ -14,9 +14,7 @@ class NavigationBarController extends GetxController {
   var tabIndex = 0.obs;
 
   final _reelRepo = Get.put(ReelRepository());
-  final _authService = Get.isRegistered<AuthService>()
-      ? Get.find<AuthService>()
-      : Get.put(AuthService());
+  final _authService = Get.isRegistered<AuthService>() ? Get.find<AuthService>() : Get.put(AuthService());
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   Future<void> retrieveDynamicLink(BuildContext context) async {
@@ -52,11 +50,11 @@ class NavigationBarController extends GetxController {
     log("Type:: $type");
     if (type == 'reels') {
       var reel = await _reelRepo.getSingleReel(id, _authService.token!);
-      Get.to(() => SingleFeedScreen(null, [reel], 0, () {}, isPhoto: false));
+      Get.to(() => SingleFeedScreen(null, [reel], 0, null, isPhoto: false));
     } else {
       log("Navigate Photo");
       var photo = await _reelRepo.getPhotosById(id, _authService.token!);
-      Get.to(() => SingleFeedScreen([photo], null, 0, () {}, isPhoto: true));
+      Get.to(() => SingleFeedScreen([photo], null, 0, null, isPhoto: true));
     }
   }
 

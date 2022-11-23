@@ -73,8 +73,7 @@ class ProfileDetail extends StatelessWidget {
                   delegate: SliverChildListDelegate([
                     GetBuilder<HomePageController>(builder: (_) {
                       return FutureBuilder<ProfileModel>(
-                          future: _profileRepo.getProfileById(
-                              profileModel.id, _controller.token!),
+                          future: _profileRepo.getProfileById(profileModel.id, _controller.token!),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return Loading();
@@ -90,12 +89,10 @@ class ProfileDetail extends StatelessWidget {
                                   alignment: Alignment.topCenter,
                                   children: [
                                     Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 100, bottom: 10),
+                                      margin: const EdgeInsets.only(top: 100, bottom: 10),
                                       decoration: const BoxDecoration(
                                           borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(40),
-                                              topRight: Radius.circular(40))),
+                                              topLeft: Radius.circular(40), topRight: Radius.circular(40))),
                                       child: ClipRRect(
                                         borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(50),
@@ -109,108 +106,66 @@ class ProfileDetail extends StatelessWidget {
                                                 height: Get.height * 0.08,
                                               ),
                                               Text(
-                                                profileModel
-                                                    .user_profile!.fullname!,
+                                                profileModel.user_profile!.fullname!,
                                                 style: style.headline5,
                                               ),
                                               SizedBox(
                                                 height: 80,
                                                 child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Expanded(
                                                         child: ListTile(
-                                                      title: Text(
-                                                          profileModel.reelCount
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                      title: Text(profileModel.reelCount.toString(),
+                                                          textAlign: TextAlign.center, style: style.headline6),
                                                       subtitle: Text(
                                                         "Rolls",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style:
-                                                            style.titleMedium,
+                                                        textAlign: TextAlign.center,
+                                                        style: style.titleMedium,
                                                       ),
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(() =>
-                                                            ListUsersView(0,
-                                                                profileModel));
+                                                        Get.to(() => ListUsersView(0, profileModel));
                                                       },
-                                                      title: Text(
-                                                          profileModel
-                                                              .followerCount
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              style.headline6),
-                                                      subtitle: Text(
-                                                          "Followers",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: style
-                                                              .titleMedium),
+                                                      title: Text(profileModel.followerCount.toString(),
+                                                          textAlign: TextAlign.center, style: style.headline6),
+                                                      subtitle: Text("Followers",
+                                                          textAlign: TextAlign.center, style: style.titleMedium),
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
                                                       onTap: () {
-                                                        Get.to(() =>
-                                                            ListUsersView(1,
-                                                                profileModel));
+                                                        Get.to(() => ListUsersView(1, profileModel));
                                                       },
-                                                      title: Text(
-                                                          profileModel
-                                                              .followingCount
-                                                              .toString(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              style.headline6),
-                                                      subtitle: Text(
-                                                          "Followings",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: style
-                                                              .titleMedium),
+                                                      title: Text(profileModel.followingCount.toString(),
+                                                          textAlign: TextAlign.center, style: style.headline6),
+                                                      subtitle: Text("Followings",
+                                                          textAlign: TextAlign.center, style: style.titleMedium),
                                                     )),
                                                   ],
                                                 ),
                                               ),
                                               FutureBuilder<bool>(
-                                                  future:
-                                                      _profileRepo.isFollowing(
-                                                          profileModel.id,
-                                                          _controller.token!),
+                                                  future: _profileRepo.isFollowing(profileModel.id, _controller.token!),
                                                   builder: (context, snapshot) {
                                                     if (!snapshot.hasData) {
                                                       return Container();
                                                     }
                                                     return snapshot.data!
                                                         ? Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
+                                                            padding: const EdgeInsets.symmetric(
                                                               horizontal: 20,
                                                               vertical: 8,
                                                             ),
                                                             child: Row(
                                                               children: [
                                                                 Expanded(
-                                                                  child:
-                                                                      OutlinedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Get.dialog(
-                                                                          AlertDialog(
-                                                                        backgroundColor:
-                                                                            Colors.black54,
+                                                                  child: OutlinedButton(
+                                                                    onPressed: () {
+                                                                      Get.dialog(AlertDialog(
+                                                                        backgroundColor: Colors.black54,
                                                                         title: snapshot.data!
                                                                             ? const Text(
                                                                                 "Do you wish to unfollow?",
@@ -220,8 +175,7 @@ class ProfileDetail extends StatelessWidget {
                                                                                 "Do you wish to follow?",
                                                                                 style: TextStyle(color: Colors.white),
                                                                               ),
-                                                                        actionsAlignment:
-                                                                            MainAxisAlignment.spaceAround,
+                                                                        actionsAlignment: MainAxisAlignment.spaceAround,
                                                                         actions: [
                                                                           TextButton(
                                                                               onPressed: () {
@@ -229,87 +183,65 @@ class ProfileDetail extends StatelessWidget {
                                                                               },
                                                                               child: const Text("Cancel")),
                                                                           MaterialButton(
-                                                                            onPressed:
-                                                                                () {
+                                                                            onPressed: () {
                                                                               Get.back();
-                                                                              _controller.toggleFollowing(profileModel.id);
+                                                                              _controller
+                                                                                  .toggleFollowing(profileModel.id);
                                                                             },
-                                                                            child:
-                                                                                const Text("Confirm"),
-                                                                            color:
-                                                                                AppColors.buttonColor,
+                                                                            child: const Text("Confirm"),
+                                                                            color: AppColors.buttonColor,
                                                                           ),
                                                                         ],
                                                                       ));
                                                                     },
-                                                                    style: OutlinedButton
-                                                                        .styleFrom(
-                                                                      minimumSize:
-                                                                          const Size.fromHeight(
-                                                                              50),
+                                                                    style: OutlinedButton.styleFrom(
+                                                                      minimumSize: const Size.fromHeight(50),
                                                                     ),
                                                                     child: Text(
                                                                       "Following",
-                                                                      style: style
-                                                                          .titleMedium,
+                                                                      style: style.titleMedium,
                                                                     ),
                                                                   ),
                                                                 ),
                                                                 Expanded(
-                                                                    child:
-                                                                        Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      OutlinedButton(
-                                                                    onPressed:
-                                                                        () {
+                                                                    child: Padding(
+                                                                  padding: const EdgeInsets.all(8.0),
+                                                                  child: OutlinedButton(
+                                                                    onPressed: () {
                                                                       log("aaaaaaaaaaaaaaaaa");
 
                                                                       log("State: ${_communicationService.client.state}");
                                                                       log("CurrentUser: ${_communicationService.client.state.currentUser}");
-                                                                      String
-                                                                          newChannelId =
+                                                                      String newChannelId =
                                                                           '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
-                                                                      final Channel
-                                                                          _newChannel =
-                                                                          _communicationService
-                                                                              .client
-                                                                              .channel(
+                                                                      final Channel _newChannel =
+                                                                          _communicationService.client.channel(
                                                                         'messaging',
                                                                         id: newChannelId,
                                                                         extraData: {
-                                                                          'isGroupChat':
-                                                                              false,
-                                                                          'presence':
-                                                                              true,
-                                                                          'members':
-                                                                              [
+                                                                          'isGroupChat': false,
+                                                                          'presence': true,
+                                                                          'members': [
                                                                             profileModel.id.toString(),
-                                                                            _communicationService.client.state.currentUser!.id.toString(),
+                                                                            _communicationService
+                                                                                .client.state.currentUser!.id
+                                                                                .toString(),
                                                                           ],
                                                                         },
                                                                       );
-                                                                      Navigator.push(
-                                                                          context,
-                                                                          MaterialPageRoute(builder:
-                                                                              (context) {
+                                                                      Navigator.push(context,
+                                                                          MaterialPageRoute(builder: (context) {
                                                                         return ChannelPage(
-                                                                          channel:
-                                                                              _newChannel,
+                                                                          channel: _newChannel,
                                                                         );
                                                                       }));
                                                                     },
                                                                     style: OutlinedButton.styleFrom(
-                                                                        minimumSize:
-                                                                            const Size.fromHeight(50)),
+                                                                        minimumSize: const Size.fromHeight(50)),
                                                                     child: Text(
                                                                       "Message",
-                                                                      style: style
-                                                                          .titleMedium,
+                                                                      style: style.titleMedium,
                                                                     ),
                                                                   ),
                                                                 ))
@@ -317,27 +249,17 @@ class ProfileDetail extends StatelessWidget {
                                                             ),
                                                           )
                                                         : Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                            padding: const EdgeInsets.all(8.0),
                                                             child: Row(
                                                               children: [
                                                                 Expanded(
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        MyElevatedButton(
-                                                                      buttonText:
-                                                                          "Follow",
-                                                                      onPressed:
-                                                                          () {
-                                                                        Get.dialog(
-                                                                            AlertDialog(
-                                                                          backgroundColor:
-                                                                              Colors.black54,
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: MyElevatedButton(
+                                                                      buttonText: "Follow",
+                                                                      onPressed: () {
+                                                                        Get.dialog(AlertDialog(
+                                                                          backgroundColor: Colors.black54,
                                                                           title: snapshot.data!
                                                                               ? const Text(
                                                                                   "Do you wish to unfollow?",
@@ -358,7 +280,8 @@ class ProfileDetail extends StatelessWidget {
                                                                             MaterialButton(
                                                                               onPressed: () {
                                                                                 Get.back();
-                                                                                _controller.toggleFollowing(profileModel.id);
+                                                                                _controller
+                                                                                    .toggleFollowing(profileModel.id);
                                                                               },
                                                                               child: const Text("Confirm"),
                                                                               color: AppColors.buttonColor,
@@ -366,68 +289,50 @@ class ProfileDetail extends StatelessWidget {
                                                                           ],
                                                                         ));
                                                                       },
-                                                                      height:
-                                                                          30,
-                                                                      style: style
-                                                                          .titleMedium,
+                                                                      height: 30,
+                                                                      style: style.titleMedium,
                                                                     ),
                                                                   ),
                                                                 ),
                                                                 Expanded(
-                                                                    child:
-                                                                        Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      OutlinedButton(
-                                                                    onPressed:
-                                                                        () {
+                                                                    child: Padding(
+                                                                  padding: const EdgeInsets.all(8.0),
+                                                                  child: OutlinedButton(
+                                                                    onPressed: () {
                                                                       log("aaaaaaaaaaaaaaaaa");
 
                                                                       log("State: ${_communicationService.client.state}");
                                                                       log("CurrentUser: ${_communicationService.client.state.currentUser}");
-                                                                      String
-                                                                          newChannelId =
+                                                                      String newChannelId =
                                                                           '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
-                                                                      final Channel
-                                                                          _newChannel =
-                                                                          _communicationService
-                                                                              .client
-                                                                              .channel(
+                                                                      final Channel _newChannel =
+                                                                          _communicationService.client.channel(
                                                                         'messaging',
                                                                         id: newChannelId,
                                                                         extraData: {
-                                                                          'isGroupChat':
-                                                                              false,
-                                                                          'presence':
-                                                                              true,
-                                                                          'members':
-                                                                              [
+                                                                          'isGroupChat': false,
+                                                                          'presence': true,
+                                                                          'members': [
                                                                             profileModel.id.toString(),
-                                                                            _communicationService.client.state.currentUser!.id.toString(),
+                                                                            _communicationService
+                                                                                .client.state.currentUser!.id
+                                                                                .toString(),
                                                                           ],
                                                                         },
                                                                       );
-                                                                      Navigator.push(
-                                                                          context,
-                                                                          MaterialPageRoute(builder:
-                                                                              (context) {
+                                                                      Navigator.push(context,
+                                                                          MaterialPageRoute(builder: (context) {
                                                                         return ChannelPage(
-                                                                          channel:
-                                                                              _newChannel,
+                                                                          channel: _newChannel,
                                                                         );
                                                                       }));
                                                                     },
                                                                     style: OutlinedButton.styleFrom(
-                                                                        minimumSize:
-                                                                            const Size.fromHeight(50)),
+                                                                        minimumSize: const Size.fromHeight(50)),
                                                                     child: Text(
                                                                       "Message",
-                                                                      style: style
-                                                                          .titleMedium,
+                                                                      style: style.titleMedium,
                                                                     ),
                                                                   ),
                                                                 ))
@@ -438,31 +343,20 @@ class ProfileDetail extends StatelessWidget {
                                               Container(
                                                 width: Get.width * 0.9,
                                                 decoration: BoxDecoration(
-                                                    color: const Color.fromRGBO(
-                                                        255, 240, 218, 1),
+                                                    color: const Color.fromRGBO(255, 240, 218, 1),
                                                     border: Border.all(
                                                       color: Colors.transparent,
                                                     ),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                20))),
+                                                    borderRadius: const BorderRadius.all(Radius.circular(20))),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      16.0),
+                                                  padding: const EdgeInsets.all(16.0),
                                                   child: Column(
                                                     children: [
                                                       Center(
                                                           child: Text(
-                                                        parser.emojify(
-                                                            profileModel
-                                                                .user_profile!
-                                                                .bio!),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 18),
+                                                        parser.emojify(profileModel.user_profile!.bio!),
+                                                        textAlign: TextAlign.center,
+                                                        style: const TextStyle(color: Colors.black, fontSize: 18),
                                                       )),
                                                     ],
                                                   ),
@@ -479,10 +373,7 @@ class ProfileDetail extends StatelessWidget {
                                         ),
                                         child: GestureDetector(
                                           onTap: () {
-                                            Get.to(ProfilePhotoView(
-                                                'hero1',
-                                                profileModel
-                                                    .user_profile!.fullname!,
+                                            Get.to(ProfilePhotoView('hero1', profileModel.user_profile!.fullname!,
                                                 "${Base.profileBucketUrl}/${profileModel.user_profile!.profile_img}"));
                                           },
                                           child: Material(
@@ -528,14 +419,11 @@ class ProfileDetail extends StatelessWidget {
           height: 8,
         ),
         Expanded(
-          child: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                ProfileReel(profileId: profileModel.id),
-                PhotoSection(id: profileModel.id, token: _controller.token!),
-                if (profileModel.status == 'VERIFIED')
-                  const Center(child: Text("Giveaway")),
-              ]),
+          child: TabBarView(physics: const NeverScrollableScrollPhysics(), children: [
+            ProfileReel(profileId: profileModel.id),
+            PhotoSection(id: profileModel.id, token: _controller.token!),
+            if (profileModel.status == 'VERIFIED') const Center(child: Text("Giveaway")),
+          ]),
         ),
       ],
     );
@@ -555,8 +443,7 @@ class ProfileReel extends StatelessWidget {
     return FutureBuilder<List<ReelModel>>(
         future: profileId != null
             ? _profileRepo.getReelByProfileId(profileId!, _controller.token!)
-            : _profileRepo.getReelByProfileId(
-                _controller.profileId!, _controller.token!),
+            : _profileRepo.getReelByProfileId(_controller.profileId!, _controller.token!),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Loading();
@@ -584,7 +471,7 @@ class ProfileReel extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(SingleFeedScreen(null, reels, index, () {}));
+                  Get.to(SingleFeedScreen(null, reels, index, null));
                 },
                 child: Stack(children: [
                   FutureBuilder<String>(
@@ -604,8 +491,7 @@ class ProfileReel extends StatelessWidget {
                                 border: Border.all(),
                               ),
                               alignment: Alignment.center,
-                              child: const Center(
-                                  child: CircularProgressIndicator()),
+                              child: const Center(child: CircularProgressIndicator()),
                             );
                           },
                           imageUrl: snapshot.data!,
@@ -615,8 +501,7 @@ class ProfileReel extends StatelessWidget {
                     },
                   ),
                   FutureBuilder<int>(
-                    future: _reelRepo.getReelViews(
-                        reels[index].id.toString(), _controller.token!),
+                    future: _reelRepo.getReelViews(reels[index].id.toString(), _controller.token!),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return ShimmerCardAnimation();
@@ -630,10 +515,7 @@ class ProfileReel extends StatelessWidget {
                               const Icon(Icons.play_arrow, color: Colors.white),
                               Text(
                                 snapshot.data.toString(),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                             ],
                           ));
@@ -650,8 +532,7 @@ class ProfileReel extends StatelessWidget {
 class PhotoSection extends StatelessWidget {
   final int id;
   final String token;
-  PhotoSection({Key? key, required this.id, required this.token})
-      : super(key: key);
+  PhotoSection({Key? key, required this.id, required this.token}) : super(key: key);
 
   final _profileRepo = ProfileRepository();
 
@@ -689,13 +570,12 @@ class PhotoSection extends StatelessWidget {
                           photos,
                           null,
                           index,
-                          () {},
+                          null,
                           isPhoto: true,
                         ));
                       },
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "${Base.profileBucketUrl}/${photos[index].filename}",
+                        imageUrl: "${Base.profileBucketUrl}/${photos[index].filename}",
                         fit: BoxFit.cover,
                         errorWidget: (c, s, e) => const Icon(Icons.error),
                       ),

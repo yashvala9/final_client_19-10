@@ -31,12 +31,35 @@ class ProfileController extends GetxController {
     update();
   }
 
+  @override
+  void onInit() {
+    debugPrint('On Init running');
+    getReels();
+    getPhotos();
+    super.onInit();
+  }
+
+  Future<void> getReels() async {
+    reels = await _profileRepo.getReelByProfileId(profileId!, token!, limit: 100, skip: 0);
+  }
+
+  Future<List<ReelModel>> getReelFuture() async {
+    return reels;
+  }
+
+  Future<void> getPhotos() async {
+    photos = await _profileRepo.getPhotosByProfileId(profileId!, token!);
+  }
+
+  Future<List<PhotoModel>> getPhotoFuture() async {
+    return photos;
+  }
+
   Future<void> getMoreFeed(int skip) async {
     loadingMore = true;
     if (_loadMore) {
       try {
-        var newList = await _profileRepo.getReelByProfileId(profileId!, token!,
-            limit: 9, skip: skip);
+        var newList = await _profileRepo.getReelByProfileId(profileId!, token!, limit: 9, skip: skip);
         if (newList.isEmpty) {
           _loadMore = false;
         } else {
@@ -57,6 +80,9 @@ class ProfileController extends GetxController {
   void deleteReel(int reelId) async {
     try {
       await _reelRepo.deleteReel(reelId, token!);
+      reels.removeWhere(
+        (element) => element.id == reelId,
+      );
       update();
     } catch (e) {
       debugPrint('delteReel: $e');
@@ -66,6 +92,9 @@ class ProfileController extends GetxController {
   void deletePost(int postId) async {
     try {
       await _reelRepo.deletePost(postId, token!);
+      photos.removeWhere(
+        (element) => element.id == postId,
+      );
       update();
       onInit();
     } catch (e) {
