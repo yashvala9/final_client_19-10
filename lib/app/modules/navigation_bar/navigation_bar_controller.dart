@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/homepage/profile_detail_screen.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 
@@ -14,7 +16,9 @@ class NavigationBarController extends GetxController {
   var tabIndex = 0.obs;
 
   final _reelRepo = Get.put(ReelRepository());
-  final _authService = Get.isRegistered<AuthService>() ? Get.find<AuthService>() : Get.put(AuthService());
+  final _authService = Get.isRegistered<AuthService>()
+      ? Get.find<AuthService>()
+      : Get.put(AuthService());
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   Future<void> retrieveDynamicLink(BuildContext context) async {
@@ -51,6 +55,17 @@ class NavigationBarController extends GetxController {
     if (type == 'reels') {
       var reel = await _reelRepo.getSingleReel(id, _authService.token!);
       Get.to(() => SingleFeedScreen(null, [reel], 0, null, isPhoto: false));
+    } else if (type == 'profile') {
+      var profile = await ProfileRepository()
+          .getProfileById(int.parse(id), _authService.token!);
+      Get.to(
+        () => ProfileDetail(
+          profileModel: profile,
+          onBack: () {
+            Get.back();
+          },
+        ),
+      );
     } else {
       log("Navigate Photo");
       var photo = await _reelRepo.getPhotosById(id, _authService.token!);

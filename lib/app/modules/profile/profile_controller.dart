@@ -31,16 +31,21 @@ class ProfileController extends GetxController {
     update();
   }
 
+  RxBool isLoading = false.obs;
+
   @override
-  void onInit() {
+  Future<void> onInit() async {
     debugPrint('On Init running');
-    getReels();
-    getPhotos();
+    isLoading(true);
+    await getReels();
+    await getPhotos();
+    isLoading(false);
     super.onInit();
   }
 
   Future<void> getReels() async {
-    reels = await _profileRepo.getReelByProfileId(profileId!, token!, limit: 100, skip: 0);
+    reels = await _profileRepo.getReelByProfileId(profileId!, token!,
+        limit: 100, skip: 0);
   }
 
   Future<List<ReelModel>> getReelFuture() async {
@@ -59,7 +64,8 @@ class ProfileController extends GetxController {
     loadingMore = true;
     if (_loadMore) {
       try {
-        var newList = await _profileRepo.getReelByProfileId(profileId!, token!, limit: 9, skip: skip);
+        var newList = await _profileRepo.getReelByProfileId(profileId!, token!,
+            limit: 9, skip: skip);
         if (newList.isEmpty) {
           _loadMore = false;
         } else {

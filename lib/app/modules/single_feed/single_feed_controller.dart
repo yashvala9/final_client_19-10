@@ -38,7 +38,8 @@ class SingleFeedController extends GetxController {
 
   void toggleLikeShow() async {
     showLike = true;
-    await Future.delayed(const Duration(milliseconds: 1000), () => showLike = false);
+    await Future.delayed(
+        const Duration(milliseconds: 1000), () => showLike = false);
   }
 
   void likeToggle(int id, {bool isPhoto = false}) async {
@@ -83,15 +84,23 @@ class SingleFeedController extends GetxController {
     }
   }
 
-  Future<void> updateCaption(int id, bool isPhoto, String caption) async {
-    if (!isPhoto) {
-      try {
-        await _reelRepo.updateReelCaption(id, token!, caption);
+  Future<void> updateReelCaption(int id, String caption) async {
+    try {
+      await _reelRepo.updateReelCaption(id, token!, caption);
 
-        update();
-      } catch (e) {
-        debugPrint("updateCaption: $e");
-      }
+      update();
+    } catch (e) {
+      debugPrint("updateCaption: $e");
+    }
+    update();
+  }
+
+  Future<void> updatePhotoCation(int id, String caption, String title) async {
+    try {
+      await _reelRepo.updatePhotoCaption(id, token!, caption, title);
+      update();
+    } catch (e) {
+      debugPrint("updateCaption: $e");
     }
     update();
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reel_ro/app/modules/search/profile_detail_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 
 import '../../../../utils/base.dart';
 import '../../../../utils/colors.dart';
+import '../../homepage/profile_detail_screen.dart';
 
 class SearchTile extends StatelessWidget {
   final int index;
@@ -23,8 +23,10 @@ class SearchTile extends StatelessWidget {
       return ListTile(
         onTap: () => Get.to(
           () => ProfileDetail(
-            index: index,
-          ),
+              profileModel: profileModel,
+              onBack: () {
+                Get.back();
+              }),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         leading: CircleAvatar(

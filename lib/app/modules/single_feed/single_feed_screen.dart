@@ -145,17 +145,21 @@ class SingleFeedScreen extends StatelessWidget {
                                                   Get.back();
                                                   if (caption != '') {
                                                     Get.back();
-                                                    await _controller.updateCaption(
-                                                        isPhoto
-                                                            ? photos![
-                                                                    currentIndex]
-                                                                .id
-                                                            : reels![
-                                                                    currentIndex]
-                                                                .id,
-                                                        isPhoto,
-                                                        caption);
-                                                    profileController!.onInit();
+                                                    isPhoto
+                                                        ? await _controller
+                                                            .updatePhotoCation(
+                                                                photos![currentIndex]
+                                                                    .id,
+                                                                caption,
+                                                                photos![currentIndex]
+                                                                    .title)
+                                                        : await _controller
+                                                            .updateReelCaption(
+                                                                reels![currentIndex]
+                                                                    .id,
+                                                                caption);
+                                                    await profileController!
+                                                        .onInit();
                                                   }
                                                 },
                                                 child: const Text("Save"),
@@ -236,6 +240,9 @@ class SingleFeedScreen extends StatelessWidget {
                 body: _controller.loading
                     ? Loading()
                     : PageView.builder(
+                        onPageChanged: (i) {
+                          currentIndex = i;
+                        },
                         allowImplicitScrolling: true,
                         itemCount: isPhoto ? photos!.length : reels!.length,
                         controller: PageController(
@@ -244,7 +251,7 @@ class SingleFeedScreen extends StatelessWidget {
                         ),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          currentIndex = index;
+                          // currentIndex = index;
 
                           if (isPhoto) {
                             return Stack(
