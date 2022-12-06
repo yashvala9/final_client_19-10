@@ -114,6 +114,24 @@ class ProfileRepository {
     }
   }
 
+  Future<List<ProfileModel>> getUserLikesByPhoto(
+      String photoId, String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.posts}$photoId/likes"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body;
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<String?> uploadProfileToAwsS3({
     required String userID,
     required File file,
@@ -174,7 +192,7 @@ class ProfileRepository {
   }
 
   Future<List<ReelModel>> getReelByProfileId(int profileId, String token,
-      {int limit = 15, skip = 0}) async {
+      {int limit = 500, skip = 0}) async {
     final response = await http.get(
       Uri.parse("${Base.getReelsByUserId}/$profileId?limit=$limit&skip=$skip"),
       headers: <String, String>{

@@ -20,7 +20,7 @@ class GiveawayView extends GetView<GiveawayController> {
   Widget build(BuildContext context) {
     final theme = Get.theme;
     final style = theme.textTheme;
-    int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 30 * 60 * 24;
+    int endTime = DateTime.now().millisecondsSinceEpoch + 5000 * 30 * 60 * 24;
 
     return Scaffold(
       backgroundColor: Colors.grey[350],
@@ -97,6 +97,9 @@ class GiveawayView extends GetView<GiveawayController> {
                   listTileWidget('badge', 'Contest Dates', ContestDatesView()),
                   listTileWidget(
                       'book', 'Contest Rules', const ContestRulesView()),
+                  SizedBox(
+                    height: 250,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Container(
@@ -104,23 +107,102 @@ class GiveawayView extends GetView<GiveawayController> {
                       width: Get.width,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              stops: [
-                                0.1,
-                                0.3,
-                                0.7,
-                                1
-                              ],
-                              colors: [
-                                Colors.green,
-                                Colors.blue,
-                                Colors.orange,
-                                Colors.pink[400]!
-                              ])),
+                          color: Colors.grey[700]),
                       child: Center(
                         child: CountdownTimer(
+                          widgetBuilder: (context, time) {
+                            return Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[800]!,
+                                          border: Border.all(
+                                            color: Colors.grey[800]!,
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          time!.days.toString(),
+                                          style: TextStyle(color: Colors.white),
+                                        )),
+                                      ),
+                                      Text('Day')
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                        child: Center(
+                                            child: Text(time.hours.toString())),
+                                      ),
+                                      Text('Hour')
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                        child: Center(
+                                            child: Text(time.min.toString())),
+                                      ),
+                                      Text('Minute')
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2.0,
+                                          ),
+                                        ),
+                                        child: Center(
+                                            child: Text(time.sec.toString())),
+                                      ),
+                                      Text('Second')
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                           endTime: endTime,
                           textStyle: TextStyle(
                               fontSize: 50,
@@ -142,7 +224,7 @@ class GiveawayView extends GetView<GiveawayController> {
 
 Widget listTileWidget(String filename, String text, Widget pageName) {
   return Padding(
-    padding: const EdgeInsets.all(12.0),
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 04.0),
     child: ListTile(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10))),

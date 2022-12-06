@@ -45,7 +45,7 @@ class ProfileController extends GetxController {
 
   Future<void> getReels() async {
     reels = await _profileRepo.getReelByProfileId(profileId!, token!,
-        limit: 100, skip: 0);
+        limit: 500, skip: 0);
   }
 
   Future<List<ReelModel>> getReelFuture() async {

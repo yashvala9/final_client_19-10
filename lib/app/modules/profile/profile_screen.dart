@@ -156,7 +156,7 @@ class ProfileScreen extends StatelessWidget {
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                       colors: [
-                                        Colors.grey[500]!,
+                                        Colors.grey[700]!,
                                         Colors.grey[800]!,
                                       ],
                                     ),

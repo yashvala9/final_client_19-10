@@ -574,7 +574,7 @@ class ReelRepository {
   Future<void> updateAdsHistory(
       int secondsWatched, int totalLength, int adId, String token) async {
     try {
-      var map = {"time_duration": secondsWatched, "reel_length": totalLength};
+      var map = {"time_duration": totalLength, "reel_length": totalLength};
       final response = await http.post(
         Uri.parse('${Base.adsHistory}$adId'),
         headers: <String, String>{

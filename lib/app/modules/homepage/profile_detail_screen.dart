@@ -47,7 +47,7 @@ class ProfileDetail extends StatelessWidget {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://reelro.page.link',
       link: Uri.parse('https://reelro.page.link/?id=$id/$type'),
-      androidParameters: AndroidParameters(
+      androidParameters: const AndroidParameters(
         packageName: 'com.example.reel_ro',
         minimumVersion: 1,
       ),
@@ -79,7 +79,7 @@ class ProfileDetail extends StatelessWidget {
             leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back,
-                color: Colors.black54,
+                color: Colors.white,
               ),
               onPressed: () async {
                 onBack();
@@ -97,7 +97,7 @@ class ProfileDetail extends StatelessWidget {
                             children: [
                               ElevatedButton(
                                   onPressed: () {},
-                                  child: Text(
+                                  child: const Text(
                                     'Report',
                                     style: TextStyle(fontSize: 17),
                                   )),
@@ -106,7 +106,7 @@ class ProfileDetail extends StatelessWidget {
                                     // ProfileRepository().toggleBlock(
                                     //     profileModel.id, _controller.token!);
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Block',
                                     style: TextStyle(fontSize: 17),
                                   )),
@@ -120,7 +120,7 @@ class ProfileDetail extends StatelessWidget {
                                   },
                                   child: _controller.shareLoading
                                       ? Loading()
-                                      : Text(
+                                      : const Text(
                                           'Share Profile',
                                           style: TextStyle(fontSize: 17),
                                         ))
@@ -128,13 +128,13 @@ class ProfileDetail extends StatelessWidget {
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.more_vert,
-                    color: Colors.black54,
+                    color: Colors.white,
                   ))
             ],
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           extendBodyBehindAppBar: true,
           body: NestedScrollView(
             headerSliverBuilder: (context, _) {
@@ -154,7 +154,16 @@ class ProfileDetail extends StatelessWidget {
                               children: [
                                 Container(
                                   height: Get.height * 0.2,
-                                  color: colorScheme.primaryContainer,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Colors.grey[700]!,
+                                        Colors.grey[800]!,
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 Stack(
                                   alignment: Alignment.topCenter,
@@ -172,7 +181,7 @@ class ProfileDetail extends StatelessWidget {
                                           topRight: Radius.circular(50),
                                         ),
                                         child: Material(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           child: Column(
                                             children: [
                                               SizedBox(
@@ -196,14 +205,20 @@ class ProfileDetail extends StatelessWidget {
                                                               .toString(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                          style: style
+                                                              .headline6!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)),
                                                       subtitle: Text(
                                                         "Rolls",
                                                         textAlign:
                                                             TextAlign.center,
-                                                        style:
-                                                            style.titleMedium,
+                                                        style: style
+                                                            .titleMedium!
+                                                            .copyWith(
+                                                                color: Colors
+                                                                    .white),
                                                       ),
                                                     )),
                                                     Expanded(
@@ -219,14 +234,20 @@ class ProfileDetail extends StatelessWidget {
                                                               .toString(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                          style: style
+                                                              .headline6!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)),
                                                       subtitle: Text(
                                                           "Followers",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: style
-                                                              .titleMedium),
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)),
                                                     )),
                                                     Expanded(
                                                         child: ListTile(
@@ -241,14 +262,20 @@ class ProfileDetail extends StatelessWidget {
                                                               .toString(),
                                                           textAlign:
                                                               TextAlign.center,
-                                                          style:
-                                                              style.headline6),
+                                                          style: style
+                                                              .headline6!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)),
                                                       subtitle: Text(
                                                           "Followings",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: style
-                                                              .titleMedium),
+                                                              .titleMedium!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .white)),
                                                     )),
                                                   ],
                                                 ),
@@ -317,11 +344,15 @@ class ProfileDetail extends StatelessWidget {
                                                                       minimumSize:
                                                                           const Size.fromHeight(
                                                                               50),
-                                                                    ),
+                                                                    ).copyWith(
+                                                                        backgroundColor:
+                                                                            MaterialStateProperty.all(Colors.grey[850]!)),
                                                                     child: Text(
                                                                       "Following",
                                                                       style: style
-                                                                          .titleMedium,
+                                                                          .titleMedium!
+                                                                          .copyWith(
+                                                                              color: Colors.white),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -374,12 +405,17 @@ class ProfileDetail extends StatelessWidget {
                                                                       }));
                                                                     },
                                                                     style: OutlinedButton.styleFrom(
-                                                                        minimumSize:
-                                                                            const Size.fromHeight(50)),
+                                                                            minimumSize: const Size.fromHeight(
+                                                                                50))
+                                                                        .copyWith(
+                                                                            backgroundColor:
+                                                                                MaterialStateProperty.all(Colors.grey[850]!)),
                                                                     child: Text(
                                                                       "Message",
                                                                       style: style
-                                                                          .titleMedium,
+                                                                          .titleMedium!
+                                                                          .copyWith(
+                                                                              color: Colors.white),
                                                                     ),
                                                                   ),
                                                                 ))
@@ -399,9 +435,7 @@ class ProfileDetail extends StatelessWidget {
                                                                         const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
-                                                                        MyElevatedButton(
-                                                                      buttonText:
-                                                                          "Follow",
+                                                                        OutlinedButton(
                                                                       onPressed:
                                                                           () {
                                                                         Get.dialog(
@@ -436,10 +470,16 @@ class ProfileDetail extends StatelessWidget {
                                                                           ],
                                                                         ));
                                                                       },
-                                                                      height:
-                                                                          30,
-                                                                      style: style
-                                                                          .titleMedium,
+                                                                      style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(50)).copyWith(
+                                                                          backgroundColor:
+                                                                              MaterialStateProperty.all(Colors.grey[850])),
+                                                                      child:
+                                                                          Text(
+                                                                        "Follow",
+                                                                        style: style
+                                                                            .titleMedium!
+                                                                            .copyWith(color: Colors.white),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -492,12 +532,17 @@ class ProfileDetail extends StatelessWidget {
                                                                       }));
                                                                     },
                                                                     style: OutlinedButton.styleFrom(
-                                                                        minimumSize:
-                                                                            const Size.fromHeight(50)),
+                                                                            minimumSize: const Size.fromHeight(
+                                                                                50))
+                                                                        .copyWith(
+                                                                            backgroundColor:
+                                                                                MaterialStateProperty.all(Colors.grey[850])),
                                                                     child: Text(
                                                                       "Message",
                                                                       style: style
-                                                                          .titleMedium,
+                                                                          .titleMedium!
+                                                                          .copyWith(
+                                                                              color: Colors.white),
                                                                     ),
                                                                   ),
                                                                 ))
@@ -508,8 +553,7 @@ class ProfileDetail extends StatelessWidget {
                                               Container(
                                                 width: Get.width * 0.9,
                                                 decoration: BoxDecoration(
-                                                    color: const Color.fromRGBO(
-                                                        255, 240, 218, 1),
+                                                    color: Colors.grey[850],
                                                     border: Border.all(
                                                       color: Colors.transparent,
                                                     ),
@@ -531,7 +575,7 @@ class ProfileDetail extends StatelessWidget {
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
-                                                            color: Colors.black,
+                                                            color: Colors.white,
                                                             fontSize: 18),
                                                       )),
                                                     ],
@@ -590,8 +634,16 @@ class ProfileDetail extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TabBar(tabs: [
-          const Tab(text: "Rolls"),
-          const Tab(text: "Photos"),
+          const Tab(
+              child: Text(
+            "Rolls",
+            style: TextStyle(color: Colors.white),
+          )),
+          const Tab(
+              child: Text(
+            "Photos",
+            style: TextStyle(color: Colors.white),
+          )),
           if (profileModel.status == 'VERIFIED') const Tab(text: "Giveaway"),
         ]),
         const SizedBox(
