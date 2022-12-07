@@ -56,16 +56,21 @@ class NavigationBarController extends GetxController {
       var reel = await _reelRepo.getSingleReel(id, _authService.token!);
       Get.to(() => SingleFeedScreen(null, [reel], 0, null, isPhoto: false));
     } else if (type == 'profile') {
-      var profile = await ProfileRepository()
-          .getProfileById(int.parse(id), _authService.token!);
-      Get.to(
-        () => ProfileDetail(
-          profileModel: profile,
-          onBack: () {
-            Get.back();
-          },
-        ),
-      );
+      if (int.parse(id) == _authService.profileModel!.id) {
+        changeTabIndex(4);
+      } else {
+        var profile = await ProfileRepository()
+            .getProfileById(int.parse(id), _authService.token!);
+
+        Get.to(
+          () => ProfileDetail(
+            profileModel: profile,
+            onBack: () {
+              Get.back();
+            },
+          ),
+        );
+      }
     } else {
       log("Navigate Photo");
       var photo = await _reelRepo.getPhotosById(id, _authService.token!);

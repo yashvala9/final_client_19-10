@@ -14,6 +14,7 @@ class NavigationBarScreen extends StatelessWidget {
   final NavigationBarController controller = Get.put(NavigationBarController());
   final homepage = HomePageScreen();
   final profileScreen = ProfileScreen();
+  final searchScreen = SearchScreen();
 
   buildBottomNavigationMenu(context) {
     return Obx(() => MediaQuery(
@@ -74,6 +75,7 @@ class NavigationBarScreen extends StatelessWidget {
                   IconButton(
                     enableFeedback: false,
                     onPressed: () {
+                      searchScreen.resetTop();
                       controller.changeTabIndex(1);
                     },
                     icon: controller.tabIndex.value == 1
@@ -203,7 +205,7 @@ class NavigationBarScreen extends StatelessWidget {
               () => IndexedStack(
                 children: <Widget>[
                   homepage,
-                  SearchScreen(),
+                  searchScreen,
                   GiveawayView(),
                   ChatList(),
                   profileScreen,

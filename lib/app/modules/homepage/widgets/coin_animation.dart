@@ -14,26 +14,23 @@ class CoinAnimation extends StatefulWidget {
   State<CoinAnimation> createState() => _CoinAnimationState();
 }
 
-class _CoinAnimationState extends State<CoinAnimation>
-    with TickerProviderStateMixin {
+class _CoinAnimationState extends State<CoinAnimation> with TickerProviderStateMixin {
   FlipCardController coinController = FlipCardController();
   @override
   void initState() {
     super.initState();
 
     coinController.state = FlipCardState();
-    coinController.state!.controller =
-        AnimationController(vsync: this, duration: const Duration(days: 1))
-          ..forward()
-          ..addListener(() {
-            if (coinController.state!.controller!.isCompleted) {
-              coinController.state!.controller!.repeat();
-            }
-          });
+    coinController.state!.controller = AnimationController(vsync: this, duration: const Duration(days: 1))
+      ..forward()
+      ..addListener(() {
+        if (coinController.state!.controller!.isCompleted) {
+          coinController.state!.controller!.repeat();
+        }
+      });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => coinController
-        .state!.controller!
-        .repeat()); //i add this to access the context safely.
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => coinController.state!.controller!.repeat()); //i add this to access the context safely.
   }
 
   @override
@@ -64,8 +61,7 @@ class CoinWidget extends StatelessWidget {
           Image.asset(Assets.coin2),
           Text(
             i.toString(),
-            style: const TextStyle(
-                color: Colors.red, fontSize: 25, fontWeight: FontWeight.bold),
+            style: const TextStyle(color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
           )
         ],
       ),

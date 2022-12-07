@@ -3,11 +3,13 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:confetti/confetti.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
+import 'package:readmore/readmore.dart';
 import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -28,6 +30,7 @@ import '../../../widgets/my_elevated_button.dart';
 import '../WebView/webview.dart';
 import '../entry_count/views/entry_count_view.dart';
 import '../homepage/comment_screen.dart';
+import '../homepage/homepage_screen.dart';
 import '../homepage/profile_detail_screen.dart';
 import '../search/search_screen.dart';
 
@@ -42,14 +45,17 @@ class SingleFeedScreen extends StatelessWidget {
   int currentIndex;
   final ProfileController? profileController;
   bool openComment;
-  final _controller = Get.put(SingleFeedController());
+  final controller = Get.put(SingleFeedController());
   final _reelRepo = Get.put(ReelRepository());
   final _commentRepo = Get.put(CommentRepository());
   final _giveawayRepo = Get.put(GiveawayRepository());
   final _profileRepo = Get.put(ProfileRepository());
-
+  final myMenuItems = <String>[
+    'Report',
+  ];
   bool shareLoading = false;
 
+  late ConfettiController _controllerCenter;
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   Future<Uri> createDynamicLink(int id, String type) async {
@@ -68,12 +74,26 @@ class SingleFeedScreen extends StatelessWidget {
     return shortUrl;
   }
 
+  void onSelect(int id, int index, String reason) {
+    controller.reportReelOrComment(reason, 'reel', id, () {
+      // controller.reportList.add(id);
+      // controller.removeReel(index);
+
+      moveNextReel(index + 1);
+    });
+  }
+
+  void moveNextReel(int index) {
+    pageController.jumpToPage(index);
+    controller.update();
+  }
+
   void openCommentSheet() {
     if (openComment) {
       Get.bottomSheet(
         CommentSheet(
           () {
-            _controller.update();
+            controller.update();
           },
           id: reels![currentIndex].id,
           isPhoto: isPhoto,
@@ -84,8 +104,18 @@ class SingleFeedScreen extends StatelessWidget {
     }
   }
 
+  PageController pageController = PageController(
+    initialPage: 0,
+    viewportFraction: 1,
+  );
   @override
   Widget build(BuildContext context) {
+    _controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 1));
+    pageController = PageController(
+      initialPage: currentIndex,
+      viewportFraction: 1,
+    );
     final theme = Get.theme;
     final style = theme.textTheme;
     final parser = EmojiParser();
@@ -146,14 +176,14 @@ class SingleFeedScreen extends StatelessWidget {
                                                   if (caption != '') {
                                                     Get.back();
                                                     isPhoto
-                                                        ? await _controller
+                                                        ? await controller
                                                             .updatePhotoCation(
                                                                 photos![currentIndex]
                                                                     .id,
                                                                 caption,
                                                                 photos![currentIndex]
                                                                     .title)
-                                                        : await _controller
+                                                        : await controller
                                                             .updateReelCaption(
                                                                 reels![currentIndex]
                                                                     .id,
@@ -239,7 +269,7 @@ class SingleFeedScreen extends StatelessWidget {
                 ),
                 body: Container(
                   color: Colors.black,
-                  child: _controller.loading
+                  child: controller.loading
                       ? Loading()
                       : PageView.builder(
                           onPageChanged: (i) {
@@ -247,21 +277,24 @@ class SingleFeedScreen extends StatelessWidget {
                           },
                           allowImplicitScrolling: true,
                           itemCount: isPhoto ? photos!.length : reels!.length,
-                          controller: PageController(
-                            initialPage: currentIndex,
-                            viewportFraction: 1,
-                          ),
+                          controller: pageController,
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             // currentIndex = index;
+                            final Rx<ReportReason?> _reason =
+                                ReportReason.hateSpeech.obs;
 
+                            var isMe = controller.profileId ==
+                                (isPhoto
+                                    ? photos![index].owner.id
+                                    : reels![index].user.id);
                             if (isPhoto) {
                               return Stack(
                                 children: [
                                   InkWell(
                                     onDoubleTap: () {
                                       isLiked = !isLiked;
-                                      _controller
+                                      controller
                                           .phototLikeToggle(photos![index].id);
                                     },
                                     child: Container(
@@ -315,7 +348,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                   right: 4),
                                                           child: InkWell(
                                                               onTap: () {
-                                                                if (_controller
+                                                                if (controller
                                                                         .profileId !=
                                                                     photos![index]
                                                                         .owner
@@ -339,7 +372,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 ),
                                                               )),
                                                         ),
-                                                        _controller.profileId ==
+                                                        controller.profileId ==
                                                                 photos![index]
                                                                     .owner
                                                                     .id
@@ -350,7 +383,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                     photos![index]
                                                                         .owner
                                                                         .id,
-                                                                    _controller
+                                                                    controller
                                                                         .token!),
                                                                 builder: (context,
                                                                     snapshot) {
@@ -399,7 +432,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                             onPressed:
                                                                                 () {
                                                                               Get.back();
-                                                                              _controller.toggleFollowing(photos![index].owner.id);
+                                                                              controller.toggleFollowing(photos![index].owner.id);
                                                                             },
                                                                             child:
                                                                                 const Text("Confirm"),
@@ -479,9 +512,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                         FutureBuilder<String>(
                                                             future: _giveawayRepo
                                                                 .getTotalEntryCountByUserId(
-                                                                    _controller
+                                                                    controller
                                                                         .profileId!,
-                                                                    _controller
+                                                                    controller
                                                                         .token!),
                                                             builder: (context,
                                                                 snapshot) {
@@ -527,7 +560,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                             onTap: () {
                                                               isLiked =
                                                                   !isLiked;
-                                                              _controller
+                                                              controller
                                                                   .phototLikeToggle(
                                                                       photos![index]
                                                                           .id);
@@ -570,7 +603,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                         photos![index]
                                                                             .id
                                                                             .toString(),
-                                                                        _controller
+                                                                        controller
                                                                             .token!),
                                                                     builder:
                                                                         (context,
@@ -605,7 +638,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                                 (BuildContext context, int index) {
                                                                               return ListTile(
                                                                                 onTap: () {
-                                                                                  if (snapshot.data![index].id != _controller.profileId) {
+                                                                                  if (snapshot.data![index].id != controller.profileId) {
                                                                                     Get.to(
                                                                                       ProfileDetail(
                                                                                         profileModel: snapshot.data![index],
@@ -648,7 +681,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 future: _reelRepo.getPhotosLikeFlag(
                                                                     photos![index]
                                                                         .id,
-                                                                    _controller
+                                                                    controller
                                                                         .token!),
                                                                 builder:
                                                                     (context,
@@ -681,7 +714,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 .getLikeCountByPhotoId(
                                                                     photos![index]
                                                                         .id,
-                                                                    _controller
+                                                                    controller
                                                                         .token!),
                                                             builder: (context,
                                                                 snap) {
@@ -709,7 +742,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                             Get.bottomSheet(
                                                               CommentSheet(
                                                                 () {
-                                                                  _controller
+                                                                  controller
                                                                       .update();
                                                                 },
                                                                 id: photos![
@@ -733,7 +766,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 .getCommentCountByPostId(
                                                                     photos![index]
                                                                         .id,
-                                                                    _controller
+                                                                    controller
                                                                         .token!),
                                                             builder: (context,
                                                                 snapshot) {
@@ -794,7 +827,7 @@ class SingleFeedScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  _controller.showLike
+                                  controller.showLike
                                       ? const Center(
                                           child: Icon(
                                             Icons.favorite,
@@ -831,12 +864,11 @@ class SingleFeedScreen extends StatelessWidget {
                                                   onDoubleTap: () {
                                                     isLiked = !isLiked;
                                                     isPhoto
-                                                        ? _controller
+                                                        ? controller
                                                             .phototLikeToggle(
                                                                 reels![index]
                                                                     .id)
-                                                        : _controller
-                                                            .likeToggle(
+                                                        : controller.likeToggle(
                                                             reels![index].id,
                                                           );
                                                   },
@@ -851,7 +883,7 @@ class SingleFeedScreen extends StatelessWidget {
                                               ),
                                             ),
                                             Center(
-                                              child: _controller.showLike
+                                              child: controller.showLike
                                                   ? const Icon(
                                                       Icons.favorite,
                                                       color: Colors.red,
@@ -868,11 +900,11 @@ class SingleFeedScreen extends StatelessWidget {
                                           updatePoints: () {},
                                           doubleTap: () {
                                             isLiked = !isLiked;
-                                            _controller
+                                            controller
                                                 .likeToggle(reels![index].id);
                                           },
                                           swipeRight: () {},
-                                          showLike: _controller.showLike,
+                                          showLike: controller.showLike,
                                         ),
                                   Column(
                                     children: [
@@ -888,7 +920,7 @@ class SingleFeedScreen extends StatelessWidget {
                                             Expanded(
                                               child: Container(
                                                 padding: const EdgeInsets.only(
-                                                    left: 20, bottom: 15),
+                                                    left: 20, bottom: 30),
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
@@ -898,145 +930,182 @@ class SingleFeedScreen extends StatelessWidget {
                                                       MainAxisAlignment.start,
                                                   children: [
                                                     isReel
-                                                        ? Row(
-                                                            children: [
-                                                              CircleAvatar(
-                                                                backgroundImage: isPhoto
-                                                                    ? NetworkImage(
-                                                                        "${Base.profileBucketUrl}/${photos![index].owner.user_profile!.profile_img}")
-                                                                    : NetworkImage(
-                                                                        "${Base.profileBucketUrl}/${reels![index].user.user_profile!.profile_img}"),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                  left: 8,
-                                                                  right: 4,
+                                                        ? InkWell(
+                                                            onTap: () {
+                                                              if (controller
+                                                                      .profileId !=
+                                                                  reels![index]
+                                                                      .user
+                                                                      .id) {
+                                                                Get.to(
+                                                                  () => ProfileDetail(
+                                                                      profileModel: reels![index].user,
+                                                                      onBack: () {
+                                                                        Get.back();
+                                                                      }),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Row(
+                                                              children: [
+                                                                CircleAvatar(
+                                                                  backgroundImage:
+                                                                      NetworkImage(
+                                                                          "${Base.profileBucketUrl}/${reels![index].user.user_profile!.profile_img}"),
                                                                 ),
-                                                                child: InkWell(
-                                                                    onTap: () {
-                                                                      if (_controller
-                                                                              .profileId !=
-                                                                          reels![index]
-                                                                              .user
-                                                                              .id) {
-                                                                        Get.to(
-                                                                          () => ProfileDetail(
-                                                                              profileModel: reels![index].user,
-                                                                              onBack: () {
-                                                                                Get.back();
-                                                                              }),
-                                                                        );
-                                                                      }
-                                                                    },
+                                                                Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .only(
+                                                                      left: 8,
+                                                                      right: 4,
+                                                                    ),
                                                                     child: Text(
-                                                                      "@${reels![index].user.username}",
+                                                                      "${reels![index].user.username}",
                                                                       style: style
                                                                           .titleMedium!
                                                                           .copyWith(
                                                                         color: Colors
-                                                                            .white,
+                                                                            .grey[400],
                                                                       ),
                                                                     )),
-                                                              ),
-                                                              _controller.profileId ==
-                                                                      reels![index]
-                                                                          .user
-                                                                          .id
-                                                                  ? SizedBox()
-                                                                  : isReel
-                                                                      ? FutureBuilder<
-                                                                              bool>(
-                                                                          future: _profileRepo.isFollowing(
-                                                                              reels![index].user.id,
-                                                                              _controller.token!),
-                                                                          builder: (context, snapshot) {
-                                                                            if (!snapshot.hasData) {
-                                                                              return Container();
-                                                                            }
-                                                                            return TextButton(
-                                                                              child: snapshot.data! ? Text("Following", style: TextStyle(color: Colors.white, fontSize: 12)) : Text("Follow", style: TextStyle(color: Colors.white, fontSize: 12)),
-                                                                              onPressed: () {
-                                                                                Get.dialog(AlertDialog(
-                                                                                  backgroundColor: Colors.black54,
-                                                                                  title: snapshot.data!
-                                                                                      ? Text(
-                                                                                          "Do you wish to unfollow?",
-                                                                                          style: TextStyle(color: Colors.white),
-                                                                                        )
-                                                                                      : Text(
-                                                                                          "Do you wish to follow?",
-                                                                                          style: TextStyle(color: Colors.white),
-                                                                                        ),
-                                                                                  actionsAlignment: MainAxisAlignment.spaceAround,
-                                                                                  actions: [
-                                                                                    TextButton(
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                isMe
+                                                                    ? SizedBox()
+                                                                    : isReel
+                                                                        ? FutureBuilder<
+                                                                                bool>(
+                                                                            future:
+                                                                                _profileRepo.isFollowing(reels![index].user.id, controller.token!),
+                                                                            builder: (context, snapshot) {
+                                                                              if (!snapshot.hasData) {
+                                                                                return Container();
+                                                                              }
+                                                                              return TextButton(
+                                                                                child: snapshot.data! ? Text("Following", style: TextStyle(color: Colors.grey[400], fontSize: 12)) : Text("Follow", style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+                                                                                onPressed: () {
+                                                                                  Get.dialog(AlertDialog(
+                                                                                    backgroundColor: Colors.black54,
+                                                                                    title: snapshot.data!
+                                                                                        ? Text(
+                                                                                            "Do you wish to unfollow?",
+                                                                                            style: TextStyle(color: Colors.white),
+                                                                                          )
+                                                                                        : Text(
+                                                                                            "Do you wish to follow?",
+                                                                                            style: TextStyle(color: Colors.white),
+                                                                                          ),
+                                                                                    actionsAlignment: MainAxisAlignment.spaceAround,
+                                                                                    actions: [
+                                                                                      TextButton(
+                                                                                          onPressed: () {
+                                                                                            Get.back();
+                                                                                          },
+                                                                                          child: const Text("Cancel")),
+                                                                                      MaterialButton(
                                                                                         onPressed: () {
                                                                                           Get.back();
+                                                                                          controller.toggleFollowing(reels![index].user.id);
                                                                                         },
-                                                                                        child: const Text("Cancel")),
-                                                                                    MaterialButton(
-                                                                                      onPressed: () {
-                                                                                        Get.back();
-                                                                                        _controller.toggleFollowing(reels![index].user.id);
-                                                                                      },
-                                                                                      child: const Text("Confirm"),
-                                                                                      color: AppColors.buttonColor,
-                                                                                    ),
-                                                                                  ],
-                                                                                ));
-                                                                              },
-                                                                              style: ButtonStyle(
-                                                                                shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.white, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
-                                                                              ),
-                                                                            );
-                                                                          })
-                                                                      : SizedBox(),
-                                                            ],
+                                                                                        child: const Text("Confirm"),
+                                                                                        color: AppColors.buttonColor,
+                                                                                      ),
+                                                                                    ],
+                                                                                  ));
+                                                                                },
+                                                                                style: ButtonStyle(
+                                                                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(side: BorderSide(color: Colors.grey[400]!, width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(10.0))),
+                                                                                ),
+                                                                              );
+                                                                            })
+                                                                        : SizedBox(),
+                                                              ],
+                                                            ),
                                                           )
-                                                        : Column(
+                                                        : Row(
                                                             children: [
                                                               Text(
-                                                                "@sponsored",
+                                                                "@sponsored  ",
                                                                 style: style
-                                                                    .titleLarge!
+                                                                    .titleMedium!
                                                                     .copyWith(
                                                                   color: Colors
-                                                                      .pink,
+                                                                          .grey[
+                                                                      400],
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                width: 150,
-                                                                child:
-                                                                    MyElevatedButton(
-                                                                  buttonText:
-                                                                      "Click Here",
-                                                                  height: 30,
-                                                                  style: style
-                                                                      .titleMedium,
-                                                                  onPressed:
-                                                                      () {
-                                                                    Get.to(WebViewScreen(
-                                                                        'https://flutter.dev'));
-                                                                  },
-                                                                ),
-                                                              ),
+                                                                  width: 150,
+                                                                  child:
+                                                                      TextButton(
+                                                                    child: Text(
+                                                                        "Click Here",
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.grey[400],
+                                                                            fontSize: 12)),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Get.to(WebViewScreen(
+                                                                          'https://flutter.dev'));
+                                                                    },
+                                                                    style:
+                                                                        ButtonStyle(
+                                                                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                                                          side: BorderSide(
+                                                                              color: Colors.grey[400]!,
+                                                                              width: 1,
+                                                                              style: BorderStyle.solid),
+                                                                          borderRadius: BorderRadius.circular(10.0))),
+                                                                    ),
+                                                                  )),
                                                             ],
                                                           ),
-                                                    Text(
-                                                      parser.emojify(
-                                                          reels![index]
-                                                              .video_title),
-                                                      style: const TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                    if (reels![index]
+                                                            .video_title !=
+                                                        '')
+                                                      ReadMoreText(
+                                                        parser.emojify(
+                                                            reels![index]
+                                                                .video_title),
+                                                        trimLength: 20,
+                                                        colorClickableText:
+                                                            Colors.pink,
+                                                        trimMode:
+                                                            TrimMode.Length,
+                                                        trimCollapsedText:
+                                                            '(...)',
+                                                        trimExpandedText:
+                                                            ' (Show less)',
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                          color:
+                                                              Colors.grey[400],
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        lessStyle: TextStyle(
+                                                          fontSize: 15,
+                                                          color:
+                                                              Colors.grey[400],
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        moreStyle: TextStyle(
+                                                          fontSize: 15,
+                                                          color:
+                                                              Colors.grey[400],
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    isReel
-                                                        ? HashTagText(
+                                                    if (isReel)
+                                                      if (reels![index]
+                                                              .description !=
+                                                          '')
+                                                        HashTagText(
                                                             onTap: (tag) {
                                                               Get.to(
                                                                   SearchHashTags(
@@ -1048,18 +1117,17 @@ class SingleFeedScreen extends StatelessWidget {
                                                                         index]
                                                                     .description),
                                                             basicStyle:
-                                                                const TextStyle(
+                                                                TextStyle(
                                                               fontSize: 15,
-                                                              color:
-                                                                  Colors.white,
+                                                              color: Colors
+                                                                  .grey[400],
                                                             ),
                                                             decoratedStyle:
                                                                 const TextStyle(
                                                               fontSize: 15,
                                                               color:
                                                                   Colors.blue,
-                                                            ))
-                                                        : SizedBox(),
+                                                            )),
                                                   ],
                                                 ),
                                               ),
@@ -1081,20 +1149,20 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 Get.to(
                                                                     EntryCountView());
                                                               },
-                                                              child: const Icon(
+                                                              child: Icon(
                                                                 Icons
                                                                     .card_giftcard,
                                                                 size: 30,
                                                                 color: Colors
-                                                                    .white,
+                                                                    .grey[400]!,
                                                               ),
                                                             ),
                                                             FutureBuilder<
                                                                     String>(
                                                                 future: _giveawayRepo.getTotalEntryCountByUserId(
-                                                                    _controller
+                                                                    controller
                                                                         .profileId!,
-                                                                    _controller
+                                                                    controller
                                                                         .token!),
                                                                 builder: (context,
                                                                     snapshot) {
@@ -1108,7 +1176,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                         fontSize:
                                                                             18,
                                                                         color: Colors
-                                                                            .white,
+                                                                            .grey[400],
                                                                       ),
                                                                     );
                                                                   }
@@ -1129,7 +1197,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                                       fontSize:
                                                                           18,
                                                                       color: Colors
-                                                                          .white,
+                                                                              .grey[
+                                                                          400],
                                                                     ),
                                                                   );
                                                                 })
@@ -1139,147 +1208,152 @@ class SingleFeedScreen extends StatelessWidget {
                                                         Column(
                                                           children: [
                                                             FutureBuilder<bool>(
-                                                                future: isPhoto
-                                                                    ? _reelRepo.getPhotosLikeFlag(
-                                                                        reels![index]
-                                                                            .id,
-                                                                        _controller
-                                                                            .token!)
-                                                                    : _reelRepo.getLikeFlag(
-                                                                        reels![index]
-                                                                            .id,
-                                                                        _controller
-                                                                            .token!),
-                                                                builder:
-                                                                    (context,
-                                                                        snap) {
-                                                                  isLiked = snap
-                                                                          .hasData
-                                                                      ? snap.data!
-                                                                          ? true
-                                                                          : false
-                                                                      : false;
-                                                                  return InkWell(
-                                                                    onLongPress:
-                                                                        () {
-                                                                      Get.dialog(
-                                                                          AlertDialog(
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(20),
+                                                              future: isPhoto
+                                                                  ? _reelRepo.getPhotosLikeFlag(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      controller
+                                                                          .token!)
+                                                                  : _reelRepo.getLikeFlag(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      controller
+                                                                          .token!),
+                                                              builder: (context,
+                                                                  snap) {
+                                                                isLiked = snap
+                                                                        .hasData
+                                                                    ? snap.data!
+                                                                        ? true
+                                                                        : false
+                                                                    : false;
+                                                                return InkWell(
+                                                                  onLongPress:
+                                                                      () {
+                                                                    Get.dialog(
+                                                                        AlertDialog(
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(20),
+                                                                      ),
+                                                                      title:
+                                                                          const Text(
+                                                                        "Liked By",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color: Color.fromRGBO(
+                                                                              22,
+                                                                              22,
+                                                                              22,
+                                                                              1),
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
                                                                         ),
-                                                                        title:
-                                                                            const Text(
-                                                                          "Liked By",
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color: Color.fromRGBO(
-                                                                                22,
-                                                                                22,
-                                                                                22,
-                                                                                1),
-                                                                            fontSize:
-                                                                                18,
-                                                                            fontWeight:
-                                                                                FontWeight.w500,
-                                                                          ),
-                                                                        ),
-                                                                        content: FutureBuilder<List<ProfileModel>>(
-                                                                            future: ProfileRepository().getUserLikesByReel(reels![index].id.toString(), _controller.token!),
-                                                                            builder: (context, snapshot) {
-                                                                              if (!snapshot.hasData) {
-                                                                                return Loading();
-                                                                              }
-                                                                              if (snapshot.hasError) {
-                                                                                printInfo(info: "getFollowersByUserId: ${snapshot.hasError}");
-                                                                                return Container();
-                                                                              }
-                                                                              return Container(
-                                                                                height: Get.height * 0.7,
-                                                                                width: Get.width * 0.7,
-                                                                                child: Material(
-                                                                                  child: ListView.builder(
-                                                                                    shrinkWrap: true,
-                                                                                    physics: const ClampingScrollPhysics(),
-                                                                                    itemCount: snapshot.data!.length,
-                                                                                    itemBuilder: (BuildContext context, int index) {
-                                                                                      return ListTile(
-                                                                                        onTap: () {
-                                                                                          if (snapshot.data![index].id != _controller.profileId) {
-                                                                                            Get.to(
-                                                                                              ProfileDetail(
-                                                                                                profileModel: snapshot.data![index],
-                                                                                                onBack: () {
-                                                                                                  Get.back();
-                                                                                                },
-                                                                                              ),
-                                                                                            );
-                                                                                          }
-                                                                                        },
-                                                                                        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                                                                                        leading: CircleAvatar(
-                                                                                          radius: 25,
-                                                                                          backgroundColor: theme.colorScheme.primary,
-                                                                                          backgroundImage: NetworkImage(
-                                                                                            snapshot.data![index].user_profile != null ? "${Base.profileBucketUrl}/${snapshot.data![index].user_profile!.profile_img}" : "",
-                                                                                          ),
+                                                                      ),
+                                                                      content: FutureBuilder<
+                                                                              List<
+                                                                                  ProfileModel>>(
+                                                                          future: ProfileRepository().getUserLikesByReel(
+                                                                              reels![index].id.toString(),
+                                                                              controller.token!),
+                                                                          builder: (context, snapshot) {
+                                                                            if (!snapshot.hasData) {
+                                                                              return Loading();
+                                                                            }
+                                                                            if (snapshot.hasError) {
+                                                                              printInfo(info: "getFollowersByUserId: ${snapshot.hasError}");
+                                                                              return Container();
+                                                                            }
+                                                                            return Container(
+                                                                              height: Get.height * 0.7,
+                                                                              width: Get.width * 0.7,
+                                                                              child: Material(
+                                                                                child: ListView.builder(
+                                                                                  shrinkWrap: true,
+                                                                                  physics: const ClampingScrollPhysics(),
+                                                                                  itemCount: snapshot.data!.length,
+                                                                                  itemBuilder: (BuildContext context, int index) {
+                                                                                    return ListTile(
+                                                                                      onTap: () {
+                                                                                        if (snapshot.data![index].id != controller.profileId) {
+                                                                                          Get.to(
+                                                                                            ProfileDetail(
+                                                                                              profileModel: snapshot.data![index],
+                                                                                              onBack: () {
+                                                                                                Get.back();
+                                                                                              },
+                                                                                            ),
+                                                                                          );
+                                                                                        }
+                                                                                      },
+                                                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                                                                                      leading: CircleAvatar(
+                                                                                        radius: 25,
+                                                                                        backgroundColor: theme.colorScheme.primary,
+                                                                                        backgroundImage: NetworkImage(
+                                                                                          snapshot.data![index].user_profile != null ? "${Base.profileBucketUrl}/${snapshot.data![index].user_profile!.profile_img}" : "",
                                                                                         ),
-                                                                                        title: Text(
-                                                                                          snapshot.data![index].user_profile!.fullname!,
-                                                                                          style: style.titleMedium!.copyWith(
-                                                                                            fontWeight: FontWeight.w600,
-                                                                                          ),
+                                                                                      ),
+                                                                                      title: Text(
+                                                                                        snapshot.data![index].user_profile!.fullname!,
+                                                                                        style: style.titleMedium!.copyWith(
+                                                                                          fontWeight: FontWeight.w600,
                                                                                         ),
-                                                                                        subtitle: Text(
-                                                                                          snapshot.data![index].username!,
-                                                                                          maxLines: 2,
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                        ),
-                                                                                      );
-                                                                                    },
-                                                                                  ),
+                                                                                      ),
+                                                                                      subtitle: Text(
+                                                                                        snapshot.data![index].username!,
+                                                                                        maxLines: 2,
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                      ),
+                                                                                    );
+                                                                                  },
                                                                                 ),
-                                                                              );
-                                                                            }),
-                                                                      ));
-                                                                    },
-                                                                    onTap: () {
-                                                                      isLiked =
-                                                                          !isLiked;
-                                                                      _controller.likeToggle(
-                                                                          index,
-                                                                          isPhoto:
-                                                                              isPhoto);
-                                                                    },
-                                                                    child: Icon(
-                                                                      isLiked
-                                                                          ? Icons
-                                                                              .favorite
-                                                                          : Icons
-                                                                              .favorite_border,
-                                                                      size: 30,
-                                                                      color: isLiked
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Colors
-                                                                              .white,
-                                                                    ),
-                                                                  );
-                                                                }),
+                                                                              ),
+                                                                            );
+                                                                          }),
+                                                                    ));
+                                                                  },
+                                                                  onTap: () {
+                                                                    isLiked =
+                                                                        !isLiked;
+                                                                    controller.likeToggle(
+                                                                        reels![index]
+                                                                            .id,
+                                                                        isPhoto:
+                                                                            isPhoto);
+                                                                  },
+                                                                  child: Icon(
+                                                                    isLiked
+                                                                        ? Icons
+                                                                            .favorite
+                                                                        : Icons
+                                                                            .favorite_border,
+                                                                    size: 30,
+                                                                    color: isLiked
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .grey[400],
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
                                                             FutureBuilder<int>(
                                                                 future: isPhoto
                                                                     ? _reelRepo.getLikeCountByPhotoId(
                                                                         reels![index]
                                                                             .id,
-                                                                        _controller
+                                                                        controller
                                                                             .token!)
                                                                     : _reelRepo.getLikeCountByReelId(
                                                                         reels![index]
                                                                             .id,
-                                                                        _controller
+                                                                        controller
                                                                             .token!),
                                                                 builder:
                                                                     (context,
@@ -1296,7 +1370,8 @@ class SingleFeedScreen extends StatelessWidget {
                                                                       fontSize:
                                                                           18,
                                                                       color: Colors
-                                                                          .white,
+                                                                              .grey[
+                                                                          400],
                                                                     ),
                                                                   );
                                                                 }),
@@ -1310,7 +1385,7 @@ class SingleFeedScreen extends StatelessWidget {
                                                                 Get.bottomSheet(
                                                                   CommentSheet(
                                                                     () {
-                                                                      _controller
+                                                                      controller
                                                                           .update();
                                                                     },
                                                                     id: reels![
@@ -1324,11 +1399,11 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           .white,
                                                                 );
                                                               },
-                                                              child: const Icon(
+                                                              child: Icon(
                                                                 Icons.comment,
                                                                 size: 30,
                                                                 color: Colors
-                                                                    .white,
+                                                                    .grey[400],
                                                               ),
                                                             ),
                                                             FutureBuilder<int>(
@@ -1336,12 +1411,12 @@ class SingleFeedScreen extends StatelessWidget {
                                                                     ? _commentRepo.getCommentCountByPostId(
                                                                         reels![index]
                                                                             .id,
-                                                                        _controller
+                                                                        controller
                                                                             .token!)
                                                                     : _commentRepo.getCommentCountByReelId(
                                                                         reels![index]
                                                                             .id,
-                                                                        _controller
+                                                                        controller
                                                                             .token!),
                                                                 builder: (context,
                                                                     snapshot) {
@@ -1357,97 +1432,222 @@ class SingleFeedScreen extends StatelessWidget {
                                                                       fontSize:
                                                                           18,
                                                                       color: Colors
-                                                                          .white,
+                                                                              .grey[
+                                                                          400],
                                                                     ),
                                                                   );
                                                                 })
                                                           ],
                                                         ),
                                                         SizedBox(height: 15),
-                                                        StatefulBuilder(builder:
-                                                            (context,
-                                                                setState) {
-                                                          return shareLoading
-                                                              ? Loading()
-                                                              : InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    setState(
+                                                        controller.shareLoading
+                                                            ? Loading()
+                                                            : InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  log("Working>>>>");
+                                                                  final dl = await createDynamicLink(
+                                                                      reels![index]
+                                                                          .id,
+                                                                      'reels');
+                                                                  log("Dynamic Link:: $dl");
+                                                                  Share.share(dl
+                                                                      .toString());
+                                                                },
+                                                                child: Icon(
+                                                                  Icons.reply,
+                                                                  size: 30,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      400],
+                                                                ),
+                                                              ),
+                                                        SizedBox(height: 15),
+                                                        PopupMenuButton<String>(
+                                                            child: Icon(
+                                                              Icons.more_vert,
+                                                              size: 30,
+                                                              color: Colors
+                                                                  .grey[400],
+                                                            ),
+                                                            onSelected:
+                                                                (v) async {
+                                                              final val =
+                                                                  await Get.dialog(
+                                                                      AlertDialog(
+                                                                title: const Text(
+                                                                    "Please select the reason:"),
+                                                                content: Obx(
+                                                                    () =>
+                                                                        Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: <
+                                                                              Widget>[
+                                                                            RadioListTile<ReportReason>(
+                                                                              title: const Text('Hate Speech'),
+                                                                              value: ReportReason.hateSpeech,
+                                                                              groupValue: _reason.value,
+                                                                              onChanged: (ReportReason? value) {
+                                                                                _reason.value = value;
+                                                                              },
+                                                                            ),
+                                                                            RadioListTile<ReportReason>(
+                                                                              title: const Text('Bullying'),
+                                                                              value: ReportReason.bullying,
+                                                                              groupValue: _reason.value,
+                                                                              onChanged: (ReportReason? value) {
+                                                                                _reason.value = value;
+                                                                              },
+                                                                            ),
+                                                                            RadioListTile<ReportReason>(
+                                                                              title: const Text('Impersonation'),
+                                                                              value: ReportReason.impersonation,
+                                                                              groupValue: _reason.value,
+                                                                              onChanged: (ReportReason? value) {
+                                                                                _reason.value = value;
+                                                                              },
+                                                                            ),
+                                                                            RadioListTile<ReportReason>(
+                                                                              title: const Text('Illegal content'),
+                                                                              value: ReportReason.illegalContent,
+                                                                              groupValue: _reason.value,
+                                                                              onChanged: (ReportReason? value) {
+                                                                                _reason.value = value;
+                                                                              },
+                                                                            ),
+                                                                            RadioListTile<ReportReason>(
+                                                                              title: const Text('Abusive content'),
+                                                                              value: ReportReason.abusiveContent,
+                                                                              groupValue: _reason.value,
+                                                                              onChanged: (ReportReason? value) {
+                                                                                _reason.value = value;
+                                                                              },
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                                actions: [
+                                                                  TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back();
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Cancel")),
+                                                                  MaterialButton(
+                                                                    onPressed:
                                                                         () {
-                                                                      shareLoading =
-                                                                          true;
-                                                                    });
-                                                                    final dl = await createDynamicLink(
-                                                                        reels![index]
-                                                                            .id,
-                                                                        'reels');
-                                                                    log("Dynamic Link:: $dl");
-                                                                    setState(
-                                                                        () {
-                                                                      shareLoading =
-                                                                          false;
-                                                                    });
-                                                                    Share.share(
-                                                                        dl.toString());
-                                                                  },
-                                                                  child:
-                                                                      const Icon(
-                                                                    Icons.reply,
-                                                                    size: 30,
+                                                                      Get.back(
+                                                                          result:
+                                                                              true);
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Report"),
                                                                     color: Colors
-                                                                        .white,
+                                                                        .red,
                                                                   ),
+                                                                ],
+                                                              ));
+                                                              if (val != null) {
+                                                                onSelect(
+                                                                    reels![index]
+                                                                        .id,
+                                                                    index,
+                                                                    _reason
+                                                                        .value
+                                                                        .toString());
+                                                                reels!.removeAt(
+                                                                    index);
+                                                              }
+                                                            },
+                                                            itemBuilder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return myMenuItems
+                                                                  .map((String
+                                                                      choice) {
+                                                                return PopupMenuItem<
+                                                                    String>(
+                                                                  child: Text(
+                                                                      choice),
+                                                                  value: choice,
                                                                 );
-                                                        })
+                                                              }).toList();
+                                                            })
                                                       ],
                                                     )
                                                   : Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment.end,
                                                       children: [
+                                                        ConfettiWidget(
+                                                          confettiController:
+                                                              _controllerCenter,
+                                                          blastDirectionality:
+                                                              BlastDirectionality
+                                                                  .explosive,
+                                                          shouldLoop: false,
+                                                          colors: const [
+                                                            Colors.green,
+                                                            Colors.blue,
+                                                            Colors.pink,
+                                                            Colors.orange,
+                                                            Colors.purple
+                                                          ],
+                                                        ),
                                                         InkWell(
                                                           onTap: () {
                                                             Get.to(
                                                                 EntryCountView());
                                                           },
-                                                          child: const Icon(
+                                                          child:
+                                                              // Obx(() =>
+                                                              // AnimatedRotation(
+                                                              //   turns: turns
+                                                              //       .value,
+                                                              //   duration:
+                                                              //       const Duration(seconds: 1),
+                                                              //   child:
+                                                              const Icon(
                                                             Icons.card_giftcard,
                                                             size: 30,
                                                             color: Colors.pink,
                                                           ),
+                                                          // )),
                                                         ),
                                                         FutureBuilder<String>(
-                                                            future: _giveawayRepo
-                                                                .getTotalEntryCountByUserId(
-                                                                    _controller
-                                                                        .profileId!,
-                                                                    _controller
-                                                                        .token!),
-                                                            builder: (context,
-                                                                snapshot) {
-                                                              if (!snapshot
-                                                                  .hasData) {
-                                                                return Loading();
-                                                              }
-                                                              if (snapshot
-                                                                  .hasError) {
-                                                                printInfo(
-                                                                    info:
-                                                                        "getTotalEntryCountByUserId: ${snapshot.hasError}");
-                                                                return Container();
-                                                              }
-                                                              return Text(
-                                                                snapshot.data
-                                                                    .toString(),
-                                                                style: style
-                                                                    .headlineSmall!
-                                                                    .copyWith(
-                                                                  fontSize: 18,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              );
-                                                            })
+                                                          future: _giveawayRepo
+                                                              .getTotalEntryCountByUserId(
+                                                                  controller
+                                                                      .profileId!,
+                                                                  controller
+                                                                      .token!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return Loading();
+                                                            }
+                                                            if (snapshot
+                                                                .hasError) {
+                                                              printInfo(
+                                                                  info:
+                                                                      "getTotalEntryCountByUserId: ${snapshot.hasError}");
+                                                              return Container();
+                                                            }
+                                                            return Text(
+                                                              snapshot.data
+                                                                  .toString(),
+                                                              style: style
+                                                                  .headlineSmall!
+                                                                  .copyWith(
+                                                                fontSize: 18,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            );
+                                                          },
+                                                        )
                                                       ],
                                                     ),
                                             ),

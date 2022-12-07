@@ -33,13 +33,19 @@ class SingleFeedController extends GetxController {
     update();
   }
 
+  bool _shareLoading = false;
+  bool get shareLoading => _shareLoading;
+  set shareLoading(bool shareLoading) {
+    _shareLoading = shareLoading;
+    update();
+  }
+
   final Rx<List<CommentModel>> _comments = Rx<List<CommentModel>>([]);
   List<CommentModel> get comments => _comments.value;
 
   void toggleLikeShow() async {
     showLike = true;
-    await Future.delayed(
-        const Duration(milliseconds: 1000), () => showLike = false);
+    await Future.delayed(const Duration(milliseconds: 1000), () => showLike = false);
   }
 
   void likeToggle(int id, {bool isPhoto = false}) async {
@@ -103,6 +109,15 @@ class SingleFeedController extends GetxController {
       debugPrint("updateCaption: $e");
     }
     update();
+  }
+
+  void reportReelOrComment(String reason, String type, int id, VoidCallback onDone) async {
+    try {
+      await _reelRepo.reportReelOrComment(type, reason, id, token!);
+      onDone();
+    } catch (e) {
+      log("reportReelOrComment: $e");
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 import 'package:get/get.dart';
@@ -61,30 +62,21 @@ class GiveawayView extends GetView<GiveawayController> {
                           ),
                         ),
                         FutureBuilder<String>(
-                          future: _giveawayRepo.getTotalEntryCountByUserId(
-                              _controller.profileId!, _controller.token!),
+                          future: _giveawayRepo.getTotalEntryCountByUserId(_controller.profileId!, _controller.token!),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Text(
                                 "0",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                               );
                             }
                             if (snapshot.hasError) {
-                              printInfo(
-                                  info:
-                                      "getTotalEntryCountByUserIdError: ${snapshot.hasError}");
+                              printInfo(info: "getTotalEntryCountByUserIdError: ${snapshot.hasError}");
                               return Container();
                             }
                             return Text(
                               snapshot.data.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                             );
                           },
                         ),
@@ -95,119 +87,50 @@ class GiveawayView extends GetView<GiveawayController> {
                   listTileWidget('referral', 'Referrals', ReferralsView()),
                   listTileWidget('trophy', 'Winners', WinnersView()),
                   listTileWidget('badge', 'Contest Dates', ContestDatesView()),
-                  listTileWidget(
-                      'book', 'Contest Rules', const ContestRulesView()),
-                  SizedBox(
+                  listTileWidget('book', 'Contest Rules', const ContestRulesView()),
+                  const SizedBox(
                     height: 250,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Container(
-                      height: 70,
                       width: Get.width,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[700]),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black,
+                        gradient: const LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 0, 64, 255),
+                              Color(0xFF00CCFF),
+                            ],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(1.0, 0.0),
+                            stops: [0.0, 1.0],
+                            tileMode: TileMode.clamp),
+                      ),
                       child: Center(
-                        child: CountdownTimer(
-                          widgetBuilder: (context, time) {
-                            return Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[800]!,
-                                          border: Border.all(
-                                            color: Colors.grey[800]!,
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        child: Center(
-                                            child: Text(
-                                          time!.days.toString(),
-                                          style: TextStyle(color: Colors.white),
-                                        )),
-                                      ),
-                                      Text('Day')
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        child: Center(
-                                            child: Text(time.hours.toString())),
-                                      ),
-                                      Text('Hour')
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        child: Center(
-                                            child: Text(time.min.toString())),
-                                      ),
-                                      Text('Minute')
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 2.0,
-                                          ),
-                                        ),
-                                        child: Center(
-                                            child: Text(time.sec.toString())),
-                                      ),
-                                      Text('Second')
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          endTime: endTime,
-                          textStyle: TextStyle(
-                              fontSize: 50,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: CountdownTimer(
+                            widgetBuilder: (context, time) {
+                              return Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    timeBox(time!.days.toString(), 'Day'),
+                                    colon(),
+                                    timeBox(time.hours.toString(), 'Hour'),
+                                    colon(),
+                                    timeBox(time.min.toString(), 'Minute'),
+                                    colon(),
+                                    timeBox(time.sec.toString(), 'Second'),
+                                  ],
+                                ),
+                              );
+                            },
+                            endTime: endTime,
+                            textStyle: const TextStyle(fontSize: 50, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
@@ -220,14 +143,59 @@ class GiveawayView extends GetView<GiveawayController> {
       ),
     );
   }
+
+  Column colon() {
+    return Column(
+      children: const [
+        Text(':', style: TextStyle(fontSize: 28, color: Colors.white)),
+        SizedBox(
+          height: 20,
+        )
+      ],
+    );
+  }
+
+  Widget timeBox(String time, String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.grey[300]!,
+                border: Border.all(
+                  color: Colors.grey[100]!,
+                  width: 2.0,
+                ),
+              ),
+              child: Center(
+                  child: Text(
+                time,
+                style: const TextStyle(color: Colors.blueAccent, fontSize: 28, fontWeight: FontWeight.bold),
+              )),
+            ),
+          ),
+          Text(
+            text,
+            style: const TextStyle(color: Colors.white),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 Widget listTileWidget(String filename, String text, Widget pageName) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 04.0),
     child: ListTile(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
       contentPadding: const EdgeInsets.all(8.0),
       leading: SizedBox(
         width: 70,

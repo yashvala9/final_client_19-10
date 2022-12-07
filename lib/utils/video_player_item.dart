@@ -77,8 +77,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
 
   void updateEntryPoints(int seconds, int totalSeconds) {
     if (widget.isReel) {
-      _reelRepo.updateReelHistory(
-          seconds, totalSeconds, widget.videoId, token!);
+      _reelRepo.updateReelHistory(seconds, totalSeconds, widget.videoId, token!);
     } else {
       _reelRepo.updateAdsHistory(seconds, totalSeconds, widget.videoId, token!);
       widget.updatePoints();
@@ -89,13 +88,11 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   Widget build(BuildContext context) {
     controller.addListener(() async {
-      if (controller.value.position.inSeconds ==
-              (controller.value.duration.inSeconds - 1) &&
+      if (controller.value.position.inSeconds == (controller.value.duration.inSeconds - 1) &&
           // (videoPlayerController.value.position.inSeconds.remainder(5) == 0) &&
           controller.value.position.inSeconds != 0 &&
           updated != controller.value.position.inSeconds) {
-        updateEntryPoints(controller.value.position.inSeconds,
-            controller.value.duration.inSeconds);
+        updateEntryPoints(controller.value.position.inSeconds, controller.value.duration.inSeconds);
       }
     });
 
@@ -158,18 +155,13 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                                   height: controller.value.size.height,
                                   child: VideoPlayer(controller),
                                 ))),
-                        if (!widget.isReel)
-                          CustomVideoProgressIndicator(controller,
-                              allowScrubbing: false),
+                        if (!widget.isReel) CustomVideoProgressIndicator(controller, allowScrubbing: false),
                         if (!widget.isReel)
                           Positioned(
                               top: 15,
                               right: 15,
                               child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CoinAnimation(
-                                      controller.value.duration.inSeconds)))
+                                  height: 40, width: 40, child: CoinAnimation(controller.value.duration.inSeconds)))
                       ],
                     ),
                   ),
