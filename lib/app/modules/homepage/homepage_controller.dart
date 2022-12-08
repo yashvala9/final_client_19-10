@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/repositories/reel_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 import '../../../models/comment_model.dart';
 import '../../../models/reel_model.dart';
 import '../../../repositories/giveaway_repository.dart';
@@ -177,6 +178,7 @@ class HomePageController extends GetxController {
     try {
       await _reelRepo.reportReelOrComment(type, reason, id, token!);
       onDone();
+      showSnackBar('The reel has been reported to the admin.');
     } catch (e) {
       log("reportReelOrComment: $e");
     }

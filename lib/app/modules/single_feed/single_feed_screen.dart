@@ -135,136 +135,146 @@ class SingleFeedScreen extends StatelessWidget {
                         Get.back();
                       }),
                   actions: [
-                    IconButton(
-                        onPressed: () {
-                          Get.bottomSheet(
-                            Container(
-                              height: Get.height * 0.15,
-                              color: Colors.white,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          String caption = '';
-                                          Get.back();
-                                          Get.dialog(AlertDialog(
-                                            title: const Text("Edit Caption"),
-                                            content: TextFormField(
-                                              decoration: InputDecoration(
-                                                hintText: parser.emojify(isPhoto
-                                                    ? photos![currentIndex]
-                                                        .content
-                                                    : reels![currentIndex]
-                                                        .description),
-                                                counterText: '',
+                    if ((isPhoto
+                            ? photos![currentIndex].owner.id
+                            : reels![currentIndex].user.id) ==
+                        controller.profileId)
+                      IconButton(
+                          onPressed: () {
+                            Get.bottomSheet(
+                              Container(
+                                height: Get.height * 0.15,
+                                color: Colors.white,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            String caption = '';
+                                            Get.back();
+                                            Get.dialog(AlertDialog(
+                                              title: const Text("Edit Caption"),
+                                              content: TextFormField(
+                                                decoration: InputDecoration(
+                                                  hintText: parser.emojify(
+                                                      isPhoto
+                                                          ? photos![
+                                                                  currentIndex]
+                                                              .content
+                                                          : reels![currentIndex]
+                                                              .description),
+                                                  counterText: '',
+                                                ),
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                // validator: (v) =>
+                                                //     v!.isNotEmpty && v.length != 2 ? "Country code must be 2 digits" : null,
+                                                onChanged: (v) => caption = (v),
                                               ),
-                                              keyboardType: TextInputType.text,
-                                              // validator: (v) =>
-                                              //     v!.isNotEmpty && v.length != 2 ? "Country code must be 2 digits" : null,
-                                              onChanged: (v) => caption = (v),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Get.back();
+                                                    },
+                                                    child:
+                                                        const Text("Cancel")),
+                                                MaterialButton(
+                                                  onPressed: () async {
                                                     Get.back();
+                                                    if (caption != '') {
+                                                      Get.back();
+                                                      isPhoto
+                                                          ? await controller
+                                                              .updatePhotoCation(
+                                                                  photos![currentIndex]
+                                                                      .id,
+                                                                  caption,
+                                                                  photos![currentIndex]
+                                                                      .title)
+                                                          : await controller
+                                                              .updateReelCaption(
+                                                                  reels![currentIndex]
+                                                                      .id,
+                                                                  caption);
+                                                      await profileController!
+                                                          .onInit();
+                                                    }
                                                   },
-                                                  child: const Text("Cancel")),
-                                              MaterialButton(
-                                                onPressed: () async {
-                                                  Get.back();
-                                                  if (caption != '') {
-                                                    Get.back();
-                                                    isPhoto
-                                                        ? await controller
-                                                            .updatePhotoCation(
-                                                                photos![currentIndex]
-                                                                    .id,
-                                                                caption,
-                                                                photos![currentIndex]
-                                                                    .title)
-                                                        : await controller
-                                                            .updateReelCaption(
-                                                                reels![currentIndex]
-                                                                    .id,
-                                                                caption);
-                                                    await profileController!
-                                                        .onInit();
-                                                  }
-                                                },
-                                                child: const Text("Save"),
-                                                color: Colors.red,
-                                              ),
-                                            ],
-                                          ));
-                                        },
-                                        child: Text(
-                                          'Edit',
-                                          style: TextStyle(fontSize: 17),
-                                        )),
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          isPhoto
-                                              ? Get.dialog(AlertDialog(
-                                                  title: const Text(
-                                                      "Are you sure you want to delete this post?"),
-                                                  actions: [
-                                                    TextButton(
+                                                  child: const Text("Save"),
+                                                  color: Colors.red,
+                                                ),
+                                              ],
+                                            ));
+                                          },
+                                          child: Text(
+                                            'Edit',
+                                            style: TextStyle(fontSize: 17),
+                                          )),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            isPhoto
+                                                ? Get.dialog(AlertDialog(
+                                                    title: const Text(
+                                                        "Are you sure you want to delete this post?"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Get.back();
+                                                          },
+                                                          child:
+                                                              const Text("NO")),
+                                                      MaterialButton(
                                                         onPressed: () {
                                                           Get.back();
+                                                          Get.back();
+                                                          Get.back();
+                                                          profileController!
+                                                              .deletePost(photos![
+                                                                      currentIndex]
+                                                                  .id);
                                                         },
                                                         child:
-                                                            const Text("NO")),
-                                                    MaterialButton(
-                                                      onPressed: () {
-                                                        Get.back();
-                                                        Get.back();
-                                                        Get.back();
-                                                        profileController!
-                                                            .deletePost(photos![
-                                                                    currentIndex]
-                                                                .id);
-                                                      },
-                                                      child: const Text("YES"),
-                                                      color: Colors.red,
-                                                    ),
-                                                  ],
-                                                ))
-                                              : Get.dialog(AlertDialog(
-                                                  title: const Text(
-                                                      "Are you sure you want to delete this roll?"),
-                                                  actions: [
-                                                    TextButton(
+                                                            const Text("YES"),
+                                                        color: Colors.red,
+                                                      ),
+                                                    ],
+                                                  ))
+                                                : Get.dialog(AlertDialog(
+                                                    title: const Text(
+                                                        "Are you sure you want to delete this roll?"),
+                                                    actions: [
+                                                      TextButton(
+                                                          onPressed: () {
+                                                            Get.back();
+                                                          },
+                                                          child:
+                                                              const Text("NO")),
+                                                      MaterialButton(
                                                         onPressed: () {
                                                           Get.back();
+                                                          Get.back();
+                                                          Get.back();
+                                                          profileController!
+                                                              .deleteReel(reels![
+                                                                      currentIndex]
+                                                                  .id);
                                                         },
                                                         child:
-                                                            const Text("NO")),
-                                                    MaterialButton(
-                                                      onPressed: () {
-                                                        Get.back();
-                                                        Get.back();
-                                                        Get.back();
-                                                        profileController!
-                                                            .deleteReel(reels![
-                                                                    currentIndex]
-                                                                .id);
-                                                      },
-                                                      child: const Text("YES"),
-                                                      color: Colors.red,
-                                                    ),
-                                                  ],
-                                                ));
-                                        },
-                                        child: Text(
-                                          'Delete',
-                                          style: TextStyle(fontSize: 17),
-                                        ))
-                                  ]),
-                            ),
-                          );
-                        },
-                        icon: Icon(Icons.more_vert))
+                                                            const Text("YES"),
+                                                        color: Colors.red,
+                                                      ),
+                                                    ],
+                                                  ));
+                                          },
+                                          child: Text(
+                                            'Delete',
+                                            style: TextStyle(fontSize: 17),
+                                          ))
+                                    ]),
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.more_vert))
                   ],
                 ),
                 body: Container(
