@@ -3,14 +3,17 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../../utils/snackbar.dart';
 import '../../../../widgets/my_elevated_button.dart';
+import '../controllers/account_settings_controller.dart';
 
 class HelpView extends StatelessWidget {
   HelpView({Key? key}) : super(key: key);
 
+  final controller = Get.put(AccountSettingsController());
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -36,11 +39,12 @@ class HelpView extends StatelessWidget {
             SizedBox(height: Get.height * 0.01),
             TextFormField(
               maxLines: 5,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Write your email...',
               ),
               keyboardType: TextInputType.multiline,
               validator: (v) => v!.isEmpty ? "Message cannot be empty!" : null,
+              onFieldSubmitted: (value) => controller.message = value,
             ),
             SizedBox(height: Get.height * 0.03),
             MyElevatedButton(
@@ -49,6 +53,8 @@ class HelpView extends StatelessWidget {
                 if (!_formKey.currentState!.validate()) {
                   return;
                 }
+                ProfileRepository()
+                    .reportBug(controller.message, controller.token!);
                 Get.back();
                 showSnackBar(
                     'Your response has been sent to \'help@reelro.com\'');

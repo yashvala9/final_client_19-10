@@ -45,7 +45,8 @@ class SingleFeedController extends GetxController {
 
   void toggleLikeShow() async {
     showLike = true;
-    await Future.delayed(const Duration(milliseconds: 1000), () => showLike = false);
+    await Future.delayed(
+        const Duration(milliseconds: 1000), () => showLike = false);
   }
 
   void likeToggle(int id, {bool isPhoto = false}) async {
@@ -111,9 +112,10 @@ class SingleFeedController extends GetxController {
     update();
   }
 
-  void reportReelOrComment(String reason, String type, int id, VoidCallback onDone) async {
+  void reportReelOrComment(
+      String reason, String type, int id, VoidCallback onDone) async {
     try {
-      await _reelRepo.reportReelOrComment(type, reason, id, token!);
+      await _reelRepo.reportReelOrCommentorUser(type, reason, id, token!);
       onDone();
     } catch (e) {
       log("reportReelOrComment: $e");

@@ -36,42 +36,46 @@ class WinnersView extends GetView<WinnersController> {
       ),
       backgroundColor: theme.colorScheme.primary,
       body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]!
-            // image: DecorationImage(
-            //     image: AssetImage(
-            //       Assets.winnerScreenBackground,
-            //     ),
-            //     fit: BoxFit.cover),
-            ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const WinnerHeaderImage(),
-            FutureBuilder<List<WinnerModel>>(
-              future: _giveawayRepo.getWinners(
-                  _controller.profileId!, _controller.token!),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Loading();
-                }
-                if (snapshot.hasError) {
-                  printInfo(info: "getWinners: ${snapshot.hasError}");
-                  return Container();
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return WinnerCardWidget(winner: snapshot.data![index]);
-                    },
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
+          decoration: BoxDecoration(color: Colors.grey[200]!
+              // image: DecorationImage(
+              //     image: AssetImage(
+              //       Assets.winnerScreenBackground,
+              //     ),
+              //     fit: BoxFit.cover),
+              ),
+          child: FutureBuilder<List<WinnerModel>>(
+            future: _giveawayRepo.getWinners(
+                _controller.profileId!, _controller.token!),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Loading();
+              }
+              if (snapshot.hasError) {
+                printInfo(info: "getWinners: ${snapshot.hasError}");
+                return Container();
+              }
+
+              List<String> images = snapshot.data!
+                  .where((element) => element.winnerImage != '')
+                  .map((e) => e.winnerImage)
+                  .toList();
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  WinnerHeaderImage(images),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return WinnerCardWidget(winner: snapshot.data![index]);
+                      },
+                    ),
+                  )
+                ],
+              );
+            },
+          )),
     );
   }
 }

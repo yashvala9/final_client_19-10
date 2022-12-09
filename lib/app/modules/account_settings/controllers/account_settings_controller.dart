@@ -13,6 +13,8 @@ class AccountSettingsController extends GetxController {
   String? get token => _authService.token;
   int? get profileId => _authService.profileModel?.id;
 
+  String message = '';
+
   ContestModel? _contestModel;
   ContestModel? get contestModel => _contestModel;
   set contestModel(ContestModel? contestModel) {

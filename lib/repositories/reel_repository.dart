@@ -388,7 +388,7 @@ class ReelRepository {
     }
   }
 
-  Future<void> reportReelOrComment(
+  Future<void> reportReelOrCommentorUser(
       String type, String reason, int id, String token) async {
     final response = await http.post(
       Uri.parse("${Base.report}/$type/$id"),

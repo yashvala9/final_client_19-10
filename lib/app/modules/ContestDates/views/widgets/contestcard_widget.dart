@@ -34,8 +34,8 @@ class ContestCard extends StatelessWidget {
               style:
                   style.titleLarge!.copyWith(color: AppColors.winnercardbrown)),
           Image.network(
-            "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/" +
-                contest.prize_image,
+            // "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/" +
+            contest.prize_image,
             fit: BoxFit.cover,
             width: 150,
             height: 90,

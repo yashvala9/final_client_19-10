@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class WinnerModel {
@@ -5,11 +6,13 @@ class WinnerModel {
   final String userName;
   final String userImage;
   final String contestName;
+  final String winnerImage;
   WinnerModel({
     this.id = 0,
     this.userName = '',
     this.userImage = '',
     this.contestName = '',
+    required this.winnerImage,
   });
 
   WinnerModel copyWith({
@@ -17,12 +20,14 @@ class WinnerModel {
     String? userName,
     String? userImage,
     String? contestName,
+    String? winnerImage,
   }) {
     return WinnerModel(
       id: id ?? this.id,
       userName: userName ?? this.userName,
       userImage: userImage ?? this.userImage,
       contestName: contestName ?? this.contestName,
+      winnerImage: winnerImage ?? this.winnerImage,
     );
   }
 
@@ -32,16 +37,17 @@ class WinnerModel {
       'userName': userName,
       'userImage': userImage,
       'contestName': contestName,
+      'winnerImage': winnerImage,
     };
   }
 
   factory WinnerModel.fromMap(Map<String, dynamic> map) {
     return WinnerModel(
-      id: map['id'] as int,
-      userName: map['user']['user_profile']['fullname'] as String,
-      userImage: map['user']['user_profile']['profile_img'] as String,
-      contestName: map['contest']['contest_name'] as String,
-    );
+        id: map['id'] as int,
+        userName: map['user']['user_profile']['fullname'] as String,
+        userImage: map['user']['user_profile']['profile_img'] as String,
+        contestName: map['contest']['contest_name'] as String,
+        winnerImage: map['image'] ?? '');
   }
 
   String toJson() => json.encode(toMap());
@@ -51,7 +57,7 @@ class WinnerModel {
 
   @override
   String toString() {
-    return 'WinnerModel(id: $id, userName: $userName, userImage: $userImage, contestName: $contestName)';
+    return 'WinnerModel(id: $id, userName: $userName, userImage: $userImage, contestName: $contestName, winnerImage: $winnerImage)';
   }
 
   @override
@@ -61,7 +67,8 @@ class WinnerModel {
     return other.id == id &&
         other.userName == userName &&
         other.userImage == userImage &&
-        other.contestName == contestName;
+        other.contestName == contestName &&
+        other.winnerImage == winnerImage;
   }
 
   @override
@@ -69,6 +76,7 @@ class WinnerModel {
     return id.hashCode ^
         userName.hashCode ^
         userImage.hashCode ^
-        contestName.hashCode;
+        contestName.hashCode ^
+        winnerImage.hashCode;
   }
 }

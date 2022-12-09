@@ -176,7 +176,7 @@ class HomePageController extends GetxController {
   void reportReelOrComment(
       String reason, String type, int id, VoidCallback onDone) async {
     try {
-      await _reelRepo.reportReelOrComment(type, reason, id, token!);
+      await _reelRepo.reportReelOrCommentorUser(type, reason, id, token!);
       onDone();
       showSnackBar('The reel has been reported to the admin.');
     } catch (e) {

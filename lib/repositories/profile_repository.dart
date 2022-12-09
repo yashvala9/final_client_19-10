@@ -304,6 +304,24 @@ class ProfileRepository {
     }
   }
 
+  Future<void> reportBug(String message, String token) async {
+    final response = await http.post(
+      Uri.parse(Base.reportBug),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode({"message": message}),
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      printInfo(info: "reportBug: ${body['detail']}");
+      return Future.error(body['detail']);
+    }
+  }
+
   Future<void> toggleBlock(int userId, String token) async {
     final response = await http.post(
         Uri.parse('${Base.blockToggle}?user_id=$userId'),
@@ -316,6 +334,36 @@ class ProfileRepository {
       return;
     } else {
       printInfo(info: "toggleBlock: ${body['detail']}");
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> blockUser(int userId, String token) async {
+    final response = await http.post(Uri.parse('${Base.blockUser}?id=$userId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        });
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      printInfo(info: "blockUser: ${body['detail']}");
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> reportUser(int userId, String token) async {
+    final response = await http.post(Uri.parse('${Base.blockUser}?id=$userId'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        });
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      printInfo(info: "blockUser: ${body['detail']}");
       return Future.error(body['detail']);
     }
   }

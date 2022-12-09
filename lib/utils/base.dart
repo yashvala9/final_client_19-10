@@ -59,6 +59,7 @@ class Base {
   //Report
   static const report = '$_url/reels/report';
   static const blockToggle = '$_url/content-manager/toggle-block';
+  static const blockUser = '$_url/users/block_user';
 
   //Ads
 
@@ -76,6 +77,8 @@ class Base {
   static const getFollowing = '$_url/users';
   static const isFollowing = '$_url/users/follow';
   static const toggleFollow = '$_url/users/follow';
+
+  static const reportBug = '$_url/users/bug_report';
 
   //Upload Video and photo
   static const uploadVideo = '$_url/upload';

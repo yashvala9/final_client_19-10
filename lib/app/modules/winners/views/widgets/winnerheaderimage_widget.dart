@@ -4,18 +4,20 @@ import 'package:get/get.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:reel_ro/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WinnerHeaderImage extends StatelessWidget {
-  const WinnerHeaderImage({
+  WinnerHeaderImage(
+    this.images, {
     Key? key,
   }) : super(key: key);
-
+  List<String> images;
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;
     final style = theme.textTheme;
     return CarouselSlider.builder(
-      itemCount: 5,
+      itemCount: images.length,
       options: CarouselOptions(
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 4),
@@ -23,27 +25,27 @@ class WinnerHeaderImage extends StatelessWidget {
         enlargeCenterPage: true,
       ),
       itemBuilder: (context, index, realIdx) {
-        return Center(child: Image.asset(Assets.winnerHeaderImage)
+        return Center(
+          child:
+              // Image.asset(Assets.winnerHeaderImage)
 
-            // CachedNetworkImage(
-            //   fit: BoxFit.cover,
-            //   width: 1500,
-            //   imageUrl: data[index].toString(),
-            //   placeholder: (context, url) =>
-            //       Shimmer.fromColors(
-            //     baseColor: Colors.grey[300],
-            //     highlightColor: Colors.grey[100],
-            //     enabled: true,
-            //     child: Container(
-            //       height: 300,
-            //       width: 1500,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            //   errorWidget: (context, url, error) =>
-            //       Icon(Icons.error),
-            // ),
-            );
+              CachedNetworkImage(
+            fit: BoxFit.cover,
+            width: 1500,
+            imageUrl: images[index].toString(),
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.grey[100]!,
+              enabled: true,
+              child: Container(
+                height: 300,
+                width: 1500,
+                color: Colors.white,
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
+        );
       },
     );
 
