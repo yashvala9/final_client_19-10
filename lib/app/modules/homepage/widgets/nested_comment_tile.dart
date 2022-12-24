@@ -6,6 +6,8 @@ import 'package:reel_ro/models/nessted_comment_model.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/datetime_extension.dart';
 
+import '../../profile/profile_screen.dart';
+
 class NestedCommentWidget extends StatelessWidget {
   final NestedCommentModel nestedCommentModel;
   final VoidCallback likeToggle;
@@ -51,6 +53,8 @@ class NestedCommentWidget extends StatelessWidget {
                               Get.back();
                             }),
                       );
+                    } else {
+                      Get.to(() => ProfileScreen());
                     }
                   },
                   child: Text(

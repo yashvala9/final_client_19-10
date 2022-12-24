@@ -32,6 +32,7 @@ import '../entry_count/views/entry_count_view.dart';
 import '../homepage/comment_screen.dart';
 import '../homepage/homepage_screen.dart';
 import '../homepage/profile_detail_screen.dart';
+import '../profile/profile_screen.dart';
 import '../search/search_screen.dart';
 
 class SingleFeedScreen extends StatelessWidget {
@@ -143,7 +144,7 @@ class SingleFeedScreen extends StatelessWidget {
                           onPressed: () {
                             Get.bottomSheet(
                               Container(
-                                height: Get.height * 0.15,
+                                height: 140,
                                 color: Colors.white,
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -155,6 +156,15 @@ class SingleFeedScreen extends StatelessWidget {
                                             Get.dialog(AlertDialog(
                                               title: const Text("Edit Caption"),
                                               content: TextFormField(
+                                                maxLines: 2,
+                                                keyboardType:
+                                                    TextInputType.multiline,
+                                                initialValue: parser.emojify(
+                                                    isPhoto
+                                                        ? photos![currentIndex]
+                                                            .content
+                                                        : reels![currentIndex]
+                                                            .description),
                                                 decoration: InputDecoration(
                                                   hintText: parser.emojify(
                                                       isPhoto
@@ -165,8 +175,6 @@ class SingleFeedScreen extends StatelessWidget {
                                                               .description),
                                                   counterText: '',
                                                 ),
-                                                keyboardType:
-                                                    TextInputType.text,
                                                 // validator: (v) =>
                                                 //     v!.isNotEmpty && v.length != 2 ? "Country code must be 2 digits" : null,
                                                 onChanged: (v) => caption = (v),
@@ -370,6 +378,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                                           Get.back();
                                                                         }),
                                                                   );
+                                                                } else {
+                                                                  Get.to(() =>
+                                                                      ProfileScreen());
                                                                 }
                                                               },
                                                               child: Text(
@@ -954,6 +965,9 @@ class SingleFeedScreen extends StatelessWidget {
                                                                         Get.back();
                                                                       }),
                                                                 );
+                                                              } else {
+                                                                Get.to(() =>
+                                                                    ProfileScreen());
                                                               }
                                                             },
                                                             child: Row(

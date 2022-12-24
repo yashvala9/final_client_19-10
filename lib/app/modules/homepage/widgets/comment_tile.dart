@@ -12,6 +12,9 @@ import 'package:reel_ro/widgets/loading.dart';
 import 'package:reel_ro/widgets/my_elevated_button.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 
+import '../../navigation_bar/navigation_bar_screen.dart';
+import '../../profile/profile_screen.dart';
+
 class CommentWidget extends StatelessWidget {
   final CommentModel commentModel;
   final VoidCallback likeToggle;
@@ -62,6 +65,8 @@ class CommentWidget extends StatelessWidget {
                                 Get.back();
                               }),
                         );
+                      } else {
+                        Get.to(() => ProfileScreen());
                       }
                     },
                     child: Text(

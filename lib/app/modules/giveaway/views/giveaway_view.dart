@@ -62,21 +62,30 @@ class GiveawayView extends GetView<GiveawayController> {
                           ),
                         ),
                         FutureBuilder<String>(
-                          future: _giveawayRepo.getTotalEntryCountByUserId(_controller.profileId!, _controller.token!),
+                          future: _giveawayRepo.getTotalEntryCountByUserId(
+                              _controller.profileId!, _controller.token!),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Text(
                                 "0",
-                                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold),
                               );
                             }
                             if (snapshot.hasError) {
-                              printInfo(info: "getTotalEntryCountByUserIdError: ${snapshot.hasError}");
+                              printInfo(
+                                  info:
+                                      "getTotalEntryCountByUserIdError: ${snapshot.hasError}");
                               return Container();
                             }
                             return Text(
                               snapshot.data.toString(),
-                              style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
                             );
                           },
                         ),
@@ -87,54 +96,55 @@ class GiveawayView extends GetView<GiveawayController> {
                   listTileWidget('referral', 'Referrals', ReferralsView()),
                   listTileWidget('trophy', 'Winners', WinnersView()),
                   listTileWidget('badge', 'Contest Dates', ContestDatesView()),
-                  listTileWidget('book', 'Contest Rules', const ContestRulesView()),
+                  listTileWidget(
+                      'book', 'Contest Rules', const ContestRulesView()),
                   const SizedBox(
-                    height: 250,
+                    height: 25,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Container(
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black,
-                        gradient: const LinearGradient(
-                            colors: [
-                              Color.fromARGB(255, 0, 64, 255),
-                              Color(0xFF00CCFF),
-                            ],
-                            begin: FractionalOffset(0.0, 0.0),
-                            end: FractionalOffset(1.0, 0.0),
-                            stops: [0.0, 1.0],
-                            tileMode: TileMode.clamp),
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: CountdownTimer(
-                            widgetBuilder: (context, time) {
-                              return Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    timeBox(time!.days.toString(), 'Day'),
-                                    colon(),
-                                    timeBox(time.hours.toString(), 'Hour'),
-                                    colon(),
-                                    timeBox(time.min.toString(), 'Minute'),
-                                    colon(),
-                                    timeBox(time.sec.toString(), 'Second'),
-                                  ],
-                                ),
-                              );
-                            },
-                            endTime: endTime,
-                            textStyle: const TextStyle(fontSize: 50, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(12.0),
+                  //   child: Container(
+                  //     width: Get.width,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       color: Colors.black,
+                  //       gradient: const LinearGradient(
+                  //           colors: [
+                  //             Color.fromARGB(255, 0, 64, 255),
+                  //             Color(0xFF00CCFF),
+                  //           ],
+                  //           begin: FractionalOffset(0.0, 0.0),
+                  //           end: FractionalOffset(1.0, 0.0),
+                  //           stops: [0.0, 1.0],
+                  //           tileMode: TileMode.clamp),
+                  //     ),
+                  //     child: Center(
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(12.0),
+                  //         child: CountdownTimer(
+                  //           widgetBuilder: (context, time) {
+                  //             return Center(
+                  //               child: Row(
+                  //                 mainAxisAlignment: MainAxisAlignment.center,
+                  //                 children: [
+                  //                   timeBox(time!.days.toString(), 'Day'),
+                  //                   colon(),
+                  //                   timeBox(time.hours.toString(), 'Hour'),
+                  //                   colon(),
+                  //                   timeBox(time.min.toString(), 'Minute'),
+                  //                   colon(),
+                  //                   timeBox(time.sec.toString(), 'Second'),
+                  //                 ],
+                  //               ),
+                  //             );
+                  //           },
+                  //           endTime: endTime,
+                  //           textStyle: const TextStyle(fontSize: 50, color: Colors.white, fontWeight: FontWeight.bold),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -177,7 +187,10 @@ class GiveawayView extends GetView<GiveawayController> {
               child: Center(
                   child: Text(
                 time,
-                style: const TextStyle(color: Colors.blueAccent, fontSize: 28, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold),
               )),
             ),
           ),
@@ -193,10 +206,11 @@ class GiveawayView extends GetView<GiveawayController> {
 
 Widget listTileWidget(String filename, String text, Widget pageName) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 04.0),
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12.0),
     child: ListTile(
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-      contentPadding: const EdgeInsets.all(8.0),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      contentPadding: const EdgeInsets.all(16.0),
       leading: SizedBox(
         width: 70,
         child: Image.asset(

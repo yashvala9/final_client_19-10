@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/giveaway/views/giveaway_view.dart';
 import 'package:reel_ro/app/modules/profile/profile_screen.dart';
 import 'package:reel_ro/app/modules/search/search_screen.dart';
+import 'package:reel_ro/utils/snackbar.dart';
 
 import '../chat/chat_list.dart';
 import '../homepage/homepage_screen.dart';
@@ -11,7 +12,8 @@ import 'navigation_bar_controller.dart';
 class NavigationBarScreen extends StatelessWidget {
   NavigationBarScreen({Key? key}) : super(key: key);
 
-  final NavigationBarController controller = Get.put(NavigationBarController());
+  static final NavigationBarController controller =
+      Get.put(NavigationBarController());
   final homepage = HomePageScreen();
   final profileScreen = ProfileScreen();
   final searchScreen = SearchScreen();

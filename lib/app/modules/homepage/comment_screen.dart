@@ -9,6 +9,7 @@ import '../../../repositories/comment_repository.dart';
 import '../../../utils/base.dart';
 import '../../../utils/empty_widget.dart';
 import '../../../widgets/loading.dart';
+import '../profile/profile_screen.dart';
 import 'comment_controller.dart';
 
 class CommentSheet extends StatelessWidget {
@@ -91,6 +92,8 @@ class CommentSheet extends StatelessWidget {
                                               Get.back();
                                             }),
                                       );
+                                    } else {
+                                      Get.to(() => ProfileScreen());
                                     }
                                   },
                                   child: buildProfile(

@@ -203,7 +203,9 @@ class ProfileDetail extends StatelessWidget {
                                               Text(
                                                 profileModel
                                                     .user_profile!.fullname!,
-                                                style: style.headline5,
+                                                style: style.headline5!
+                                                    .copyWith(
+                                                        color: Colors.white),
                                               ),
                                               SizedBox(
                                                 height: 80,
@@ -368,69 +370,69 @@ class ProfileDetail extends StatelessWidget {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                Expanded(
-                                                                    child:
-                                                                        Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      OutlinedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      log("aaaaaaaaaaaaaaaaa");
+                                                                // Expanded(
+                                                                //     child:
+                                                                //         Padding(
+                                                                //   padding:
+                                                                //       const EdgeInsets
+                                                                //               .all(
+                                                                //           8.0),
+                                                                //   child:
+                                                                //       OutlinedButton(
+                                                                //     onPressed:
+                                                                //         () {
+                                                                //       log("aaaaaaaaaaaaaaaaa");
 
-                                                                      log("State: ${_communicationService.client.state}");
-                                                                      log("CurrentUser: ${_communicationService.client.state.currentUser}");
-                                                                      String
-                                                                          newChannelId =
-                                                                          '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+                                                                //       log("State: ${_communicationService.client.state}");
+                                                                //       log("CurrentUser: ${_communicationService.client.state.currentUser}");
+                                                                //       String
+                                                                //           newChannelId =
+                                                                //           '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
-                                                                      final Channel
-                                                                          _newChannel =
-                                                                          _communicationService
-                                                                              .client
-                                                                              .channel(
-                                                                        'messaging',
-                                                                        id: newChannelId,
-                                                                        extraData: {
-                                                                          'isGroupChat':
-                                                                              false,
-                                                                          'presence':
-                                                                              true,
-                                                                          'members':
-                                                                              [
-                                                                            profileModel.id.toString(),
-                                                                            _communicationService.client.state.currentUser!.id.toString(),
-                                                                          ],
-                                                                        },
-                                                                      );
-                                                                      Navigator.push(
-                                                                          context,
-                                                                          MaterialPageRoute(builder:
-                                                                              (context) {
-                                                                        return ChannelPage(
-                                                                          channel:
-                                                                              _newChannel,
-                                                                        );
-                                                                      }));
-                                                                    },
-                                                                    style: OutlinedButton.styleFrom(
-                                                                            minimumSize: const Size.fromHeight(
-                                                                                50))
-                                                                        .copyWith(
-                                                                            backgroundColor:
-                                                                                MaterialStateProperty.all(Colors.grey[850]!)),
-                                                                    child: Text(
-                                                                      "Message",
-                                                                      style: style
-                                                                          .titleMedium!
-                                                                          .copyWith(
-                                                                              color: Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                ))
+                                                                //       final Channel
+                                                                //           _newChannel =
+                                                                //           _communicationService
+                                                                //               .client
+                                                                //               .channel(
+                                                                //         'messaging',
+                                                                //         id: newChannelId,
+                                                                //         extraData: {
+                                                                //           'isGroupChat':
+                                                                //               false,
+                                                                //           'presence':
+                                                                //               true,
+                                                                //           'members':
+                                                                //               [
+                                                                //             profileModel.id.toString(),
+                                                                //             _communicationService.client.state.currentUser!.id.toString(),
+                                                                //           ],
+                                                                //         },
+                                                                //       );
+                                                                //       Navigator.push(
+                                                                //           context,
+                                                                //           MaterialPageRoute(builder:
+                                                                //               (context) {
+                                                                //         return ChannelPage(
+                                                                //           channel:
+                                                                //               _newChannel,
+                                                                //         );
+                                                                //       }));
+                                                                //     },
+                                                                //     style: OutlinedButton.styleFrom(
+                                                                //             minimumSize: const Size.fromHeight(
+                                                                //                 50))
+                                                                //         .copyWith(
+                                                                //             backgroundColor:
+                                                                //                 MaterialStateProperty.all(Colors.grey[850]!)),
+                                                                //     child: Text(
+                                                                //       "Message",
+                                                                //       style: style
+                                                                //           .titleMedium!
+                                                                //           .copyWith(
+                                                                //               color: Colors.white),
+                                                                //     ),
+                                                                //   ),
+                                                                // ))
                                                               ],
                                                             ),
                                                           )
@@ -495,69 +497,69 @@ class ProfileDetail extends StatelessWidget {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                Expanded(
-                                                                    child:
-                                                                        Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      OutlinedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      log("aaaaaaaaaaaaaaaaa");
+                                                                // Expanded(
+                                                                //     child:
+                                                                //         Padding(
+                                                                //   padding:
+                                                                //       const EdgeInsets
+                                                                //               .all(
+                                                                //           8.0),
+                                                                //   child:
+                                                                //       OutlinedButton(
+                                                                //     onPressed:
+                                                                //         () {
+                                                                //       log("aaaaaaaaaaaaaaaaa");
 
-                                                                      log("State: ${_communicationService.client.state}");
-                                                                      log("CurrentUser: ${_communicationService.client.state.currentUser}");
-                                                                      String
-                                                                          newChannelId =
-                                                                          '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
+                                                                //       log("State: ${_communicationService.client.state}");
+                                                                //       log("CurrentUser: ${_communicationService.client.state.currentUser}");
+                                                                //       String
+                                                                //           newChannelId =
+                                                                //           '${profileModel.id}${_communicationService.client.state.currentUser!.id}';
 
-                                                                      final Channel
-                                                                          _newChannel =
-                                                                          _communicationService
-                                                                              .client
-                                                                              .channel(
-                                                                        'messaging',
-                                                                        id: newChannelId,
-                                                                        extraData: {
-                                                                          'isGroupChat':
-                                                                              false,
-                                                                          'presence':
-                                                                              true,
-                                                                          'members':
-                                                                              [
-                                                                            profileModel.id.toString(),
-                                                                            _communicationService.client.state.currentUser!.id.toString(),
-                                                                          ],
-                                                                        },
-                                                                      );
-                                                                      Navigator.push(
-                                                                          context,
-                                                                          MaterialPageRoute(builder:
-                                                                              (context) {
-                                                                        return ChannelPage(
-                                                                          channel:
-                                                                              _newChannel,
-                                                                        );
-                                                                      }));
-                                                                    },
-                                                                    style: OutlinedButton.styleFrom(
-                                                                            minimumSize: const Size.fromHeight(
-                                                                                50))
-                                                                        .copyWith(
-                                                                            backgroundColor:
-                                                                                MaterialStateProperty.all(Colors.grey[850])),
-                                                                    child: Text(
-                                                                      "Message",
-                                                                      style: style
-                                                                          .titleMedium!
-                                                                          .copyWith(
-                                                                              color: Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                ))
+                                                                //       final Channel
+                                                                //           _newChannel =
+                                                                //           _communicationService
+                                                                //               .client
+                                                                //               .channel(
+                                                                //         'messaging',
+                                                                //         id: newChannelId,
+                                                                //         extraData: {
+                                                                //           'isGroupChat':
+                                                                //               false,
+                                                                //           'presence':
+                                                                //               true,
+                                                                //           'members':
+                                                                //               [
+                                                                //             profileModel.id.toString(),
+                                                                //             _communicationService.client.state.currentUser!.id.toString(),
+                                                                //           ],
+                                                                //         },
+                                                                //       );
+                                                                //       Navigator.push(
+                                                                //           context,
+                                                                //           MaterialPageRoute(builder:
+                                                                //               (context) {
+                                                                //         return ChannelPage(
+                                                                //           channel:
+                                                                //               _newChannel,
+                                                                //         );
+                                                                //       }));
+                                                                //     },
+                                                                //     style: OutlinedButton.styleFrom(
+                                                                //             minimumSize: const Size.fromHeight(
+                                                                //                 50))
+                                                                //         .copyWith(
+                                                                //             backgroundColor:
+                                                                //                 MaterialStateProperty.all(Colors.grey[850])),
+                                                                //     child: Text(
+                                                                //       "Message",
+                                                                //       style: style
+                                                                //           .titleMedium!
+                                                                //           .copyWith(
+                                                                //               color: Colors.white),
+                                                                //     ),
+                                                                //   ),
+                                                                // ))
                                                               ],
                                                             ),
                                                           );

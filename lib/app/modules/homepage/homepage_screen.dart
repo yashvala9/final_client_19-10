@@ -30,6 +30,7 @@ import '../../notification_screen.dart';
 import '../add_feed/add_feed_screen.dart';
 import '../add_feed/widgets/video_trimmer_view.dart';
 import '../entry_count/views/entry_count_view.dart';
+import '../profile/profile_screen.dart';
 import '../search/search_screen.dart';
 import 'comment_screen.dart';
 
@@ -397,6 +398,9 @@ class HomePageScreen extends StatelessWidget {
                                                                               Get.back();
                                                                             }),
                                                                       );
+                                                                    } else {
+                                                                      Get.to(() =>
+                                                                          ProfileScreen());
                                                                     }
                                                                   },
                                                                   child: Row(
