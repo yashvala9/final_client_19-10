@@ -10,6 +10,7 @@ import 'package:reel_ro/models/ads_history_model.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 
+import '../models/blocked_users_model.dart';
 import '../models/reel_model.dart';
 import '../utils/base.dart';
 
@@ -91,6 +92,27 @@ class ProfileRepository {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Iterable list = body;
       return list.map((e) => ProfileModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<List<BlockedusersModel>> getBlockedUsers(String token) async {
+    final response = await http.get(
+      Uri.parse(Base.blockedUsers),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    print('21212121 ${response.body.toString()}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Iterable list = body['profiles'];
+      print('21212121 ${list.toString()}');
+      return list
+          .map((e) => BlockedusersModel.fromMap(e['blocked userprofile']))
+          .toList();
     } else {
       return Future.error(body['detail']);
     }
@@ -188,6 +210,25 @@ class ProfileRepository {
       return;
     } else {
       return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> changePassword(
+      String password, String newPassword, String token) async {
+    final response = await http.put(
+      Uri.parse(Base.change_password),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body:
+          json.encode({"old_password": password, "new_password": newPassword}),
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      return Future.error(body['message']);
     }
   }
 
@@ -334,6 +375,21 @@ class ProfileRepository {
       return;
     } else {
       printInfo(info: "toggleBlock: ${body['detail']}");
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> deactivateAccount(String token) async {
+    final response = await http
+        .post(Uri.parse(Base.deactivate_user), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: "Bearer $token",
+    });
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      printInfo(info: "deactivateAccount: ${body['detail']}");
       return Future.error(body['detail']);
     }
   }

@@ -4,6 +4,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/account_settings/views/help_view.dart';
+import 'package:reel_ro/app/modules/account_settings/views/manage_account_view.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/assets.dart';
 import 'package:share_plus/share_plus.dart';
@@ -42,8 +43,9 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
     final theme = Get.theme;
     final style = theme.textTheme;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+      backgroundColor: Colors.black,
       appBar: AppBar(
+        backgroundColor: Colors.grey[700],
         title: const Text(
           "Account Settings",
           style: TextStyle(fontSize: 17),
@@ -60,13 +62,15 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 "ACCOUNT",
-                style: style.titleMedium,
+                style: style.titleMedium!.copyWith(color: Colors.white),
               ),
             ),
             AccountTile(
               asset: Assets.accountStoke,
               title: "Manage my account",
-              onPressed: () {},
+              onPressed: () {
+                Get.to(ManageAccountView());
+              },
             ),
             AccountTile(
               asset: Assets.lock,
@@ -94,7 +98,10 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text("GENERAL", style: style.titleMedium),
+              child: Text(
+                "GENERAL",
+                style: style.titleMedium!.copyWith(color: Colors.white),
+              ),
             ),
             AccountTile(
               asset: Assets.bell,
@@ -296,7 +303,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 "SUPPORT",
-                style: style.titleMedium,
+                style: style.titleMedium!.copyWith(color: Colors.white),
               ),
             ),
             // AccountTile(
@@ -380,7 +387,7 @@ class AccountTile extends StatelessWidget {
             ),
             Text(
               title,
-              style: style.titleMedium,
+              style: style.titleMedium!.copyWith(color: Colors.white),
             ),
             const Spacer(),
             const Icon(

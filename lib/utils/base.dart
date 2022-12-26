@@ -12,6 +12,7 @@ class Base {
   static const getReelsbyId = '$_url/getReelsByUserId';
 
   static const searchUser = '$_url/search';
+  static const blockedUsers = '$_url/users/block-list';
 
   //Forget password
   static const generateForgetPasswordToken =
@@ -55,11 +56,13 @@ class Base {
   static const reelsWithAds = '$_url/reels/with_ads';
   static const reelsByHashTag = '$_url/hashtags/reels/';
   static const getSingleReel = '$_url/reels/single';
+  static const change_password = '$_url/users/change_password';
 
   //Report
   static const report = '$_url/reels/report';
   static const blockToggle = '$_url/content-manager/toggle-block';
   static const blockUser = '$_url/users/block_user';
+  static const deactivate_user = '$_url/users/deactivate_user';
 
   //Ads
 
@@ -115,7 +118,7 @@ class Base {
 
   //Giveaway
   static const giveaway = '$_url/contests/';
-  static const adminContest = '$_url/superadmin/contests';
+  static const adminContest = '$_url/superadmin/new/contests';
   static const createGiveaway = '$_url/createContest';
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';

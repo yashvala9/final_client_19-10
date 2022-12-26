@@ -10,6 +10,7 @@ import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:get/get.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:readmore/readmore.dart';
+import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
 import 'package:reel_ro/app/modules/profile/profile_controller.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -133,7 +134,11 @@ class SingleFeedScreen extends StatelessWidget {
                   leading: IconButton(
                       icon: const Icon(Icons.arrow_back_ios),
                       onPressed: () {
-                        Get.back();
+                        if (NavigationBarScreen.isSelected.value) {
+                          NavigationBarScreen.isSelected.value = false;
+                        } else {
+                          Get.back();
+                        }
                       }),
                   actions: [
                     if ((isPhoto
@@ -918,6 +923,7 @@ class SingleFeedScreen extends StatelessWidget {
                                           videoUrl: videoUrl,
                                           videoId: reels![index].id,
                                           isReel: true,
+                                          points: reels![index].points,
                                           updatePoints: () {},
                                           doubleTap: () {
                                             isLiked = !isLiked;

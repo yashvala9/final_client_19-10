@@ -30,12 +30,12 @@ class ContestCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(contest.contest_name,
+          Text(contest.Contest.contest_name,
               style:
                   style.titleLarge!.copyWith(color: AppColors.winnercardbrown)),
           Image.network(
             // "https://reelro-image-bucket.s3.ap-south-1.amazonaws.com/inputs/" +
-            contest.prize_image,
+            contest.prizes.first.prize_image,
             fit: BoxFit.cover,
             width: 150,
             height: 90,
@@ -47,7 +47,7 @@ class ContestCard extends StatelessWidget {
               Text('Prize', style: style.titleLarge),
               const SizedBox(width: 10),
               Text(
-                contest.prize_name,
+                contest.prizes.first.prize_name,
                 style: style.headline5!.copyWith(
                   color: AppColors.winnercardpink,
                 ),
@@ -55,7 +55,7 @@ class ContestCard extends StatelessWidget {
             ],
           ),
           Text(
-              'Contest ends on ${DateFormat("MMMM dd, yyyy").format(contest.end_date)}',
+              'Contest ends on ${DateFormat("MMMM dd, yyyy").format(DateTime.parse(contest.Contest.end_date))}',
               style: style.titleMedium!.copyWith(
                 fontWeight: FontWeight.w600,
               )),

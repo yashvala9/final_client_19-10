@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:path/path.dart' as path;
@@ -12,6 +13,39 @@ class CreateProfileController extends GetxController {
   final _profileRepo = Get.put(ProfileRepository());
 
   bool _loading = false;
+
+  FormGroup addVendorForm = FormGroup({
+    'vendorName': FormControl(validators: [
+      Validators.required,
+    ]),
+    'email': FormControl(validators: [Validators.required, Validators.email]),
+    'companyid': FormControl(validators: [
+      Validators.required,
+    ]),
+    'taxnumber': FormControl(validators: [
+      Validators.required,
+    ]),
+    'phone': FormControl(validators: [Validators.required, Validators.number]),
+    'discription': FormControl(validators: [
+      Validators.required,
+    ]),
+    'website': FormControl(
+        validators: [Validators.required, Validators.pattern(".com")]),
+    'contactPerson': FormControl(validators: [
+      Validators.required,
+    ]),
+    'address': FormControl(validators: [
+      Validators.required,
+    ]),
+    'category': FormControl<String>(),
+    'status': FormControl<String>(),
+    'location': FormControl<String>(),
+    'region': FormControl<String>(),
+    'country': FormControl<String>(),
+    'password': FormControl(validators: [
+      Validators.required,
+    ]),
+  });
   bool get loading => _loading;
   set loading(bool loading) {
     _loading = loading;
@@ -27,8 +61,8 @@ class CreateProfileController extends GetxController {
 
   String username = '';
   String fullname = '';
-  String country = '';
-  String state = '';
+  RxString country = ''.obs;
+  RxString state = ''.obs;
   int countryCode = 0;
   int mobileNumber = 0;
   String bio = "";

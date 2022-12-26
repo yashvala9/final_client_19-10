@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:reel_ro/app/modules/navigation_bar/navigation_bar_screen.dart';
 import 'package:reel_ro/app/modules/search/search_controller.dart';
 import 'package:reel_ro/app/modules/search/widget/search_tile.dart';
 import 'package:reel_ro/utils/empty_widget.dart';
@@ -301,6 +302,11 @@ class ReelsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var reels = _controller.reelList.where((element) {
+      print('reels legth' + element.filename.substring(0, 4));
+      return element.filename.substring(0, 4) != 'ads_';
+    }).toList();
+    print('reels legth ${reels.length}');
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -352,42 +358,52 @@ class ReelsTab extends StatelessWidget {
                           ),
                           childrenDelegate: SliverChildBuilderDelegate(
                             (context, index) {
-                              var isPhoto =
-                                  _controller.reelList[index].media_ext !=
-                                      'mp4';
-                              var reel = _controller.reelList[index];
+                              var isPhoto = reels[index].media_ext != 'mp4';
+
+                              var reel = reels[index];
+
                               var videoSplit = [''];
                               var videoUrl = '';
                               if (!isPhoto) {
-                                videoSplit = _controller
-                                    .reelList[index].filename
-                                    .split("_");
-                                videoUrl = _controller.reelList[index].filepath;
+                                videoSplit = reels[index].filename.split("_");
+                                videoUrl = reels[index].filepath;
+
                                 // "https://d2qwvdd0y3hlmq.cloudfront.net/${videoSplit[0]}/${videoSplit[1]}/${videoSplit[2]}/${reel.filename}/MP4/${reel.filename}";
                               }
                               return GestureDetector(
                                   onTap: () {
-                                    Get.to(SingleFeedScreen(
+                                    NavigationBarScreen.singleScreen =
+                                        (SingleFeedScreen(
                                       null,
                                       _controller.reelList,
-                                      index,
+                                      _controller.reelList.indexWhere(
+                                          (element) =>
+                                              element.filename ==
+                                              reels[index].filename),
                                       null,
                                       isPhoto: false,
                                     ));
+                                    NavigationBarScreen.isSelected.value = true;
                                   },
                                   child: (index % 20 == 4 || index % 20 == 13)
                                       ? VideoPlayerItem(
                                           videoUrl: videoUrl,
-                                          videoId:
-                                              _controller.reelList[index].id,
+                                          videoId: reels[index].id,
+                                          points: reels[index].points,
                                           onTap: () {
-                                            Get.to(SingleFeedScreen(
+                                            NavigationBarScreen.singleScreen =
+                                                (SingleFeedScreen(
                                               null,
                                               _controller.reelList,
-                                              index,
+                                              _controller.reelList.indexWhere(
+                                                  (element) =>
+                                                      element.filename ==
+                                                      reels[index].filename),
                                               null,
                                               isPhoto: false,
                                             ));
+                                            NavigationBarScreen
+                                                .isSelected.value = true;
                                           },
                                           doubleTap: () {},
                                           swipeRight: () {},
@@ -396,8 +412,7 @@ class ReelsTab extends StatelessWidget {
                                           isReel: true)
                                       : FutureBuilder<String>(
                                           future: _profileRepo.getThumbnail(
-                                              _controller
-                                                  .reelList[index].thumbnail),
+                                              reels[index].thumbnail),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
                                               return ShimmerCardAnimation(
@@ -420,7 +435,7 @@ class ReelsTab extends StatelessWidget {
                                           },
                                         ));
                             },
-                            childCount: _controller.reelList.length,
+                            childCount: reels.length,
                           ),
                         ),
                       ),
@@ -448,7 +463,7 @@ class PhotosTab extends StatelessWidget {
             : _controller.photosList.isEmpty
                 ? const Expanded(
                     child: Center(
-                      child: Text("No reels available"),
+                      child: Text("No photos available"),
                     ),
                   )
                 : Expanded(

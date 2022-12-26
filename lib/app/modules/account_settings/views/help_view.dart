@@ -20,12 +20,13 @@ class HelpView extends StatelessWidget {
     final theme = Get.theme;
     final style = theme.textTheme;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text(
           "Help",
           style: TextStyle(fontSize: 17),
         ),
+        backgroundColor: Colors.grey[700],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,14 +35,15 @@ class HelpView extends StatelessWidget {
           child: Column(children: [
             const Text(
               'Write an email to our team at ReelRo, we will do our best to resolve your query. Thank you!',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             SizedBox(height: Get.height * 0.01),
             TextFormField(
               maxLines: 5,
-              decoration: const InputDecoration(
-                hintText: 'Write your email...',
-              ),
+              decoration: InputDecoration(
+                  fillColor: Colors.grey[700],
+                  hintText: 'Write your email...',
+                  hintStyle: TextStyle(color: Colors.white)),
               keyboardType: TextInputType.multiline,
               validator: (v) => v!.isEmpty ? "Message cannot be empty!" : null,
               onFieldSubmitted: (value) => controller.message = value,

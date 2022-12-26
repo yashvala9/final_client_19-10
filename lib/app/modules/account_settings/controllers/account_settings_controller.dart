@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
+import 'package:reel_ro/models/blocked_users_model.dart';
 import 'package:reel_ro/models/contest_model.dart';
+import 'package:reel_ro/models/likedreel_model.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
 
 import '../../../../repositories/giveaway_repository.dart';
 import '../../../../services/auth_service.dart';
@@ -15,6 +18,17 @@ class AccountSettingsController extends GetxController {
 
   String message = '';
 
+  bool loading = false;
+
+  RxBool isbUserLoading = false.obs;
+
+  String password = '';
+  String newPassword = '';
+  String confirmPassword = '';
+
+  List<LikedreelModel> likedReels = [];
+  List<BlockedusersModel> blockedUsers = [];
+
   ContestModel? _contestModel;
   ContestModel? get contestModel => _contestModel;
   set contestModel(ContestModel? contestModel) {
@@ -26,6 +40,7 @@ class AccountSettingsController extends GetxController {
   void onInit() {
     contestModel = null;
     getContestByUser();
+    getBlockedUsers();
     super.onInit();
   }
 
@@ -38,6 +53,20 @@ class AccountSettingsController extends GetxController {
       contestModel = v;
     } catch (e) {
       log("getContestByUserIdError: $e");
+    }
+  }
+
+  Future<void> getBlockedUsers() async {
+    try {
+      isbUserLoading(true);
+      blockedUsers.clear();
+      var v = await ProfileRepository().getBlockedUsers(token!);
+      printInfo(info: v.toString());
+
+      blockedUsers = v;
+      isbUserLoading(false);
+    } catch (e) {
+      log("getBlockedUsers: $e");
     }
   }
 }

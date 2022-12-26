@@ -341,6 +341,7 @@ class HomePageScreen extends StatelessWidget {
                                                 videoUrl: videoUrl,
                                                 videoId: data.id,
                                                 isReel: isReel,
+                                                points: data.points,
                                                 updatePoints: () {
                                                   _controllerCenter.play();
 

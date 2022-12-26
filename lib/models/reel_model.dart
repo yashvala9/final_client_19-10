@@ -13,6 +13,7 @@ class ReelModel {
   final String filepath;
   final String media_ext;
   final String thumbnail;
+  final int points;
   final ProfileModel user;
 
   ReelModel({
@@ -23,6 +24,7 @@ class ReelModel {
     required this.filepath,
     required this.media_ext,
     required this.thumbnail,
+    required this.points,
     required this.user,
   });
 
@@ -34,6 +36,7 @@ class ReelModel {
     String? filepath,
     String? media_ext,
     String? thumbnail,
+    int? points,
     ProfileModel? user,
   }) {
     return ReelModel(
@@ -44,6 +47,7 @@ class ReelModel {
       filepath: filepath ?? this.filepath,
       media_ext: media_ext ?? this.media_ext,
       thumbnail: thumbnail ?? this.thumbnail,
+      points: points ?? this.points,
       user: user ?? this.user,
     );
   }
@@ -57,6 +61,7 @@ class ReelModel {
       'filepath': filepath,
       'media_ext': media_ext,
       'thumbnail': thumbnail,
+      'points': points,
       'user': user.toMap(),
     };
   }
@@ -70,6 +75,7 @@ class ReelModel {
       filepath: map['filepath'] as String,
       media_ext: (map['media_ext'] ?? '') as String,
       thumbnail: (map['thumbnail'] ?? '') as String,
+      points: (map['max_point'] ?? 0) as int,
       user: ProfileModel.fromMap(
           (map['user'] ?? map['owner']) as Map<String, dynamic>),
     );
@@ -82,7 +88,7 @@ class ReelModel {
 
   @override
   String toString() {
-    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, filepath: $filepath, media_ext: $media_ext, thumbnail: $thumbnail, user: $user)';
+    return 'ReelModel(id: $id, video_title: $video_title, description: $description, filename: $filename, filepath: $filepath, media_ext: $media_ext, thumbnail: $thumbnail, points: $points, user: $user)';
   }
 
   @override
@@ -96,6 +102,7 @@ class ReelModel {
         other.filepath == filepath &&
         other.media_ext == media_ext &&
         other.thumbnail == thumbnail &&
+        other.points == points &&
         other.user == user;
   }
 
@@ -108,6 +115,7 @@ class ReelModel {
         filepath.hashCode ^
         media_ext.hashCode ^
         thumbnail.hashCode ^
+        points.hashCode ^
         user.hashCode;
   }
 }

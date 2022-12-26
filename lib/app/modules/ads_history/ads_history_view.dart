@@ -33,86 +33,96 @@ class AdsHistoryView extends StatelessWidget {
         ),
       ),
       body: GetBuilder<AdsHistoryController>(
-          builder: (_) => FutureBuilder<List<AdsHistoryModel>>(
-              future: _controller.profileId != null
-                  ? _profileRepo.getAdsHistoryByProfileId(_controller.profileId!, _controller.token!)
-                  : _profileRepo.getAdsHistoryByProfileId(_controller.profileId!, _controller.token!),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Loading();
-                }
-                if (snapshot.hasError) {
-                  printInfo(info: "profileReels: ${snapshot.error}");
-                }
-                var ads = snapshot.data!;
-                if (ads.isEmpty) {
-                  return const Center(
-                    child: Text("No Ads History Available"),
-                  );
-                }
-                log("Ads: ${snapshot.data}");
-                return GridView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ads.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                  ),
-                  itemBuilder: (context, index) {
-                    log("Add Tumb: ${ads[index].ads.thumbnail}");
-                    return GestureDetector(
-                        onTap: () {
-                          Get.to(SingleFeedScreen(
-                              null,
-                              ads
-                                  .map((e) => ReelModel(
-                                      id: e.ads.id,
-                                      video_title: e.ads.video_title,
-                                      description: e.ads.description,
-                                      filename: e.ads.filename,
-                                      filepath: e.ads.filepath,
-                                      media_ext: e.ads.media_ext,
-                                      thumbnail: e.ads.thumbnail,
-                                      user: e.ads.user))
-                                  .toList(),
-                              index,
-                              null));
-                        },
-                        child: FutureBuilder<String>(
-                          future: _profileRepo.getThumbnail(ads[index].ads.thumbnail),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-
-                            return CachedNetworkImage(
-                              key: UniqueKey(),
-                              placeholder: (context, url) {
-                                return IconButton(onPressed: () {}, icon: const Icon(Icons.refresh_rounded));
-                              },
-                              errorWidget: (_, a, b) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Loading(),
-                                );
-                              },
-                              imageUrl: snapshot.data!,
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ));
+        builder: (_) => FutureBuilder<List<AdsHistoryModel>>(
+          future: _controller.profileId != null
+              ? _profileRepo.getAdsHistoryByProfileId(
+                  _controller.profileId!, _controller.token!)
+              : _profileRepo.getAdsHistoryByProfileId(
+                  _controller.profileId!, _controller.token!),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Loading();
+            }
+            if (snapshot.hasError) {
+              printInfo(info: "profileReels: ${snapshot.error}");
+            }
+            var ads = snapshot.data!;
+            if (ads.isEmpty) {
+              return const Center(
+                child: Text("No Ads History Available"),
+              );
+            }
+            log("Ads: ${snapshot.data}");
+            return GridView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: ads.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+              ),
+              itemBuilder: (context, index) {
+                log("Add Tumb: ${ads[index].ads.thumbnail}");
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(SingleFeedScreen(
+                        null,
+                        ads
+                            .map(
+                              (e) => ReelModel(
+                                  id: e.ads.id,
+                                  video_title: e.ads.video_title,
+                                  description: e.ads.description,
+                                  filename: e.ads.filename,
+                                  filepath: e.ads.filepath,
+                                  media_ext: e.ads.media_ext,
+                                  thumbnail: e.ads.thumbnail,
+                                  points: e.ads.points,
+                                  user: e.ads.user),
+                            )
+                            .toList(),
+                        index,
+                        null));
                   },
+                  child: FutureBuilder<String>(
+                    future: _profileRepo.getThumbnail(ads[index].ads.thumbnail),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      return CachedNetworkImage(
+                        key: UniqueKey(),
+                        placeholder: (context, url) {
+                          return IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.refresh_rounded));
+                        },
+                        errorWidget: (_, a, b) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                            ),
+                            alignment: Alignment.center,
+                            child: Loading(),
+                          );
+                        },
+                        imageUrl: snapshot.data!,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 );
-              })),
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

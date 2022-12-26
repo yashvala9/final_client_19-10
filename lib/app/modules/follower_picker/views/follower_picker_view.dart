@@ -89,9 +89,9 @@ class FollowerPickerView extends GetView<FollowerPickerController> {
                     child: ElevatedButton(
                       onPressed: () async {
                         debugPrint(
-                            '2121 contestModel.id.toString() ${contestModel.id.toString()}');
-                        var v = await _controller
-                            .setRandomWinner(contestModel.id.toString());
+                            '2121 contestModel.id.toString() ${contestModel.Contest.id.toString()}');
+                        var v = await _controller.setRandomWinner(
+                            contestModel.Contest.id.toString());
                         Get.off(FollowerPickerWinnerView(v));
                       },
                       style: ElevatedButton.styleFrom(
