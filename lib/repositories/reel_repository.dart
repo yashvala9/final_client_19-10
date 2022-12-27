@@ -428,6 +428,23 @@ class ReelRepository {
     }
   }
 
+  Future<List<ReelModel>> getLikedReels(String token) async {
+    final response = await http.get(
+      Uri.parse("${Base.getLikedReels}?page=1&limit=1000"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final Iterable list = body['likedreel'];
+      return list.map((e) => ReelModel.fromMap(e)).toList();
+    } else {
+      return Future.error(body['error']['message']);
+    }
+  }
+
   Future<List<PhotoModel>> getPhotosByUserId(
       int profileId, String token) async {
     final response = await http.get(

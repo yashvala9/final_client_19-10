@@ -48,6 +48,7 @@ class Base {
 
   //Reels
   static const getReelsByUserId = '$_url/reels/user';
+  static const getLikedReels = '$_url/reels/get_all_liked_reels';
   static const getFeedsByUserId = '$_url/getFeed';
   static const getPhotosByUserId = '$_url/posts/user/';
   static const updateStatus = '$_url/reels/update/status/';
@@ -62,6 +63,7 @@ class Base {
   static const report = '$_url/reels/report';
   static const blockToggle = '$_url/content-manager/toggle-block';
   static const blockUser = '$_url/users/block_user';
+  static const unblockUser = '$_url/users/unblock_user';
   static const deactivate_user = '$_url/users/deactivate_user';
 
   //Ads

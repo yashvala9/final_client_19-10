@@ -56,8 +56,8 @@ class WinnersView extends GetView<WinnersController> {
               }
 
               List<String> images = snapshot.data!
-                  .where((element) => element.winnerImage != '')
-                  .map((e) => e.winnerImage)
+                  .where((element) => element.image != '')
+                  .map((e) => e.image)
                   .toList();
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,

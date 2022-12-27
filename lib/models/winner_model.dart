@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class WinnerModel {
@@ -6,13 +5,23 @@ class WinnerModel {
   final String userName;
   final String userImage;
   final String contestName;
-  final String winnerImage;
+  final String status;
+  final String prizeName;
+  final String prizeImage;
+  final String email;
+  final String phone;
+  final String image;
   WinnerModel({
     this.id = 0,
     this.userName = '',
     this.userImage = '',
     this.contestName = '',
-    required this.winnerImage,
+    this.status = '',
+    this.prizeName = '',
+    this.prizeImage = '',
+    this.email = '',
+    this.phone = '',
+    required this.image,
   });
 
   WinnerModel copyWith({
@@ -20,14 +29,24 @@ class WinnerModel {
     String? userName,
     String? userImage,
     String? contestName,
-    String? winnerImage,
+    String? status,
+    String? prizeName,
+    String? prizeImage,
+    String? email,
+    String? phone,
+    String? image,
   }) {
     return WinnerModel(
       id: id ?? this.id,
       userName: userName ?? this.userName,
       userImage: userImage ?? this.userImage,
       contestName: contestName ?? this.contestName,
-      winnerImage: winnerImage ?? this.winnerImage,
+      status: status ?? this.status,
+      prizeName: prizeName ?? this.prizeName,
+      prizeImage: prizeImage ?? this.prizeImage,
+      email: email ?? this.email,
+      phone: phone ?? this.phone,
+      image: image ?? this.image,
     );
   }
 
@@ -37,17 +56,28 @@ class WinnerModel {
       'userName': userName,
       'userImage': userImage,
       'contestName': contestName,
-      'winnerImage': winnerImage,
+      'status': status,
+      'prizeName': prizeName,
+      'prizeImage': prizeImage,
+      'email': email,
+      'phone': phone,
+      'image': image,
     };
   }
 
   factory WinnerModel.fromMap(Map<String, dynamic> map) {
     return WinnerModel(
-        id: map['id'] as int,
-        userName: map['user']['user_profile']['fullname'] as String,
-        userImage: map['user']['user_profile']['profile_img'] as String,
-        contestName: map['contest']['contest_name'] as String,
-        winnerImage: map['image'] ?? '');
+      id: map['id'] as int,
+      userName: map['user']['fullname'] ?? '',
+      userImage: map['user']['profile_img'] ?? '',
+      contestName: map['contest']['contest_name'] ?? '',
+      status: map['status'] ?? '',
+      prizeName: 'Static',
+      prizeImage: 'static',
+      email: map['user']['email'] ?? '',
+      image: map['image'] ?? '',
+      phone: (map['user']['pincode'] ?? '') + map['user']['phone_number'] ?? '',
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -57,7 +87,7 @@ class WinnerModel {
 
   @override
   String toString() {
-    return 'WinnerModel(id: $id, userName: $userName, userImage: $userImage, contestName: $contestName, winnerImage: $winnerImage)';
+    return 'WinnerModel(id: $id, userName: $userName, userImage: $userImage, contestName: $contestName, status: $status, prizeName: $prizeName, prizeImage: $prizeImage, email: $email, phone: $phone, image: $image)';
   }
 
   @override
@@ -68,7 +98,12 @@ class WinnerModel {
         other.userName == userName &&
         other.userImage == userImage &&
         other.contestName == contestName &&
-        other.winnerImage == winnerImage;
+        other.status == status &&
+        other.prizeName == prizeName &&
+        other.prizeImage == prizeImage &&
+        other.email == email &&
+        other.phone == phone &&
+        other.image == image;
   }
 
   @override
@@ -77,6 +112,11 @@ class WinnerModel {
         userName.hashCode ^
         userImage.hashCode ^
         contestName.hashCode ^
-        winnerImage.hashCode;
+        status.hashCode ^
+        prizeName.hashCode ^
+        prizeImage.hashCode ^
+        email.hashCode ^
+        phone.hashCode ^
+        image.hashCode;
   }
 }

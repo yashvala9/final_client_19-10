@@ -10,7 +10,6 @@ import 'package:reel_ro/models/ads_history_model.dart';
 import 'package:reel_ro/models/photo_model.dart';
 import 'package:reel_ro/models/profile_model.dart';
 
-import '../models/blocked_users_model.dart';
 import '../models/reel_model.dart';
 import '../utils/base.dart';
 
@@ -97,7 +96,7 @@ class ProfileRepository {
     }
   }
 
-  Future<List<BlockedusersModel>> getBlockedUsers(String token) async {
+  Future<List<ProfileModel>> getBlockedUsers(String token) async {
     final response = await http.get(
       Uri.parse(Base.blockedUsers),
       headers: <String, String>{
@@ -108,11 +107,9 @@ class ProfileRepository {
     final body = jsonDecode(response.body);
     print('21212121 ${response.body.toString()}');
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final Iterable list = body['profiles'];
+      final Iterable list = body;
       print('21212121 ${list.toString()}');
-      return list
-          .map((e) => BlockedusersModel.fromMap(e['blocked userprofile']))
-          .toList();
+      return list.map((e) => ProfileModel.fromMap(e)).toList();
     } else {
       return Future.error(body['detail']);
     }
@@ -224,6 +221,7 @@ class ProfileRepository {
       body:
           json.encode({"old_password": password, "new_password": newPassword}),
     );
+    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;
@@ -400,6 +398,24 @@ class ProfileRepository {
           'Content-Type': 'application/json; charset=UTF-8',
           HttpHeaders.authorizationHeader: "Bearer $token",
         });
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return;
+    } else {
+      printInfo(info: "blockUser: ${body['detail']}");
+      return Future.error(body['detail']);
+    }
+  }
+
+  Future<void> unblockUser(int userId, String token) async {
+    final response = await http.delete(
+      Uri.parse(Base.unblockUser),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: jsonEncode({"user_id": userId}),
+    );
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return;

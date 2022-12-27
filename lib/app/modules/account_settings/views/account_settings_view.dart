@@ -39,7 +39,7 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.getContestByUser();
+    _controller.onInit();
     final theme = Get.theme;
     final style = theme.textTheme;
     return Scaffold(
@@ -96,18 +96,18 @@ class AccountSettingsView extends GetView<AccountSettingsController> {
             const Divider(
               thickness: 1,
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                "GENERAL",
-                style: style.titleMedium!.copyWith(color: Colors.white),
-              ),
-            ),
-            AccountTile(
-              asset: Assets.bell,
-              title: "Push notifications",
-              onPressed: () {},
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(10.0),
+            //   child: Text(
+            //     "GENERAL",
+            //     style: style.titleMedium!.copyWith(color: Colors.white),
+            //   ),
+            // ),
+            // AccountTile(
+            //   asset: Assets.bell,
+            //   title: "Push notifications",
+            //   onPressed: () {},
+            // ),
             // GetBuilder<AccountSettingsController>(
             //     builder: (_) => AccountTile(
             //           asset: Assets.gift,

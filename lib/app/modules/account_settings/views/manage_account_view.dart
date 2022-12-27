@@ -73,7 +73,7 @@ class ManageAccountView extends GetView<AccountSettingsController> {
               asset: Icons.favorite,
               title: "Liked Videos",
               onPressed: () {
-                // Get.to(LikedVideoView());
+                Get.to(LikedVideoView());
               },
             ),
             AccountTile(
