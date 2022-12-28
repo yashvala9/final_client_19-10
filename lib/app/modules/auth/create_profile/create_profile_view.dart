@@ -273,86 +273,22 @@ class _CreateProfileViewState extends State<CreateProfileView> {
 
                                   SizedBox(height: Get.height * 0.01),
                                   CSCPicker(
-                                    ///Enable disable state dropdown [OPTIONAL PARAMETER]
-                                    showStates: true,
-
-                                    /// Enable disable city drop down [OPTIONAL PARAMETER]
-                                    showCities: false,
-
-                                    ///Enable (get flag with country name) / Disable (Disable flag) / ShowInDropdownOnly (display flag in dropdown only) [OPTIONAL PARAMETER]
                                     flagState: CountryFlag.DISABLE,
-
-                                    ///Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER] (USE with disabledDropdownDecoration)
-                                    dropdownDecoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: Colors.white,
-                                        border: Border.all(
-                                            color: Colors.grey.shade300,
-                                            width: 1)),
-
-                                    ///Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
-                                    disabledDropdownDecoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: Colors.grey.shade300,
-                                        border: Border.all(
-                                            color: Colors.grey.shade300,
-                                            width: 1)),
-
-                                    ///placeholders for dropdown search field
-                                    countrySearchPlaceholder: "Country",
-                                    stateSearchPlaceholder: "State",
-
-                                    ///labels for dropdown
-                                    countryDropdownLabel: "Country",
-                                    stateDropdownLabel: "State",
-
-                                    ///Default Country
-                                    defaultCountry: DefaultCountry.India,
-
-                                    ///Disable country dropdown (Note: use it with default country)
-                                    //disableCountry: true,
-
-                                    ///selected item style [OPTIONAL PARAMETER]
-                                    selectedItemStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-
-                                    ///DropdownDialog Heading style [OPTIONAL PARAMETER]
-                                    dropdownHeadingStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold),
-
-                                    ///DropdownDialog Item style [OPTIONAL PARAMETER]
-                                    dropdownItemStyle: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-
-                                    ///Dialog box radius [OPTIONAL PARAMETER]
-                                    dropdownDialogRadius: 10.0,
-
-                                    ///Search bar radius [OPTIONAL PARAMETER]
-                                    searchBarRadius: 10.0,
-
-                                    ///triggers once country selected in dropdown
                                     onCountryChanged: (value) {
-                                      ///store value in country variable
-                                      _controller.country.value = value;
+                                      setState(() {
+                                        _controller.country.value = value;
+                                      });
                                     },
-
-                                    ///triggers once state selected in dropdown
                                     onStateChanged: (value) {
-                                      ///store value in state variable
-                                      if (value != null) {
-                                        _controller.state.value = value;
-                                      }
+                                      setState(() {
+                                        _controller.state.value = value ?? '';
+                                      });
                                     },
-
-                                    ///triggers once city selected in dropdown
+                                    onCityChanged: (value) {
+                                      setState(() {
+                                        _controller.city.value = value ?? '';
+                                      });
+                                    },
                                   ),
 
                                   // TextFormField(
@@ -414,6 +350,24 @@ class _CreateProfileViewState extends State<CreateProfileView> {
                                             if (_controller.file == null) {
                                               showSnackBar(
                                                   "Please select image",
+                                                  color: Colors.red);
+                                              return;
+                                            }
+                                            if (_controller.country.value ==
+                                                '') {
+                                              showSnackBar(
+                                                  "Please select country",
+                                                  color: Colors.red);
+                                              return;
+                                            }
+                                            if (_controller.state.value == '') {
+                                              showSnackBar(
+                                                  "Please select state",
+                                                  color: Colors.red);
+                                              return;
+                                            }
+                                            if (_controller.city.value == '') {
+                                              showSnackBar("Please select city",
                                                   color: Colors.red);
                                               return;
                                             }

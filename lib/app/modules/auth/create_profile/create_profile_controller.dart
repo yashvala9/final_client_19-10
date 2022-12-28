@@ -63,6 +63,7 @@ class CreateProfileController extends GetxController {
   String fullname = '';
   RxString country = ''.obs;
   RxString state = ''.obs;
+  RxString city = ''.obs;
   int countryCode = 0;
   int mobileNumber = 0;
   String bio = "";
@@ -98,8 +99,8 @@ class CreateProfileController extends GetxController {
         'current_language': 'en',
         'phone_number': mobileNumber,
         'profile_img': _fileName,
-        "country": country,
-        "state": state,
+        "country": country.value,
+        "state": state.value,
       };
       await _profileRepo.createProfile(profileData, _authService.token!);
       _authService.redirectUser();

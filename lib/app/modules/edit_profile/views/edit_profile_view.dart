@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,15 +16,24 @@ import '../../../../widgets/loading.dart';
 import '../../../../widgets/my_elevated_button.dart';
 import '../controllers/edit_profile_controller.dart';
 
-class EditProfileView extends GetView<EditProfileController> {
+class EditProfileView extends StatefulWidget {
   EditProfileView({Key? key, required this.profileEditCalBack})
       : super(key: key);
   final VoidCallback profileEditCalBack;
 
+  @override
+  State<EditProfileView> createState() => _EditProfileViewState();
+}
+
+class _EditProfileViewState extends State<EditProfileView> {
   final _formKey = GlobalKey<FormState>();
+
   final _controller = Get.put(EditProfileController());
+
   final _picker = ImagePicker();
+
   final parser = EmojiParser();
+
   @override
   Widget build(BuildContext context) {
     final theme = Get.theme;
@@ -248,33 +258,55 @@ class EditProfileView extends GetView<EditProfileController> {
                             ],
                           ),
                           SizedBox(height: Get.height * 0.02),
-                          Text('Country',
-                              textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge),
-                          SizedBox(height: Get.height * 0.01),
-                          TextFormField(
-                            enabled: !_controller.loading,
-                            decoration: InputDecoration(
-                              hintText: _controller
-                                  .profileModel.user_profile!.country,
-                            ),
-                            keyboardType: TextInputType.name,
-                            onChanged: (v) => _controller.country = v,
+                          CSCPicker(
+                            currentCountry:
+                                _controller.profileModel.user_profile!.country,
+                            currentState:
+                                _controller.profileModel.user_profile!.state,
+                            flagState: CountryFlag.DISABLE,
+                            onCountryChanged: (value) {
+                              setState(() {
+                                _controller.country = value;
+                              });
+                            },
+                            onStateChanged: (value) {
+                              setState(() {
+                                _controller.state = value ?? '';
+                              });
+                            },
+                            onCityChanged: (value) {
+                              setState(() {
+                                // _controller.city.value = value ?? '';
+                              });
+                            },
                           ),
-                          SizedBox(height: Get.height * 0.02),
-                          Text('State',
-                              textScaleFactor: Get.textScaleFactor,
-                              style: style.labelLarge),
-                          SizedBox(height: Get.height * 0.01),
-                          TextFormField(
-                            enabled: !_controller.loading,
-                            decoration: InputDecoration(
-                              hintText:
-                                  _controller.profileModel.user_profile!.state,
-                            ),
-                            keyboardType: TextInputType.name,
-                            onChanged: (v) => _controller.state = v,
-                          ),
+                          // Text('Country',
+                          //     textScaleFactor: Get.textScaleFactor,
+                          //     style: style.labelLarge),
+                          // SizedBox(height: Get.height * 0.01),
+                          // TextFormField(
+                          //   enabled: !_controller.loading,
+                          //   decoration: InputDecoration(
+                          //     hintText: _controller
+                          //         .profileModel.user_profile!.country,
+                          //   ),
+                          //   keyboardType: TextInputType.name,
+                          //   onChanged: (v) => _controller.country = v,
+                          // ),
+                          // SizedBox(height: Get.height * 0.02),
+                          // Text('State',
+                          //     textScaleFactor: Get.textScaleFactor,
+                          //     style: style.labelLarge),
+                          // SizedBox(height: Get.height * 0.01),
+                          // TextFormField(
+                          //   enabled: !_controller.loading,
+                          //   decoration: InputDecoration(
+                          //     hintText:
+                          //         _controller.profileModel.user_profile!.state,
+                          //   ),
+                          //   keyboardType: TextInputType.name,
+                          //   onChanged: (v) => _controller.state = v,
+                          // ),
                           SizedBox(height: Get.height * 0.02),
                           Text(
                             'Add About Me',
@@ -307,7 +339,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                       return;
                                     }
                                     await _controller.updateProfile();
-                                    profileEditCalBack();
+                                    widget.profileEditCalBack();
                                   },
                                 ),
                         ],
