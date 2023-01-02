@@ -120,7 +120,7 @@ class HomePageScreen extends StatelessWidget {
 
   void moveToReel() {
     pageController2.animateTo(0,
-        curve: Curves.linear, duration: Duration(milliseconds: 500));
+        curve: Curves.linear, duration: Duration(milliseconds: 600));
     controller.updateManually();
   }
 
@@ -149,15 +149,15 @@ class HomePageScreen extends StatelessWidget {
       builder: (_) => SafeArea(
         child: controller.loading
             ? Loading()
-            : reels.value.isEmpty
-                ? EmptyWidget("No reels available!")
-                : RefreshIndicator(
-                    onRefresh: () {
-                      controller.getFeeds();
-                      return Future.value();
-                    },
-                    child: Obx(
-                      () => PageView.builder(
+            : RefreshIndicator(
+                onRefresh: () async {
+                  await controller.getFeeds();
+                  return Future.value();
+                },
+                child: Obx(
+                  () => reels.value.isEmpty
+                      ? EmptyWidget("No reels available!")
+                      : PageView.builder(
                           allowImplicitScrolling: true,
                           itemCount: reels.value.length,
                           controller: pageController,
@@ -1044,8 +1044,8 @@ class HomePageScreen extends StatelessWidget {
                               },
                             );
                           }),
-                    ),
-                  ),
+                ),
+              ),
       ),
     );
   }

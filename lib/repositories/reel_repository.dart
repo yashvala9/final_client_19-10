@@ -92,20 +92,29 @@ class ReelRepository {
 
   Future<List<ReelModel>> getFeedsWithAds(int profileId, String token,
       {int limit = 10, int skip = 0}) async {
-    final response = await http.get(
-      Uri.parse('${Base.reelsWithAds}?limit=$limit&skip=$skip'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        HttpHeaders.authorizationHeader: "Bearer $token",
-      },
-    );
-    final body = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-      final Iterable list = body;
-      return list.map((e) => ReelModel.fromMap(e)).toList();
-    } else {
-      return Future.error(body['detail']);
+    try {
+      print(
+          "Getting all reels url : ${Base.reelsWithAds}?limit=$limit&skip=$skip");
+      print("Getting all reels token : $token");
+      final response = await http.get(
+        Uri.parse('${Base.reelsWithAds}?limit=$limit&skip=$skip'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          HttpHeaders.authorizationHeader: "Bearer $token",
+        },
+      );
+      final body = jsonDecode(response.body);
+      print("Getting all reels response : $body");
+      if (response.statusCode == 200) {
+        final Iterable list = body;
+        return list.map((e) => ReelModel.fromMap(e)).toList();
+      } else {
+        return Future.error(body['detail']);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
+    return [];
   }
 
   Future<List<ReelModel>> getReelsWithoutAd(int profileId, String token,

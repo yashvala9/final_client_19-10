@@ -81,10 +81,10 @@ class HomePageController extends GetxController {
 
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
-  void getFeeds() async {
+  Future<void> getFeeds() async {
     loading = true;
     try {
-      reelList.value = await _reelRepo.getFeedsWithAds(profileId!, token!);
+      reelList(await _reelRepo.getFeedsWithAds(profileId!, token!));
     } catch (e) {
       debugPrint("getFeeds: $e");
     }
