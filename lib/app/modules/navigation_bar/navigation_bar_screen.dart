@@ -176,7 +176,7 @@ class NavigationBarScreen extends StatelessWidget {
                       },
                       icon: controller.tabIndex.value == 3
                           ? const Icon(
-                              Icons.message,
+                              Icons.access_time_rounded,
                               color: Colors.white,
                               size: 30,
                             )

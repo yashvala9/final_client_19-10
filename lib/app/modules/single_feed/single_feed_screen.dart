@@ -922,6 +922,7 @@ class SingleFeedScreen extends StatelessWidget {
                                       : VideoPlayerItem(
                                           videoUrl: videoUrl,
                                           videoId: reels![index].id,
+                                          thumbnail: reels![index].thumbnail,
                                           isReel: true,
                                           points: reels![index].points,
                                           updatePoints: () {},

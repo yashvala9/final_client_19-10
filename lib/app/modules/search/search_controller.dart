@@ -81,7 +81,7 @@ class SearchController extends GetxController {
     loading = true;
     try {
       reelList = await _reelRepo.getFeedsWithAds(profileId!, token!,
-          limit: 13, skip: 0);
+          limit: 25, skip: 0);
     } catch (e) {
       debugPrint("getFeeds: $e");
     }
@@ -93,7 +93,7 @@ class SearchController extends GetxController {
     loading = true;
     try {
       photosList = await _reelRepo.getPhotosWithoutAds(profileId!, token!,
-          limit: 15, skip: 0);
+          limit: 25, skip: 0);
     } catch (e) {
       debugPrint("getFeeds: $e");
     }

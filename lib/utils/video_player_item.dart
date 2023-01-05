@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reel_ro/app/modules/homepage/widgets/coin_animation.dart';
+import 'package:reel_ro/repositories/profile_repository.dart';
 import 'package:reel_ro/services/auth_service.dart';
 import 'package:reel_ro/utils/video_progress_indicator.dart';
 import 'package:reel_ro/widgets/loading.dart';
@@ -10,10 +12,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:wakelock/wakelock.dart';
 
 import '../repositories/reel_repository.dart';
+import '../widgets/shimmer_animation.dart';
 
 class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final int videoId;
+  final String thumbnail;
   final int points;
   final VoidCallback doubleTap;
   final VoidCallback? onTap;
@@ -26,6 +30,7 @@ class VideoPlayerItem extends StatefulWidget {
     Key? key,
     required this.videoUrl,
     required this.videoId,
+    required this.thumbnail,
     required this.doubleTap,
     required this.points,
     required this.swipeRight,
@@ -102,8 +107,32 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     });
 
     return controller.value.isBuffering || loading
-        ? Loading(
-            isWhite: true,
+        ? Stack(
+            children: [
+              FutureBuilder<String>(
+                future: ProfileRepository().getThumbnail(widget.thumbnail),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Container();
+                  }
+
+                  return SizedBox(
+                    width: double.infinity,
+                    child: CachedNetworkImage(
+                      key: UniqueKey(),
+                      errorWidget: (_, a, b) {
+                        return ShimmerCardAnimation();
+                      },
+                      imageUrl: snapshot.data!,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
+              Loading(
+                isWhite: true,
+              ),
+            ],
           )
         : SizedBox(
             width: double.infinity,
@@ -154,7 +183,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                       children: <Widget>[
                         SizedBox.expand(
                             child: FittedBox(
-                                fit: BoxFit.cover,
+                                fit: BoxFit.fitHeight,
                                 child: SizedBox(
                                   width: controller.value.size.width,
                                   height: controller.value.size.height,

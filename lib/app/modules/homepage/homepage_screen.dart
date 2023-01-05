@@ -339,6 +339,7 @@ class HomePageScreen extends StatelessWidget {
                                               )
                                             : VideoPlayerItem(
                                                 videoUrl: videoUrl,
+                                                thumbnail: data.thumbnail,
                                                 videoId: data.id,
                                                 isReel: isReel,
                                                 points: data.points,

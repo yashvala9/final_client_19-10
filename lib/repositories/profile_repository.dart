@@ -70,9 +70,10 @@ class ProfileRepository {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
+    print(response.body);
     final body = jsonDecode(response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return ProfileModel.fromMap(body['user']);
+      return ProfileModel.fromMap(body['User']);
     } else {
       return Future.error(body['detail']);
     }

@@ -99,7 +99,7 @@ class GiveawayView extends GetView<GiveawayController> {
                   listTileWidget(
                       'book', 'Contest Rules', const ContestRulesView()),
                   const SizedBox(
-                    height: 25,
+                    height: 80,
                   ),
                   // Padding(
                   //   padding: const EdgeInsets.all(12.0),

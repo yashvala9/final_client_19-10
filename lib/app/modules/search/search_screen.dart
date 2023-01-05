@@ -30,9 +30,10 @@ class Debouncer {
   }
 }
 
+ScrollController scrollController = ScrollController();
+
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
-
   // ignore: unused_field
   final _controller = Get.put(SearchController());
   void resetTop() {
@@ -280,20 +281,6 @@ class SearchHashTags extends StatelessWidget {
   }
 }
 
-ScrollController scrollController = ScrollController();
-
-void resetTop() {
-  if (scrollController.positions.isNotEmpty) {
-    if (scrollController.positions.isNotEmpty) {
-      scrollController.animateTo(
-        scrollController.position.minScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 500),
-      );
-    }
-  }
-}
-
 class ReelsTab extends StatelessWidget {
   ReelsTab({Key? key}) : super(key: key);
 
@@ -337,7 +324,7 @@ class ReelsTab extends StatelessWidget {
                           return Future.value();
                         },
                         child: GridView.custom(
-                          controller: scrollController,
+                          // controller: scrollController,
                           gridDelegate: SliverQuiltedGridDelegate(
                             crossAxisCount: 3,
                             mainAxisSpacing: 4,
@@ -388,6 +375,7 @@ class ReelsTab extends StatelessWidget {
                                   child: (index % 20 == 4 || index % 20 == 13)
                                       ? VideoPlayerItem(
                                           videoUrl: videoUrl,
+                                          thumbnail: reels[index].thumbnail,
                                           videoId: reels[index].id,
                                           points: reels[index].points,
                                           onTap: () {
@@ -484,7 +472,6 @@ class PhotosTab extends StatelessWidget {
                           return Future.value();
                         },
                         child: CustomScrollView(
-                          controller: scrollController,
                           shrinkWrap: true,
                           slivers: [
                             SliverGrid(
@@ -502,7 +489,7 @@ class PhotosTab extends StatelessWidget {
                                         Get.to(SingleFeedScreen(
                                           [_controller.photosList[index]],
                                           null,
-                                          index,
+                                          0,
                                           null,
                                           isPhoto: true,
                                         ));
