@@ -503,8 +503,8 @@ class ReelRepository {
   }) async {
     try {
       final response = await AwsS3.uploadFile(
-        accessKey: "AKIARYAXXOSN5XYB5M67",
-        secretKey: "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",
+        accessKey: "AKIARYAXXOSNV5LLZWPA",
+        secretKey: "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",
         file: file,
         bucket: "reelro-vod-sourcebucket",
         region: "ap-south-1",
