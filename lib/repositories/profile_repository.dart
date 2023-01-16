@@ -476,4 +476,21 @@ class ProfileRepository {
       return Future.error(body['detail']);
     }
   }
+
+  Future<String> getEntryModel(String token) async {
+    final response = await http.get(
+      Uri.parse(Base.entry),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    final body = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return body['mega_contest_datetime'];
+    } else {
+      return Future.error(body['detail']);
+    }
+  }
 }

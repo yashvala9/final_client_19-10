@@ -113,9 +113,9 @@ class GiveawayRepository {
         },
       );
       final body = jsonDecode(response.body);
-      print(body['data']);
+      print(body['contests']);
       if (response.statusCode == 200) {
-        Iterable list = body['data'];
+        Iterable list = body['contests'];
         var v = list.map((e) => ContestModel.fromMap(e)).toList();
         print(v);
         return v;

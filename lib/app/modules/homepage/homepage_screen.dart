@@ -517,15 +517,15 @@ class HomePageScreen extends StatelessWidget {
                                                             ReadMoreText(
                                                               parser.emojify(data
                                                                   .video_title),
-                                                              trimLength: 20,
+                                                              trimLength: 10,
                                                               colorClickableText:
                                                                   Colors.pink,
                                                               trimMode: TrimMode
                                                                   .Length,
                                                               trimCollapsedText:
-                                                                  '(...)',
+                                                                  '(More)',
                                                               trimExpandedText:
-                                                                  ' (Show less)',
+                                                                  ' (Less)',
                                                               style: TextStyle(
                                                                 fontSize: 15,
                                                                 color: Colors
@@ -556,32 +556,76 @@ class HomePageScreen extends StatelessWidget {
                                                           if (isReel)
                                                             if (data.description !=
                                                                 '')
-                                                              HashTagText(
-                                                                  onTap: (tag) {
-                                                                    Get.to(
-                                                                        SearchHashTags(
-                                                                      hashTag:
-                                                                          tag,
-                                                                    ));
-                                                                  },
-                                                                  text: parser
-                                                                      .emojify(data
-                                                                          .description),
-                                                                  basicStyle:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                            .grey[
-                                                                        400],
-                                                                  ),
-                                                                  decoratedStyle:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                        .blue,
-                                                                  )),
+                                                              ReadMoreText(
+                                                                parser.emojify(data
+                                                                    .description),
+                                                                trimLength: 10,
+                                                                colorClickableText:
+                                                                    Colors.pink,
+                                                                trimMode:
+                                                                    TrimMode
+                                                                        .Length,
+                                                                trimCollapsedText:
+                                                                    '(More)',
+                                                                trimExpandedText:
+                                                                    ' (Less)',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      400],
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                lessStyle:
+                                                                    TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      400],
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                moreStyle:
+                                                                    TextStyle(
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      400],
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              )
+                                                          // HashTagText(
+                                                          //     onTap: (tag) {
+                                                          //       Get.to(
+                                                          //           SearchHashTags(
+                                                          //         hashTag:
+                                                          //             tag,
+                                                          //       ));
+                                                          //     },
+                                                          //     text: parser
+                                                          //         .emojify(data
+                                                          //             .description),
+                                                          //     basicStyle:
+                                                          //         TextStyle(
+                                                          //       fontSize:
+                                                          //           15,
+                                                          //       color: Colors
+                                                          //               .grey[
+                                                          //           400],
+                                                          //     ),
+                                                          //     decoratedStyle:
+                                                          //         const TextStyle(
+                                                          //       fontSize:
+                                                          //           15,
+                                                          //       color: Colors
+                                                          //           .blue,
+                                                          //     )),
                                                         ],
                                                       ),
                                                     ),

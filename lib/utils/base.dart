@@ -13,6 +13,7 @@ class Base {
 
   static const searchUser = '$_url/search';
   static const blockedUsers = '$_url/users/block-list';
+  static const entry = '$_url/superadmin/entrycriteria';
 
   //Forget password
   static const generateForgetPasswordToken =
@@ -120,7 +121,7 @@ class Base {
 
   //Giveaway
   static const giveaway = '$_url/contests/';
-  static const adminContest = '$_url/superadmin/new/contests';
+  static const adminContest = '$_url/superadmin/contests';
   static const createGiveaway = '$_url/createContest';
   static const getAdsEntryCountByUserId = '$_url/ads-histories/count';
   static const getReferralsEntryCountByUserId = '$_url/referrals/count';

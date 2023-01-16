@@ -13,7 +13,7 @@ import '../../notification_screen.dart';
 class ChatList extends StatelessWidget {
   ChatList({Key? key}) : super(key: key);
   final controller = Get.put(ChatListController());
-  int endTime = DateTime.now().millisecondsSinceEpoch + 5000 * 30 * 60 * 24;
+  // int endTime = DateTime.now().millisecondsSinceEpoch + 5000 * 30 * 60 * 24;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,7 @@ class ChatList extends StatelessWidget {
                         ),
                       );
                     },
-                    endTime: endTime,
+                    endTime: controller.endTime,
                     textStyle: const TextStyle(
                         fontSize: 50,
                         color: Colors.white,

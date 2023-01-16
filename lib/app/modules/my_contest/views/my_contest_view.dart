@@ -15,7 +15,7 @@ class MyContestView extends GetView<MyContestController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          contestModel.Contest.contest_name,
+          contestModel.contest_name!,
           style: const TextStyle(fontSize: 14),
         ),
         leading: IconButton(
@@ -45,7 +45,7 @@ class MyContestView extends GetView<MyContestController> {
             ],
           ));
           if (val != null) {
-            _controller.deleteContest(contestModel.Contest.id);
+            _controller.deleteContest(contestModel.id!);
           }
         },
       ),
