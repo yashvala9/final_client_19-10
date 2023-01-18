@@ -77,8 +77,8 @@ class SetForgetPassword extends StatelessWidget {
                                           !_controller.obsecure,
                                       child: Icon(
                                         _controller.obsecure
-                                            ? Icons.visibility_sharp
-                                            : Icons.visibility_off_sharp,
+                                            ? Icons.visibility_off_sharp
+                                            : Icons.visibility_sharp,
                                         color: AppColors.headline5Color
                                             .withOpacity(.5),
                                       )),
@@ -100,8 +100,8 @@ class SetForgetPassword extends StatelessWidget {
                                         !_controller.obsecure2,
                                     child: Icon(
                                       _controller.obsecure2
-                                          ? Icons.visibility_sharp
-                                          : Icons.visibility_off_sharp,
+                                          ? Icons.visibility_off_sharp
+                                          : Icons.visibility_sharp,
                                       color: AppColors.headline5Color
                                           .withOpacity(.5),
                                     ),
